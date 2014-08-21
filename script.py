@@ -29,6 +29,60 @@ addon_name = addon.getAddonInfo('name')
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
+class URLBuilder(object):
+
+    def __init__(self):
+        self.log('URLBuilder: __init__')
+
+    def GetGoogleMapURL(self, search_string, zoom_level, type, aspect, lat, lon):
+        self.log('URLBuilder: GetGoogleMapURL')
+        try:
+            if not type:
+                type="roadmap"
+            if aspect == "square":
+                size = "640x640"
+            else:
+                size = "640x400"
+            if lat and lon:
+                search_string = str(lat) + "," + str(lon)
+                log("Location: " + search_string)
+            else:
+                search_string = urllib.quote_plus(search_string.replace('"',''))
+            base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
+            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoom_level, search_string, size, googlemaps_key_normal)
+            self.log("Google Maps Search:" + url)
+            return url
+        except Exception,e:
+            self.log(e)
+            return "Building Maps URL failed"
+            
+    def GetGoogleMapStreetViewURL(self, search_string, zoom_level, aspect, lat, lon, direction):
+        self.log('URLBuilder: GetGoogleMapStreetViewURL')
+        try:
+            if aspect == "square":
+                size = "640x640"
+            else:
+                size = "640x400"
+            if lat and lon:
+                search_string = str(lat) + "," + str(lon)
+                log("Location: " + search_string)
+            else:
+                search_string = urllib.quote_plus(search_string.replace('"',''))
+            zoom = 130 - int(zoom_level) * 6
+            base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
+            url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key_streetview, str(direction))        
+            self.log("Google Maps Search (Street View):" + url)
+            return url
+        except Exception,e:
+            self.log(e)
+            return "Building Street View URL failed"
+        
+    def log(self, msg):
+        xbmc.log('Maps Browser: %s' % msg)
+
+
+
+
 class GUI(xbmcgui.WindowXML):
 
     CONTROL_SEARCH = 101
@@ -58,13 +112,13 @@ class GUI(xbmcgui.WindowXML):
         self.NavBar_active = True
         self.StreetView = False
         self.getControls()
-        self.setFocus(self.street_view)
+        self.setFocus(self.c_street_view)
         self.search_string = ""
-        self.zoomlevel = 15
+        self.zoom_level = "15"
         self.type = "normal"
-        self.lat = 0.0
-        self.lon = 0.0
-        self.direction = 0
+        self.lat = "0.0"
+        self.lon = "0.0"
+        self.direction = "0"
         self.log('onInit finished')
 
     def getControls(self):
@@ -78,7 +132,6 @@ class GUI(xbmcgui.WindowXML):
         self.c_mode_hybrid = self.getControl(self.CONTROL_MODE_HYBRID)
         self.c_mode_satellite = self.getControl(self.CONTROL_MODE_SATELLITE)
         self.c_mode_terrain = self.getControl(self.CONTROL_MODE_TERRAIN)
-        self.c_map_image = self.getControl(self.CONTROL_MAP_IMAGE)
 
     def onAction(self, action):
         action_id = action.getId()
@@ -117,50 +170,12 @@ class GUI(xbmcgui.WindowXML):
         self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
         if self.location=="":
             sys.exit()
-        mapURL = self.GetGoogleMapURL(search_string = self.location, zoomlevel = "15", type = "terrain", aspect = "normal", lat="", lon="")
+        urlbuilder = URLBuilder()
+        mapURL = urlbuilder.GetGoogleMapURL(self.location, "15", "terrain", "normal", "", "")       
+        del urlbuilder
         self.log("right here: " + mapURL)
-        c_map_image.setImage(mapURL)
-
-            
-    def GetGoogleMapURL(self, search_string, zoomlevel, type, aspect, lat, lon):
-        try:
-            if not type:
-                type="roadmap"
-            if aspect == "square":
-                size = "640x640"
-            else:
-                size = "640x400"
-            if lat and lon:
-                search_string = str(lat) + "," + str(lon)
-                log("Location: " + search_string)
-            else:
-                search_string = urllib.quote_plus(search_string.replace('"',''))
-            base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
-            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key_normal)
-            log("Google Maps Search:" + url)
-            return url
-        except:
-            return ""
-            
-    def GetGoogleMapStreetViewURL(self, search_string, zoomlevel, aspect, lat, lon, direction):
-        try:
-            if aspect == "square":
-                size = "640x640"
-            else:
-                size = "640x400"
-            if lat and lon:
-                search_string = str(lat) + "," + str(lon)
-                log("Location: " + search_string)
-            else:
-                search_string = urllib.quote_plus(search_string.replace('"',''))
-            zoom = 130 - int(zoomlevel) * 6
-            base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-            url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key_streetview, str(direction))        
-            log("Google Maps Search:" + url)
-            return url
-        except:
-            return ""
-            
+        self.getControl(self.CONTROL_MAP_IMAGE).setImage(mapURL)
+                    
     def GetGeoCodes(self, search_string):
         try:
             search_string = urllib.quote_plus(search_string)
