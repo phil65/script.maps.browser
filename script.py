@@ -42,6 +42,7 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_MODE_TERRAIN = 108
     CONTROL_MAP_IMAGE = 109
     CONTROL_STREETVIEW_IMAGE = 110
+    CONTROL_GOTO_PLACE = 111
 
     ACTION_CONTEXT_MENU = [117]
     ACTION_PREVIOUS_MENU = [9, 92, 10]
@@ -90,19 +91,11 @@ class GUI(xbmcgui.WindowXML):
         mapURL = self.GetGoogleMapURL()       
         self.log("URL: " + mapURL)
         self.c_map_image.setImage(mapURL)
-        self.setFocus(self.c_street_view)
+        self.setFocus(self.c_streetview_image)
         self.log('onInit finished')
 
     def getControls(self):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        self.c_search = self.getControl(self.CONTROL_SEARCH)
-        self.c_street_view = self.getControl(self.CONTROL_STREET_VIEW)
-        self.c_zoom_in = self.getControl(self.CONTROL_ZOOM_IN)
-        self.c_zoom_out = self.getControl(self.CONTROL_ZOOM_OUT)
-        self.c_mode_roadmap = self.getControl(self.CONTROL_MODE_ROADMAP)
-        self.c_mode_hybrid = self.getControl(self.CONTROL_MODE_HYBRID)
-        self.c_mode_satellite = self.getControl(self.CONTROL_MODE_SATELLITE)
-        self.c_mode_terrain = self.getControl(self.CONTROL_MODE_TERRAIN)
         self.c_map_image = self.getControl(self.CONTROL_MAP_IMAGE)
         self.c_streetview_image = self.getControl(self.CONTROL_STREETVIEW_IMAGE)
 
@@ -222,8 +215,14 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_MODE_TERRAIN:
             self.type ="terrain"
             mapURL = self.GetGoogleMapURL()       
-            self.log("URL: " + mapURL)
             self.c_map_image.setImage(mapURL)
+        elif controlId == self.CONTROL_GOTO_PLACE:
+            self.location = self.getWindowProperty("Location")
+            self.lat, self.lon = self.GetGeoCodes(self.location)
+            self.log("goto place: " + self.location)
+            mapURL = self.GetGoogleMapURL()       
+            self.c_map_image.setImage(mapURL)
+
         self.SetProperties()
 
     def SearchLocation(self):

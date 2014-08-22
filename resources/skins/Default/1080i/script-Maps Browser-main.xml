@@ -8,20 +8,24 @@
     <control type="button" id="9023">
         <include>HiddenObject</include>
                         <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
-                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],zoomlevel=12)</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],zoomlevel=12)</onfocus>
+                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(9011).ListItem.Property(City)] $INFO[Container(9011).ListItem.Property(Street)])</onfocus>
+                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(9011).ListItem.Property(City)] $INFO[Container(9011).ListItem.Property(Name)])</onfocus>
+                        <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(9011)</onfocus>
                     <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
-                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],zoomlevel=12)</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],zoomlevel=12)</onfocus>
+                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)])</onfocus>
+                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)])</onfocus>
                         <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
+                        <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(9011)</onfocus>
                     <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
-    
+     <control type="button" id="111">
+        <include>HiddenObject</include>
+    </control>   
     <control type="button" id="9023">
         <include>HiddenObject</include>
                 <onfocus>ClearProperty(ShowArtistEvents,home)</onfocus>
