@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
+    <onload>ClearProperty(streetview)</onload>
     <backgroundcolor>backgroundcolor</backgroundcolor>
     <defaultcontrol always="true">650</defaultcontrol>
-    <onload>ClearProperty(googlemapoverview,home)</onload>
-    <onload>ClearProperty(StreetViewMode,home)</onload>
     <allowoverlay>no</allowoverlay>
     <controls>
     <control type="button" id="9023">
         <include>HiddenObject</include>
-                       <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],home)</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],home)</onfocus>
-                        <onfocus>SetProperty(zoomlevel,12,home)</onfocus>
                         <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
-                        <onfocus>RunScript(script.extendedinfo,info=getgooglemap,location=$INFO[Window(home).Property(Location)],zoomlevel=12,type=$INFO[Window(home).Property(Type)])</onfocus>
+                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],zoomlevel=12)</onfocus>
+                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],zoomlevel=12)</onfocus>
                         <onfocus>SetFocus(9011)</onfocus>
                     <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
-                       <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],home)</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],home)</onfocus>
+                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)],zoomlevel=12)</onfocus>
+                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">RunScript(script.maps.browser,location=$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)],zoomlevel=12)</onfocus>
                         <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
-                        <onfocus>SetProperty(zoomlevel,12,home)</onfocus>
-                        <onfocus>RunScript(script.extendedinfo,info=getgooglemap,location=$INFO[Window(home).Property(Location)],zoomlevel=12,type=$INFO[Window(home).Property(Type)])</onfocus>
                         <onfocus>SetFocus(9011)</onfocus>
                     <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
@@ -54,8 +49,18 @@
          <onfocus>SetFocus(9023)</onfocus>
          <visible>Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
-    
-    
+        <control type="image" id="110">
+            <posx>460</posx>
+            <width>1460</width>
+            <height>980</height>
+            <aspectratio>scale</aspectratio>
+            <fadetime>FanartCrossfadeTime</fadetime>
+            <include>Animation_VisibleChange200</include>
+            <visible>!IsEmpty(Window.Property(streetview))</visible> 
+         </control>    
+        <control type="group">
+                    <visible>IsEmpty(Window.Property(streetview))</visible> 
+
         <control type="image" id="109">
             <posx>460</posx>
             <width>1460</width>
@@ -63,27 +68,28 @@
             <aspectratio>scale</aspectratio>
             <fadetime>FanartCrossfadeTime</fadetime>
             <include>Animation_VisibleChange200</include>
-<!--             <visible>!IsEmpty(Window.Property(NavBar))</visible>
- -->        </control>
-<!--         <control type="image">
+             <visible>Skin.HasSetting(mapnavbar)</visible>
+         </control>
+         <control type="image">
             <posx>0</posx>
             <width>1920</width>
             <height>1080</height>
             <aspectratio>scale</aspectratio>
-            <texture background="true">$INFO[Window(home).Property(googlemap)]</texture>
+            <texture background="true">$INFO[Control.GetLabel(109)]</texture>
             <fadetime>FanartCrossfadeTime</fadetime>
             <include>Animation_VisibleChange200</include>
-            <visible>IsEmpty(Window.Property(NavBar))</visible>
-        </control> -->
+            <visible>!Skin.HasSetting(mapnavbar)</visible>
+        </control>
+        </control>
         <control type="group">
-            <visible>!IsEmpty(Window(home).Property(streetviewmode)) + !IsEmpty(Window(home).Property(googlemapoverview))</visible> 
+            <visible>!IsEmpty(Window.Property(streetview))</visible> 
         <control type="image">
             <posx>1520</posx>
             <posy>50</posy>
             <height>300</height>
             <width>400</width>
             <aspectratio>keep</aspectratio>
-            <texture background="true">$INFO[Window(home).Property(googlemapoverview)]</texture>
+            <texture background="true">$INFO[Control.GetLabel(109)]</texture>
             <fadetime>FanartCrossfadeTime</fadetime>
         </control>
             <control type="image">
@@ -93,31 +99,31 @@
                 <height>35</height>
                 <texture>defaulticons/DefaultFolderBack.png</texture>
                 <animation effect="rotate" end="-90" center="1720,188" time="0" condition="true">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),0)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),1)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),2)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),3)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),4)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),5)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),6)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),7)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),8)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),9)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),10)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),11)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),12)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),13)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),14)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),15)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),16)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),17)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window(home).Property(direction),18)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),0)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),1)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),2)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),3)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),4)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),5)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),6)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),7)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),8)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),9)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),10)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),11)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),12)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),13)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),14)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),15)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
                 <colordiffuse>red</colordiffuse>
             </control>
         </control>
         <control type="group">
                     <include>Animation_VisibleChange200</include>
-            <visible>!IsEmpty(Window.Property(NavBar))</visible>
+            <visible>Skin.HasSetting(mapnavbar)</visible>
         
             <control type="image">
                 <posx>-122</posx>
@@ -191,7 +197,7 @@
             <control type="grouplist" id="650">
                 <orientation>horizontal</orientation>
                 <onup>9011</onup>
-                <onleft>109</onleft>
+                <onleft>108</onleft>
                 <onright>103</onright>
                 <control type="button" id="99">
                      <width>100</width>
@@ -221,7 +227,7 @@
                 <orientation>horizontal</orientation>
                 <onleft>102</onleft>
                 <onup>9011</onup>
-                <onright>106</onright>
+                <onright>105</onright>
                 <control type="button" id="103">
                      <width>100</width>
                     <height>100</height>
@@ -230,14 +236,14 @@
                     <texturenofocus colordiffuse="white2">googlemaps/zoomin.png</texturenofocus>
                     <onclick>Skin.ToggleSetting(mapnavbar)</onclick>
                 </control>  
-                <control type="button" id="104">
+<!--                 <control type="button" id="104">
                      <width>100</width>
                     <height>100</height>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Navigation.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/Navigation.png</texturenofocus>
-                </control>  
-                <control type="button" id="105">
+                </control>  --> 
+                <control type="button" id="104">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/zoomout.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/zoomout.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
@@ -245,38 +251,35 @@
                     <height>100</height>
                 </control>
             </control>
-
-
             <control type="grouplist" id="652">
                 <posx>1420</posx>
                 <orientation>horizontal</orientation>
-                <onleft>105</onleft>
+                <onleft>104</onleft>
                 <onup>9011</onup>
-                <onright>652</onright>
-                <visible>IsEmpty(Window(home).Property(StreetViewMode))</visible>
-                <control type="button" id="106">
+                <onright>99</onright>
+                <visible>IsEmpty(Window.Property(streetview))</visible>
+                <control type="button" id="105">
                      <width>100</width>
                     <height>100</height>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/roadmap.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/roadmap.png</texturenofocus>
-                    <onclick>Skin.ToggleSetting(mapnavbar)</onclick>
                 </control>  
-                <control type="button" id="107">
+                <control type="button" id="106">
                      <width>100</width>
                     <height>100</height>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/hybrid.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/hybrid.png</texturenofocus>
                 </control>  
-                <control type="button" id="108">
+                <control type="button" id="107">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/satellite.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/satellite.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
                 </control>  
-                <control type="button" id="109">
+                <control type="button" id="108">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/terrain.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/terrain.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
@@ -294,64 +297,7 @@
                     <height>100</height>
                     <texturefocus>googlemaps/Navigation.png</texturefocus>
                     <texturenofocus>-</texturenofocus>
-                    <label>13395</label>
                     <font>-</font>
-                    <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
-                    <onclick>SetFocus(651)</onclick>
-<!--                     <onup condition="!IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=getgooglemap,lat=$INFO[Window(home).Property(lat)],lon=$INFO[Window(home).Property(lon)],zoomlevel=$INFO[Window(home).Property(zoomlevel)],type=$INFO[Window(home).Property(Type)])</onup>
- -->                <onback>SetFocus(724)</onback>
-
-                    
-                    <onup condition="IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=moveupgooglemap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</onup>
-                    <onup condition="!IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=moveupgooglestreetviewmap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</onup>
-                    <ondown condition="IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=movedowngooglemap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</ondown>
-                    <ondown condition="!IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=movedowngooglestreetviewmap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</ondown>
-                    <onleft condition="IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=moveleftgooglemap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),0)">SetProperty(Direction,19,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) +Stringcompare(Window(home).Property(Direction),1)">SetProperty(Direction,0,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),2)">SetProperty(Direction,1,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),3)">SetProperty(Direction,2,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),4)">SetProperty(Direction,3,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),5)">SetProperty(Direction,4,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),6)">SetProperty(Direction,5,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),7)">SetProperty(Direction,6,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),8)">SetProperty(Direction,7,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),9)">SetProperty(Direction,8,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),10)">SetProperty(Direction,9,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),11)">SetProperty(Direction,10,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),12)">SetProperty(Direction,11,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),13)">SetProperty(Direction,12,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),14)">SetProperty(Direction,13,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),15)">SetProperty(Direction,14,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),16)">SetProperty(Direction,15,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),17)">SetProperty(Direction,16,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),18)">SetProperty(Direction,17,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),19)">SetProperty(Direction,18,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),0)">SetProperty(Direction,19,home)</onleft>
-                    <onleft condition="!IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=getgooglestreetviewmap,lat=$INFO[Window(home).Property(lat)],lon=$INFO[Window(home).Property(lon)],zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],silent=False)</onleft>
-                    <onright condition="IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=moverightgooglemap,zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],type=$INFO[Window(home).Property(Type)],silent=False)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),0)">SetProperty(Direction,1,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),19)">SetProperty(Direction,0,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),18)">SetProperty(Direction,19,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),17)">SetProperty(Direction,18,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),16)">SetProperty(Direction,17,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),15)">SetProperty(Direction,16,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),14)">SetProperty(Direction,15,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),13)">SetProperty(Direction,14,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),12)">SetProperty(Direction,13,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),11)">SetProperty(Direction,12,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),10)">SetProperty(Direction,11,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),9)">SetProperty(Direction,10,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),8)">SetProperty(Direction,9,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),7)">SetProperty(Direction,8,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),6)">SetProperty(Direction,7,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),5)">SetProperty(Direction,6,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),4)">SetProperty(Direction,5,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),3)">SetProperty(Direction,4,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),2)">SetProperty(Direction,3,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),1)">SetProperty(Direction,2,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode)) + Stringcompare(Window(home).Property(Direction),0)">SetProperty(Direction,1,home)</onright>
-                <onright condition="!IsEmpty(Window(home).Property(StreetViewMode))">RunScript(script.extendedinfo,info=getgooglestreetviewmap,lat=$INFO[Window(home).Property(lat)],lon=$INFO[Window(home).Property(lon)],zoomlevel=$INFO[Window(home).Property(zoomlevel)],direction=$INFO[Window(home).Property(Direction)],silent=False)</onright>
                     </control>
         
     </controls>
