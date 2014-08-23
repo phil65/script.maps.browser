@@ -2,7 +2,7 @@
 <window>
     <onload>ClearProperty(streetview)</onload>
     <backgroundcolor>backgroundcolor</backgroundcolor>
-    <defaultcontrol always="true">650</defaultcontrol>
+    <defaultcontrol always="true">101</defaultcontrol>
     <allowoverlay>no</allowoverlay>
     <controls>
     <control type="button" id="9023">
@@ -54,37 +54,23 @@
          <visible>Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
     </control>
         <control type="image" id="110">
-            <posx>460</posx>
-            <width>1460</width>
-            <height>980</height>
+            <posx>0</posx>
+            <width>1920</width>
+            <height>1080</height>
             <aspectratio>scale</aspectratio>
             <fadetime>FanartCrossfadeTime</fadetime>
             <include>Animation_VisibleChange200</include>
             <visible>!IsEmpty(Window.Property(streetview))</visible> 
          </control>    
-        <control type="group">
-                    <visible>IsEmpty(Window.Property(streetview))</visible> 
-
         <control type="image" id="109">
-            <posx>460</posx>
-            <width>1460</width>
-            <height>980</height>
-            <aspectratio>scale</aspectratio>
-            <fadetime>FanartCrossfadeTime</fadetime>
-            <include>Animation_VisibleChange200</include>
-             <visible>Skin.HasSetting(mapnavbar)</visible>
-         </control>
-         <control type="image">
             <posx>0</posx>
             <width>1920</width>
             <height>1080</height>
             <aspectratio>scale</aspectratio>
-            <texture background="true">$INFO[Control.GetLabel(109)]</texture>
             <fadetime>FanartCrossfadeTime</fadetime>
             <include>Animation_VisibleChange200</include>
-            <visible>!Skin.HasSetting(mapnavbar)</visible>
-        </control>
-        </control>
+            <visible>IsEmpty(Window.Property(streetview))</visible> 
+         </control>
         <control type="group">
             <visible>!IsEmpty(Window.Property(streetview))</visible> 
         <control type="image">
@@ -97,56 +83,218 @@
             <fadetime>FanartCrossfadeTime</fadetime>
         </control>
             <control type="image">
-                <posx>1670</posx>
-                <posy>170</posy>
+                <posx>1680</posx>
+                <posy>180</posy>
                 <width>35</width>
                 <height>35</height>
                 <texture>defaulticons/DefaultFolderBack.png</texture>
-                <animation effect="rotate" end="-90" center="1720,188" time="0" condition="true">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),0)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),1)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),2)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),3)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),4)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),5)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),6)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),7)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),8)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),9)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),10)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),11)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),12)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),13)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),14)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),15)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="1720,188" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
+                <animation effect="rotate" end="-90" center="1720,197" time="0" condition="true">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),0)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),1)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),2)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),3)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),4)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),5)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),6)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),7)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),8)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),9)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),10)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),11)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),12)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),13)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),14)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),15)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
                 <colordiffuse>red</colordiffuse>
             </control>
         </control>
         <control type="group">
                     <include>Animation_VisibleChange200</include>
             <visible>Skin.HasSetting(mapnavbar)</visible>
-        
-            <control type="image">
-                <posx>-122</posx>
-                <width>602</width>
-                <height>1080</height>
-                <texture>dialogs/context_middle.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>
+             <visible>IsEmpty(Window.Property(streetview))</visible> 
+                       <animation effect="fade" start="100" end="0" time="280" condition="Control.HasFocus(725)">Conditional</animation>
+
 
         <control type="list" id="9011">
-            <width>450</width>
-            <posy>40</posy>
+            <width>1920</width>
+            <posy>800</posy>
             <height>980</height>
-            <orientation>vertical</orientation>
-            <onup>9011</onup>
-                <ondown>9011</ondown>
-            <onleft>650</onleft>
-            <onright>SetFocus(650)</onright>
-            <include>VenueSidebarLayouts</include>
+            <orientation>horizontal</orientation>
+            <onup>651</onup>
+                <ondown>651</ondown>
+            <onleft>9011</onleft>
+            <onright>9011</onright>
+               <itemlayout width="600" height="150">
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>150</height>
+                <texture>dialogs/dialog_back_shadow.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                <include>PanelGlowFade</include>
+                <include>Animation_VisibleChange400</include>
+            </control>
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>177</height>
+                <texture>dialogs/dialog_back.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>
+     <!--       <control type="image">
+                <posx>-4</posx>
+                <width>500</width>
+                <height>167</height>
+                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
+                <bordersize>5</bordersize>
+                <texture>dialogs/scan_backg.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>-->
+                <control type="image">
+                    <posy>15</posy>
+                    <posx>15</posx>
+                    <width>145</width>
+                    <height>145</height>
+                    <aspectratio>stretch</aspectratio>
+                    <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
+                </control>
+                <control type="group">
+                <posx>170</posx>
+                <control type="label">
+                    <posy>15</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg26</font>
+                    <textcolor>white2</textcolor>
+                    <label>[B]$INFO[ListItem.Property(Name)][/B]</label>
+                </control>
+                <control type="textbox">
+                    <posy>50</posy>
+                    <width>345</width>
+                    <height>110</height>
+                    <align>left</align>
+                    <font>Font_Reg31_Caps</font>
+                    <textcolor>white2</textcolor>
+                    <label>$LOCALIZE[31926]</label>
+                    <visible>Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                </control>
+                <control type="group">
+                <visible>!Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                <control type="label">
+                    <posy>130</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg22_Caps</font>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+                <control type="textbox">
+                    <posy>45</posy>
+                    <width>305</width>
+                    <height>81</height>
+                    <font>Font_Reg26</font>
+                    <align>left</align>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Property(EventName)]</label>
+                </control>
+                </control>
+</control>
+            </itemlayout>
+            <focusedlayout width="600" height="150">
+
+
+               <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>150</height>
+                <texture>dialogs/dialog_back_shadow.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                <include>PanelGlowFade</include>
+                <include>Animation_VisibleChange400</include>
+            </control>
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>177</height>
+                <texture>dialogs/dialog_back.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>
+     <!--       <control type="image">
+                <posx>-4</posx>
+                <width>500</width>
+                <height>167</height>
+                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
+                <bordersize>5</bordersize>
+                <texture>dialogs/scan_backg.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>-->
+                <control type="image">
+                    <posy>15</posy>
+                    <posx>15</posx>
+                    <width>145</width>
+                    <height>145</height>
+                    <aspectratio>stretch</aspectratio>
+                    <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
+                </control>
+                                <control type="image">
+                                <posx>160</posx>
+                                <posy>12</posy>
+                    <width>400</width>
+                    <height>150</height>
+                    <texture border="8">views/tripanel/listselect_fo.png</texture>
+                    <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
+                    <include>PanelGlowFade</include>
+                    <visible>Control.HasFocus(9011)</visible>
+                </control>
+                <control type="group">
+                <posx>170</posx>
+                <control type="label">
+                    <posy>15</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg26</font>
+                    <textcolor>white2</textcolor>
+                    <label>[B]$INFO[ListItem.Property(Name)][/B]</label>
+                </control>
+                <control type="textbox">
+                    <posy>50</posy>
+                    <width>345</width>
+                    <height>110</height>
+                    <align>left</align>
+                    <font>Font_Reg31_Caps</font>
+                    <textcolor>white2</textcolor>
+                    <label>$LOCALIZE[31926]</label>
+                    <visible>Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                </control>
+                <control type="group">
+                <visible>!Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                <control type="label">
+                    <posy>130</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg22_Caps</font>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+                <control type="textbox">
+                    <posy>45</posy>
+                    <width>305</width>
+                    <height>81</height>
+                    <font>Font_Reg26</font>
+                    <align>left</align>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Property(EventName)]</label>
+                </control>
+                </control>
+</control>
+            </focusedlayout>
+    
+    
             <content>
                 <include>ConcertsPanelContent1124</include>
                 <include>ConcertsPanelContent</include>
@@ -161,45 +309,25 @@
         </control>
         <include>Furniture_NowPlayingWidget</include>
         <control type="group">
-            <posy>975</posy>
-            <control type="image">
-                <width>1920</width>
-                <height>135</height>
-                <texture flipy="true">osd/osd_back.png</texture>
-                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
-            </control>
-            <control type="group">
-                <visible>Control.HasFocus(725)</visible>
-                <control type="label">
-                    <posy>23</posy>
-                    <width>1251</width>
-                    <height>60</height>
-                    <textoffsetx>15</textoffsetx>
-                    <label>$LOCALIZE[31943]</label>
-                    <font>Font_MainClassic3</font>
-                </control>
-                <control type="label">
-                    <posy>23</posy>
-                    <width>1920</width>
-                    <posx>1920</posx>
-                    <align>right</align>
-                    <height>60</height>
-                    <textoffsetx>15</textoffsetx>
-                    <label>$LOCALIZE[31944]</label>
-                    <font>Font_MainClassic3</font>
-                </control>
-            
-            </control>
-            
-            
+            <posy>975</posy>    
             <control type="group">
                 <posy>84</posy>
                 <include>Neon_Topbar</include>
             </control>
             <control type="group">
-                <visible>!Control.HasFocus(725)</visible>
+                <posy>20</posy>
+                <animation effect="slide" start="0,0" end="0,200" time="480" tween="quadratic" condition="Control.HasFocus(725)">Conditional</animation>
+            <control type="image">
+                <posy>-20</posy>
+                <width>1920</width>
+                <height>135</height>
+                <texture flipy="true">osd/osd_back.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+            </control>       
             <control type="grouplist" id="650">
                 <orientation>horizontal</orientation>
+                <posx>50</posx>
+                <itemgap>20</itemgap>
                 <onup>9011</onup>
                 <onleft>108</onleft>
                 <onright>103</onright>
@@ -209,6 +337,7 @@
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Flag.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/Flag.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
+                    <onclick>RunScript(script.extendedinfo,info=getlocationevents,lat=$INFO[Window.Property(lat)],lon=$INFO[Window.Property(lon)],silent=False)</onclick>
                     <onclick>Skin.ToggleSetting(mapnavbar)</onclick>
                 </control>  
                 <control type="button" id="101">
@@ -227,8 +356,9 @@
                 </control>  
             </control>            
             <control type="grouplist" id="651">
-                <posx>790</posx>
+                <posx>850</posx>
                 <orientation>horizontal</orientation>
+                <itemgap>20</itemgap>
                 <onleft>102</onleft>
                 <onup>9011</onup>
                 <onright>105</onright>
@@ -238,7 +368,6 @@
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/zoomin.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/zoomin.png</texturenofocus>
-                    <onclick>Skin.ToggleSetting(mapnavbar)</onclick>
                 </control>  
 <!--                 <control type="button" id="104">
                      <width>100</width>
@@ -256,50 +385,59 @@
                 </control>
             </control>
             <control type="grouplist" id="652">
-                <posx>1420</posx>
+                <posx>1410</posx>
                 <orientation>horizontal</orientation>
                 <onleft>104</onleft>
                 <onup>9011</onup>
                 <onright>99</onright>
+                <itemgap>20</itemgap>
                 <visible>IsEmpty(Window.Property(streetview))</visible>
-                <control type="button" id="105">
+                <control type="togglebutton" id="105">
                      <width>100</width>
                     <height>100</height>
+                    <usealttexture>Stringcompare(Window.Property(type),roadmap)</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/roadmap.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/roadmap.png</texturenofocus>
+                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/roadmap.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="grey">googlemaps/roadmap.png</alttexturenofocus>
                 </control>  
-                <control type="button" id="106">
+                <control type="togglebutton" id="106">
                      <width>100</width>
                     <height>100</height>
+                    <usealttexture>Stringcompare(Window.Property(type),hybrid)</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/hybrid.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/hybrid.png</texturenofocus>
+                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/hybrid.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="grey">googlemaps/hybrid.png</alttexturenofocus>
                 </control>  
-                <control type="button" id="107">
+                <control type="togglebutton" id="107">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/satellite.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/satellite.png</texturenofocus>
+                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/satellite.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="grey">googlemaps/satellite.png</alttexturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
+                    <usealttexture>Stringcompare(Window.Property(type),satellite)</usealttexture>
                 </control>  
-                <control type="button" id="108">
+                <control type="togglebutton" id="108">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/terrain.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/terrain.png</texturenofocus>
+                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/terrain.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="grey">googlemaps/terrain.png</alttexturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
+                    <usealttexture>Stringcompare(Window.Property(type),terrain)</usealttexture>
                 </control>  
             </control>  
               </control>
           
         </control>
                 <control type="button" id="725">
-                    <posy>986</posy>
-                    <posx>910</posx>
-                    <width>100</width>
-                    <height>100</height>
-                    <texturefocus>googlemaps/Navigation.png</texturefocus>
+                    <include>HiddenObject</include>
                     <texturenofocus>-</texturenofocus>
                     <font>-</font>
                     </control>
