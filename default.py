@@ -44,7 +44,7 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_MAP_IMAGE = 109
     CONTROL_STREETVIEW_IMAGE = 110
     CONTROL_GOTO_PLACE = 111
-    CONTROL_SELECT_LOCATION = 112
+    CONTROL_SELECT_PROVIDER = 112
     CONTROL_LEFT = 120
     CONTROL_RIGHT = 121
     CONTROL_UP = 122
@@ -117,8 +117,11 @@ class GUI(xbmcgui.WindowXML):
             self.getControls()
             self.c_map_image.setImage(self.GoogleMapURL)
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            dialog = xbmcgui.Dialog()
-            dialog.ok("Welcome to Maps Browser", " Press Menu button to toggle navigation mode", "Press Info button to change map type")
+            settings = xbmcaddon.Addon(id='script.extendedinfo')
+            if not settings.getSetting('firststart') == "true":
+                settings.setSetting(id='firststart', value='true')
+                dialog = xbmcgui.Dialog()
+                dialog.ok("Welcome to Maps Browser", " Press Menu button to toggle navigation mode", "Press Info button to change map type")
         self.log('onInit finished')
 
     def getControls(self):
@@ -221,6 +224,19 @@ class GUI(xbmcgui.WindowXML):
             self.GetGoogleMapURLs()       
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)
+        elif controlId == self.CONTROL_SELECT_PROVIDER:
+            providerlist =    [("foursquare", u"FourSquare Places"),
+                         ("concerts", u"Concerts")]
+            modeselect= []
+            modeselect.append( "FourSquare" )
+            modeselect.append( "Concerts" )
+            dialogSelection = xbmcgui.Dialog()
+            provider_index = dialogSelection.select( "Choose Places", modeselect )
+            if provider_index == 0:
+                self.GetPlaces()
+            elif provider_index == 1:
+                self.GetPlaces()
+            
         elif controlId == self.CONTROL_LEFT:
             pass
         elif controlId == self.CONTROL_RIGHT:

@@ -1,4 +1,4 @@
-import xbmc, os, sys, time, re
+import xbmc, os, sys, time, re, xbmcgui
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -6,6 +6,8 @@ else:
     
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
+foursquare_id = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
+foursquare_secret = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
             
 def GetNearEvents(self,tag = False,festivalsonly = False, lat = "", lon = ""):
     if festivalsonly:
@@ -126,3 +128,37 @@ def GetLocationCoordinates(self):
         self.lon = results["longitude"]
     except Exception,e:
         self.log(e)
+        
+def GetPlaces(self):
+    url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.6f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "test", foursquare_id, foursquare_secret)
+    self.log(url)
+    response = self.GetStringFromUrl(url)
+    results = simplejson.loads(response)
+    self.prettyprint(results)
+    places_list = list()
+    try:
+        if results and 'meta' in results:
+            if results['meta']['code'] == 200:
+                for v in results['response']['venues']:
+                    p = {'id': v['id'], 'name': v['name'], 'lat': v['location']['lat'], 'lng': v['location']['lng'], 'distance': v['location']['distance'], 'comments': v['stats']['tipCount'], 'visited': v['stats']['usersCount']}
+                    if 'formattedAddress' in v['location']:
+                        p['address'] = ', '.join(filter(None, v['location']['formattedAddress']))
+                    if 'phone' in v['contact']:
+                        p['phone'] = v['contact']['phone']
+                    if 'twitter' in v['contact']:
+                        p['phone'] = v['contact']['twitter']
+                             # create a list item
+                    item = xbmcgui.ListItem(v['name'])
+                    item.setProperty("id", str(v['id']))
+                    item.setProperty("id", str(v['id']))
+                    places_list.append(("item['file']", item, False))
+            elif results['meta']['code'] == 400:
+                self.log("LIMIT EXCEEDED")
+            else:
+                self.log("ERROR")
+        else:
+            self.log("ERROR")
+    except Exception,e:
+        self.log(e)
+        info['status'] = 'ERROR'
+    return places_list

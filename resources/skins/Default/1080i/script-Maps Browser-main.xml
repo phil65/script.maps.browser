@@ -331,7 +331,7 @@
                 <onup>9011</onup>
                 <onleft>108</onleft>
                 <onright>103</onright>
-                <control type="button" id="99">
+                <control type="button" id="112">
                      <width>100</width>
                     <height>100</height>     
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Flag.png</texturefocus>
@@ -389,7 +389,7 @@
                 <orientation>horizontal</orientation>
                 <onleft>104</onleft>
                 <onup>9011</onup>
-                <onright>99</onright>
+                <onright>112</onright>
                 <itemgap>20</itemgap>
                 <visible>IsEmpty(Window.Property(streetview))</visible>
                 <control type="togglebutton" id="105">
