@@ -12,7 +12,7 @@
                         <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Name)])</onfocus>
                         <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(200)</onfocus>
-                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window.Property(eventname))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
@@ -21,7 +21,7 @@
                         <onfocus>SetProperty(TempLocation,$ESCINFO[Container(200).ListItem.Property(eventname)],home)</onfocus>
                         <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(200)</onfocus>
-                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window.Property(eventname))</visible>
     </control>
      <control type="button" id="111">
         <include>HiddenObject</include>
@@ -46,12 +46,12 @@
         <onfocus>SetProperty(WidgetType,concert,home)</onfocus>
         <onfocus>SetFocus(200)</onfocus>
         <onfocus>ActivateWindow(1165)</onfocus>
-                    <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+                    <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window.Property(eventname))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
          <onfocus>SetFocus(9023)</onfocus>
-         <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+         <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window.Property(eventname))</visible>
     </control>
         <control type="image" id="110">
             <posx>0</posx>
@@ -174,7 +174,7 @@
                     <textcolor>white2</textcolor>
                     <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-<!--                 <control type="textbox">
+                 <control type="textbox">
                     <posy>50</posy>
                     <width>345</width>
                     <height>110</height>
@@ -182,11 +182,11 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
-                </control> -->
+                    <visible>Stringcompare(ListItem.Property(eventname),Window.Property(eventname))</visible>
+                </control>
                 <control type="group">
-<!--                 <visible>!Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
- -->                <control type="label">
+                 <visible>!Stringcompare(ListItem.Property(eventname),Window.Property(eventname))</visible>
+                <control type="label">
                     <posy>130</posy>
                     <width>345</width>
                     <height>35</height>
@@ -263,7 +263,7 @@
                     <textcolor>white2</textcolor>
                     <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-<!--                 <control type="textbox">
+                 <control type="textbox">
                     <posy>50</posy>
                     <width>345</width>
                     <height>110</height>
@@ -271,11 +271,11 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
-                </control> -->
+                    <visible>Stringcompare(ListItem.Property(eventname),Window.Property(eventname))</visible>
+                </control>
                 <control type="group">
-<!--                 <visible>!Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
- -->                <control type="label">
+                 <visible>!Stringcompare(ListItem.Property(eventname),Window.Property(eventname))</visible>
+                <control type="label">
                     <posy>130</posy>
                     <width>345</width>
                     <height>35</height>

@@ -282,6 +282,10 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_PLACES_LIST:
             self.lat = self.c_places_list.getSelectedItem().getProperty("lat")
             self.lon = self.c_places_list.getSelectedItem().getProperty("lon")
+            if not self.c_places_list.getSelectedItem().getProperty("eventname") == self.getWindowProperty('eventname'):
+                self.setWindowProperty('eventname', self.c_places_list.getSelectedItem().getProperty("eventname"))
+            else:
+                xbmc.executebuiltin("SetFocus(9023)")
             self.GetGoogleMapURLs()       
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)           

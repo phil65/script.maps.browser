@@ -43,7 +43,7 @@ def GetNearEvents(self,tag = False,festivalsonly = False):
             if event['venue']['location']['geo:point']['geo:long']:
                 lon = event['venue']['location']['geo:point']['geo:long']
                 lat = event['venue']['location']['geo:point']['geo:lat']
-                search_string = ""
+                search_string = lat + "," + lon
             elif event['venue']['location']['street']:
                 search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
             elif event['venue']['location']['city']:
@@ -130,8 +130,12 @@ def GetGeoCodes(self, search_string):
         self.log("Google Geocodes Search:" + url)
         response = self.GetStringFromUrl(url)
         results = simplejson.loads(response)
-        location = results["results"][0]["geometry"]["location"]
-        return (location["lat"], location["lng"])
+        self.prettyprint(results)
+        self.log(len(results["results"]))
+        for item in results["results"]:
+            pass
+        first_hit = results["results"][0]["geometry"]["location"]
+        return (first_hit["lat"], first_hit["lng"])
     except Exception,e:
         self.log(e)
         return ("","")
