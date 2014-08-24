@@ -246,6 +246,16 @@ class GUI(xbmcgui.WindowXML):
             modeselect= []
             modeselect.append( "FourSquare Places" )
             modeselect.append( "FourSquare Top Picks" )
+            modeselect.append( "FourSquare Food" )
+            modeselect.append( "FourSquare Drinks" )
+            modeselect.append( "FourSquare Coffee" )
+            modeselect.append( "FourSquare Shops" )
+            modeselect.append( "FourSquare Arts" )
+            modeselect.append( "FourSquare Outdoors" )
+            modeselect.append( "FourSquare Sights" )
+            modeselect.append( "FourSquare Trending" )
+            modeselect.append( "FourSquare Specials" )
+            modeselect.append( "FourSquare Next Venues" )
             modeselect.append( "Last.Fm Concerts" )
             modeselect.append( "Last.Fm Festivals" )
             modeselect.append( "Last.Fm Concert Search" )
@@ -258,19 +268,59 @@ class GUI(xbmcgui.WindowXML):
                 self.c_places_list.addItems(items=itemlist)
             elif provider_index == 1:
                 self.c_places_list.reset()
-                itemlist = self.GetPlacesListExplore()
+                itemlist = self.GetPlacesListExplore("topPicks")
                 self.c_places_list.addItems(items=itemlist)
             elif provider_index == 2:
                 self.c_places_list.reset()
-                self.c_places_list.addItems(items=self.GetNearEvents())
+                itemlist = self.GetPlacesListExplore("food")
+                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 3:
                 self.c_places_list.reset()
-                self.c_places_list.addItems(items=self.GetNearEvents(False,True))
+                itemlist = self.GetPlacesListExplore("drinks")
+                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 4:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("coffee")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 5:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("shops")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 6:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("arts")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 7:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("outdoors")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 8:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("sights")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 9:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("trending")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 10:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("specials")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 11:
+                self.c_places_list.reset()
+                itemlist = self.GetPlacesListExplore("nextVenues")
+                self.c_places_list.addItems(items=itemlist)
+            elif provider_index == 12:
+                self.c_places_list.reset()
+                self.c_places_list.addItems(items=self.GetNearEvents())
+            elif provider_index == 13:
+                self.c_places_list.reset()
+                self.c_places_list.addItems(items=self.GetNearEvents(False,True))
+            elif provider_index == 14:
                 self.c_places_list.reset()
                 search_string=xbmcgui.Dialog().input("Enter music tags to search for", type=xbmcgui.INPUT_ALPHANUM)
                 self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
-            elif provider_index == 5:
+            elif provider_index == 15:
                 self.c_places_list.reset()
                 self.PinString = ""
             self.street_view = False
@@ -287,8 +337,8 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_DOWN:
             pass
         elif controlId == self.CONTROL_PLACES_LIST:
-            self.lat = self.c_places_list.getSelectedItem().getProperty("lat")
-            self.lon = self.c_places_list.getSelectedItem().getProperty("lon")
+            self.lat = float(self.c_places_list.getSelectedItem().getProperty("lat"))
+            self.lon = float(self.c_places_list.getSelectedItem().getProperty("lon"))
             if not self.c_places_list.getSelectedItem().getProperty("sortletter") == self.getWindowProperty('sortletter'):
                 self.setWindowProperty('sortletter', self.c_places_list.getSelectedItem().getProperty("sortletter"))
             else:

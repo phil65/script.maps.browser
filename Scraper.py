@@ -212,10 +212,10 @@ def GetPlacesList(self):
         self.log("ERROR")
     return places_list
     
-def GetPlacesListExplore(self):
+def GetPlacesListExplore(self,type):
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-    url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (float(self.lat), float(self.lon), "topPicks", foursquare_id, foursquare_secret)
+    url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, type, foursquare_id, foursquare_secret)
     self.log(url)
     response = self.GetStringFromUrl(url)
     results = simplejson.loads(response)
