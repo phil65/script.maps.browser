@@ -157,7 +157,7 @@ def GetPlacesList(self):
     self.log(url)
     response = self.GetStringFromUrl(url)
     results = simplejson.loads(response)
-#    self.prettyprint(results)
+ #   self.prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -206,6 +206,49 @@ def GetPlacesList(self):
                 self.log("LIMIT EXCEEDED")
             else:
                 self.log("ERROR")
+        else:
+            self.log("ERROR")
+    else:
+        self.log("ERROR")
+    return places_list
+    
+def GetPlacesListExplore(self):
+   # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
+  #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
+    url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (float(self.lat), float(self.lon), "topPicks", foursquare_id, foursquare_secret)
+    self.log(url)
+    response = self.GetStringFromUrl(url)
+    results = simplejson.loads(response)
+  #  self.prettyprint(results)
+    places_list = list()
+    self.PinString = ""
+    letter = ord('A')
+    count = 0
+    if results and 'meta' in results:
+        if results['meta']['code'] == 200:
+            for v in results['response']['groups'][0]['items']:
+                if True:
+                    item = xbmcgui.ListItem(v['venue']['name'])
+                    icon = v['venue']['categories'][0]['icon']['prefix'] + "88" +  v['venue']['categories'][0]['icon']['suffix']
+                    item.setArt({'thumb': icon})
+                    item.setLabel(v['venue']['name'])
+                    item.setProperty('name',v['venue']['name'])
+                    item.setLabel2(v['venue']['categories'][0]['name'])
+                    item.setProperty("sortletter", chr(letter))
+                    item.setProperty("Venue_Image", icon)
+                    item.setProperty("lat", str(v['venue']['location']['lat']))
+                    item.setProperty("lon", str(v['venue']['location']['lng']))
+                    self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['venue']['location']['lat']) + "," + str(v['venue']['location']['lng'])
+                    places_list.append(item)
+                    count += 1
+                    letter += 1
+                    if count > max_limit:
+                        break
+            difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
+            difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
+            self.log(difference_lat)
+        elif results['meta']['code'] == 400:
+            self.log("LIMIT EXCEEDED")
         else:
             self.log("ERROR")
     else:

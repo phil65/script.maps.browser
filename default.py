@@ -242,29 +242,35 @@ class GUI(xbmcgui.WindowXML):
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_SELECT_PROVIDER:
+            self.setWindowProperty('sortletter', "")
             modeselect= []
-            modeselect.append( "FourSquare" )
-            modeselect.append( "Concerts" )
-            modeselect.append( "Festivals" )
-            modeselect.append( "Concert Search" )
+            modeselect.append( "FourSquare Places" )
+            modeselect.append( "FourSquare Top Picks" )
+            modeselect.append( "Last.Fm Concerts" )
+            modeselect.append( "Last.Fm Festivals" )
+            modeselect.append( "Last.Fm Concert Search" )
             modeselect.append( "Reset" )
             dialogSelection = xbmcgui.Dialog()
-            provider_index = dialogSelection.select( "Choose Places", modeselect )
+            provider_index = dialogSelection.select( "Choose places to display", modeselect )
             if provider_index == 0:
                 self.c_places_list.reset()
                 itemlist = self.GetPlacesList()
                 self.c_places_list.addItems(items=itemlist)
             elif provider_index == 1:
                 self.c_places_list.reset()
-                self.c_places_list.addItems(items=self.GetNearEvents())
+                itemlist = self.GetPlacesListExplore()
+                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 2:
                 self.c_places_list.reset()
-                self.c_places_list.addItems(items=self.GetNearEvents(False,True))
+                self.c_places_list.addItems(items=self.GetNearEvents())
             elif provider_index == 3:
                 self.c_places_list.reset()
-                search_string=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
-                self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
+                self.c_places_list.addItems(items=self.GetNearEvents(False,True))
             elif provider_index == 4:
+                self.c_places_list.reset()
+                search_string=xbmcgui.Dialog().input("Enter music tags to search for", type=xbmcgui.INPUT_ALPHANUM)
+                self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
+            elif provider_index == 5:
                 self.c_places_list.reset()
                 self.PinString = ""
             self.street_view = False
@@ -283,8 +289,8 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_PLACES_LIST:
             self.lat = self.c_places_list.getSelectedItem().getProperty("lat")
             self.lon = self.c_places_list.getSelectedItem().getProperty("lon")
-            if not self.c_places_list.getSelectedItem().getProperty("eventname") == self.getWindowProperty('eventname'):
-                self.setWindowProperty('eventname', self.c_places_list.getSelectedItem().getProperty("eventname"))
+            if not self.c_places_list.getSelectedItem().getProperty("sortletter") == self.getWindowProperty('sortletter'):
+                self.setWindowProperty('sortletter', self.c_places_list.getSelectedItem().getProperty("sortletter"))
             else:
                 xbmc.executebuiltin("SetFocus(9023)")
             self.GetGoogleMapURLs()       
