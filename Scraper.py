@@ -133,7 +133,8 @@ def GetGeoCodes(self, search_string):
         self.prettyprint(results)
         self.log(len(results["results"]))
         for item in results["results"]:
-            pass
+            self.prettyprint(item['formatted_address'])
+            locationinfo = results["results"][0]["geometry"]["location"]            
         first_hit = results["results"][0]["geometry"]["location"]
         return (first_hit["lat"], first_hit["lng"])
     except Exception,e:
@@ -230,8 +231,11 @@ def GetPlacesListExplore(self,type):
                 if True:
                     item = xbmcgui.ListItem(v['venue']['name'])
                     icon = v['venue']['categories'][0]['icon']['prefix'] + "88" +  v['venue']['categories'][0]['icon']['suffix']
-                    photo_node = v['venue']['photos']['groups'][0]['items'][0]
-                    photo = photo_node['prefix'] + str(photo_node['height']) +  photo_node['suffix']
+                    try:
+                        photo_node = v['venue']['photos']['groups'][0]['items'][0]
+                        photo = photo_node['prefix'] + str(photo_node['height']) +  photo_node['suffix']
+                    except:
+                        photo = ""
                     item.setArt({'thumb': icon})
                     item.setLabel(v['venue']['name'])
                     item.setProperty('name',v['venue']['name'])
