@@ -267,6 +267,7 @@ class GUI(xbmcgui.WindowXML):
             elif provider_index == 4:
                 self.c_places_list.reset()
                 self.PinString = ""
+            self.street_view = False
             self.GetGoogleMapURLs()       
             self.c_map_image.setImage(self.GoogleMapURL)
             
@@ -348,6 +349,7 @@ class GUI(xbmcgui.WindowXML):
     def SearchLocation(self):
         self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
         if not self.location=="":
+            self.street_view = False
             self.lat, self.lon = self.GetGeoCodes(self.location)
             self.GetGoogleMapURLs()       
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
