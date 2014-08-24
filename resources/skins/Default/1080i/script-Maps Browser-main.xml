@@ -69,42 +69,44 @@
             <visible>!IsEmpty(Window.Property(streetview))</visible> 
             <animation effect="slide" start="400,0" end="0,0" time="560" tween="cubic" delay="600">Visible</animation>
             <posx>1500</posx>
-        <control type="image">
-            <posy>50</posy>
-            <height>300</height>
-            <width>400</width>
-            <aspectratio>keep</aspectratio>
-            <texture background="true">$INFO[Control.GetLabel(109)]</texture>
-            <fadetime>FanartCrossfadeTime</fadetime>
-        </control>
+            <control type="image">
+                <posy>20</posy>
+                <height>300</height>
+                <width>400</width>
+                <aspectratio>keep</aspectratio>
+                <bordertexture colordiffuse="FF000000" border="5">views/addonwall_select.png</bordertexture>
+                <bordersize>5</bordersize>
+                <texture background="true">$INFO[Control.GetLabel(109)]</texture>
+                <fadetime>FanartCrossfadeTime</fadetime>
+            </control>
             <control type="image">
                 <posx>160</posx>
-                <posy>180</posy>
+                <posy>150</posy>
                 <width>35</width>
                 <height>35</height>
                 <texture>defaulticons/DefaultFolderBack.png</texture>
-                <animation effect="rotate" end="-90" center="200,197" time="0" condition="true">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),0)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),1)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),2)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),3)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),4)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),5)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),6)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),7)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),8)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),9)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),10)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),11)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),12)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),13)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),14)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),15)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),19)">Conditional</animation>
-                <animation effect="rotate" end="-18" center="200,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),20)">Conditional</animation>
+                <animation effect="rotate" end="-90" center="200,167" time="0" condition="true">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),0)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),1)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),2)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),3)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),4)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),5)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),6)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),7)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),8)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),9)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),10)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),11)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),12)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),13)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),14)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),15)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),19)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="200,167" time="0" condition="IntegerGreaterThan(Window.Property(direction),20)">Conditional</animation>
                 <colordiffuse>red</colordiffuse>
             </control>
         </control>
@@ -290,12 +292,6 @@
 </control>
             </focusedlayout>
          </control>
-        </control>
-        <control type="group">
-            <include>Animation_HideBreadCrumbs</include>
-            <include>Breadcrumbs_BackBar</include>
-            <include>BreadcrumbsContent</include>
-            <include>Breadcrumbs_Furniture</include>
         </control>
         <include>Furniture_NowPlayingWidget</include>
         <control type="group">
