@@ -120,6 +120,17 @@ def read_from_file(self,path = "" ):
             return []
     else:
         return False
+        
+def cleanText(self, text):
+    import re
+    text = re.sub('<br \/>','[CR]',text)
+    text = re.sub('<(.|\n|\r)*?>','',text)
+    text = re.sub('&quot;','"',text)
+    text = re.sub('&amp;','&',text)
+    text = re.sub('&gt;','>',text)
+    text = re.sub('&lt;','<',text)
+    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
+    return text.strip() 
    
 def Notify(self, header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )

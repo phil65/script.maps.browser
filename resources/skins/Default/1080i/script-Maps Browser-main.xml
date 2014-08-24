@@ -7,21 +7,21 @@
     <controls>
     <control type="button" id="9023">
         <include>HiddenObject</include>
-                        <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
-                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(9011).ListItem.Property(City)] $INFO[Container(9011).ListItem.Property(Street)])</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(9011).ListItem.Property(City)] $INFO[Container(9011).ListItem.Property(Name)])</onfocus>
+                        <onfocus>SetProperty(TempLocation,$ESCINFO[Container(200).ListItem.Property(eventname)],home)</onfocus>
+                        <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Street)])</onfocus>
+                        <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Name)])</onfocus>
                         <onfocus>SendClick(111)</onfocus>
-                        <onfocus>SetFocus(9011)</onfocus>
-                    <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                        <onfocus>SetFocus(200)</onfocus>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
-                        <onfocus condition="!IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Street)])</onfocus>
-                        <onfocus condition="IsEmpty(Container(9011).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(9011).ListItem.Property(City)] $ESCINFO[Container(9011).ListItem.Property(Name)])</onfocus>
-                        <onfocus>SetProperty(TempLocation,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
+                        <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Street)])</onfocus>
+                        <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Name)])</onfocus>
+                        <onfocus>SetProperty(TempLocation,$ESCINFO[Container(200).ListItem.Property(eventname)],home)</onfocus>
                         <onfocus>SendClick(111)</onfocus>
-                        <onfocus>SetFocus(9011)</onfocus>
-                    <visible>!Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                        <onfocus>SetFocus(200)</onfocus>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
     </control>
      <control type="button" id="111">
         <include>HiddenObject</include>
@@ -29,29 +29,29 @@
     <control type="button" id="9023">
         <include>HiddenObject</include>
                 <onfocus>ClearProperty(ShowArtistEvents,home)</onfocus>
-        <onfocus>SetProperty(Label,$ESCINFO[Container(9011).ListItem.Label],home)</onfocus>
-        <onfocus>SetProperty(Label2,$ESCINFO[Container(9011).ListItem.Label2],home)</onfocus>
-        <onfocus>SetProperty(Thumb,$ESCINFO[Container(9011).ListItem.Thumb],home)</onfocus>
-        <onfocus>SetProperty(City,$ESCINFO[Container(9011).ListItem.Property(City)],home)</onfocus>
-        <onfocus>SetProperty(Street,$ESCINFO[Container(9011).ListItem.Property(Street)],home)</onfocus>
-        <onfocus>SetProperty(ID,$ESCINFO[Container(9011).ListItem.Property(ID)],home)</onfocus>
-        <onfocus>SetProperty(Name,$ESCINFO[Container(9011).ListItem.Property(Name)],home)</onfocus>
-        <onfocus>SetProperty(EventName,$ESCINFO[Container(9011).ListItem.Property(EventName)],home)</onfocus>
-        <onfocus>SetProperty(Website,$ESCINFO[Container(9011).ListItem.Property(Website)],home)</onfocus>
-        <onfocus>SetProperty(TicketURL,$ESCINFO[Container(9011).ListItem.Property(TicketURL)],home)</onfocus>
-        <onfocus>SetProperty(Description,$ESCINFO[Container(9011).ListItem.Property(Description)],home)</onfocus>
-        <onfocus>SetProperty(Headliner,$ESCINFO[Container(9011).ListItem.Property(Headliner)],home)</onfocus>
-        <onfocus>SetProperty(Venue_Image,$ESCINFO[Container(9011).ListItem.Property(Venue_Image)],home)</onfocus>
-        <onfocus>SetProperty(googlemap,$ESCINFO[Container(9011).ListItem.Property(GoogleMap)],home)</onfocus>
+        <onfocus>SetProperty(Label,$ESCINFO[Container(200).ListItem.Label],home)</onfocus>
+        <onfocus>SetProperty(Label2,$ESCINFO[Container(200).ListItem.Label2],home)</onfocus>
+        <onfocus>SetProperty(Thumb,$ESCINFO[Container(200).ListItem.Thumb],home)</onfocus>
+        <onfocus>SetProperty(City,$ESCINFO[Container(200).ListItem.Property(City)],home)</onfocus>
+        <onfocus>SetProperty(Street,$ESCINFO[Container(200).ListItem.Property(Street)],home)</onfocus>
+        <onfocus>SetProperty(ID,$ESCINFO[Container(200).ListItem.Property(ID)],home)</onfocus>
+        <onfocus>SetProperty(Name,$ESCINFO[Container(200).ListItem.Property(Name)],home)</onfocus>
+        <onfocus>SetProperty(eventname,$ESCINFO[Container(200).ListItem.Property(eventname)],home)</onfocus>
+        <onfocus>SetProperty(Website,$ESCINFO[Container(200).ListItem.Property(Website)],home)</onfocus>
+        <onfocus>SetProperty(TicketURL,$ESCINFO[Container(200).ListItem.Property(TicketURL)],home)</onfocus>
+        <onfocus>SetProperty(Description,$ESCINFO[Container(200).ListItem.Property(Description)],home)</onfocus>
+        <onfocus>SetProperty(Headliner,$ESCINFO[Container(200).ListItem.Property(Headliner)],home)</onfocus>
+        <onfocus>SetProperty(Venue_Image,$ESCINFO[Container(200).ListItem.Property(Venue_Image)],home)</onfocus>
+        <onfocus>SetProperty(googlemap,$ESCINFO[Container(200).ListItem.Property(GoogleMap)],home)</onfocus>
         <onfocus>SetProperty(WidgetType,concert,home)</onfocus>
-        <onfocus>SetFocus(9011)</onfocus>
+        <onfocus>SetFocus(200)</onfocus>
         <onfocus>ActivateWindow(1165)</onfocus>
-                    <visible>Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+                    <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
          <onfocus>SetFocus(9023)</onfocus>
-         <visible>Stringcompare(Container(9011).ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
+         <visible>Stringcompare(Container(200).ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
     </control>
         <control type="image" id="110">
             <posx>0</posx>
@@ -108,6 +108,8 @@
                 <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),16)">Conditional</animation>
                 <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),17)">Conditional</animation>
                 <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),18)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),19)">Conditional</animation>
+                <animation effect="rotate" end="-18" center="1720,197" time="0" condition="IntegerGreaterThan(Window.Property(direction),20)">Conditional</animation>
                 <colordiffuse>red</colordiffuse>
             </control>
         </control>
@@ -118,15 +120,15 @@
                        <animation effect="fade" start="100" end="0" time="280" condition="Control.HasFocus(725)">Conditional</animation>
 
 
-        <control type="list" id="9011">
+        <control type="list" id="200">
             <width>1920</width>
             <posy>800</posy>
             <height>980</height>
             <orientation>horizontal</orientation>
             <onup>651</onup>
                 <ondown>651</ondown>
-            <onleft>9011</onleft>
-            <onright>9011</onright>
+            <onleft>200</onleft>
+            <onright>200</onright>
                <itemlayout width="600" height="150">
             <control type="image">
                 <posx>-4</posx>
@@ -159,7 +161,7 @@
                     <posx>15</posx>
                     <width>145</width>
                     <height>145</height>
-                    <aspectratio>stretch</aspectratio>
+                    <aspectratio>keep</aspectratio>
                     <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
                 </control>
                 <control type="group">
@@ -170,9 +172,9 @@
                     <height>35</height>
                     <font>Font_Reg26</font>
                     <textcolor>white2</textcolor>
-                    <label>[B]$INFO[ListItem.Property(Name)][/B]</label>
+                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-                <control type="textbox">
+<!--                 <control type="textbox">
                     <posy>50</posy>
                     <width>345</width>
                     <height>110</height>
@@ -180,11 +182,11 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
-                </control>
+                    <visible>Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+                </control> -->
                 <control type="group">
-                <visible>!Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
-                <control type="label">
+<!--                 <visible>!Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+ -->                <control type="label">
                     <posy>130</posy>
                     <width>345</width>
                     <height>35</height>
@@ -199,7 +201,7 @@
                     <font>Font_Reg26</font>
                     <align>left</align>
                     <textcolor>grey2</textcolor>
-                    <label>$INFO[ListItem.Property(EventName)]</label>
+                    <label>$INFO[ListItem.Property(eventname)]</label>
                 </control>
                 </control>
 </control>
@@ -238,7 +240,7 @@
                     <posx>15</posx>
                     <width>145</width>
                     <height>145</height>
-                    <aspectratio>stretch</aspectratio>
+                    <aspectratio>keep</aspectratio>
                     <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
                 </control>
                                 <control type="image">
@@ -249,7 +251,7 @@
                     <texture border="8">views/tripanel/listselect_fo.png</texture>
                     <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
                     <include>PanelGlowFade</include>
-                    <visible>Control.HasFocus(9011)</visible>
+                    <visible>Control.HasFocus(200)</visible>
                 </control>
                 <control type="group">
                 <posx>170</posx>
@@ -259,9 +261,9 @@
                     <height>35</height>
                     <font>Font_Reg26</font>
                     <textcolor>white2</textcolor>
-                    <label>[B]$INFO[ListItem.Property(Name)][/B]</label>
+                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-                <control type="textbox">
+<!--                 <control type="textbox">
                     <posy>50</posy>
                     <width>345</width>
                     <height>110</height>
@@ -269,11 +271,11 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
-                </control>
+                    <visible>Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+                </control> -->
                 <control type="group">
-                <visible>!Stringcompare(ListItem.Property(EventName),Window(home).Property(TempLocation))</visible>
-                <control type="label">
+<!--                 <visible>!Stringcompare(ListItem.Property(eventname),Window(home).Property(TempLocation))</visible>
+ -->                <control type="label">
                     <posy>130</posy>
                     <width>345</width>
                     <height>35</height>
@@ -288,17 +290,11 @@
                     <font>Font_Reg26</font>
                     <align>left</align>
                     <textcolor>grey2</textcolor>
-                    <label>$INFO[ListItem.Property(EventName)]</label>
+                    <label>$INFO[ListItem.Property(eventname)]</label>
                 </control>
                 </control>
 </control>
             </focusedlayout>
-    
-    
-            <content>
-                <include>ConcertsPanelContent1124</include>
-                <include>ConcertsPanelContent</include>
-            </content>
          </control>
         </control>
         <control type="group">
@@ -328,7 +324,7 @@
                 <orientation>horizontal</orientation>
                 <posx>50</posx>
                 <itemgap>20</itemgap>
-                <onup>9011</onup>
+                <onup>200</onup>
                 <onleft>108</onleft>
                 <onright>103</onright>
                 <control type="button" id="112">
@@ -337,15 +333,13 @@
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Flag.png</texturefocus>
                     <texturenofocus colordiffuse="white2">googlemaps/Flag.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <onclick>RunScript(script.extendedinfo,info=getlocationevents,lat=$INFO[Window.Property(lat)],lon=$INFO[Window.Property(lon)],silent=False)</onclick>
-                    <onclick>Skin.ToggleSetting(mapnavbar)</onclick>
                 </control>  
                 <control type="button" id="101">
                      <width>100</width>
                     <height>100</height>     
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Flag.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/Flag.png</texturenofocus>
+                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Search.png</texturefocus>
+                    <texturenofocus colordiffuse="white2">googlemaps/Search.png</texturenofocus>
                 </control>  
                 <control type="button" id="102">
                     <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/streetview.png</texturefocus>
@@ -360,7 +354,7 @@
                 <orientation>horizontal</orientation>
                 <itemgap>20</itemgap>
                 <onleft>102</onleft>
-                <onup>9011</onup>
+                <onup>200</onup>
                 <onright>105</onright>
                 <control type="button" id="103">
                      <width>100</width>
@@ -388,7 +382,7 @@
                 <posx>1410</posx>
                 <orientation>horizontal</orientation>
                 <onleft>104</onleft>
-                <onup>9011</onup>
+                <onup>200</onup>
                 <onright>112</onright>
                 <itemgap>20</itemgap>
                 <visible>IsEmpty(Window.Property(streetview))</visible>
@@ -441,6 +435,9 @@
                     <texturenofocus>-</texturenofocus>
                     <font>-</font>
                     </control>
-        
+        		<control type="label">
+			<include>Dialogs_Label1</include>
+			<label>$INFO[Window.Property(direction)]</label>
+		</control>
     </controls>
 </window>
