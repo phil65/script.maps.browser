@@ -430,9 +430,5 @@
                     <texturenofocus>-</texturenofocus>
                     <font>-</font>
                     </control>
-        		<control type="label">
-			<include>Dialogs_Label1</include>
-			<label>$INFO[Window.Property(direction)]</label>
-		</control>
     </controls>
 </window>
