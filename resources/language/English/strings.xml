@@ -5,7 +5,7 @@
 
 <strings>
 	<string id="34001">Welcome to Maps Browser</string>
-	<string id="34002">Press Menu button to toggle navigation mode</string>
+	<string id="34002">Press Context Menu button to toggle navigation mode</string>
 	<string id="34003">Press Info button to change map type</string>
 	<string id="34004">FourSquare Places</string>
 	<string id="34005">FourSquare Top Picks</string>
