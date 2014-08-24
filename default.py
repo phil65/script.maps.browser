@@ -33,6 +33,7 @@ __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
 
+
 addon = xbmcaddon.Addon()
 addon_path = addon.getAddonInfo('path')
 addon_name = addon.getAddonInfo('name')
@@ -241,7 +242,7 @@ class GUI(xbmcgui.WindowXML):
             self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_GOTO_PLACE:
             self.location = self.getWindowProperty("Location")
-            self.lat, self.lon = self.GetGeoCodes(self.location)
+            self.lat, self.lon = self.GetGeoCodes(False, self.location)
             self.GetGoogleMapURLs()       
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)
@@ -410,7 +411,8 @@ class GUI(xbmcgui.WindowXML):
         self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
         if not self.location=="":
             self.street_view = False
-            self.lat, self.lon = self.GetGeoCodes(self.location)
+            self.lat, self.lon = self.GetGeoCodes(True, self.location)
+            self.PinString = ""
             self.GetGoogleMapURLs()       
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)
@@ -436,7 +438,68 @@ class GUI(xbmcgui.WindowXML):
         message = u'%s: %s' % (__addonid__, msg)
         xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
+class dialog_select_UI(xbmcgui.WindowXMLDialog):
+    from Utils import *
+    ACTION_CONTEXT_MENU = [117]
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+    ACTION_SHOW_INFO = [11]
+    ACTION_EXIT_SCRIPT = [13]
+    ACTION_DOWN = [4]
+    ACTION_UP = [3]
+    ACTION_LEFT = [1]
+    ACTION_RIGHT = [2]
+    ACTION_0 = [58, 18]
+    ACTION_PLAY = [79]
+    ACTION_SELECT_ITEM = [7]
+    
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+        self.listing = kwargs.get('listing')
+        self.selected_id = ''
+        self.lon = ''
+        self.lat = ''
 
+    def onInit(self):
+        if True :
+            self.img_list = self.getControl(6)
+            self.img_list.controlLeft(self.img_list)
+            self.img_list.controlRight(self.img_list)
+            self.getControl(3).setVisible(False)
+        else :
+           # print_exc()
+            self.img_list = self.getControl(3)
+
+        self.getControl(5).setVisible(False)
+        self.getControl(1).setLabel(__language__(32015))
+
+        for entry in self.listing:
+            listitem = xbmcgui.ListItem('%s' %(entry['generalinfo']))
+            listitem.setIconImage(entry['preview'])
+            listitem.setLabel2(entry['id'])
+            listitem.setProperty("lat",entry['lat'])
+            listitem.setProperty("lon",entry['lon'])
+            self.img_list.addItem(listitem)
+        self.setFocus(self.img_list)
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def onClick(self, controlID):
+      #  self.log('# GUI control: %s' % controlID)
+        if controlID == 6 or controlID == 3: 
+            num = self.img_list.getSelectedPosition()
+       #     self.log('# GUI position: %s' % num)
+            self.selected_id = self.img_list.getSelectedItem().getLabel2()
+            self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
+            self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))
+            xbmc.log('# GUI selected lat: %s' % self.selected_id)
+            self.close()
+
+    def onFocus(self, controlID):
+        pass
+        
+        
 if __name__ == '__main__':
     startGUI = True
     for arg in sys.argv:

@@ -8,6 +8,8 @@ __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
 
+
+
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
 def GetStringFromUrl(self,encurl):
@@ -19,7 +21,7 @@ def GetStringFromUrl(self,encurl):
             req.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
             res = urllib2.urlopen(req)
             html = res.read()
-            log("URL String: " + html)
+       #     log("URL String: " + html)
             return html
         except:
             log("could not get data from %s" % encurl)

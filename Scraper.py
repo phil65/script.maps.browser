@@ -1,4 +1,5 @@
 import xbmc, os, sys, time, re, xbmcgui,xbmcaddon, xbmcvfs,urllib
+from default import dialog_select_UI
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -7,6 +8,8 @@ else:
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
+__addonpath__ = __addon__.getAddonInfo('path')
+
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )    
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
@@ -123,20 +126,35 @@ def GetGoogleMapURLs(self):
     # self.log(url)
     # return url
                           
-def GetGeoCodes(self, search_string):
+def GetGeoCodes(self, show_dialog, search_string):
     try:
         search_string = urllib.quote_plus(search_string)
         url = 'https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&address=%s' % (search_string)
         self.log("Google Geocodes Search:" + url)
         response = self.GetStringFromUrl(url)
         results = simplejson.loads(response)
-        self.prettyprint(results)
-        self.log(len(results["results"]))
+        events = []
+#        self.log(len(results["results"]))
         for item in results["results"]:
-            self.prettyprint(item['formatted_address'])
-            locationinfo = results["results"][0]["geometry"]["location"]            
+        #    self.prettyprint(item)
+            locationinfo = item["geometry"]["location"]
+            search_string = str(locationinfo["lat"]) + "," + str(locationinfo["lng"])
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+            event = {'generalinfo': item['formatted_address'],
+                     'lat': str(locationinfo["lat"]),            
+                     'lon': str(locationinfo["lng"]),            
+                     'map': str(locationinfo["lng"]),            
+                     'preview': googlemap,            
+                     'id': item['formatted_address']}            
+            events.append(event)
         first_hit = results["results"][0]["geometry"]["location"]
-        return (first_hit["lat"], first_hit["lng"])
+        if show_dialog:
+            w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
+            w.doModal()
+            self.log(w.lat)
+            return (w.lat,w.lon)
+        else:
+            return (first_hit["lat"], first_hit["lng"])
     except Exception,e:
         self.log(e)
         return ("","")
