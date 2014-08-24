@@ -62,6 +62,7 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_PLACES_LIST = 200
 
     ACTION_CONTEXT_MENU = [117]
+    ACTION_OSD = [122]
     ACTION_PREVIOUS_MENU = [9, 92, 10]
     ACTION_SHOW_INFO = [11]
     ACTION_EXIT_SCRIPT = [13]
@@ -82,6 +83,7 @@ class GUI(xbmcgui.WindowXML):
         self.street_view = False
         self.search_string = ""
         self.zoom_level = 10
+        self.zoom_level_saved = 10
         self.zoom_level_streetview = 0
         self.type = "roadmap"
         self.lat = 0.0
@@ -392,6 +394,7 @@ class GUI(xbmcgui.WindowXML):
         if self.street_view == True:
             self.street_view = False
             self.log("StreetView Off")
+            self.zoom_level = self.zoom_level_saved
             self.GetGoogleMapURLs()       
             self.log("URL: " + self.GoogleMapURL)
             self.c_map_image.setImage(self.GoogleMapURL)
@@ -399,6 +402,7 @@ class GUI(xbmcgui.WindowXML):
         else:
             self.street_view = True
             self.log("StreetView On")
+            self.zoom_level_saved = self.zoom_level
             self.zoom_level = 17
             self.GetGoogleMapURLs()
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
