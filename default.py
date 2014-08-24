@@ -17,6 +17,10 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+
+    ################### code for FourSquare scraping based on script.maps by a.a.alsaleh. credits to him.
+
+
 import os, re, sys, urllib, xbmc, xbmcaddon, xbmcgui
 from math import sin, cos, radians
 if sys.version_info < (2, 7):

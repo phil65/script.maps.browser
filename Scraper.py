@@ -152,6 +152,7 @@ def GetLocationCoordinates(self):
         self.log(e)
         
 def GetPlacesList(self):
+    ################### code based on script.maps by a.a.alsaleh. credits to him.
     url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "topPicks", foursquare_id, foursquare_secret)
@@ -220,7 +221,7 @@ def GetPlacesListExplore(self,type):
     self.log(url)
     response = self.GetStringFromUrl(url)
     results = simplejson.loads(response)
-    self.prettyprint(results)
+   # self.prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
