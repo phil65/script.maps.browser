@@ -190,10 +190,15 @@ def GetGeoCodes(self, show_dialog, search_string):
             events.append(event)
         first_hit = results["results"][0]["geometry"]["location"]
         if show_dialog:
-            w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
-            w.doModal()
-            self.log(w.lat)
-            return (w.lat,w.lon)
+            if len(results["results"]) > 1:
+                w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
+                w.doModal()
+                self.log(w.lat)
+                return (w.lat,w.lon)
+            elif len(results["results"]) == 1:
+                return (first_hit["lat"], first_hit["lng"])                
+            else:
+                return (self.lat,self.lon)
         else:
             return (first_hit["lat"], first_hit["lng"])
     except Exception,e:
