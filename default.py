@@ -188,7 +188,7 @@ class GUI(xbmcgui.WindowXML):
         elif self.NavMode_active == True:
             self.log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if self.street_view == False:
-                stepsize = 80.0 / pow(2, self.zoom_level)
+                stepsize = 60.0 / pow(2, self.zoom_level)
                 if action_id in self.ACTION_UP:
                     self.lat = float(self.lat) + stepsize
                 elif action_id in self.ACTION_DOWN:
@@ -463,7 +463,7 @@ class GUI(xbmcgui.WindowXML):
         return self.window.getProperty(key)
 
     def setWindowProperty(self, key, value):
-        self.log("Key: " + key + " value:" + value)
+      #  self.log("Key: " + key + " value:" + value)
         return self.window.setProperty(key, value)
 
     def toggleInfo(self):

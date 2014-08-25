@@ -297,7 +297,8 @@ def GetPlacesListExplore(self,type):
                         photo = photo_node['prefix'] + str(photo_node['height']) +  photo_node['suffix']
                     except:
                         photo = ""
-                    item.setArt({'thumb': icon})
+                    item.setArt({'thumb': photo})
+                    item.setArt({'icon': icon})
                     item.setLabel(v['venue']['name'])
                     item.setProperty('name',v['venue']['name'])
                     item.setLabel2(v['venue']['categories'][0]['name'])
