@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="General">
+        <setting id="InfoButtonAction" type="enum" label="Choose Info Button Action" default="0" values="Street View|Map Type"/>
+    </category>
+</settings>
