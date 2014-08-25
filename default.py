@@ -22,7 +22,7 @@
 
 
 import os, re, sys, urllib, xbmc, xbmcaddon, xbmcgui
-from math import sin, cos, radians
+from math import sin, cos, radians, pow
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -188,7 +188,7 @@ class GUI(xbmcgui.WindowXML):
         elif self.NavMode_active == True:
             self.log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if self.street_view == False:
-                stepsize = 200.0 / float(self.zoom_level) / float(self.zoom_level) / float(self.zoom_level) / float(self.zoom_level)
+                stepsize = 80.0 / pow(2, self.zoom_level)
                 if action_id in self.ACTION_UP:
                     self.lat = float(self.lat) + stepsize
                 elif action_id in self.ACTION_DOWN:
