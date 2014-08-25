@@ -1,5 +1,6 @@
 import xbmc, os, sys, time, re, xbmcgui,xbmcaddon, xbmcvfs,urllib
 from default import dialog_select_UI
+from ImageTags import *
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -66,6 +67,7 @@ def GetNearEvents(self,tag = False,festivalsonly = False):
             item.setProperty("country", event['venue']['location']['country'])
             item.setProperty("lon", event['venue']['location']['geo:point']['geo:long'])
             item.setProperty("lat", event['venue']['location']['geo:point']['geo:lat'])
+            item.setProperty("index", str(count))
             item.setProperty("artists", my_arts)
             item.setProperty("sortletter", chr(letter))
             item.setProperty("googlemap", googlemap)
@@ -84,6 +86,45 @@ def GetNearEvents(self,tag = False,festivalsonly = False):
     else:
         self.log("Error when handling LastFM results")
     return events_list
+    
+    
+def GetImages(self,path = ""):
+    self.PinString = "&markers=color:blue"
+    letter = ord('A')
+    count = 0
+   # results = GetLastFMData(self,url)
+    images_list = list()
+    if True:
+        for image in xbmcvfs.listdir(path): #check that
+            for test in image:
+                try:
+                    img = Image.open(path + test)
+                    exif_data = get_exif_data(img)
+                    lat, lon = get_lat_lon(exif_data)
+                    if lat:
+                        self.log(lat)
+                        item = xbmcgui.ListItem(test)
+                        item.setLabel(test)
+                        item.setProperty("name",test)
+                        item.setProperty("lat", str(lat))
+                        item.setProperty("lon", str(lon))
+                        item.setArt({'thumb': path + test})
+                        images_list.append(item)
+                        item.setProperty("index", str(count))
+                        if len(self.PinString) < 1850:
+                            self.PinString = self.PinString + "%7C" + str(lat) + "," + str(lon)
+                            item.setProperty("sortletter", chr(letter))
+                            letter += 1
+                        count += 1
+                except Exception,e:
+                    self.log("Error when handling GetImages results")
+                    self.log(e)
+
+    else:
+        self.log("Error when handling GetImages results")
+    return images_list
+
+    
           
 def GetLastFMData(self, url = "", cache_days = 14):
     from base64 import b64encode
@@ -114,7 +155,7 @@ def GetGoogleMapURLs(self):
         self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-        self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction))        
+        self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))        
         self.SetProperties()
     except Exception,e:
         self.log(e)
@@ -213,6 +254,7 @@ def GetPlacesList(self):
                     item.setLabel(v['name'])
                     item.setLabel2(v['name'])
                     item.setProperty("name", v['name'])
+                    item.setProperty("index", str(count))
                     item.setProperty("sortletter", chr(letter))
                     item.setProperty("eventname", ', '.join(filter(None, v['location']['formattedAddress'])))
                     item.setProperty("Venue_Image", icon)
@@ -260,6 +302,7 @@ def GetPlacesListExplore(self,type):
                     item.setProperty('name',v['venue']['name'])
                     item.setLabel2(v['venue']['categories'][0]['name'])
                     item.setProperty("sortletter", chr(letter))
+                    item.setProperty("index", str(count))
                     item.setProperty("Venue_Image", photo)
                     item.setProperty("lat", str(v['venue']['location']['lat']))
                     item.setProperty("lon", str(v['venue']['location']['lng']))

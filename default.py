@@ -59,6 +59,8 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_RIGHT = 121
     CONTROL_UP = 122
     CONTROL_DOWN = 123
+    CONTROL_LOOK_UP = 124
+    CONTROL_LOOK_DOWN = 125
     CONTROL_PLACES_LIST = 200
 
     ACTION_CONTEXT_MENU = [117]
@@ -90,12 +92,14 @@ class GUI(xbmcgui.WindowXML):
         self.strlat = ""
         self.lon = 0.0
         self.strlon = ""
+        self.pitch = 0
         self.location = ""
         self.PinString = ""
         self.direction = 0
         self.saved_id = 100
         self.aspect = "normal"
         self.prefix = ""
+        itemlist = []
         self.GoogleMapURL = ""
         self.GoogleStreetViewURL = ""
         self.GetLocationCoordinates()
@@ -119,6 +123,9 @@ class GUI(xbmcgui.WindowXML):
                 self.zoom_level = (param[5:])
             elif param.startswith('aspect='):
                 self.aspect = (param[7:])
+            elif param.startswith('folder='):
+                folder = (param[7:])
+                itemlist = self.GetImages(folder)
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -132,7 +139,6 @@ class GUI(xbmcgui.WindowXML):
             xbmc.executebuiltin( "ActivateWindow(busydialog)" )
             self.getControls()
             self.c_places_list.reset()
-            itemlist = self.GetPlacesList()
             self.GetGoogleMapURLs()
             try:
                 self.c_places_list.addItems(items=itemlist)
@@ -249,7 +255,7 @@ class GUI(xbmcgui.WindowXML):
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_SELECT_PROVIDER:
-            self.setWindowProperty('sortletter', "")
+            self.setWindowProperty('index', "")
             modeselect= []
             modeselect.append( __language__(34004) )
             modeselect.append(__language__(34005) )
@@ -267,6 +273,7 @@ class GUI(xbmcgui.WindowXML):
             modeselect.append( __language__(34017) )
             modeselect.append( __language__(34018) )
             modeselect.append( __language__(34019) )
+            modeselect.append( __language__(34021) )
             dialogSelection = xbmcgui.Dialog()
             provider_index = dialogSelection.select( __language__(34020), modeselect )
             if provider_index == 0:
@@ -325,11 +332,17 @@ class GUI(xbmcgui.WindowXML):
                 self.c_places_list.addItems(items=self.GetNearEvents(False,True))
             elif provider_index == 14:
                 self.c_places_list.reset()
-                search_string=xbmcgui.Dialog().input("Enter music tags to search for", type=xbmcgui.INPUT_ALPHANUM)
+                search_string=xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
             elif provider_index == 15:
                 self.c_places_list.reset()
                 self.PinString = ""
+            elif provider_index == 16:
+                self.c_places_list.reset()
+                folder_path=xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
+                self.setWindowProperty('imagepath', folder_path)
+                self.c_places_list.addItems(items=self.GetImages(folder_path))
+                
             self.street_view = False
             self.GetGoogleMapURLs()       
             self.c_map_image.setImage(self.GoogleMapURL)
@@ -343,11 +356,15 @@ class GUI(xbmcgui.WindowXML):
             pass
         elif controlId == self.CONTROL_DOWN:
             pass
+        elif controlId == self.CONTROL_LOOK_UP:
+            self.PitchUp()
+        elif controlId == self.CONTROL_LOOK_DOWN:
+            self.PitchDown()
         elif controlId == self.CONTROL_PLACES_LIST:
             self.lat = float(self.c_places_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.c_places_list.getSelectedItem().getProperty("lon"))
-            if not self.c_places_list.getSelectedItem().getProperty("sortletter") == self.getWindowProperty('sortletter'):
-                self.setWindowProperty('sortletter', self.c_places_list.getSelectedItem().getProperty("sortletter"))
+            if not self.c_places_list.getSelectedItem().getProperty("index") == self.getWindowProperty('index'):
+                self.setWindowProperty('index', self.c_places_list.getSelectedItem().getProperty("index"))
             else:
                 xbmc.executebuiltin("SetFocus(9023)")
             self.GetGoogleMapURLs()       
@@ -378,6 +395,23 @@ class GUI(xbmcgui.WindowXML):
         self.GetGoogleMapURLs()       
         self.c_streetview_image.setImage(self.GoogleStreetViewURL)
         self.c_map_image.setImage(self.GoogleMapURL)
+
+    def PitchUp(self):
+        self.location = str(self.lat) + "," + str(self.lon)
+        if self.pitch <= 80:
+            self.pitch += 10       
+        self.GetGoogleMapURLs()       
+        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
+        self.c_map_image.setImage(self.GoogleMapURL)    
+
+    def PitchDown(self):
+        self.location = str(self.lat) + "," + str(self.lon)
+        if self.pitch >= -80:
+            self.pitch -= 10   
+        self.GetGoogleMapURLs()       
+        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
+        self.c_map_image.setImage(self.GoogleMapURL)    
+
         
     def ToggleNavMode(self):
         if self.NavMode_active == True:

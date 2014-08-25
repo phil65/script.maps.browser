@@ -6,28 +6,27 @@
     <controls>
     <control type="button" id="9023">
         <include>HiddenObject</include>
-                        <onfocus>SetProperty(sortletter,$ESCINFO[Container(200).ListItem.Property(sortletter)],home)</onfocus>
+                        <onfocus>SetProperty(index,$ESCINFO[Container(200).ListItem.Property(index)],home)</onfocus>
                         <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Street)])</onfocus>
                         <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Name)])</onfocus>
                         <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(200)</onfocus>
-                    <visible>!Stringcompare(Container(200).ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(index),Window.Property(index))</visible>
     </control>
     <control type="button" id="9022">
         <include>HiddenObject</include>
                         <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Street)])</onfocus>
                         <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Name)])</onfocus>
-                        <onfocus>SetProperty(sortletter,$ESCINFO[Container(200).ListItem.Property(sortletter)],home)</onfocus>
+                        <onfocus>SetProperty(index,$ESCINFO[Container(200).ListItem.Property(index)],home)</onfocus>
                         <onfocus>SendClick(111)</onfocus>
                         <onfocus>SetFocus(200)</onfocus>
-                    <visible>!Stringcompare(Container(200).ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                    <visible>!Stringcompare(Container(200).ListItem.Property(index),Window.Property(index))</visible>
     </control>
      <control type="button" id="111">
         <include>HiddenObject</include>
     </control>   
     <control type="button" id="9023">
         <include>HiddenObject</include>
-                <onfocus>ClearProperty(ShowArtistEvents,home)</onfocus>
         <onfocus>SetProperty(Label,$ESCINFO[Container(200).ListItem.Label],home)</onfocus>
         <onfocus>SetProperty(Label2,$ESCINFO[Container(200).ListItem.Label2],home)</onfocus>
         <onfocus>SetProperty(Thumb,$ESCINFO[Container(200).ListItem.Thumb],home)</onfocus>
@@ -45,7 +44,7 @@
         <onfocus>SetProperty(WidgetType,concert,home)</onfocus>
         <onfocus>SetFocus(200)</onfocus>
         <onfocus>ActivateWindow(1165)</onfocus>
-                    <visible>Stringcompare(Container(200).ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                    <visible>Stringcompare(Container(200).ListItem.Property(index),Window.Property(index))</visible>
     </control>
         <control type="image" id="110">
             <posx>0</posx>
@@ -65,6 +64,23 @@
             <include>Animation_VisibleChange200</include>
             <visible>IsEmpty(Window.Property(streetview))</visible> 
          </control>
+<!--                 <control type="image">
+                    <posx>704</posx>
+                    <posy>0</posy>
+                    <width>513</width>
+                    <height>87</height>
+                    <texture flipy="true">osd/osd_top_bar.png</texture>
+                </control>
+                <control type="label">
+                    <posx>750</posx>
+                    <width>420</width>
+                    <height>42</height>
+                    <align>center</align>
+                    <label>Test</label>
+                    <font>Font_Reg33_Caps</font>
+                    <shadowcolor>88e5e5e5</shadowcolor>
+                    <textcolor>FF363636</textcolor>
+                </control>   -->       
         <control type="group">
             <visible>!IsEmpty(Window.Property(streetview))</visible> 
             <animation effect="slide" start="400,0" end="0,0" time="560" tween="cubic" delay="600">Visible</animation>
@@ -158,7 +174,7 @@
                     <width>145</width>
                     <height>145</height>
                     <aspectratio>keep</aspectratio>
-                    <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
                 </control>
                 <control type="group">
                 <posx>170</posx>
@@ -178,10 +194,10 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 </control>
                 <control type="group">
-                 <visible>!Stringcompare(ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 <control type="label">
                     <posy>130</posy>
                     <width>345</width>
@@ -237,7 +253,7 @@
                     <width>145</width>
                     <height>145</height>
                     <aspectratio>keep</aspectratio>
-                    <texture fallback="DefaultArtist.png">$INFO[ListItem.Property(Venue_Image)]</texture>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
                 </control>
                                 <control type="image">
                                 <posx>160</posx>
@@ -267,10 +283,10 @@
                     <font>Font_Reg31_Caps</font>
                     <textcolor>white2</textcolor>
                     <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 </control>
                 <control type="group">
-                 <visible>!Stringcompare(ListItem.Property(sortletter),Window.Property(sortletter))</visible>
+                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 <control type="label">
                     <posy>130</posy>
                     <width>345</width>
