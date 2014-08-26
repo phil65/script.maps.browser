@@ -272,8 +272,13 @@ class GUI(xbmcgui.WindowXML):
             modeselect.append( __language__(34016) )
             modeselect.append( __language__(34017) )
             modeselect.append( __language__(34018) )
-            modeselect.append( __language__(34019) )
             modeselect.append( __language__(34021) )
+            modeselect.append( "Google Places" )
+
+
+
+
+            modeselect.append( __language__(34019) )
             dialogSelection = xbmcgui.Dialog()
             provider_index = dialogSelection.select( __language__(34020), modeselect )
             if provider_index == 0:
@@ -334,15 +339,22 @@ class GUI(xbmcgui.WindowXML):
                 self.c_places_list.reset()
                 search_string=xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
+
             elif provider_index == 15:
-                self.c_places_list.reset()
-                self.PinString = ""
-            elif provider_index == 16:
                 self.c_places_list.reset()
                 folder_path=xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
                 self.setWindowProperty('imagepath', folder_path)
                 self.c_places_list.addItems(items=self.GetImages(folder_path))
                 
+            elif provider_index == 16:
+                self.c_places_list.reset()
+                itemlist = self.GetGooglePlacesList("food")
+                self.c_places_list.addItems(items=itemlist)
+                
+            elif provider_index == 25:
+                self.c_places_list.reset()
+                self.PinString = ""
+
             self.street_view = False
             self.GetGoogleMapURLs()       
             self.c_map_image.setImage(self.GoogleMapURL)
