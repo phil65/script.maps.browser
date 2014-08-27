@@ -86,12 +86,17 @@
             <animation effect="slide" start="400,0" end="0,0" time="560" tween="cubic" delay="600">Visible</animation>
             <posx>1500</posx>
             <control type="image">
+                <posx>-5</posx>
+                <posy>40</posy>
+                <height>260</height>
+                <width>410</width>
+                <texture colordiffuse="FF000000" background="true">views/addonwall_select.png</texture>
+            </control>
+            <control type="image">
                 <posy>20</posy>
                 <height>300</height>
                 <width>400</width>
                 <aspectratio>keep</aspectratio>
-                <bordertexture colordiffuse="FF000000" border="5">views/addonwall_select.png</bordertexture>
-                <bordersize>5</bordersize>
                 <texture background="true">$INFO[Control.GetLabel(109)]</texture>
                 <fadetime>FanartCrossfadeTime</fadetime>
             </control>
@@ -141,40 +146,13 @@
                 <ondown>651</ondown>
             <onleft>200</onleft>
             <onright>200</onright>
-               <itemlayout width="600" height="150">
-            <control type="image">
-                <posx>-4</posx>
-                <width>600</width>
-                <height>150</height>
-                <texture>dialogs/dialog_back_shadow.png</texture>
-                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
-                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
-                <include>PanelGlowFade</include>
-                <include>Animation_VisibleChange400</include>
-            </control>
-            <control type="image">
-                <posx>-4</posx>
-                <width>600</width>
-                <height>177</height>
-                <texture>dialogs/dialog_back.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>
-     <!--       <control type="image">
-                <posx>-4</posx>
-                <width>500</width>
-                <height>167</height>
-                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
-                <bordersize>5</bordersize>
-                <texture>dialogs/scan_backg.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>-->
+               <itemlayout width="450" height="150">
                 <control type="image">
-                    <posy>15</posy>
                     <posx>15</posx>
-                    <width>145</width>
-                    <height>145</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
+                    <width>450</width>
+                    <height>200</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
                 </control>
                 <control type="group">
                 <posx>170</posx>
@@ -183,8 +161,8 @@
                     <width>345</width>
                     <height>35</height>
                     <font>Font_Reg26</font>
-                    <textcolor>white2</textcolor>
-                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                    <textcolor>FFe5e5e5</textcolor>
+                    <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
                  <control type="textbox">
                     <posy>50</posy>
@@ -192,7 +170,7 @@
                     <height>110</height>
                     <align>left</align>
                     <font>Font_Reg31_Caps</font>
-                    <textcolor>white2</textcolor>
+                    <textcolor>FFe5e5e5</textcolor>
                     <label>$LOCALIZE[31926]</label>
                     <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 </control>
@@ -203,7 +181,7 @@
                     <width>345</width>
                     <height>35</height>
                     <font>Font_Reg22_Caps</font>
-                    <textcolor>grey2</textcolor>
+                    <textcolor>FFa4a4a42</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
                 </control>
                 <control type="textbox">
@@ -212,48 +190,36 @@
                     <height>81</height>
                     <font>Font_Reg26</font>
                     <align>left</align>
-                    <textcolor>grey2</textcolor>
+                    <textcolor>FFa4a4a42</textcolor>
                     <label>$INFO[ListItem.Property(eventname)]</label>
                 </control>
+                                        <control type="image">
+                            <posy>100</posy>
+                            <width>180</width>
+                            <height>40</height>
+                            <aspectratio align="center">keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
+                            <colordiffuse>FFe5e5e5</colordiffuse>
+                        </control>
                 </control>
 </control>
             </itemlayout>
             <focusedlayout width="600" height="150">
 
 
-               <control type="image">
-                <posx>-4</posx>
-                <width>600</width>
-                <height>150</height>
-                <texture>dialogs/dialog_back_shadow.png</texture>
-                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
-                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
-                <include>PanelGlowFade</include>
-                <include>Animation_VisibleChange400</include>
-            </control>
             <control type="image">
                 <posx>-4</posx>
                 <width>600</width>
                 <height>177</height>
                 <texture>dialogs/dialog_back.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
             </control>
-     <!--       <control type="image">
-                <posx>-4</posx>
-                <width>500</width>
-                <height>167</height>
-                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
-                <bordersize>5</bordersize>
-                <texture>dialogs/scan_backg.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>-->
                 <control type="image">
                     <posy>15</posy>
                     <posx>15</posx>
                     <width>145</width>
                     <height>145</height>
                     <aspectratio>keep</aspectratio>
-                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
                 </control>
                                 <control type="image">
                                 <posx>160</posx>
@@ -261,7 +227,7 @@
                     <width>400</width>
                     <height>150</height>
                     <texture border="8">views/tripanel/listselect_fo.png</texture>
-                    <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
+                    <colordiffuse>FF0084ff</colordiffuse>
                     <include>PanelGlowFade</include>
                     <visible>Control.HasFocus(200)</visible>
                 </control>
@@ -272,8 +238,8 @@
                     <width>345</width>
                     <height>35</height>
                     <font>Font_Reg26</font>
-                    <textcolor>white2</textcolor>
-                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                    <textcolor>FFe5e5e5</textcolor>
+                    <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
                  <control type="textbox">
                     <posy>50</posy>
@@ -281,7 +247,7 @@
                     <height>110</height>
                     <align>left</align>
                     <font>Font_Reg31_Caps</font>
-                    <textcolor>white2</textcolor>
+                    <textcolor>FFe5e5e5</textcolor>
                     <label>$LOCALIZE[31926]</label>
                     <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 </control>
@@ -292,7 +258,7 @@
                     <width>345</width>
                     <height>35</height>
                     <font>Font_Reg22_Caps</font>
-                    <textcolor>grey2</textcolor>
+                    <textcolor>FFa4a4a42</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
                 </control>
                 <control type="textbox">
@@ -301,21 +267,24 @@
                     <height>81</height>
                     <font>Font_Reg26</font>
                     <align>left</align>
-                    <textcolor>grey2</textcolor>
+                    <textcolor>FFa4a4a42</textcolor>
                     <label>$INFO[ListItem.Property(eventname)]</label>
                 </control>
+                                                        <control type="image">
+                            <posy>100</posy>
+                            <width>180</width>
+                            <height>40</height>
+                            <aspectratio align="center">keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
+                            <colordiffuse>FFe5e5e5</colordiffuse>
+                        </control>
                 </control>
 </control>
             </focusedlayout>
          </control>
         </control>
-        <include>Furniture_NowPlayingWidget</include>
         <control type="group">
             <posy>975</posy>    
-            <control type="group">
-                <posy>84</posy>
-                <include>Neon_Topbar</include>
-            </control>
             <control type="group">
                 <posy>20</posy>
                 <animation effect="slide" start="0,0" end="0,200" time="480" tween="quadratic" condition="Control.HasFocus(725)">Conditional</animation>
@@ -325,7 +294,6 @@
                 <width>1920</width>
                 <height>135</height>
                 <texture flipy="true">osd/osd_back.png</texture>
-                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
             </control>       
             <control type="grouplist" id="650">
                 <orientation>horizontal</orientation>
@@ -337,20 +305,20 @@
                 <control type="button" id="112">
                      <width>100</width>
                     <height>100</height>     
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Flag.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/Flag.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/Flag.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Flag.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                 </control>  
                 <control type="button" id="101">
                      <width>100</width>
                     <height>100</height>     
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Search.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/Search.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/Search.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Search.png</texturenofocus>
                 </control>  
                 <control type="button" id="102">
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/streetview.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/streetview.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/streetview.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/streetview.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>     
@@ -367,19 +335,19 @@
                      <width>100</width>
                     <height>100</height>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/zoomin.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/zoomin.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/zoomin.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/zoomin.png</texturenofocus>
                 </control>  
 <!--                 <control type="button" id="104">
                      <width>100</width>
                     <height>100</height>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/Navigation.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/Navigation.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/Navigation.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Navigation.png</texturenofocus>
                 </control>  --> 
                 <control type="button" id="104">
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/zoomout.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/zoomout.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/zoomout.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/zoomout.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
@@ -392,47 +360,66 @@
                 <onup>200</onup>
                 <onright>112</onright>
                 <itemgap>20</itemgap>
-                <visible>IsEmpty(Window.Property(streetview))</visible>
                 <control type="togglebutton" id="105">
                      <width>100</width>
                     <height>100</height>
                     <usealttexture>Stringcompare(Window.Property(type),roadmap)</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/roadmap.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/roadmap.png</texturenofocus>
-                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/roadmap.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="grey">googlemaps/roadmap.png</alttexturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/roadmap.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/roadmap.png</texturenofocus>
+                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/roadmap.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/roadmap.png</alttexturenofocus>
+                <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>  
                 <control type="togglebutton" id="106">
                      <width>100</width>
                     <height>100</height>
                     <usealttexture>Stringcompare(Window.Property(type),hybrid)</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/hybrid.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/hybrid.png</texturenofocus>
-                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/hybrid.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="grey">googlemaps/hybrid.png</alttexturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/hybrid.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/hybrid.png</texturenofocus>
+                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/hybrid.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/hybrid.png</alttexturenofocus>
+                <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>  
                 <control type="togglebutton" id="107">
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/satellite.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/satellite.png</texturenofocus>
-                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/satellite.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="grey">googlemaps/satellite.png</alttexturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/satellite.png</texturenofocus>
+                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/satellite.png</alttexturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
                     <usealttexture>Stringcompare(Window.Property(type),satellite)</usealttexture>
+                <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>  
                 <control type="togglebutton" id="108">
-                    <texturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/terrain.png</texturefocus>
-                    <texturenofocus colordiffuse="white2">googlemaps/terrain.png</texturenofocus>
-                    <alttexturefocus colordiffuse="$VAR[FocusTextureColorVar]">googlemaps/terrain.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="grey">googlemaps/terrain.png</alttexturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
+                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/terrain.png</alttexturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
                     <usealttexture>Stringcompare(Window.Property(type),terrain)</usealttexture>
-                </control>  
+                <visible>IsEmpty(Window.Property(streetview))</visible>
+                </control>
+                <control type="button" id="124">
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
+                    <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
+                     <width>100</width>
+                    <height>100</height>
+                <visible>!IsEmpty(Window.Property(streetview))</visible>
+                </control>
+                <control type="button" id="125">
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
+                    <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
+                     <width>100</width>
+                    <height>100</height>
+                <visible>!IsEmpty(Window.Property(streetview))</visible>
+                </control>
             </control>  
               </control>
           
