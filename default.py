@@ -348,7 +348,7 @@ class GUI(xbmcgui.WindowXML):
                 
             elif provider_index == 16:
                 self.c_places_list.reset()
-                itemlist = self.GetGooglePlacesList("food")
+                itemlist = self.GetGooglePlacesList("pharmacy")
                 self.c_places_list.addItems(items=itemlist)
                 
             elif provider_index == 25:
