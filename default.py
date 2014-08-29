@@ -304,7 +304,7 @@ class GUI(xbmcgui.WindowXML):
             elif provider_index == 11:
                 itemlist = self.GetPlacesListExplore("nextVenues")
             elif provider_index == 12:
-                itemlist = self.GetNearEvents()
+                itemlist,self.PinString = self.GetNearEvents()
             elif provider_index == 13:
                 self.c_places_list.addItems(items=self.GetNearEvents(False,True))
             elif provider_index == 14:
@@ -318,7 +318,7 @@ class GUI(xbmcgui.WindowXML):
        #         itemlist = self.GetPlacesList()               
             elif provider_index == 16:
                 search_string = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetEvents(search_string)
+                itemlist,self.PinString = self.GetEvents(search_string)
             elif provider_index == 17:
                 self.PinString = ""
                 itemlist = []

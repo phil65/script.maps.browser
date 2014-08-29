@@ -1,4 +1,4 @@
-import xbmc, xbmcaddon, xbmcgui, xbmcvfs, urllib2, os, sys, time, re
+import xbmc, xbmcaddon, xbmcvfs, urllib2, os, sys, time, re
 if sys.version_info < (2, 7):
     import simplejson
 else:
