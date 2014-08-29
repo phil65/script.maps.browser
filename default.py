@@ -222,7 +222,7 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_SEARCH:
             self.SearchLocation()
         elif controlId == self.CONTROL_MODE_TOGGLE:
-            self.ToggleMapmode()
+            self.ToggleMapMode()      
         elif controlId == self.CONTROL_STREET_VIEW:
             self.ToggleStreetMode()
         elif controlId == self.CONTROL_MODE_ROADMAP:
