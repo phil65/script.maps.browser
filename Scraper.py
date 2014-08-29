@@ -86,7 +86,7 @@ def GetNearEvents(self,tag = False,festivalsonly = False):
     return self.CreateVenueList(results)
 
 def CreateVenueList(self, results):
-    self.PinString = ""
+    PinString = ""
     letter = ord('A')
     count = 0
     events_list = list()
@@ -133,14 +133,14 @@ def CreateVenueList(self, results):
             item.setLabel(event['venue']['name'])
             item.setLabel2(event['startDate'])
             events_list.append(item)
-            self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(event['venue']['location']['geo:point']['geo:lat']) + "," + str(event['venue']['location']['geo:point']['geo:long'])
+            PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(event['venue']['location']['geo:point']['geo:lat']) + "," + str(event['venue']['location']['geo:point']['geo:long'])
             count += 1
             letter += 1
             if count > max_limit:
                 break
     else:
         log("Error when handling LastFM results")
-    return events_list
+    return events_list, PinString
     
     
 def GetImages(self,path = ""):
