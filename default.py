@@ -250,7 +250,8 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_SELECT_PROVIDER:
             self.setWindowProperty('index', "")
             modeselect= []
-            modeselect.append( __language__(34004) )
+#            modeselect.append( __language__(34004) )
+            modeselect.append( "Google Places" )
             modeselect.append(__language__(34005) )
             modeselect.append(__language__(34006) )
             modeselect.append(__language__(34007) )
@@ -266,7 +267,6 @@ class GUI(xbmcgui.WindowXML):
             modeselect.append( __language__(34017) )
             modeselect.append( __language__(34018) )
             modeselect.append( __language__(34021) )
-            modeselect.append( "Google Places" )
 
 
 
@@ -274,83 +274,52 @@ class GUI(xbmcgui.WindowXML):
             modeselect.append( __language__(34019) )
             dialogSelection = xbmcgui.Dialog()
             provider_index = dialogSelection.select( __language__(34020), modeselect )
+            self.c_places_list.reset()
             if provider_index == 0:
-                self.c_places_list.reset()
-                itemlist = self.GetPlacesList()
-                self.c_places_list.addItems(items=itemlist)
+                itemlist = self.GetGooglePlacesList("food")
             elif provider_index == 1:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("topPicks")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 2:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("food")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 3:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("drinks")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 4:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("coffee")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 5:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("shops")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 6:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("arts")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 7:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("outdoors")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 8:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("sights")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 9:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("trending")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 10:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("specials")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 11:
-                self.c_places_list.reset()
                 itemlist = self.GetPlacesListExplore("nextVenues")
-                self.c_places_list.addItems(items=itemlist)
             elif provider_index == 12:
-                self.c_places_list.reset()
-                self.c_places_list.addItems(items=self.GetNearEvents())
+                itemlist = self.GetNearEvents()
             elif provider_index == 13:
-                self.c_places_list.reset()
                 self.c_places_list.addItems(items=self.GetNearEvents(False,True))
             elif provider_index == 14:
-                self.c_places_list.reset()
                 search_string=xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
-
             elif provider_index == 15:
-                self.c_places_list.reset()
                 folder_path=xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
                 self.setWindowProperty('imagepath', folder_path)
-                self.c_places_list.addItems(items=self.GetImages(folder_path))
-                
+                itemlist = self.GetImages(folder_path)               
+       #     elif provider_index == 16:
+       #         itemlist = self.GetPlacesList()               
             elif provider_index == 16:
-                self.c_places_list.reset()
-                itemlist = self.GetGooglePlacesList("pharmacy")
-                self.c_places_list.addItems(items=itemlist)
-                
-            elif provider_index == 25:
-                self.c_places_list.reset()
                 self.PinString = ""
-
-            self.street_view = False
-            self.GetGoogleMapURLs()       
-            self.c_map_image.setImage(self.GoogleMapURL)
+                itemlist = []
+            if not provider_index == -1:
+                self.c_places_list.addItems(items=itemlist)
+                self.street_view = False
+                self.GetGoogleMapURLs()       
+                self.c_map_image.setImage(self.GoogleMapURL)
             
             
         elif controlId == self.CONTROL_LEFT:
@@ -438,9 +407,9 @@ class GUI(xbmcgui.WindowXML):
             self.type = "terrain"
         else:
             self.type = "roadmap"
-            self.GetGoogleMapURLs()       
-            self.c_map_image.setImage(self.GoogleMapURL)
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)      
+        self.GetGoogleMapURLs()       
+        self.c_map_image.setImage(self.GoogleMapURL)
+        self.c_streetview_image.setImage(self.GoogleStreetViewURL)      
         
     def ToggleStreetMode(self):
         if self.street_view == True:
