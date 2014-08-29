@@ -62,6 +62,7 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_LOOK_UP = 124
     CONTROL_LOOK_DOWN = 125
     CONTROL_PLACES_LIST = 200
+    CONTROL_MODE_TOGGLE = 126
 
     ACTION_CONTEXT_MENU = [117]
     ACTION_OSD = [122]
@@ -163,17 +164,7 @@ class GUI(xbmcgui.WindowXML):
     def onAction(self, action):
         action_id = action.getId()
         if action_id in self.ACTION_SHOW_INFO:
-            if self.type == "roadmap":
-                self.type = "satellite"
-            elif self.type == "satellite":
-                self.type = "hybrid"
-            elif self.type == "hybrid":
-                self.type = "terrain"
-            else:
-                self.type = "roadmap"
-            self.GetGoogleMapURLs()       
-            self.c_map_image.setImage(self.GoogleMapURL)
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)            
+            self.ToggleMapMode()      
         elif action_id in self.ACTION_CONTEXT_MENU:
             self.ToggleNavMode()
         elif action_id in self.ACTION_PREVIOUS_MENU:
@@ -230,6 +221,8 @@ class GUI(xbmcgui.WindowXML):
             self.ZoomOut()
         elif controlId == self.CONTROL_SEARCH:
             self.SearchLocation()
+        elif controlId == self.CONTROL_MODE_TOGGLE:
+            self.ToggleMapmode()
         elif controlId == self.CONTROL_STREET_VIEW:
             self.ToggleStreetMode()
         elif controlId == self.CONTROL_MODE_ROADMAP:
@@ -435,6 +428,19 @@ class GUI(xbmcgui.WindowXML):
             self.NavMode_active = True
             self.setWindowProperty('NavMode', 'True')
             xbmc.executebuiltin("SetFocus(725)")
+
+    def ToggleMapMode(self):
+        if self.type == "roadmap":
+            self.type = "satellite"
+        elif self.type == "satellite":
+            self.type = "hybrid"
+        elif self.type == "hybrid":
+            self.type = "terrain"
+        else:
+            self.type = "roadmap"
+            self.GetGoogleMapURLs()       
+            self.c_map_image.setImage(self.GoogleMapURL)
+            self.c_streetview_image.setImage(self.GoogleStreetViewURL)      
         
     def ToggleStreetMode(self):
         if self.street_view == True:
