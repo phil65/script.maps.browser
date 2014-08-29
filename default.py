@@ -168,9 +168,11 @@ class GUI(xbmcgui.WindowXML):
         elif action_id in self.ACTION_CONTEXT_MENU:
             self.ToggleNavMode()
         elif action_id in self.ACTION_PREVIOUS_MENU:
-            if self.NavMode_active == True:
+            if self.NavMode_active == True or self.street_view == True:
                 self.setWindowProperty('NavMode', '')
-                self.NavMode_active = False                
+                self.setWindowProperty('streetview', '')
+                self.NavMode_active = False
+                self.street_view = False         
                 xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
             else:
                 self.close()
@@ -224,7 +226,11 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_MODE_TOGGLE:
             self.ToggleMapMode()      
         elif controlId == self.CONTROL_STREET_VIEW:
-            self.ToggleStreetMode()
+            if not self.street_view:
+                self.ToggleStreetMode()
+                self.ToggleNavMode()
+            else:
+                self.ToggleStreetMode()                
         elif controlId == self.CONTROL_MODE_ROADMAP:
             self.type ="roadmap"
             self.GetGoogleMapURLs()       
@@ -267,11 +273,9 @@ class GUI(xbmcgui.WindowXML):
             modeselect.append( __language__(34017) )
             modeselect.append( __language__(34018) )
             modeselect.append( __language__(34021) )
-
-
-
-
+            modeselect.append( "Concert Search (by artist)" )
             modeselect.append( __language__(34019) )
+
             dialogSelection = xbmcgui.Dialog()
             provider_index = dialogSelection.select( __language__(34020), modeselect )
             self.c_places_list.reset()
@@ -305,14 +309,17 @@ class GUI(xbmcgui.WindowXML):
                 self.c_places_list.addItems(items=self.GetNearEvents(False,True))
             elif provider_index == 14:
                 search_string=xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                self.c_places_list.addItems(items=self.GetNearEvents(search_string,False))
+                itemlist = self.GetNearEvents(search_string,False)
             elif provider_index == 15:
-                folder_path=xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
+                folder_path = xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
                 self.setWindowProperty('imagepath', folder_path)
                 itemlist = self.GetImages(folder_path)               
        #     elif provider_index == 16:
        #         itemlist = self.GetPlacesList()               
             elif provider_index == 16:
+                search_string = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
+                itemlist = self.GetEvents(search_string)
+            elif provider_index == 17:
                 self.PinString = ""
                 itemlist = []
             if not provider_index == -1:
