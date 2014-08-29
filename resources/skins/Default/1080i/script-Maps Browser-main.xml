@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
-    <backgroundcolor>backgroundcolor</backgroundcolor>
+    <backgroundcolor>FF000000</backgroundcolor>
     <defaultcontrol always="true">101</defaultcontrol>
     <allowoverlay>no</allowoverlay>
     <controls>
@@ -183,39 +183,28 @@
                     <posy>220</posy>
                     <width>420</width>
                     <height>35</height>
-                    <font>Font_Reg26</font>
+                    <font>font12</font>
                     <textcolor>FFe5e5e5</textcolor>
                     <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-                 <control type="textbox">
-                    <posy>50</posy>
-                    <width>420</width>
-                    <height>110</height>
-                    <align>left</align>
-                    <font>Font_Reg31_Caps</font>
-                    <textcolor>FFe5e5e5</textcolor>
-                    <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                </control>
                 <control type="group">
-                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 <control type="label">
                     <posy>2</posy>
                     <width>345</width>
                     <height>35</height>
-                    <font>Font_Reg22_Caps</font>
+                    <font>font10</font>
                     <textcolor>FFe5e5e5</textcolor>
                     <shadowcolor>FF000000</shadowcolor>
-                    <label>$INFO[ListItem.Label2]</label>
+                    <label>[UPPERCASE]$INFO[ListItem.Label2][/UPPERCASE]</label>
                 </control>
-                <control type="textbox">
-                    <posy>45</posy>
+                <control type="label">
+                    <posy>200</posy>
                     <width>305</width>
                     <height>81</height>
-                    <font>Font_Reg26</font>
+                    <font>font10</font>
                     <align>left</align>
-                    <textcolor>FFa4a4a4</textcolor>
-                    <label>$INFO[ListItem.Property(eventname)]</label>
+                    <textcolor>FFe5e5e5</textcolor>
+                    <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
                 </control>
                                         <control type="image">
                             <posy>100</posy>
@@ -266,39 +255,28 @@
                     <posy>220</posy>
                     <width>420</width>
                     <height>35</height>
-                    <font>Font_Reg26</font>
+                    <font>font12</font>
                     <textcolor>FFe5e5e5</textcolor>
                     <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
                 </control>
-                 <control type="textbox">
-                    <posy>50</posy>
-                    <width>420</width>
-                    <height>110</height>
-                    <align>left</align>
-                    <font>Font_Reg31_Caps</font>
-                    <textcolor>FFe5e5e5</textcolor>
-                    <label>$LOCALIZE[31926]</label>
-                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                </control>
                 <control type="group">
-                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                 <control type="label">
                     <posy>2</posy>
                     <width>345</width>
                     <height>35</height>
-                    <font>Font_Reg22_Caps</font>
+                    <font>font10</font>
                     <textcolor>FFe5e5e5</textcolor>
                     <shadowcolor>FF000000</shadowcolor>
-                    <label>$INFO[ListItem.Label2]</label>
+                    <label>[UPPERCASE]$INFO[ListItem.Label2][/UPPERCASE]</label>
                 </control>
-                <control type="textbox">
-                    <posy>45</posy>
+                <control type="label">
+                    <posy>200</posy>
                     <width>305</width>
                     <height>81</height>
-                    <font>Font_Reg26</font>
+                    <font>font10</font>
                     <align>left</align>
-                    <textcolor>FFa4a4a4</textcolor>
-                    <label>$INFO[ListItem.Property(eventname)]</label>
+                    <textcolor>FFe5e5e5</textcolor>
+                    <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
                 </control>
                                         <control type="image">
                             <posy>100</posy>
@@ -341,7 +319,7 @@
                 <posx>50</posx>
                 <itemgap>20</itemgap>
                 <onup>200</onup>
-                <onleft>108</onleft>
+                <onleft>652</onleft>
                 <onright>103</onright>
                 <control type="button" id="112">
                      <width>100</width>
@@ -371,7 +349,7 @@
                 <itemgap>20</itemgap>
                 <onleft>102</onleft>
                 <onup>200</onup>
-                <onright>105</onright>
+                <onright>652</onright>
                 <control type="button" id="103">
                      <width>100</width>
                     <height>100</height>
@@ -395,56 +373,22 @@
                 </control>
             </control>
             <control type="grouplist" id="652">
-                <posx>1410</posx>
+                <posx>1370</posx>
+                <width>500</width>
                 <orientation>horizontal</orientation>
+                <align>right</align>
                 <onleft>104</onleft>
                 <onup>200</onup>
                 <onright>112</onright>
                 <itemgap>20</itemgap>
-                <control type="togglebutton" id="105">
+                <control type="button" id="126">
                      <width>100</width>
                     <height>100</height>
-                    <usealttexture>Stringcompare(Window.Property(type),roadmap)</usealttexture>
-                    <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                    <texturefocus colordiffuse="FF0084ff">googlemaps/roadmap.png</texturefocus>
-                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/roadmap.png</texturenofocus>
-                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/roadmap.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/roadmap.png</alttexturenofocus>
-                <visible>IsEmpty(Window.Property(streetview))</visible>
-                </control>  
-                <control type="togglebutton" id="106">
-                     <width>100</width>
-                    <height>100</height>
-                    <usealttexture>Stringcompare(Window.Property(type),hybrid)</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                     <texturefocus colordiffuse="FF0084ff">googlemaps/hybrid.png</texturefocus>
                     <texturenofocus colordiffuse="FFe5e5e5">googlemaps/hybrid.png</texturenofocus>
-                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/hybrid.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/hybrid.png</alttexturenofocus>
                 <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>  
-                <control type="togglebutton" id="107">
-                    <texturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</texturefocus>
-                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/satellite.png</texturenofocus>
-                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/satellite.png</alttexturenofocus>
-                    <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                     <width>100</width>
-                    <height>100</height>
-                    <usealttexture>Stringcompare(Window.Property(type),satellite)</usealttexture>
-                <visible>IsEmpty(Window.Property(streetview))</visible>
-                </control>  
-                <control type="togglebutton" id="108">
-                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
-                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
-                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</alttexturefocus>
-                    <alttexturenofocus colordiffuse="FFa4a4a4">googlemaps/terrain.png</alttexturenofocus>
-                    <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
-                     <width>100</width>
-                    <height>100</height>
-                    <usealttexture>Stringcompare(Window.Property(type),terrain)</usealttexture>
-                <visible>IsEmpty(Window.Property(streetview))</visible>
-                </control>
                 <control type="button" id="124">
                     <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
                     <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
@@ -466,9 +410,9 @@
           
         </control>
                 <control type="button" id="725">
-                    <include>HiddenObject</include>
-                    <texturenofocus>-</texturenofocus>
-                    <font>-</font>
+                        <include>HiddenObject</include>
+                       <texturenofocus>-</texturenofocus>
+                       <font>-</font>
                     </control>
     </controls>
 </window>
