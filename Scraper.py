@@ -22,11 +22,56 @@ factual_key = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
 factual_secret= '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
 max_limit = 25
 
+def HandleLastFMEventResult(self,results):
+    events = []
+    if "events" in results and results['events'].get("event"):
+        for event in results['events']['event']:
+            artists = event['artists']['artist']
+            if isinstance(artists, list):
+                my_arts = ' / '.join(artists)
+            else:
+                my_arts = artists
+            lat = ""
+            lon = ""
+            try:
+                if event['venue']['location']['geo:point']['geo:long']:
+                    lon = event['venue']['location']['geo:point']['geo:long']
+                    lat = event['venue']['location']['geo:point']['geo:lat']
+                    search_string = lat + "," + lon
+                elif event['venue']['location']['street']:
+                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
+                elif event['venue']['location']['city']:
+                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
+                else:
+                    search_string = urllib.quote_plus(event['venue']['name'])
+            except:
+                search_string = ""
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
+            event = {'date': event['startDate'],
+                     'name': event['venue']['name'],
+                     'id': event['venue']['id'],
+                     'street': event['venue']['location']['street'],
+                     'eventname': event['title'],
+                     'website': event['website'],
+                     'description': cleanText(event['description']),
+                    # 'description': event['description'], ticket missing
+                 #    'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
+                     'city': event['venue']['location']['city'],
+                     'country': event['venue']['location']['country'],
+                     'geolong': event['venue']['location']['geo:point']['geo:long'],
+                     'geolat': event['venue']['location']['geo:point']['geo:lat'],
+                     'artists': my_arts,
+                     'googlemap': googlemap,
+                     'artist_image': event['image'][-1]['#text'],
+                     'venue_image': event['venue']['image'][-1]['#text'],
+                     'headliner': event['artists']['headliner']  }
+            events.append(event)
+    else:
+        log("Error in HandleLastFMEventResult. JSON query follows:")
+     #   prettyprint(results)
+    return events
             
 def GetNearEvents(self,tag = False,festivalsonly = False):
-    self.PinString = ""
-    letter = ord('A')
-    count = 0
     if festivalsonly:
         festivalsonly = "1"
     else:
@@ -37,6 +82,12 @@ def GetNearEvents(self,tag = False,festivalsonly = False):
     if self.lat:
         url = url + '&lat=%s&long=%s' % (self.lat,self.lon)  # &distance=60
     results = GetLastFMData(self,url)
+    return self.CreateVenueList(results)
+
+def CreateVenueList(self, results):
+    self.PinString = ""
+    letter = ord('A')
+    count = 0
     events_list = list()
     if "events" in results and results['events'].get("event"):
         for event in results['events']['event']:
@@ -141,6 +192,21 @@ def GetLastFMData(self, url = "", cache_days = 14):
         results = simplejson.loads(response)
         self.save_to_file(results,filename,Addon_Data_Path)
         return results
+
+def GetEvents(self,id, pastevents = False):
+    id = urllib.quote(id)
+    if pastevents:
+ #       url = 'method=artist.getpastevents&mbid=%s' % (id)
+        url = 'method=artist.getpastevents&autocorrect=1&artist=%s' % (id)
+    else:
+  #      url = 'method=artist.getevents&mbid=%s' % (id)
+        url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
+    results = GetLastFMData(self,url)
+    try:
+        return self.CreateVenueList(results)
+    except:
+        log("Error in GetEvents()")
+        return []
         
 def GetGoogleMapURLs(self):
     try:
