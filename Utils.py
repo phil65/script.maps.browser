@@ -62,12 +62,12 @@ def string2deg(string):
         
 def ParseGeoTags(lat,lon):
     if not lon == "":
-        lat = string2deg(lat)
-        lon = string2deg(lon)
+        lat = float(string2deg(lat))
+        lon = float(string2deg(lon))
     else:
         coords = lat.split(",lon=")
-        lat = string2deg(coords[0])
-        lon = string2deg(coords[1])
+        lat = float(string2deg(coords[0]))
+        lon = float(string2deg(coords[1]))
     return lat,lon
         
 def save_to_file(content, filename, path = "" ):
