@@ -335,9 +335,12 @@
                     <texturefocus colordiffuse="FF0084ff">googlemaps/Search.png</texturefocus>
                     <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Search.png</texturenofocus>
                 </control>  
-                <control type="button" id="102">
+                <control type="togglebutton" id="102">
                     <texturefocus colordiffuse="FF0084ff">googlemaps/streetview.png</texturefocus>
                     <texturenofocus colordiffuse="FFe5e5e5">googlemaps/streetview.png</texturenofocus>
+                    <alttexturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</alttexturefocus>
+                    <alttexturenofocus colordiffuse="FFe5e5e5">googlemaps/satellite.png</alttexturenofocus>
+                    <usealttexture>!IsEmpty(Window.Property(streetview))</usealttexture>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>     
@@ -390,16 +393,16 @@
                 <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>  
                 <control type="button" id="124">
-                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
-                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/moveup.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/moveup.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
                 <visible>!IsEmpty(Window.Property(streetview))</visible>
                 </control>
                 <control type="button" id="125">
-                    <texturefocus colordiffuse="FF0084ff">googlemaps/terrain.png</texturefocus>
-                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/terrain.png</texturenofocus>
+                    <texturefocus colordiffuse="FF0084ff">googlemaps/movedown.png</texturefocus>
+                    <texturenofocus colordiffuse="FFe5e5e5">googlemaps/movedown.png</texturenofocus>
                     <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                      <width>100</width>
                     <height>100</height>
