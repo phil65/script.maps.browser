@@ -1,6 +1,7 @@
 import xbmc, os, sys, time, re, xbmcgui,xbmcaddon, xbmcvfs,urllib
 from default import dialog_select_UI
 from ImageTags import *
+from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -116,7 +117,7 @@ def CreateVenueList(self, results):
             item.setProperty("street", event['venue']['location']['street'])
             item.setProperty("eventname", event['title'])
             item.setProperty("website", event['website'])
-            item.setProperty("description", self.cleanText(event['description']))
+            item.setProperty("description", cleanText(event['description']))
             item.setProperty("city", event['venue']['location']['city'])
             item.setProperty("country", event['venue']['location']['country'])
             item.setProperty("lon", event['venue']['location']['geo:point']['geo:long'])
@@ -138,7 +139,7 @@ def CreateVenueList(self, results):
             if count > max_limit:
                 break
     else:
-        self.log("Error when handling LastFM results")
+        log("Error when handling LastFM results")
     return events_list
     
     
@@ -156,7 +157,7 @@ def GetImages(self,path = ""):
                     exif_data = get_exif_data(img)
                     lat, lon = get_lat_lon(exif_data)
                     if lat:
-                        self.log(lat)
+                        log(lat)
                         item = xbmcgui.ListItem(test)
                         item.setLabel(test)
                         item.setProperty("name",test)
@@ -171,11 +172,11 @@ def GetImages(self,path = ""):
                             letter += 1
                         count += 1
                 except Exception,e:
-                    self.log("Error when handling GetImages results")
-                    self.log(e)
+                    log("Error when handling GetImages results")
+                    log(e)
 
     else:
-        self.log("Error when handling GetImages results")
+        log("Error when handling GetImages results")
     return images_list
 
     
@@ -185,12 +186,12 @@ def GetLastFMData(self, url = "", cache_days = 14):
     filename = b64encode(url).replace("/","XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-        return self.read_from_file(path)
+        return read_from_file(path)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
-        response = self.GetStringFromUrl(url)
+        response = GetStringFromUrl(url)
         results = simplejson.loads(response)
-        self.save_to_file(results,filename,Addon_Data_Path)
+        save_to_file(results,filename,Addon_Data_Path)
         return results
 
 def GetEvents(self,id, pastevents = False):
@@ -225,26 +226,42 @@ def GetGoogleMapURLs(self):
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
         self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))        
-        self.SetProperties()
+        self.setWindowProperty(self.prefix + 'location', self.location)
+        self.setWindowProperty(self.prefix + 'lat', str(self.lat))
+        self.setWindowProperty(self.prefix + 'lon', str(self.lon))
+        self.setWindowProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
+        self.setWindowProperty(self.prefix + 'direction', str(self.direction/18))
+        self.setWindowProperty(self.prefix + 'type', self.type)
+        self.setWindowProperty(self.prefix + 'aspect', self.aspect)
+        self.setWindowProperty(self.prefix + 'map_image', self.GoogleMapURL)
+        self.setWindowProperty(self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+        if self.street_view == False:
+            self.setWindowProperty(self.prefix + 'streetview', "")
+        else:
+            self.setWindowProperty(self.prefix + 'streetview', "True")
+        if self.NavMode_active == False:
+            self.setWindowProperty(self.prefix + 'NavMode', "")
+        else:
+            self.setWindowProperty(self.prefix + 'NavMode', "True")
     except Exception,e:
-        self.log(e)
+        log(e)
         
 # def GetBingMap(self):
    # # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%s?mapSize=800,600&key=%s' % (urllib.quote(self.search_string),bing_key)
     # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%.6f,%.6f/5?key=%s' % (self.lat,self.lon, bing_key)
    ##         'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%.6f,%.6f/%i?fmt=%s&key=%s' % (self.lat, self.lon, self.zoom_level, self._format, bing_key)
-    # self.log(url)
+    # log(url)
     # return url
                           
 def GetGeoCodes(self, show_dialog, search_string):
     try:
         search_string = urllib.quote_plus(search_string)
         url = 'https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&address=%s' % (search_string)
-        self.log("Google Geocodes Search:" + url)
-        response = self.GetStringFromUrl(url)
+        log("Google Geocodes Search:" + url)
+        response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         events = []
-#        self.log(len(results["results"]))
+#        log(len(results["results"]))
         for item in results["results"]:
         #    self.prettyprint(item)
             locationinfo = item["geometry"]["location"]
@@ -262,7 +279,7 @@ def GetGeoCodes(self, show_dialog, search_string):
             if len(results["results"]) > 1:
                 w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
                 w.doModal()
-                self.log(w.lat)
+                log(w.lat)
                 return (w.lat,w.lon)
             elif len(results["results"]) == 1:
                 return (first_hit["lat"], first_hit["lng"])                
@@ -271,26 +288,26 @@ def GetGeoCodes(self, show_dialog, search_string):
         else:
             return (first_hit["lat"], first_hit["lng"])
     except Exception,e:
-        self.log(e)
+        log(e)
         return ("","")
         
 def GetLocationCoordinates(self):
     try:
         url = 'http://www.telize.com/geoip'
-        response = self.GetStringFromUrl(url)
+        response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         self.lat = results["latitude"]
         self.lon = results["longitude"]
     except Exception,e:
-        self.log(e)
+        log(e)
         
 def GetPlacesList(self):
     ################### code based on script.maps by a.a.alsaleh. credits to him.
     url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "topPicks", foursquare_id, foursquare_secret)
-    self.log(url)
-    response = self.GetStringFromUrl(url)
+    log(url)
+    response = GetStringFromUrl(url)
     results = simplejson.loads(response)
  #   self.prettyprint(results)
     places_list = list()
@@ -322,8 +339,8 @@ def GetPlacesList(self):
                     #
                     except Exception, e:
                         icon = ""
-                        self.log("Error: Exception in GetPlacesList with message:")
-                        self.log(e)
+                        log("Error: Exception in GetPlacesList with message:")
+                        log(e)
                     item.setArt({'thumb': icon})
                     item.setLabel(v['name'])
                     item.setLabel2(v['name'])
@@ -339,21 +356,21 @@ def GetPlacesList(self):
                     if count > max_limit:
                         break
             elif results['meta']['code'] == 400:
-                self.log("LIMIT EXCEEDED")
+                log("LIMIT EXCEEDED")
             else:
-                self.log("ERROR")
+                log("ERROR")
         else:
-            self.log("ERROR")
+            log("ERROR")
     else:
-        self.log("ERROR")
+        log("ERROR")
     return places_list
     
 def GetPlacesListExplore(self,type):
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=25&venuePhotos=1&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, type, foursquare_id, foursquare_secret)
-    self.log(url)
-    response = self.GetStringFromUrl(url)
+    log(url)
+    response = GetStringFromUrl(url)
     results = simplejson.loads(response)
     self.prettyprint(results)
     places_list = list()
@@ -391,21 +408,21 @@ def GetPlacesListExplore(self,type):
                         break
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
            # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # self.log(difference_lat)
+           # log(difference_lat)
         elif results['meta']['code'] == 400:
-            self.log("LIMIT EXCEEDED")
+            log("LIMIT EXCEEDED")
         else:
-            self.log("ERROR")
+            log("ERROR")
     else:
-        self.log("ERROR")
+        log("ERROR")
     return places_list
     
     
 def GetGooglePlacesList(self,type):
     location = str(self.lat) + "," + str(self.lon)
     url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location,type, googlemaps_key_places)
-    self.log(url)
-    response = self.GetStringFromUrl(url)
+    log(url)
+    response = GetStringFromUrl(url)
     results = simplejson.loads(response)
     self.prettyprint(results)
     places_list = list()
@@ -447,11 +464,11 @@ def GetGooglePlacesList(self,type):
                     break
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
            # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # self.log(difference_lat)
+           # log(difference_lat)
         elif results['meta']['code'] == 400:
-            self.log("LIMIT EXCEEDED")
+            log("LIMIT EXCEEDED")
         else:
-            self.log("ERROR")
+            log("ERROR")
     else:
-        self.log("ERROR")
+        log("ERROR")
     return places_list

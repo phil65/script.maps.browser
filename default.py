@@ -22,6 +22,7 @@
 
 
 import os, re, sys, urllib, xbmc, xbmcaddon, xbmcgui
+from Utils import *
 from math import sin, cos, radians, pow
 if sys.version_info < (2, 7):
     import simplejson
@@ -41,7 +42,6 @@ bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 
 
 class GUI(xbmcgui.WindowXML):
-    from Utils import *
     from Scraper import *
     CONTROL_SEARCH = 101
     CONTROL_STREET_VIEW = 102
@@ -78,10 +78,10 @@ class GUI(xbmcgui.WindowXML):
     ACTION_SELECT_ITEM = [7]
 
     def __init__(self, skin_file, addon_path):
-        self.log('__init__')
+        log('__init__')
             
     def onInit(self,startGUI = True):
-        self.log('onInit')
+        log('onInit')
         self.NavMode_active = False
         self.street_view = False
         self.search_string = ""
@@ -106,12 +106,12 @@ class GUI(xbmcgui.WindowXML):
         self.GetLocationCoordinates()
         self.location = str(self.lat) + "," + str(self.lon)
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        self.log("window = " + str(self.window))
+        log("window = " + str(self.window))
         self.setWindowProperty('NavMode', '')
         self.setWindowProperty('streetview', '')
         for arg in sys.argv:
             param = arg.lower()
-            self.log("param = " + param)
+            log("param = " + param)
             if param.startswith('location='):
                 self.location = (param[9:])
             elif param.startswith('lat='):
@@ -134,7 +134,7 @@ class GUI(xbmcgui.WindowXML):
                 if not self.prefix.endswith('.') and self.prefix <> "":
                     self.prefix = self.prefix + '.'
         if self.location == "geocode":
-            self.ParseGeoTags()            
+            self.lat,self.lon = ParseGeoTags()            
         self.GetGoogleMapURLs()
         if startGUI:
             xbmc.executebuiltin( "ActivateWindow(busydialog)" )
@@ -146,15 +146,15 @@ class GUI(xbmcgui.WindowXML):
                 self.c_map_image.setImage(self.GoogleMapURL)
                 self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             except Exception,e:
-                self.log("Error: Exception in onInit with message:")
-                self.log(e)
+                log("Error: Exception in onInit with message:")
+                log(e)
             settings = xbmcaddon.Addon(id='script.maps.browser')
             xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             if not settings.getSetting('firststart') == "true":
                 settings.setSetting(id='firststart', value='true')
                 dialog = xbmcgui.Dialog()
                 dialog.ok(__language__(34001), __language__(34002), __language__(34003))
-        self.log('onInit finished')
+        log('onInit finished')
 
     def getControls(self):
         self.c_map_image = self.getControl(self.CONTROL_MAP_IMAGE)
@@ -179,7 +179,7 @@ class GUI(xbmcgui.WindowXML):
         elif action_id in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif self.NavMode_active == True:
-            self.log("lat: " + str(self.lat) + " lon: " + str(self.lon))
+            log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if self.street_view == False:
                 stepsize = 60.0 / pow(2, self.zoom_level)
                 if action_id in self.ACTION_UP:
@@ -421,15 +421,15 @@ class GUI(xbmcgui.WindowXML):
     def ToggleStreetMode(self):
         if self.street_view == True:
             self.street_view = False
-            self.log("StreetView Off")
+            log("StreetView Off")
             self.zoom_level = self.zoom_level_saved
             self.GetGoogleMapURLs()       
-            self.log("URL: " + self.GoogleMapURL)
+            log("URL: " + self.GoogleMapURL)
             self.c_map_image.setImage(self.GoogleMapURL)
             self.setWindowProperty('streetview', '')
         else:
             self.street_view = True
-            self.log("StreetView On")
+            log("StreetView On")
             self.zoom_level_saved = self.zoom_level
             self.zoom_level = 17
             self.GetGoogleMapURLs()
@@ -457,7 +457,7 @@ class GUI(xbmcgui.WindowXML):
         return self.window.getProperty(key)
 
     def setWindowProperty(self, key, value):
-      #  self.log("Key: " + key + " value:" + value)
+      #  log("Key: " + key + " value:" + value)
         return self.window.setProperty(key, value)
 
     def toggleInfo(self):
@@ -518,10 +518,10 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-      #  self.log('# GUI control: %s' % controlID)
+      #  log('# GUI control: %s' % controlID)
         if controlID == 6 or controlID == 3: 
             num = self.img_list.getSelectedPosition()
-       #     self.log('# GUI position: %s' % num)
+       #     log('# GUI position: %s' % num)
             self.selected_id = self.img_list.getSelectedItem().getLabel2()
             self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))
