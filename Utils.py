@@ -12,7 +12,7 @@ __language__     = __addon__.getLocalizedString
 
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
-def GetStringFromUrl(self,encurl):
+def GetStringFromUrl(encurl):
     doc = ""
     succeed = 0
     while succeed < 5:
@@ -35,9 +35,9 @@ def log(txt):
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
-def string2deg(self, string):
+def string2deg(string):
     string = string.strip().replace('"','').replace("'","") # trim leading/trailing whitespace
-    self.log("String:" + string)
+    log("String:" + string)
     if string[0].lower() == "w" or string[0].lower() == "s":
        negative = True
     else:
@@ -60,35 +60,17 @@ def string2deg(self, string):
         decDegrees = -1.0 * decDegrees
     return decDegrees   
         
-def ParseGeoTags(self):
-    if not self.strlon == "":
-        self.lat = self.string2deg(self.strlat)
-        self.lon = self.string2deg(self.strlon)
+def ParseGeoTags(lat,lon):
+    if not lon == "":
+        lat = string2deg(lat)
+        lon = string2deg(lon)
     else:
-        coords = self.strlat.split(",lon=")
-        self.lat = self.string2deg(coords[0])
-        self.lon = self.string2deg(coords[1])
-
-def SetProperties(self):
-    self.setWindowProperty(self.prefix + 'location', self.location)
-    self.setWindowProperty(self.prefix + 'lat', str(self.lat))
-    self.setWindowProperty(self.prefix + 'lon', str(self.lon))
-    self.setWindowProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
-    self.setWindowProperty(self.prefix + 'direction', str(self.direction/18))
-    self.setWindowProperty(self.prefix + 'type', self.type)
-    self.setWindowProperty(self.prefix + 'aspect', self.aspect)
-    self.setWindowProperty(self.prefix + 'map_image', self.GoogleMapURL)
-    self.setWindowProperty(self.prefix + 'streetview_image', self.GoogleStreetViewURL)
-    if self.street_view == False:
-        self.setWindowProperty(self.prefix + 'streetview', "")
-    else:
-        self.setWindowProperty(self.prefix + 'streetview', "True")
-    if self.NavMode_active == False:
-        self.setWindowProperty(self.prefix + 'NavMode', "")
-    else:
-        self.setWindowProperty(self.prefix + 'NavMode', "True")
+        coords = lat.split(",lon=")
+        lat = string2deg(coords[0])
+        lon = string2deg(coords[1])
+    return lat,lon
         
-def save_to_file(self, content, filename, path = "" ):
+def save_to_file(content, filename, path = "" ):
     if True:
         if path == "":
             text_file_path = get_browse_dialog() + filename + ".txt"
@@ -105,7 +87,7 @@ def save_to_file(self, content, filename, path = "" ):
     else:
         return False
         
-def read_from_file(self,path = "" ):
+def read_from_file(path = "" ):
     log("trying to load " + path)
     # Set path
     if path == "":
@@ -123,7 +105,7 @@ def read_from_file(self,path = "" ):
     else:
         return False
         
-def cleanText(self, text):
+def cleanText(text):
     import re
     text = re.sub('<br \/>','[CR]',text)
     text = re.sub('<(.|\n|\r)*?>','',text)
@@ -134,8 +116,8 @@ def cleanText(self, text):
     text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
     return text.strip() 
    
-def Notify(self, header, line='', line2='', line3=''):
+def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
         
-def prettyprint(self,string):
+def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
