@@ -181,6 +181,7 @@
                     <posx>5</posx>
                 <control type="label">
                     <posy>220</posy>
+                    <aligny>top</aligny>
                     <width>420</width>
                     <height>35</height>
                     <font>font12</font>
@@ -190,7 +191,7 @@
                 <control type="group">
                 <control type="label">
                     <posy>2</posy>
-                    <width>345</width>
+                    <width>420</width>
                     <height>35</height>
                     <font>font10</font>
                     <textcolor>FFe5e5e5</textcolor>
@@ -199,10 +200,11 @@
                 </control>
                 <control type="label">
                     <posy>200</posy>
-                    <width>305</width>
+                    <width>420</width>
                     <height>81</height>
                     <font>font10</font>
                     <align>left</align>
+                    <aligny>bottom</aligny>
                     <textcolor>FFe5e5e5</textcolor>
                     <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
                 </control>
@@ -253,6 +255,7 @@
                     <posx>5</posx>
                 <control type="label">
                     <posy>220</posy>
+                    <aligny>top</aligny>
                     <width>420</width>
                     <height>35</height>
                     <font>font12</font>
@@ -262,7 +265,7 @@
                 <control type="group">
                 <control type="label">
                     <posy>2</posy>
-                    <width>345</width>
+                    <width>420</width>
                     <height>35</height>
                     <font>font10</font>
                     <textcolor>FFe5e5e5</textcolor>
@@ -271,10 +274,11 @@
                 </control>
                 <control type="label">
                     <posy>200</posy>
-                    <width>305</width>
+                    <width>420</width>
                     <height>81</height>
                     <font>font10</font>
                     <align>left</align>
+                    <aligny>bottom</aligny>
                     <textcolor>FFe5e5e5</textcolor>
                     <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
                 </control>
