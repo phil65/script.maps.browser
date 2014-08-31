@@ -263,7 +263,7 @@ def GetGeoCodes(self, show_dialog, search_string):
         events = []
 #        log(len(results["results"]))
         for item in results["results"]:
-        #    self.prettyprint(item)
+        #    prettyprint(item)
             locationinfo = item["geometry"]["location"]
             search_string = str(locationinfo["lat"]) + "," + str(locationinfo["lng"])
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
@@ -309,7 +309,7 @@ def GetPlacesList(self):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
- #   self.prettyprint(results)
+ #   prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -372,7 +372,7 @@ def GetPlacesListExplore(self,placetype):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    self.prettyprint(results)
+   # prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -424,7 +424,6 @@ def GetGooglePlacesList(self,type):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    self.prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -437,7 +436,7 @@ def GetGooglePlacesList(self,type):
                     photo_ref = v['photos'][0]['photo_reference']
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref,googlemaps_key_places)
                 except:
-                    photo = v['icon']
+                    photo = ""
                 typestring = ""
                 typestring =  " / ".join( v['types'] )
                 item.setArt({'thumb': photo})
