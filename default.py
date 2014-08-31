@@ -472,17 +472,7 @@ class GUI(xbmcgui.WindowXML):
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
     from Utils import *
-    ACTION_CONTEXT_MENU = [117]
     ACTION_PREVIOUS_MENU = [9, 92, 10]
-    ACTION_SHOW_INFO = [11]
-    ACTION_EXIT_SCRIPT = [13]
-    ACTION_DOWN = [4]
-    ACTION_UP = [3]
-    ACTION_LEFT = [1]
-    ACTION_RIGHT = [2]
-    ACTION_0 = [58, 18]
-    ACTION_PLAY = [79]
-    ACTION_SELECT_ITEM = [7]
     
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
