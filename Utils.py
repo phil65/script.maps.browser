@@ -1,4 +1,4 @@
-import xbmc, xbmcaddon, xbmcvfs, urllib2, os, sys, time, re
+import xbmc, xbmcaddon, xbmcgui, xbmcvfs, urllib2, os, sys, time, re
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -9,8 +9,15 @@ __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
 
 
-
+window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
+
+def getWindowProperty(key):
+    return window.getProperty(key)
+
+def setWindowProperty(key, value):
+  #  log("Key: " + key + " value:" + value)
+    return window.setProperty(key, value)
 
 def GetStringFromUrl(encurl):
     doc = ""

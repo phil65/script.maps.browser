@@ -226,23 +226,23 @@ def GetGoogleMapURLs(self):
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
         self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))        
-        self.setWindowProperty(self.prefix + 'location', self.location)
-        self.setWindowProperty(self.prefix + 'lat', str(self.lat))
-        self.setWindowProperty(self.prefix + 'lon', str(self.lon))
-        self.setWindowProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
-        self.setWindowProperty(self.prefix + 'direction', str(self.direction/18))
-        self.setWindowProperty(self.prefix + 'type', self.type)
-        self.setWindowProperty(self.prefix + 'aspect', self.aspect)
-        self.setWindowProperty(self.prefix + 'map_image', self.GoogleMapURL)
-        self.setWindowProperty(self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+        setWindowProperty(self.prefix + 'location', self.location)
+        setWindowProperty(self.prefix + 'lat', str(self.lat))
+        setWindowProperty(self.prefix + 'lon', str(self.lon))
+        setWindowProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
+        setWindowProperty(self.prefix + 'direction', str(self.direction/18))
+        setWindowProperty(self.prefix + 'type', self.type)
+        setWindowProperty(self.prefix + 'aspect', self.aspect)
+        setWindowProperty(self.prefix + 'map_image', self.GoogleMapURL)
+        setWindowProperty(self.prefix + 'streetview_image', self.GoogleStreetViewURL)
         if self.street_view == False:
-            self.setWindowProperty(self.prefix + 'streetview', "")
+            setWindowProperty(self.prefix + 'streetview', "")
         else:
-            self.setWindowProperty(self.prefix + 'streetview', "True")
+            setWindowProperty(self.prefix + 'streetview', "True")
         if self.NavMode_active == False:
-            self.setWindowProperty(self.prefix + 'NavMode', "")
+            setWindowProperty(self.prefix + 'NavMode', "")
         else:
-            self.setWindowProperty(self.prefix + 'NavMode', "True")
+            setWindowProperty(self.prefix + 'NavMode', "True")
     except Exception,e:
         log(e)
         
@@ -309,7 +309,7 @@ def GetPlacesList(self):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
- #   prettyprint(results)
+    prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -418,14 +418,15 @@ def GetPlacesListExplore(self,placetype):
     return places_list
     
     
-def GetGooglePlacesList(self,type):
+def GetGooglePlacesList(self,locationtype):
     location = str(self.lat) + "," + str(self.lon)
-    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location,type, googlemaps_key_places)
+    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location,locationtype, googlemaps_key_places)
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
+    prettyprint(results)
     places_list = list()
-    self.PinString = ""
+    PinString = ""
     letter = ord('A')
     count = 0
     if "results" in results:
@@ -455,7 +456,7 @@ def GetGooglePlacesList(self,type):
                 if "rating" in v:
                     rating = str(v['rating']*2.0)
                     item.setProperty("rating", rating)
-                self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)
                 count += 1
                 letter += 1
@@ -470,4 +471,4 @@ def GetGooglePlacesList(self,type):
             log("ERROR")
     else:
         log("ERROR")
-    return places_list
+    return PinString, places_list
