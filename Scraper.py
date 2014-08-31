@@ -396,6 +396,8 @@ def GetPlacesListExplore(self,placetype):
                     item.setProperty("sortletter", chr(letter))
                     item.setProperty("index", str(count))
                     item.setProperty("Venue_Image", photo)
+                    address = "[CR]".join(v['venue']['location']['formattedAddress'])
+                    item.setProperty("description", address)
                     item.setProperty("lat", str(v['venue']['location']['lat']))
                     item.setProperty("lon", str(v['venue']['location']['lng']))
                     self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['venue']['location']['lat']) + "," + str(v['venue']['location']['lng'])
@@ -418,7 +420,7 @@ def GetPlacesListExplore(self,placetype):
     
 def GetGooglePlacesList(self,type):
     location = str(self.lat) + "," + str(self.lon)
-    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=500&key=%s' % (location,googlemaps_key_places)
+    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location,type, googlemaps_key_places)
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
@@ -431,17 +433,19 @@ def GetGooglePlacesList(self,type):
         if True:
             for v in results['results']:
                 item = xbmcgui.ListItem(v['name'])
-           #     icon = v['venue']['categories'][0]['icon']['prefix'] + "88" +  v['venue']['categories'][0]['icon']['suffix']
                 try:
                     photo_ref = v['photos'][0]['photo_reference']
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref,googlemaps_key_places)
                 except:
                     photo = ""
+                typestring = ""
+                typestring =  " / ".join( v['types'] )
                 item.setArt({'thumb': photo})
-           #     item.setArt({'icon': icon})
+                item.setArt({'icon': v['icon']})
                 item.setLabel(v['name'])
                 item.setProperty('name',v['name'])
-             #   item.setLabel2(v['venue']['categories'][0]['name'])
+                item.setProperty('description',v['vicinity'])
+                item.setLabel2(typestring)
                 item.setProperty("sortletter", chr(letter))
                 item.setProperty("index", str(count))
                 lat = str(v['geometry']['location']['lat'])
@@ -449,6 +453,9 @@ def GetGooglePlacesList(self,type):
                 item.setProperty("lat", lat)
                 item.setProperty("lon", lon)
                 item.setProperty("index", str(count))
+                if "rating" in v:
+                    rating = str(v['rating']*2.0)
+                    item.setProperty("rating", rating)
                 self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)
                 count += 1
