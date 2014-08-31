@@ -9,13 +9,12 @@ __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
 
 
-window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
-def getWindowProperty(key):
+def getWindowProperty(window, key):
     return window.getProperty(key)
 
-def setWindowProperty(key, value):
+def setWindowProperty(window, key, value):
   #  log("Key: " + key + " value:" + value)
     return window.setProperty(key, value)
 

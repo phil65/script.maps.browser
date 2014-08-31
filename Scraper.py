@@ -226,23 +226,23 @@ def GetGoogleMapURLs(self):
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
         self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))        
-        setWindowProperty(self.prefix + 'location', self.location)
-        setWindowProperty(self.prefix + 'lat', str(self.lat))
-        setWindowProperty(self.prefix + 'lon', str(self.lon))
-        setWindowProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
-        setWindowProperty(self.prefix + 'direction', str(self.direction/18))
-        setWindowProperty(self.prefix + 'type', self.type)
-        setWindowProperty(self.prefix + 'aspect', self.aspect)
-        setWindowProperty(self.prefix + 'map_image', self.GoogleMapURL)
-        setWindowProperty(self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+        setWindowProperty(self.window, self.prefix + 'location', self.location)
+        setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
+        setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
+        setWindowProperty(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
+        setWindowProperty(self.window, self.prefix + 'direction', str(self.direction/18))
+        setWindowProperty(self.window, self.prefix + 'type', self.type)
+        setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
+        setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
+        setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
         if self.street_view == False:
-            setWindowProperty(self.prefix + 'streetview', "")
+            setWindowProperty(self.window, self.prefix + 'streetview', "")
         else:
-            setWindowProperty(self.prefix + 'streetview', "True")
+            setWindowProperty(self.window, self.prefix + 'streetview', "True")
         if self.NavMode_active == False:
-            setWindowProperty(self.prefix + 'NavMode', "")
+            setWindowProperty(self.window, self.prefix + 'NavMode', "")
         else:
-            setWindowProperty(self.prefix + 'NavMode', "True")
+            setWindowProperty(self.window, self.prefix + 'NavMode', "True")
     except Exception,e:
         log(e)
         
