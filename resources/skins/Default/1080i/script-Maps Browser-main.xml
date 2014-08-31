@@ -146,7 +146,179 @@
                 <ondown>651</ondown>
             <onleft>200</onleft>
             <onright>200</onright>
+                          <itemlayout width="600" height="150" condition="false">
+                                            <control type="group">
+                <posy>80</posy>
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>150</height>
+                <texture>dialogs/dialog_back_shadow.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                <include>PanelGlowFade</include>
+                <include>Animation_VisibleChange400</include>
+            </control>
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>177</height>
+                <texture>dialogs/dialog_back.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>
+     <!--       <control type="image">
+                <posx>-4</posx>
+                <width>500</width>
+                <height>167</height>
+                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
+                <bordersize>5</bordersize>
+                <texture>dialogs/scan_backg.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>-->
+                <control type="image">
+                    <posy>15</posy>
+                    <posx>15</posx>
+                    <width>145</width>
+                    <height>145</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
+                </control>
+                <control type="group">
+                <posx>170</posx>
+                <control type="label">
+                    <posy>15</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg26</font>
+                    <textcolor>white2</textcolor>
+                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                </control>
+                 <control type="textbox">
+                    <posy>50</posy>
+                    <width>345</width>
+                    <height>110</height>
+                    <align>left</align>
+                    <font>Font_Reg31_Caps</font>
+                    <textcolor>white2</textcolor>
+                    <label>$LOCALIZE[31926]</label>
+                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
+                </control>
+                <control type="group">
+                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
+                <control type="label">
+                    <posy>130</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg22_Caps</font>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+                <control type="textbox">
+                    <posy>45</posy>
+                    <width>305</width>
+                    <height>81</height>
+                    <font>Font_Reg26</font>
+                    <align>left</align>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Property(eventname)]</label>
+                </control>
+                </control>
+</control>
+</control>
+            </itemlayout>
+            <focusedlayout width="600" height="150" condition="false">
+            <control type="group">
+                <posy>80</posy>
+
+               <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>150</height>
+                <texture>dialogs/dialog_back_shadow.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                <include>PanelGlowFade</include>
+                <include>Animation_VisibleChange400</include>
+            </control>
+            <control type="image">
+                <posx>-4</posx>
+                <width>600</width>
+                <height>177</height>
+                <texture>dialogs/dialog_back.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>
+     <!--       <control type="image">
+                <posx>-4</posx>
+                <width>500</width>
+                <height>167</height>
+                <bordertexture colordiffuse="$VAR[ColorDiffuseVar]" border="5">dialogs/scan_backg_shadow.png</bordertexture>
+                <bordersize>5</bordersize>
+                <texture>dialogs/scan_backg.png</texture>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+            </control>-->
+                <control type="image">
+                    <posy>15</posy>
+                    <posx>15</posx>
+                    <width>145</width>
+                    <height>145</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
+                </control>
+                                <control type="image">
+                                <posx>160</posx>
+                                <posy>12</posy>
+                    <width>400</width>
+                    <height>150</height>
+                    <texture border="8">views/tripanel/listselect_fo.png</texture>
+                    <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
+                    <include>PanelGlowFade</include>
+                    <visible>Control.HasFocus(200)</visible>
+                </control>
+                <control type="group">
+                <posx>170</posx>
+                <control type="label">
+                    <posy>15</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg26</font>
+                    <textcolor>white2</textcolor>
+                    <label>[COLOR=grey]$INFO[ListItem.Property(sortletter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                </control>
+                 <control type="textbox">
+                    <posy>50</posy>
+                    <width>345</width>
+                    <height>110</height>
+                    <align>left</align>
+                    <font>Font_Reg31_Caps</font>
+                    <textcolor>white2</textcolor>
+                    <label>$LOCALIZE[31926]</label>
+                    <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
+                </control>
+                <control type="group">
+                 <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
+                <control type="label">
+                    <posy>130</posy>
+                    <width>345</width>
+                    <height>35</height>
+                    <font>Font_Reg22_Caps</font>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+                <control type="textbox">
+                    <posy>45</posy>
+                    <width>305</width>
+                    <height>81</height>
+                    <font>Font_Reg26</font>
+                    <align>left</align>
+                    <textcolor>grey2</textcolor>
+                    <label>$INFO[ListItem.Property(eventname)]</label>
+                </control>
+                </control>
+</control>
+</control>
+            </focusedlayout>
                <itemlayout width="450" height="280">
+
                 <control type="image">
                     <width>450</width>
                     <height>270</height>
