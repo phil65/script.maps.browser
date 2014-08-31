@@ -279,47 +279,47 @@ class GUI(xbmcgui.WindowXML):
             dialogSelection = xbmcgui.Dialog()
             provider_index = dialogSelection.select( __language__(34020), modeselect )
             self.c_places_list.reset()
-            if provider_index == 0:
+            if modeselect[provider_index] == "Google Places":
                 self.PinString, itemlist = self.GetGooglePlacesList("food")
-            elif provider_index == 1:
+            elif modeselect[provider_index] == __language__(34005):
                 itemlist = self.GetPlacesListExplore("topPicks")
-            elif provider_index == 2:
+            elif modeselect[provider_index] == __language__(34006):
                 itemlist = self.GetPlacesListExplore("food")
-            elif provider_index == 3:
+            elif modeselect[provider_index] == __language__(34007):
                 itemlist = self.GetPlacesListExplore("drinks")
-            elif provider_index == 4:
+            elif modeselect[provider_index] == __language__(34008):
                 itemlist = self.GetPlacesListExplore("coffee")
-            elif provider_index == 5:
+            elif modeselect[provider_index] == __language__(34009):
                 itemlist = self.GetPlacesListExplore("shops")
-            elif provider_index == 6:
+            elif modeselect[provider_index] == __language__(34010):
                 itemlist = self.GetPlacesListExplore("arts")
-            elif provider_index == 7:
+            elif modeselect[provider_index] == __language__(34011):
                 itemlist = self.GetPlacesListExplore("outdoors")
-            elif provider_index == 8:
+            elif modeselect[provider_index] == __language__(34012):
                 itemlist = self.GetPlacesListExplore("sights")
-            elif provider_index == 9:
+            elif modeselect[provider_index] == __language__(34013):
                 itemlist = self.GetPlacesListExplore("trending")
-            elif provider_index == 10:
+            elif modeselect[provider_index] == __language__(34014):
                 itemlist = self.GetPlacesListExplore("specials")
-            elif provider_index == 11:
+            elif modeselect[provider_index] == __language__(34015):
                 itemlist = self.GetPlacesListExplore("nextVenues")
-            elif provider_index == 12:
+            elif modeselect[provider_index] == __language__(34016):
                 itemlist,self.PinString = self.GetNearEvents()
-            elif provider_index == 13:
+            elif modeselect[provider_index] == __language__(34017):
                 self.c_places_list.addItems(items=self.GetNearEvents(False,True))
-            elif provider_index == 14:
+            elif modeselect[provider_index] == __language__(34018):
                 search_string=xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 itemlist = self.GetNearEvents(search_string,False)
-            elif provider_index == 15:
+            elif modeselect[provider_index] == __language__(34021):
                 folder_path = xbmcgui.Dialog().browse(0,__language__(34021) , 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist = self.GetImages(folder_path)               
-       #     elif provider_index == 16:
+       #     elif modeselect[provider_index] == 16:
        #         itemlist = self.GetPlacesList()               
-            elif provider_index == 16:
+            elif modeselect[provider_index] == "Concert Search (by artist)":
                 search_string = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
                 itemlist,self.PinString = self.GetEvents(search_string)
-            elif provider_index == 17:
+            elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
             if not provider_index == -1:
