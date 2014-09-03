@@ -1,4 +1,11 @@
-import xbmc, os, sys, time, re, xbmcgui,xbmcaddon, xbmcvfs,urllib
+import xbmc
+import os
+import sys
+import time
+import xbmcgui
+import xbmcaddon
+import xbmcvfs
+import urllib
 from default import dialog_select_UI
 from ImageTags import *
 from Utils import *
@@ -7,12 +14,12 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id')
-__language__     = __addon__.getLocalizedString
+__addon__ = xbmcaddon.Addon()
+__addonid__ = __addon__.getAddonInfo('id')
+__language__ = __addon__.getLocalizedString
 __addonpath__ = __addon__.getAddonInfo('path')
 
-Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )    
+Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 googlemaps_key_places = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
@@ -20,10 +27,16 @@ foursquare_id = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 foursquare_secret = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
 factual_key = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
-factual_secret= '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
+factual_secret = '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
+wunderground_key = "xx"
 max_limit = 25
 
-def HandleLastFMEventResult(self,results):
+
+def GetRadarImage(self, lat, lon):
+    pass
+
+
+def HandleLastFMEventResult(self, results):
     events = []
     if "events" in results and results['events'].get("event"):
         for event in results['events']['event']:
@@ -55,8 +68,7 @@ def HandleLastFMEventResult(self,results):
                      'eventname': event['title'],
                      'website': event['website'],
                      'description': cleanText(event['description']),
-                    # 'description': event['description'], ticket missing
-                 #    'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
+                    # 'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
                      'city': event['venue']['location']['city'],
                      'country': event['venue']['location']['country'],
                      'geolong': event['venue']['location']['geo:point']['geo:long'],
@@ -65,25 +77,27 @@ def HandleLastFMEventResult(self,results):
                      'googlemap': googlemap,
                      'artist_image': event['image'][-1]['#text'],
                      'venue_image': event['venue']['image'][-1]['#text'],
-                     'headliner': event['artists']['headliner']  }
+                     'headliner': event['artists']['headliner']}
             events.append(event)
     else:
         log("Error in HandleLastFMEventResult. JSON query follows:")
      #   prettyprint(results)
     return events
-            
-def GetNearEvents(self,tag = False,festivalsonly = False):
+
+
+def GetNearEvents(self, tag=False, festivalsonly=False):
     if festivalsonly:
         festivalsonly = "1"
     else:
         festivalsonly = "0"
     url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
-        url = url + '&tag=%s' % (urllib.quote_plus(tag))  
+        url = url + '&tag=%s' % (urllib.quote_plus(tag))
     if self.lat:
-        url = url + '&lat=%s&long=%s' % (self.lat,self.lon)  # &distance=60
-    results = GetLastFMData(self,url)
+        url = url + '&lat=%s&long=%s' % (self.lat, self.lon)  # &distance=60
+    results = GetLastFMData(self, url)
     return self.CreateVenueList(results)
+
 
 def CreateVenueList(self, results):
     PinString = ""
@@ -98,7 +112,7 @@ def CreateVenueList(self, results):
             else:
                 my_arts = artists
             lat = ""
-            lon = ""               
+            lon = ""
             if event['venue']['location']['geo:point']['geo:long']:
                 lon = event['venue']['location']['geo:point']['geo:long']
                 lat = event['venue']['location']['geo:point']['geo:lat']
@@ -106,7 +120,7 @@ def CreateVenueList(self, results):
             elif event['venue']['location']['street']:
                 search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
             elif event['venue']['location']['city']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['name']               
+                search_string = event['venue']['location']['city'] + " " + event['venue']['name']
             else:
                 search_string = event['venue']['name']
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
@@ -141,16 +155,16 @@ def CreateVenueList(self, results):
     else:
         log("Error when handling LastFM results")
     return events_list, PinString
-    
-    
-def GetImages(self,path = ""):
+
+
+def GetImages(self, path=""):
     self.PinString = "&markers=color:blue"
     letter = ord('A')
     count = 0
    # results = GetLastFMData(self,url)
     images_list = list()
     if True:
-        for image in xbmcvfs.listdir(path): #check that
+        for image in xbmcvfs.listdir(path):  # check that
             for test in image:
                 try:
                     img = Image.open(path + test)
@@ -160,7 +174,7 @@ def GetImages(self,path = ""):
                         log(lat)
                         item = xbmcgui.ListItem(test)
                         item.setLabel(test)
-                        item.setProperty("name",test)
+                        item.setProperty("name", test)
                         item.setProperty("lat", str(lat))
                         item.setProperty("lon", str(lon))
                         item.setArt({'thumb': path + test})
@@ -171,7 +185,7 @@ def GetImages(self,path = ""):
                             item.setProperty("sortletter", chr(letter))
                             letter += 1
                         count += 1
-                except Exception,e:
+                except Exception as e:
                     log("Error when handling GetImages results")
                     log(e)
 
@@ -179,11 +193,10 @@ def GetImages(self,path = ""):
         log("Error when handling GetImages results")
     return images_list
 
-    
-          
-def GetLastFMData(self, url = "", cache_days = 14):
+
+def GetLastFMData(self, url="", cache_days=14):
     from base64 import b64encode
-    filename = b64encode(url).replace("/","XXXX")
+    filename = b64encode(url).replace("/", "XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
         return read_from_file(path)
@@ -191,10 +204,11 @@ def GetLastFMData(self, url = "", cache_days = 14):
         url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
-        save_to_file(results,filename,Addon_Data_Path)
+        save_to_file(results, filename, Addon_Data_Path)
         return results
 
-def GetEvents(self,id, pastevents = False):
+
+def GetEvents(self, id, pastevents=False):
     id = urllib.quote(id)
     if pastevents:
  #       url = 'method=artist.getpastevents&mbid=%s' % (id)
@@ -202,17 +216,18 @@ def GetEvents(self,id, pastevents = False):
     else:
   #      url = 'method=artist.getevents&mbid=%s' % (id)
         url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
-    results = GetLastFMData(self,url)
+    results = GetLastFMData(self, url)
     try:
         return self.CreateVenueList(results)
     except:
         log("Error in GetEvents()")
         return []
-        
+
+
 def GetGoogleMapURLs(self):
     try:
         if not self.type:
-            self.type="roadmap"
+            self.type = "roadmap"
         if self.aspect == "square":
             size = "640x640"
         else:
@@ -220,12 +235,12 @@ def GetGoogleMapURLs(self):
         if self.lat and self.lon:
             self.search_string = str(self.lat) + "," + str(self.lon)
         else:
-            self.search_string = urllib.quote_plus(self.search_string.replace('"',''))
-        base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
+            self.search_string = urllib.quote_plus(self.search_string.replace('"', ''))
+        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
         self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
-        base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-        self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))        
+        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
+        self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
         setWindowProperty(self.window, self.prefix + 'location', self.location)
         setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
         setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
@@ -235,24 +250,25 @@ def GetGoogleMapURLs(self):
         setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
         setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
         setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
-        if self.street_view == False:
+        if not self.street_view:
             setWindowProperty(self.window, self.prefix + 'streetview', "")
         else:
             setWindowProperty(self.window, self.prefix + 'streetview', "True")
-        if self.NavMode_active == False:
+        if not self.NavMode_active:
             setWindowProperty(self.window, self.prefix + 'NavMode', "")
         else:
             setWindowProperty(self.window, self.prefix + 'NavMode', "True")
-    except Exception,e:
+    except Exception as e:
         log(e)
-        
+
 # def GetBingMap(self):
    # # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%s?mapSize=800,600&key=%s' % (urllib.quote(self.search_string),bing_key)
     # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%.6f,%.6f/5?key=%s' % (self.lat,self.lon, bing_key)
    ##         'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%.6f,%.6f/%i?fmt=%s&key=%s' % (self.lat, self.lon, self.zoom_level, self._format, bing_key)
     # log(url)
     # return url
-                          
+
+
 def GetGeoCodes(self, show_dialog, search_string):
     try:
         search_string = urllib.quote_plus(search_string)
@@ -268,11 +284,11 @@ def GetGeoCodes(self, show_dialog, search_string):
             search_string = str(locationinfo["lat"]) + "," + str(locationinfo["lng"])
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
             event = {'generalinfo': item['formatted_address'],
-                     'lat': str(locationinfo["lat"]),            
-                     'lon': str(locationinfo["lng"]),            
-                     'map': str(locationinfo["lng"]),            
-                     'preview': googlemap,            
-                     'id': item['formatted_address']}            
+                     'lat': str(locationinfo["lat"]),
+                     'lon': str(locationinfo["lng"]),
+                     'map': str(locationinfo["lng"]),
+                     'preview': googlemap,
+                     'id': item['formatted_address']}
             events.append(event)
         first_hit = results["results"][0]["geometry"]["location"]
         if show_dialog:
@@ -280,17 +296,18 @@ def GetGeoCodes(self, show_dialog, search_string):
                 w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
                 w.doModal()
                 log(w.lat)
-                return (w.lat,w.lon)
+                return (w.lat, w.lon)
             elif len(results["results"]) == 1:
-                return (first_hit["lat"], first_hit["lng"])                
+                return (first_hit["lat"], first_hit["lng"])
             else:
-                return (self.lat,self.lon)
+                return (self.lat, self.lon)
         else:
             return (first_hit["lat"], first_hit["lng"])
-    except Exception,e:
+    except Exception as e:
         log(e)
-        return ("","")
-        
+        return ("", "")
+
+
 def GetLocationCoordinates(self):
     try:
         url = 'http://www.telize.com/geoip'
@@ -298,9 +315,10 @@ def GetLocationCoordinates(self):
         results = simplejson.loads(response)
         self.lat = results["latitude"]
         self.lon = results["longitude"]
-    except Exception,e:
+    except Exception as e:
         log(e)
-        
+
+
 def GetPlacesList(self):
     ################### code based on script.maps by a.a.alsaleh. credits to him.
     url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
@@ -331,13 +349,13 @@ def GetPlacesList(self):
                     item.setProperty("lat", str(v['location']['lat']))
                     item.setProperty("lon", str(v['location']['lng']))
                     self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['location']['lat']) + "," + str(v['location']['lng'])
-                    try: 
-                        icon = v['categories'][0]['icon']['prefix'] + "88" +  v['categories'][0]['icon']['suffix']
+                    try:
+                        icon = v['categories'][0]['icon']['prefix'] + "88" + v['categories'][0]['icon']['suffix']
 #                        if count < 12:
                    #     self.PinString = self.PinString + "&markers=icon:" + v['categories'][0]['icon']['prefix'] + "64" +  v['categories'][0]['icon']['suffix'] + "|" + str(v['location']['lat']) + "," + str(v['location']['lng'])
                     #    self.PinString = self.PinString + "&markers="+ str(v['location']['lat']) + "," + str(v['location']['lng'])
                     #
-                    except Exception, e:
+                    except Exception as e:
                         icon = ""
                         log("Error: Exception in GetPlacesList with message:")
                         log(e)
@@ -364,8 +382,9 @@ def GetPlacesList(self):
     else:
         log("ERROR")
     return places_list
-    
-def GetPlacesListExplore(self,placetype):
+
+
+def GetPlacesListExplore(self, placetype):
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=25&venuePhotos=1&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, placetype, foursquare_id, foursquare_secret)
@@ -382,16 +401,16 @@ def GetPlacesListExplore(self,placetype):
             for v in results['response']['groups'][0]['items']:
                 if True:
                     item = xbmcgui.ListItem(v['venue']['name'])
-                    icon = v['venue']['categories'][0]['icon']['prefix'] + "88" +  v['venue']['categories'][0]['icon']['suffix']
+                    icon = v['venue']['categories'][0]['icon']['prefix'] + "88" + v['venue']['categories'][0]['icon']['suffix']
                     try:
                         photo_node = v['venue']['photos']['groups'][0]['items'][0]
-                        photo = photo_node['prefix'] + str(photo_node['height']) +  photo_node['suffix']
+                        photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
                     except:
                         photo = ""
                     item.setArt({'thumb': photo})
                     item.setArt({'icon': icon})
                     item.setLabel(v['venue']['name'])
-                    item.setProperty('name',v['venue']['name'])
+                    item.setProperty('name', v['venue']['name'])
                     item.setLabel2(v['venue']['categories'][0]['name'])
                     item.setProperty("sortletter", chr(letter))
                     item.setProperty("index", str(count))
@@ -416,11 +435,11 @@ def GetPlacesListExplore(self,placetype):
     else:
         log("ERROR")
     return places_list
-    
-    
-def GetGooglePlacesList(self,locationtype):
+
+
+def GetGooglePlacesList(self, locationtype):
     location = str(self.lat) + "," + str(self.lon)
-    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location,locationtype, googlemaps_key_places)
+    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location, locationtype, googlemaps_key_places)
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
@@ -435,16 +454,16 @@ def GetGooglePlacesList(self,locationtype):
                 item = xbmcgui.ListItem(v['name'])
                 try:
                     photo_ref = v['photos'][0]['photo_reference']
-                    photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref,googlemaps_key_places)
+                    photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
                 except:
                     photo = ""
                 typestring = ""
-                typestring =  " / ".join( v['types'] )
+                typestring = " / ".join(v['types'])
                 item.setArt({'thumb': photo})
                 item.setArt({'icon': v['icon']})
                 item.setLabel(v['name'])
-                item.setProperty('name',v['name'])
-                item.setProperty('description',v['vicinity'])
+                item.setProperty('name', v['name'])
+                item.setProperty('description', v['vicinity'])
                 item.setLabel2(typestring)
                 item.setProperty("sortletter", chr(letter))
                 item.setProperty("index", str(count))
