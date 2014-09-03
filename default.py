@@ -135,7 +135,7 @@ class GUI(xbmcgui.WindowXML):
                 if not self.prefix.endswith('.') and self.prefix != "":
                     self.prefix = self.prefix + '.'
         if self.location == "geocode":
-            self.lat, self.lon = ParseGeoTags()
+            self.lat, self.lon = ParseGeoTags(self.strlat,self.strlon)
         self.GetGoogleMapURLs()
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
