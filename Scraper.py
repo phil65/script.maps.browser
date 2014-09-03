@@ -32,8 +32,9 @@ wunderground_key = "xx"
 max_limit = 25
 
 
-def GetRadarImage(self, lat, lon):
-    pass
+# def GetRadarImage(self, lat, lon):
+#     url = "http://api.wunderground.com/api/%s/animatedradar/image.gif?centerlat=%s&centerlon=%s&radius=100&width=280&height=280&newmaps=0" % (wunderground_key, str(self.lat), str(self.lon))
+#     pass
 
 
 def HandleLastFMEventResult(self, results):
@@ -188,7 +189,6 @@ def GetImages(self, path=""):
                 except Exception as e:
                     log("Error when handling GetImages results")
                     log(e)
-
     else:
         log("Error when handling GetImages results")
     return images_list
@@ -226,8 +226,6 @@ def GetEvents(self, id, pastevents=False):
 
 def GetGoogleMapURLs(self):
     try:
-        if not self.type:
-            self.type = "roadmap"
         if self.aspect == "square":
             size = "640x640"
         else:
@@ -250,13 +248,11 @@ def GetGoogleMapURLs(self):
         setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
         setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
         setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
-        if not self.street_view:
-            setWindowProperty(self.window, self.prefix + 'streetview', "")
-        else:
+        setWindowProperty(self.window, self.prefix + 'NavMode', "")
+        setWindowProperty(self.window, self.prefix + 'streetview', "")
+        if self.street_view:
             setWindowProperty(self.window, self.prefix + 'streetview', "True")
-        if not self.NavMode_active:
-            setWindowProperty(self.window, self.prefix + 'NavMode', "")
-        else:
+        if self.NavMode_active:
             setWindowProperty(self.window, self.prefix + 'NavMode', "True")
     except Exception as e:
         log(e)
@@ -277,9 +273,7 @@ def GetGeoCodes(self, show_dialog, search_string):
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         events = []
-#        log(len(results["results"]))
         for item in results["results"]:
-        #    prettyprint(item)
             locationinfo = item["geometry"]["location"]
             search_string = str(locationinfo["lat"]) + "," + str(locationinfo["lng"])
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
@@ -292,15 +286,15 @@ def GetGeoCodes(self, show_dialog, search_string):
             events.append(event)
         first_hit = results["results"][0]["geometry"]["location"]
         if show_dialog:
-            if len(results["results"]) > 1:
+            if len(results["results"]) > 1:  # open dialog when more than one hit
                 w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
                 w.doModal()
                 log(w.lat)
                 return (w.lat, w.lon)
             elif len(results["results"]) == 1:
-                return (first_hit["lat"], first_hit["lng"])
+                return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
             else:
-                return (self.lat, self.lon)
+                return (self.lat, self.lon)  # old values when no hit
         else:
             return (first_hit["lat"], first_hit["lng"])
     except Exception as e:
@@ -443,7 +437,6 @@ def GetGooglePlacesList(self, locationtype):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    prettyprint(results)
     places_list = list()
     PinString = ""
     letter = ord('A')
