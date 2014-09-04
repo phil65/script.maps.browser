@@ -18,7 +18,7 @@
 #
 
 
-    ################### code for FourSquare scraping based on script.maps by a.a.alsaleh. credits to him.
+    # code for FourSquare scraping based on script.maps by a.a.alsaleh. credits to him.
 
 import xbmc
 import xbmcaddon
@@ -135,7 +135,7 @@ class GUI(xbmcgui.WindowXML):
                 if not self.prefix.endswith('.') and self.prefix != "":
                     self.prefix = self.prefix + '.'
         if self.location == "geocode":
-            self.lat, self.lon = ParseGeoTags(self.strlat,self.strlon)
+            self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
         self.GetGoogleMapURLs()
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -487,10 +487,10 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-      #  log('# GUI control: %s' % controlID)
+      # log('# GUI control: %s' % controlID)
         if controlID == 6 or controlID == 3:
        #     num = self.img_list.getSelectedPosition()
-       #     log('# GUI position: %s' % num)
+       # log('# GUI position: %s' % num)
             self.selected_id = self.img_list.getSelectedItem().getLabel2()
             self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))

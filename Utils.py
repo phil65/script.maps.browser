@@ -71,7 +71,7 @@ def string2deg(string):
     degrees = float(elems[0])
     arcminutes = float(elems[1])
     arcseconds = float(elems[2])
-    decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
+    decDegrees = degrees + arcminutes / 60.0 + arcseconds / 3600.0
     if negative:
         decDegrees = -1.0 * decDegrees
     return decDegrees
