@@ -126,6 +126,9 @@ class GUI(xbmcgui.WindowXML):
             elif param.startswith('folder='):
                 folder = (param[7:])
                 itemlist = self.GetImages(folder)
+            elif param.startswith('artist='):
+                artist = (param[7:])
+                itemlist, self.PinString = self.GetEvents(artist)
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -137,7 +140,8 @@ class GUI(xbmcgui.WindowXML):
         elif (self.location == "") and (self.strlat == ""):
             self.GetLocationCoordinates()
             self.location = str(self.lat) + "," + str(self.lon)
-        log(self.location)
+        elif (not self.location == "") and (self.strlat == ""):
+            self.lat, self.lon = self.GetGeoCodes(False,self.location)
         self.GetGoogleMapURLs()
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -320,8 +324,8 @@ class GUI(xbmcgui.WindowXML):
        #     elif modeselect[provider_index] == 16:
        #         itemlist = self.GetPlacesList()
             elif modeselect[provider_index] == "Concert Search (by artist)":
-                self.location = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
-                itemlist, self.PinString = self.GetEvents(self.location)
+                artist = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
+                itemlist, self.PinString = self.GetEvents(artist)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
