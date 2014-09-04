@@ -104,8 +104,6 @@ class GUI(xbmcgui.WindowXML):
         itemlist = []
         self.GoogleMapURL = ""
         self.GoogleStreetViewURL = ""
-        self.GetLocationCoordinates()
-        self.location = str(self.lat) + "," + str(self.lon)
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
         log("window = " + str(self.window))
         setWindowProperty(self.window, 'NavMode', '')
@@ -136,6 +134,10 @@ class GUI(xbmcgui.WindowXML):
                     self.prefix = self.prefix + '.'
         if self.location == "geocode":
             self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
+        elif (self.location == "") and (self.strlat == ""):
+            self.GetLocationCoordinates()
+            self.location = str(self.lat) + "," + str(self.lon)
+        log(self.location)
         self.GetGoogleMapURLs()
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -309,8 +311,8 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34017):
                 self.c_places_list.addItems(items=self.GetNearEvents(False, True))
             elif modeselect[provider_index] == __language__(34018):
-                search_string = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetNearEvents(search_string, False)
+                self.location = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
+                itemlist = self.GetNearEvents(self.location, False)
             elif modeselect[provider_index] == __language__(34021):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
@@ -318,8 +320,8 @@ class GUI(xbmcgui.WindowXML):
        #     elif modeselect[provider_index] == 16:
        #         itemlist = self.GetPlacesList()
             elif modeselect[provider_index] == "Concert Search (by artist)":
-                search_string = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
-                itemlist, self.PinString = self.GetEvents(search_string)
+                self.location = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
+                itemlist, self.PinString = self.GetEvents(self.location)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
