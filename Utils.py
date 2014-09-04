@@ -33,9 +33,10 @@ def GetStringFromUrl(encurl):
         try:
             request = urllib2.Request(encurl)
             request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
-            request.add_header('Accept-encoding', 'gzip')
+           # request.add_header('Accept-encoding', 'gzip')
             response = urllib2.urlopen(request)
-            if response.info().get('Content-Encoding') == 'gzip':
+           # if response.info().get('Content-Encoding') == 'gzip':
+            if False:
                 buf = StringIO(response.read())
                 compr = gzip.GzipFile(fileobj=buf)
                 data = compr.read()
