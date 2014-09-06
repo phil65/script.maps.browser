@@ -396,7 +396,10 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
 #            modeselect.append( __language__(34004) )
-        modeselect.append("Google Places")
+        # modeselect.append("Google Places")
+        modeselect.append(__language__(34016))
+        modeselect.append(__language__(34017))
+        modeselect.append(__language__(34027))
         modeselect.append(__language__(34005))
         modeselect.append(__language__(34006))
         modeselect.append(__language__(34007))
@@ -408,9 +411,6 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34013))
         modeselect.append(__language__(34014))
         modeselect.append(__language__(34015))
-        modeselect.append(__language__(34016))
-        modeselect.append(__language__(34017))
-        modeselect.append(__language__(34021))
         modeselect.append(__language__(34019))
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
@@ -443,7 +443,7 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = self.GetNearEvents()
             elif modeselect[provider_index] == __language__(34017):
                 self.c_places_list.addItems(items=self.GetNearEvents(False, True))
-            elif modeselect[provider_index] == __language__(34021):
+            elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist = self.GetImages(folder_path)
