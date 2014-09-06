@@ -1,3 +1,4 @@
+    # code for FourSquare Scraping based on script.maps by a.a.alsaleh. credits to him.
 import xbmc
 import os
 import sys
@@ -321,9 +322,11 @@ def GetLocationCoordinates(self):
         log(e)
 
 
-def GetPlacesList(self):
-    # code based on script.maps by a.a.alsaleh. credits to him.
-    url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
+def GetPlacesList(self, query=""):
+    if query is not "":
+         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, query, foursquare_id, foursquare_secret)
+    else:
+         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "topPicks", foursquare_id, foursquare_secret)
     log(url)
@@ -338,6 +341,7 @@ def GetPlacesList(self):
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
                 for v in results['response']['venues']:
+                    item = xbmcgui.ListItem(v['name'])
                     if 'formattedAddress' in v['location']:
                         item.setProperty("eventname", ', '.join(filter(None, v['location']['formattedAddress'])))
                     if 'phone' in v['contact']:
@@ -345,9 +349,8 @@ def GetPlacesList(self):
                     if 'twitter' in v['contact']:
                         item.setProperty("twitter", v['contact']['twitter'])
                              # create a list item
-                    item = xbmcgui.ListItem(v['name'])
                     item.setProperty("id", str(v['id']))
-                    item.setProperty("distance", str(v['distance']))
+                    item.setProperty("distance", str(v['location']['distance']))
                     item.setProperty("comments", str(v['stats']['tipCount']))
                     item.setProperty("visited", str(v['stats']['usersCount']))
                     item.setProperty("lat", str(v['location']['lat']))

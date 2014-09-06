@@ -242,7 +242,7 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_ZOOM_OUT:
             self.ZoomOut()
         elif controlId == self.CONTROL_SEARCH:
-            self.SearchLocation()
+            self.SearchDialog()
         elif controlId == self.CONTROL_MODE_TOGGLE:
             self.ToggleMapMode()
         elif controlId == self.CONTROL_STREET_VIEW:
@@ -410,9 +410,7 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34015))
         modeselect.append(__language__(34016))
         modeselect.append(__language__(34017))
-        modeselect.append(__language__(34018))
         modeselect.append(__language__(34021))
-        modeselect.append("Concert Search (by artist)")
         modeselect.append(__language__(34019))
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
@@ -445,17 +443,40 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = self.GetNearEvents()
             elif modeselect[provider_index] == __language__(34017):
                 self.c_places_list.addItems(items=self.GetNearEvents(False, True))
-            elif modeselect[provider_index] == __language__(34018):
-                self.location = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetNearEvents(self.location, False)
             elif modeselect[provider_index] == __language__(34021):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist = self.GetImages(folder_path)
-       #     elif modeselect[provider_index] == 16:
-       #         itemlist = self.GetPlacesList()
-            elif modeselect[provider_index] == "Concert Search (by artist)":
-                artist = xbmcgui.Dialog().input("Type in artist name", type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == __language__(34019):
+                self.PinString = ""
+                itemlist = []
+            self.c_places_list.reset()
+            self.c_places_list.addItems(items=itemlist)
+            self.street_view = False
+            self.GetGoogleMapURLs()
+            self.c_map_image.setImage(self.GoogleMapURL)
+
+    def SearchDialog(self):
+        setWindowProperty(self.window, 'index', "")
+        modeselect = []
+        modeselect.append(__language__(34024))
+        modeselect.append(__language__(34004))
+        modeselect.append(__language__(34018))
+        modeselect.append(__language__(34023))
+        modeselect.append(__language__(34019))
+        dialogSelection = xbmcgui.Dialog()
+        provider_index = dialogSelection.select(__language__(34026), modeselect)
+        if not provider_index < 0:
+            if modeselect[provider_index] == __language__(34024):
+                self.SearchLocation()
+            elif modeselect[provider_index] == __language__(34018):
+                self.location = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
+                itemlist = self.GetNearEvents(self.location, False)
+            elif modeselect[provider_index] == __language__(34004):
+                query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
+                itemlist = self.GetPlacesList(query)
+            elif modeselect[provider_index] == __language__(34023):
+                artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 itemlist, self.PinString = self.GetEvents(artist)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
@@ -465,6 +486,7 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
             self.GetGoogleMapURLs()
             self.c_map_image.setImage(self.GoogleMapURL)
+
 
     def toggleInfo(self):
         self.show_info = not self.show_info
