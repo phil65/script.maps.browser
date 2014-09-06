@@ -157,6 +157,8 @@ def CreateVenueList(self, results):
             letter += 1
             if count > max_limit:
                 break
+    elif "error" in results:
+        Notify("Error", results["message"])
     else:
         log("Error when handling LastFM results")
     return events_list, PinString
@@ -221,6 +223,7 @@ def GetEvents(self, id, pastevents=False):
   #      url = 'method=artist.getevents&mbid=%s' % (id)
         url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
     results = GetLastFMData(self, url)
+    prettyprint(results)
     try:
         return self.CreateVenueList(results)
     except:
@@ -392,15 +395,15 @@ def GetPlacesListExplore(self, placetype):
     log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-   # prettyprint(results)
+    prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
     count = 0
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
-            for v in results['response']['groups'][0]['items']:
-                if True:
+            if len(results['response']['groups'][0]['items']) > 0:
+                for v in results['response']['groups'][0]['items']:
                     item = xbmcgui.ListItem(v['venue']['name'])
                     icon = v['venue']['categories'][0]['icon']['prefix'] + "88" + v['venue']['categories'][0]['icon']['suffix']
                     try:
@@ -427,6 +430,8 @@ def GetPlacesListExplore(self, placetype):
                     letter += 1
                     if count > max_limit:
                         break
+            else:
+                Notify("Error", "No results found near the selected area.")
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
            # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
            # log(difference_lat)
