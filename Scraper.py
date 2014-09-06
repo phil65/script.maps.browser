@@ -335,16 +335,18 @@ def GetPlacesList(self):
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
                 for v in results['response']['venues']:
-                    p = {'id': v['id'], 'name': v['name'], 'distance': v['location']['distance'], 'comments': v['stats']['tipCount'], 'visited': v['stats']['usersCount']}
                     if 'formattedAddress' in v['location']:
-                        p['address'] = "aa"
+                        item.setProperty("eventname", ', '.join(filter(None, v['location']['formattedAddress'])))
                     if 'phone' in v['contact']:
-                        p['phone'] = v['contact']['phone']
+                        item.setProperty("phone", v['contact']['phone'])
                     if 'twitter' in v['contact']:
-                        p['phone'] = v['contact']['twitter']
+                        item.setProperty("twitter", v['contact']['twitter'])
                              # create a list item
                     item = xbmcgui.ListItem(v['name'])
                     item.setProperty("id", str(v['id']))
+                    item.setProperty("distance", str(v['distance']))
+                    item.setProperty("comments", str(v['stats']['tipCount']))
+                    item.setProperty("visited", str(v['stats']['usersCount']))
                     item.setProperty("lat", str(v['location']['lat']))
                     item.setProperty("lon", str(v['location']['lng']))
                     self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['location']['lat']) + "," + str(v['location']['lng'])
@@ -364,7 +366,6 @@ def GetPlacesList(self):
                     item.setProperty("name", v['name'])
                     item.setProperty("index", str(count))
                     item.setProperty("sortletter", chr(letter))
-                    item.setProperty("eventname", ', '.join(filter(None, v['location']['formattedAddress'])))
                     item.setProperty("Venue_Image", icon)
                     item.setProperty("GoogleMap", icon)
                     places_list.append(item)
@@ -417,6 +418,7 @@ def GetPlacesListExplore(self, placetype):
                     item.setProperty("Venue_Image", photo)
                     address = "[CR]".join(v['venue']['location']['formattedAddress'])
                     item.setProperty("description", address)
+                    item.setProperty("eventname", address)
                     item.setProperty("lat", str(v['venue']['location']['lat']))
                     item.setProperty("lon", str(v['venue']['location']['lng']))
                     self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['venue']['location']['lat']) + "," + str(v['venue']['location']['lng'])

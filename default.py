@@ -108,6 +108,10 @@ class GUI(xbmcgui.WindowXML):
         log("window = " + str(self.window))
         setWindowProperty(self.window, 'NavMode', '')
         setWindowProperty(self.window, 'streetview', '')
+        if __addon__.getSetting("VenueLayout") == "1":
+            setWindowProperty(self.window, 'ListLayout', '1')
+        else:
+            setWindowProperty(self.window, 'ListLayout', '0')
         for arg in sys.argv:
             param = arg.lower()
             log("param = " + param)
@@ -173,7 +177,14 @@ class GUI(xbmcgui.WindowXML):
     def onAction(self, action):
         action_id = action.getId()
         if action_id in self.ACTION_SHOW_INFO:
-            self.ToggleMapMode()
+            if __addon__.getSetting("InfoButtonAction") == "1":
+                self.ToggleMapMode()
+            else:
+                if not self.street_view:
+                    self.ToggleStreetMode()
+                    self.ToggleNavMode()
+                else:
+                    self.ToggleStreetMode()
         elif action_id in self.ACTION_CONTEXT_MENU:
             self.ToggleNavMode()
         elif action_id in self.ACTION_PREVIOUS_MENU:
@@ -279,6 +290,7 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_PLACES_LIST:
             self.lat = float(self.c_places_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.c_places_list.getSelectedItem().getProperty("lon"))
+            self.zoom_level = 12
             if not self.c_places_list.getSelectedItem().getProperty("index") == getWindowProperty(self.window, 'index'):
                 setWindowProperty(self.window, 'index', self.c_places_list.getSelectedItem().getProperty("index"))
             else:
