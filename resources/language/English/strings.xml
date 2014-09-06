@@ -4,9 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-	<string id="34001">Welcome to Maps Browser</string>
-	<string id="34002">Press Context Menu button to toggle navigation mode</string>
-	<string id="34003">Press Info button to change map type</string>
+	<string id="34001">Welcome to XBMC Maps Browser</string>
+	<string id="34002">Press context menu button to toggle navigation mode</string>
+	<string id="34003">Press "info" button to change map type</string>
 	<string id="34004">FourSquare Places Search</string>
 	<string id="34005">FourSquare Top Picks</string>
 	<string id="34006">FourSquare Food</string>
@@ -19,15 +19,15 @@
 	<string id="34013">FourSquare Trending</string>
 	<string id="34014">FourSquare Specials</string>
 	<string id="34015">FourSquare Next venues</string>
-	<string id="34016">Last.Fm Concerts</string>
-	<string id="34017">Last.Fm Festivals</string>
-	<string id="34018">Last.Fm Concert Search (by tag)</string>
+	<string id="34016">Last.Fm near concerts</string>
+	<string id="34017">Last.Fm near festivals</string>
+	<string id="34018">Last.Fm concert search (by tag)</string>
 	<string id="34019">Reset places</string>
 	<string id="34020">Choose places to display</string>
-	<string id="34021">Choose Folder with geotagged images</string>
+	<string id="34021">Choose folder with geotagged images</string>
 	<string id="34022">"Enter music tags to search for"</string>
-	<string id="34023">Last.Fm Concert Search (by artist)</string>
-	<string id="34024">Google Search</string>
+	<string id="34023">Last.Fm concert cearch (by artist)</string>
+	<string id="34024">Google maps search</string>
 	<string id="34025">Type in artist name</string>
 	<string id="34026">Choose search type</string>
 </strings>
