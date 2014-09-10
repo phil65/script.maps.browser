@@ -3,5 +3,6 @@
     <category label="General">
         <setting id="InfoButtonAction" type="enum" label="Choose Info Button Action" default="0" values="Street View|Map Type"/>
         <setting id="VenueLayout" type="enum" label="Choose Venue List Style" default="0" values="Panel|Image"/>
+        <setting id="ImageFormat" type="labelenum" label="Choose Map Image Format (affects image loading times)" values="png8|png32|gif|jpg|jpg-baseline"/>
     </category>
 </settings>
