@@ -99,7 +99,7 @@ class GUI(xbmcgui.WindowXML):
         self.PinString = ""
         self.direction = 0
         self.saved_id = 100
-        self.aspect = "normal"
+        self.aspect = "640x400"
         self.prefix = ""
         itemlist = []
         self.GoogleMapURL = ""
@@ -193,6 +193,9 @@ class GUI(xbmcgui.WindowXML):
                 setWindowProperty(self.window, 'streetview', '')
                 self.NavMode_active = False
                 self.street_view = False
+                self.GetGoogleMapURLs()
+                self.c_map_image.setImage(self.GoogleMapURL)
+                self.c_streetview_image.setImage(self.GoogleStreetViewURL)
                 xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
             else:
                 self.close()
@@ -380,7 +383,7 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = True
             log("StreetView On")
             self.zoom_level_saved = self.zoom_level
-            self.zoom_level = 17
+            self.zoom_level = 15
             self.GetGoogleMapURLs()
             self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             self.c_map_image.setImage(self.GoogleMapURL)

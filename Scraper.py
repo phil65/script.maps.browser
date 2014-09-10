@@ -224,7 +224,7 @@ def GetEvents(self, id, pastevents=False):
   #      url = 'method=artist.getevents&mbid=%s' % (id)
         url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
     results = GetLastFMData(self, url)
-    prettyprint(results)
+  #  prettyprint(results)
     try:
         return self.CreateVenueList(results)
     except:
@@ -234,19 +234,19 @@ def GetEvents(self, id, pastevents=False):
 
 def GetGoogleMapURLs(self):
     try:
-        if self.aspect == "square":
-            size = "640x640"
+        if self.street_view is True:
+            size = "320x200"
         else:
             size = "640x400"
         if self.lat and self.lon:
             self.search_string = str(self.lat) + "," + str(self.lon)
         else:
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
-        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
+        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
         self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
-        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-        self.GoogleStreetViewURL = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, size, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
+        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
+        self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
         setWindowProperty(self.window, self.prefix + 'location', self.location)
         setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
         setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
@@ -329,10 +329,10 @@ def GetPlacesList(self, query=""):
          url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "topPicks", foursquare_id, foursquare_secret)
-    log(url)
+ #   log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    prettyprint(results)
+ #   prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -395,10 +395,10 @@ def GetPlacesListExplore(self, placetype):
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=25&venuePhotos=1&client_id=%s&client_secret=%s&v=20130815' % (
         self.lat, self.lon, placetype, foursquare_id, foursquare_secret)
-    log(url)
+  #  log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    prettyprint(results)
+ #   prettyprint(results)
     places_list = list()
     self.PinString = ""
     letter = ord('A')
@@ -450,7 +450,7 @@ def GetPlacesListExplore(self, placetype):
 def GetGooglePlacesList(self, locationtype):
     location = str(self.lat) + "," + str(self.lon)
     url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location, locationtype, googlemaps_key_places)
-    log(url)
+ #   log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
     places_list = list()
