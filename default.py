@@ -210,10 +210,6 @@ class GUI(xbmcgui.WindowXML):
                     self.lon = float(self.lon) - 2.0 * stepsize
                 elif action_id in self.ACTION_RIGHT:
                     self.lon = float(self.lon) + 2.0 * stepsize
-                self.location = str(self.lat) + "," + str(self.lon)
-                self.GetGoogleMapURLs()
-                self.c_map_image.setImage(self.GoogleMapURL)
-                self.c_streetview_image.setImage(self.GoogleStreetViewURL)
             else:
                 stepsize = 0.0002
                 radiantdirection = float(radians(self.direction))
@@ -231,10 +227,18 @@ class GUI(xbmcgui.WindowXML):
                     if self.direction >= 348:
                         self.direction = 0
                     self.direction += 18
-                self.location = str(self.lat) + "," + str(self.lon)
-                self.GetGoogleMapURLs()
-                self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-                self.c_map_image.setImage(self.GoogleMapURL)
+            if self.lat > 90.0:
+                self.lat -= 180.0
+            if self.lat < -90.0:
+                self.lat += 180.0
+            if self.lon > 180.0:
+                self.lon -= 360.0
+            if self.lon < -180.0:
+                self.lon += 180.0
+            self.location = str(self.lat) + "," + str(self.lon)
+            self.GetGoogleMapURLs()
+            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
+            self.c_map_image.setImage(self.GoogleMapURL)
 
     def onClick(self, controlId):
         if controlId == self.CONTROL_ZOOM_IN:
@@ -395,7 +399,6 @@ class GUI(xbmcgui.WindowXML):
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
-#            modeselect.append( __language__(34004) )
         # modeselect.append("Google Places")
         modeselect.append(__language__(34016))
         modeselect.append(__language__(34017))
