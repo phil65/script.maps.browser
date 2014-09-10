@@ -75,8 +75,8 @@ def HandleLastFMEventResult(self, results):
                      # 'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
                      'city': event['venue']['location']['city'],
                      'country': event['venue']['location']['country'],
-                     'geolong': event['venue']['location']['geo:point']['geo:long'],
-                     'geolat': event['venue']['location']['geo:point']['geo:lat'],
+                     'geolong': lon,
+                     'geolat': lat,
                      'artists': my_arts,
                      'googlemap': googlemap,
                      'artist_image': event['image'][-1]['#text'],
@@ -139,8 +139,8 @@ def CreateVenueList(self, results):
             item.setProperty("description", cleanText(event['description']))
             item.setProperty("city", event['venue']['location']['city'])
             item.setProperty("country", event['venue']['location']['country'])
-            item.setProperty("lon", event['venue']['location']['geo:point']['geo:long'])
-            item.setProperty("lat", event['venue']['location']['geo:point']['geo:lat'])
+            item.setProperty("lon", lon)
+            item.setProperty("lat", lat)
             item.setProperty("index", str(count))
             item.setProperty("artists", my_arts)
             item.setProperty("sortletter", chr(letter))
@@ -153,7 +153,7 @@ def CreateVenueList(self, results):
             item.setLabel2(event['startDate'])
             events_list.append(item)
             PinString = PinString + "&markers=color:blue%7Clabel:" + \
-                chr(letter) + "%7C" + str(event['venue']['location']['geo:point']['geo:lat']) + "," + str(event['venue']['location']['geo:point']['geo:long'])
+                chr(letter) + "%7C" + lat + "," + lon
             count += 1
             letter += 1
             if count > max_limit:
@@ -414,6 +414,8 @@ def GetPlacesListExplore(self, placetype):
                         photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
                     except:
                         photo = ""
+                    lat = str(v['venue']['location']['lat'])
+                    lon = str(v['venue']['location']['lng'])
                     item.setArt({'thumb': photo})
                     item.setArt({'icon': icon})
                     item.setLabel(v['venue']['name'])
@@ -425,9 +427,9 @@ def GetPlacesListExplore(self, placetype):
                     address = "[CR]".join(v['venue']['location']['formattedAddress'])
                     item.setProperty("description", address)
                     item.setProperty("eventname", address)
-                    item.setProperty("lat", str(v['venue']['location']['lat']))
-                    item.setProperty("lon", str(v['venue']['location']['lng']))
-                    self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['venue']['location']['lat']) + "," + str(v['venue']['location']['lng'])
+                    item.setProperty("lat", lat)
+                    item.setProperty("lon", lon)
+                    self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                     places_list.append(item)
                     count += 1
                     letter += 1
