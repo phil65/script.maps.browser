@@ -83,6 +83,7 @@ class GUI(xbmcgui.WindowXML):
 
     def onInit(self, startGUI=True):
         log('onInit')
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.NavMode_active = False
         self.street_view = False
         self.search_string = ""
@@ -156,6 +157,7 @@ class GUI(xbmcgui.WindowXML):
         elif (not self.location == "") and (self.strlat == ""):
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
         self.GetGoogleMapURLs()
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.getControls()
