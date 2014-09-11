@@ -421,6 +421,7 @@ class GUI(xbmcgui.WindowXML):
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
         if not provider_index < 0:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             if modeselect[provider_index] == "Google Places":
                 self.PinString, itemlist = self.GetGooglePlacesList("food")
             elif modeselect[provider_index] == __language__(34005):
@@ -448,7 +449,7 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34016):
                 itemlist, self.PinString = self.GetNearEvents()
             elif modeselect[provider_index] == __language__(34017):
-                self.c_places_list.addItems(items=self.GetNearEvents(False, True))
+                itemlist, self.PinString = self.GetNearEvents(False, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
@@ -461,6 +462,7 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
             self.GetGoogleMapURLs()
             self.c_map_image.setImage(self.GoogleMapURL)
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def SearchDialog(self):
         setWindowProperty(self.window, 'index', "")
