@@ -129,10 +129,17 @@ class GUI(xbmcgui.WindowXML):
                 self.aspect = (param[7:])
             elif param.startswith('folder='):
                 folder = (param[7:])
-                itemlist = self.GetImages(folder)
+                itemlist, self.PinString = self.GetImages(folder)
             elif param.startswith('artist='):
                 artist = (param[7:])
                 itemlist, self.PinString = self.GetEvents(artist)
+            elif param.startswith('list='):
+                listtype = (param[5:])
+                self.zoom_level = 14
+                if listtype == "nearfestivals":
+                    itemlist, self.PinString = self.GetNearEvents(False, True)
+                elif listtype == "nearconcerts":
+                    itemlist, self.PinString = self.GetNearEvents()
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -453,7 +460,7 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
-                itemlist = self.GetImages(folder_path)
+                itemlist, self.PinString = self.GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []

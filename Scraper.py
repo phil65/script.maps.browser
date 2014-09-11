@@ -98,8 +98,9 @@ def GetNearEvents(self, tag=False, festivalsonly=False):
     if tag:
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
     if self.lat:
-        url = url + '&lat=%s&long=%s' % (self.lat, self.lon)  # &distance=60
+        url = url + '&lat=%s&long=%s&distance=30' % (self.lat, self.lon)  # &distance=60
     results = GetLastFMData(self, url)
+    prettyprint(results)
     return self.CreateVenueList(results)
 
 
@@ -166,7 +167,7 @@ def CreateVenueList(self, results):
 
 
 def GetImages(self, path=""):
-    self.PinString = "&markers=color:blue"
+    PinString = "&markers=color:blue"
     letter = ord('A')
     count = 0
    # results = GetLastFMData(self,url)
@@ -188,8 +189,8 @@ def GetImages(self, path=""):
                         item.setArt({'thumb': path + test})
                         images_list.append(item)
                         item.setProperty("index", str(count))
-                        if len(self.PinString) < 1850:
-                            self.PinString = self.PinString + "%7C" + str(lat) + "," + str(lon)
+                        if len(PinString) < 1850:
+                            PinString = PinString + "%7C" + str(lat) + "," + str(lon)
                             item.setProperty("sortletter", chr(letter))
                             letter += 1
                         count += 1
@@ -198,7 +199,7 @@ def GetImages(self, path=""):
                     log(e)
     else:
         log("Error when handling GetImages results")
-    return images_list
+    return images_list, PinString
 
 
 def GetLastFMData(self, url="", cache_days=14):
