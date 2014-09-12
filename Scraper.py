@@ -109,8 +109,11 @@ def CreateVenueList(self, results):
     letter = ord('A')
     count = 0
     events_list = list()
+  #  prettyprint(results)
     if "events" in results:
         if "@attr" in results["events"]:
+            if int(results["events"]["@attr"]["total"]) == 1:
+                results['events']['event'] = [results['events']['event']]
             for event in results['events']['event']:
                 artists = event['artists']['artist']
                 if isinstance(artists, list):
