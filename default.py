@@ -84,27 +84,8 @@ class GUI(xbmcgui.WindowXML):
     def onInit(self, startGUI=True):
         log('onInit')
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.NavMode_active = False
-        self.street_view = False
-        self.search_string = ""
-        self.zoom_level = 10
-        self.zoom_level_saved = 10
-        self.zoom_level_streetview = 0
-        self.type = "roadmap"
-        self.lat = 0.0
-        self.strlat = ""
-        self.lon = 0.0
-        self.strlon = ""
-        self.pitch = 0
-        self.location = ""
-        self.PinString = ""
-        self.direction = 0
-        self.saved_id = 100
-        self.aspect = "640x400"
-        self.prefix = ""
         itemlist = []
-        self.GoogleMapURL = ""
-        self.GoogleStreetViewURL = ""
+        self.init_vars()
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
         log("window = " + str(self.window))
         setWindowProperty(self.window, 'NavMode', '')
@@ -178,6 +159,28 @@ class GUI(xbmcgui.WindowXML):
                 dialog.ok(__language__(34001), __language__(34002), __language__(34003))
         log('onInit finished')
 
+    def init_vars(self):
+        self.NavMode_active = False
+        self.street_view = False
+        self.search_string = ""
+        self.zoom_level = 10
+        self.zoom_level_saved = 10
+        self.zoom_level_streetview = 0
+        self.type = "roadmap"
+        self.lat = 0.0
+        self.strlat = ""
+        self.lon = 0.0
+        self.strlon = ""
+        self.pitch = 0
+        self.location = ""
+        self.PinString = ""
+        self.direction = 0
+        self.saved_id = 100
+        self.aspect = "640x400"
+        self.prefix = ""
+        self.GoogleMapURL = ""
+        self.GoogleStreetViewURL = ""
+
     def getControls(self):
         self.c_map_image = self.getControl(self.CONTROL_MAP_IMAGE)
         self.c_streetview_image = self.getControl(self.CONTROL_STREETVIEW_IMAGE)
@@ -202,9 +205,6 @@ class GUI(xbmcgui.WindowXML):
                 setWindowProperty(self.window, 'streetview', '')
                 self.NavMode_active = False
                 self.street_view = False
-                self.GetGoogleMapURLs()
-                self.c_map_image.setImage(self.GoogleMapURL)
-                self.c_streetview_image.setImage(self.GoogleStreetViewURL)
                 xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
             else:
                 self.close()
@@ -248,9 +248,9 @@ class GUI(xbmcgui.WindowXML):
             if self.lon < -180.0:
                 self.lon += 180.0
             self.location = str(self.lat) + "," + str(self.lon)
-            self.GetGoogleMapURLs()
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
+        self.GetGoogleMapURLs()
+        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
+        self.c_map_image.setImage(self.GoogleMapURL)
 
     def onClick(self, controlId):
         if controlId == self.CONTROL_ZOOM_IN:
@@ -269,26 +269,15 @@ class GUI(xbmcgui.WindowXML):
                 self.ToggleStreetMode()
         elif controlId == self.CONTROL_MODE_ROADMAP:
             self.type = "roadmap"
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_MODE_SATELLITE:
             self.type = "satellite"
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_MODE_HYBRID:
             self.type = "hybrid"
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_MODE_TERRAIN:
             self.type = "terrain"
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_GOTO_PLACE:
             self.location = getWindowProperty(self.window, "Location")
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
-            self.GetGoogleMapURLs()
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
         elif controlId == self.CONTROL_SELECT_PROVIDER:
             self.SelectPlacesProvider()
         elif controlId == self.CONTROL_LEFT:
@@ -311,9 +300,9 @@ class GUI(xbmcgui.WindowXML):
                 setWindowProperty(self.window, 'index', self.c_places_list.getSelectedItem().getProperty("index"))
             else:
                 xbmc.executebuiltin("SetFocus(9023)")
-            self.GetGoogleMapURLs()
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
+        self.GetGoogleMapURLs()
+        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
+        self.c_map_image.setImage(self.GoogleMapURL)
 
     def ZoomIn(self):
         self.location = str(self.lat) + "," + str(self.lon)
@@ -323,9 +312,6 @@ class GUI(xbmcgui.WindowXML):
         else:
             if self.zoom_level <= 20:
                 self.zoom_level += 1
-        self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
 
     def ZoomOut(self):
         self.location = str(self.lat) + "," + str(self.lon)
@@ -335,25 +321,16 @@ class GUI(xbmcgui.WindowXML):
         else:
             if self.zoom_level >= 1:
                 self.zoom_level -= 1
-        self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
 
     def PitchUp(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.pitch <= 80:
             self.pitch += 10
-        self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
 
     def PitchDown(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.pitch >= -80:
             self.pitch -= 10
-        self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
 
     def ToggleNavMode(self):
         if self.NavMode_active:
@@ -375,27 +352,18 @@ class GUI(xbmcgui.WindowXML):
             self.type = "terrain"
         else:
             self.type = "roadmap"
-        self.GetGoogleMapURLs()
-        self.c_map_image.setImage(self.GoogleMapURL)
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
 
     def ToggleStreetMode(self):
         if self.street_view:
             self.street_view = False
             log("StreetView Off")
             self.zoom_level = self.zoom_level_saved
-            self.GetGoogleMapURLs()
-            log("URL: " + self.GoogleMapURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
             setWindowProperty(self.window, 'streetview', '')
         else:
             self.street_view = True
             log("StreetView On")
             self.zoom_level_saved = self.zoom_level
             self.zoom_level = 15
-            self.GetGoogleMapURLs()
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
             setWindowProperty(self.window, 'streetview', 'True')
 
     def SearchLocation(self):
@@ -404,9 +372,6 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
             self.lat, self.lon = self.GetGeoCodes(True, self.location)
             self.PinString = ""
-            self.GetGoogleMapURLs()
-            self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            self.c_map_image.setImage(self.GoogleMapURL)
 
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
@@ -469,8 +434,6 @@ class GUI(xbmcgui.WindowXML):
             self.c_places_list.reset()
             self.c_places_list.addItems(items=itemlist)
             self.street_view = False
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def SearchDialog(self):
@@ -486,9 +449,10 @@ class GUI(xbmcgui.WindowXML):
         if not provider_index < 0:
             if modeselect[provider_index] == __language__(34024):
                 self.SearchLocation()
+                itemlist = []
             elif modeselect[provider_index] == __language__(34018):
-                self.location = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetNearEvents(self.location, False)
+                tag = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
+                itemlist = self.GetNearEvents(tag, False)
             elif modeselect[provider_index] == __language__(34004):
                 query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 itemlist = self.GetPlacesList(query)
@@ -501,8 +465,6 @@ class GUI(xbmcgui.WindowXML):
             self.c_places_list.reset()
             self.c_places_list.addItems(items=itemlist)
             self.street_view = False
-            self.GetGoogleMapURLs()
-            self.c_map_image.setImage(self.GoogleMapURL)
 
 
     def toggleInfo(self):
