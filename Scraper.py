@@ -100,7 +100,7 @@ def GetNearEvents(self, tag=False, festivalsonly=False):
     if self.lat:
         url = url + '&lat=%s&long=%s&distance=30' % (self.lat, self.lon)  # &distance=60
     results = GetLastFMData(self, url)
-    prettyprint(results)
+  #  prettyprint(results)
     return self.CreateVenueList(results)
 
 
@@ -109,60 +109,64 @@ def CreateVenueList(self, results):
     letter = ord('A')
     count = 0
     events_list = list()
-    if "events" in results and results['events'].get("event"):
-        for event in results['events']['event']:
-            artists = event['artists']['artist']
-            if isinstance(artists, list):
-                my_arts = ' / '.join(artists)
-            else:
-                my_arts = artists
-            lat = ""
-            lon = ""
-            if event['venue']['location']['geo:point']['geo:long']:
-                lon = event['venue']['location']['geo:point']['geo:long']
-                lat = event['venue']['location']['geo:point']['geo:lat']
-                search_string = lat + "," + lon
-            elif event['venue']['location']['street']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
-            elif event['venue']['location']['city']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['name']
-            else:
-                search_string = event['venue']['name']
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (
-                search_string, search_string, googlemaps_key_normal)
-            item = xbmcgui.ListItem(event['venue']['name'])
-            item.setProperty("date", event['startDate'])
-            item.setProperty("name", event['venue']['name'])
-            item.setProperty("id", event['startDate'])
-            item.setProperty("street", event['venue']['location']['street'])
-            item.setProperty("eventname", event['title'])
-            item.setProperty("website", event['website'])
-            item.setProperty("description", cleanText(event['description']))
-            item.setProperty("city", event['venue']['location']['city'])
-            item.setProperty("country", event['venue']['location']['country'])
-            item.setProperty("lon", lon)
-            item.setProperty("lat", lat)
-            item.setProperty("index", str(count))
-            item.setProperty("artists", my_arts)
-            item.setProperty("sortletter", chr(letter))
-            item.setProperty("googlemap", googlemap)
-            item.setProperty("artist_image", event['image'][-1]['#text'])
-            item.setProperty("venue_image", event['venue']['image'][-1]['#text'])
-            item.setProperty("headliner", event['artists']['headliner'])
-            item.setArt({'thumb': event['venue']['image'][-1]['#text']})
-            item.setLabel(event['venue']['name'])
-            item.setLabel2(event['startDate'])
-            events_list.append(item)
-            PinString = PinString + "&markers=color:blue%7Clabel:" + \
-                chr(letter) + "%7C" + lat + "," + lon
-            count += 1
-            letter += 1
-            if count > max_limit:
-                break
+    if "events" in results:
+        if "@attr" in results["events"]:
+            for event in results['events']['event']:
+                artists = event['artists']['artist']
+                if isinstance(artists, list):
+                    my_arts = ' / '.join(artists)
+                else:
+                    my_arts = artists
+                lat = ""
+                lon = ""
+                if event['venue']['location']['geo:point']['geo:long']:
+                    lon = event['venue']['location']['geo:point']['geo:long']
+                    lat = event['venue']['location']['geo:point']['geo:lat']
+                    search_string = lat + "," + lon
+                elif event['venue']['location']['street']:
+                    search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
+                elif event['venue']['location']['city']:
+                    search_string = event['venue']['location']['city'] + " " + event['venue']['name']
+                else:
+                    search_string = event['venue']['name']
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (
+                    search_string, search_string, googlemaps_key_normal)
+                item = xbmcgui.ListItem(event['venue']['name'])
+                item.setProperty("date", event['startDate'])
+                item.setProperty("name", event['venue']['name'])
+                item.setProperty("id", event['startDate'])
+                item.setProperty("street", event['venue']['location']['street'])
+                item.setProperty("eventname", event['title'])
+                item.setProperty("website", event['website'])
+                item.setProperty("description", cleanText(event['description']))
+                item.setProperty("city", event['venue']['location']['city'])
+                item.setProperty("country", event['venue']['location']['country'])
+                item.setProperty("lon", lon)
+                item.setProperty("lat", lat)
+                item.setProperty("index", str(count))
+                item.setProperty("artists", my_arts)
+                item.setProperty("sortletter", chr(letter))
+                item.setProperty("googlemap", googlemap)
+                item.setProperty("artist_image", event['image'][-1]['#text'])
+                item.setProperty("venue_image", event['venue']['image'][-1]['#text'])
+                item.setProperty("headliner", event['artists']['headliner'])
+                item.setArt({'thumb': event['venue']['image'][-1]['#text']})
+                item.setLabel(event['venue']['name'])
+                item.setLabel2(event['startDate'])
+                events_list.append(item)
+                PinString = PinString + "&markers=color:blue%7Clabel:" + \
+                    chr(letter) + "%7C" + lat + "," + lon
+                count += 1
+                letter += 1
+                if count > max_limit:
+                    break
+        else:
+            Notify("Error", "No concerts found")            
     elif "error" in results:
         Notify("Error", results["message"])
     else:
         log("Error when handling LastFM results")
+        prettyprint(results)
     return events_list, PinString
 
 
@@ -226,11 +230,8 @@ def GetEvents(self, id, pastevents=False):
         url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
     results = GetLastFMData(self, url)
   #  prettyprint(results)
-    try:
-        return self.CreateVenueList(results)
-    except:
-        log("Error in GetEvents()")
-        return []
+    return self.CreateVenueList(results)
+
 
 
 def GetGoogleMapURLs(self):
