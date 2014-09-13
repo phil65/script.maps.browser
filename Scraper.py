@@ -209,7 +209,7 @@ def GetImages(self, path=""):
     return images_list, PinString
 
 
-def GetLastFMData(self, url="", cache_days=14):
+def GetLastFMData(self, url="", cache_days=1):
     from base64 import b64encode
     filename = b64encode(url).replace("/", "XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
