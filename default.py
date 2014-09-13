@@ -377,21 +377,21 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
         # modeselect.append("Google Places")
-        modeselect.append(__language__(34016))
-        modeselect.append(__language__(34017))
-        modeselect.append(__language__(34027))
-        modeselect.append(__language__(34005))
-        modeselect.append(__language__(34006))
-        modeselect.append(__language__(34007))
-        modeselect.append(__language__(34008))
-        modeselect.append(__language__(34009))
-        modeselect.append(__language__(34010))
-        modeselect.append(__language__(34011))
-        modeselect.append(__language__(34012))
-        modeselect.append(__language__(34013))
-        modeselect.append(__language__(34014))
-        modeselect.append(__language__(34015))
-        modeselect.append(__language__(34019))
+        modeselect.append(__language__(34016))  # concerts
+        modeselect.append(__language__(34017))  # festivals
+        modeselect.append(__language__(34027))  # geopics
+        modeselect.append(__language__(34005))  # toppicks
+        modeselect.append(__language__(34006))  # food
+        modeselect.append(__language__(34007))  # drinks
+        modeselect.append(__language__(34008))  # coffee
+        modeselect.append(__language__(34009))  # shops
+        modeselect.append(__language__(34010))  # arts
+        modeselect.append(__language__(34011))  # outdoors
+        modeselect.append(__language__(34012))  # sights
+        modeselect.append(__language__(34013))  # trending
+        modeselect.append(__language__(34014))  # specials
+        modeselect.append(__language__(34015))  # nextvenues
+        modeselect.append(__language__(34019))  # reset
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
         if not provider_index < 0:
