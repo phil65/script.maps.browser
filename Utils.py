@@ -139,6 +139,7 @@ def cleanText(text):
         text = re.sub('&gt;', '>', text)
         text = re.sub('&lt;', '<', text)
         text = re.sub('&#;', "'", text)
+        text = re.sub('&#39;', "'", text)
         text = re.sub('<i>', '[I]', text)
         text = re.sub('<\/i>', '[/I]', text)
         text = re.sub('<strong>', '[B]', text)

@@ -358,7 +358,9 @@ def HandleEventfulEventResult(self, results):
     count = 0
     prettyprint(results)
     for venue in results:
-        formattedAddress = venue["venue_address"]
+        eventname = cleanText(venue['title'])
+        venuename = cleanText(venue['venue_name'])
+        formattedAddress = cleanText(venue["venue_address"])
         lat = str(venue['latitude'])
         lon = str(venue['longitude'])
         if venue["image"] is not None:
@@ -370,9 +372,9 @@ def HandleEventfulEventResult(self, results):
         else:
             date = venue["start_time"] + " - " + venue["stop_time"]
         prop_list = {"id": str(venue['id']),
-                     "eventname": venue['title'],
+                     "eventname": eventname,
                      "description": cleanText(venue['description']),
-                     "name": venue['venue_name'],
+                     "name": venuename,
                      "photo": photo,
                      "date": date,
                      "address": formattedAddress,
@@ -383,12 +385,12 @@ def HandleEventfulEventResult(self, results):
                      "sortletter": chr(letter),
                      "lat": lat,
                      "lon": lon}
-        item = xbmcgui.ListItem(venue['venue_name'])
+        item = xbmcgui.ListItem(venuename)
         for key, value in prop_list.iteritems():
             item.setProperty(key, value)
         item.setProperty("item_info", simplejson.dumps(prop_list))
         item.setArt({'thumb': photo})
-        item.setLabel(venue['venue_name'])
+        item.setLabel(venuename)
         item.setLabel2(date)
         self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
         places_list.append(item)
