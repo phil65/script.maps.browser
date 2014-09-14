@@ -356,20 +356,28 @@ def HandleEventfulEventResult(self, results):
     places_list = list()
     letter = ord('A')
     count = 0
+    prettyprint(results)
     for venue in results:
         formattedAddress = venue["venue_address"]
         lat = str(venue['latitude'])
         lon = str(venue['longitude'])
         if venue["image"] is not None:
-            photo = venue["image"]["medium"]["url"]
+            photo = venue["image"]["large"]["url"]
         else:
             photo = ""
+        if (venue["start_time"] == venue["stop_time"]) or (venue["stop_time"] is None):
+            date = venue["start_time"]
+        else:
+            date = venue["start_time"] + " - " + venue["stop_time"]
         prop_list = {"id": str(venue['id']),
-                     "eventname": formattedAddress,
+                     "eventname": venue['title'],
                      "description": cleanText(venue['description']),
                      "name": venue['venue_name'],
                      "photo": photo,
+                     "date": date,
+                     "address": formattedAddress,
                      "Venue_Image": photo,
+                     "venue_id": venue['venue_id'],
                      "GoogleMap": photo,
                      "index":  str(count),
                      "sortletter": chr(letter),
@@ -381,7 +389,7 @@ def HandleEventfulEventResult(self, results):
         item.setProperty("item_info", simplejson.dumps(prop_list))
         item.setArt({'thumb': photo})
         item.setLabel(venue['venue_name'])
-        item.setLabel2(venue['venue_name'])
+        item.setLabel2(date)
         self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
         places_list.append(item)
         count += 1
@@ -414,9 +422,9 @@ def GetPlacesList(self, query=""):
 
 def GetEventfulList(self, query=""):
     if query is not "":
-        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&page_size=25date&sort_order=date&within=30&date=Future&query=%s&app_key=%s' % (self.lat, self.lon, query, eventful_key)
+        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&image_sizes=large&include=price&page_size=25date&sort_order=date&within=30&date=Future&query=%s&app_key=%s' % (self.lat, self.lon, query, eventful_key)
     else:
-        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&page_size=25date&sort_order=date&within=30&date=Future&app_key=%s' % (self.lat, self.lon, eventful_key)
+        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&image_sizes=large&include=price&page_size=25date&sort_order=date&within=30&date=Future&app_key=%s' % (self.lat, self.lon, eventful_key)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     self.PinString = ""
     response = GetStringFromUrl(url)

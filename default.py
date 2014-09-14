@@ -521,6 +521,10 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
 
 class EventInfoDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
+    C_TEXT_FIELD = 200
+    C_TITLE = 201
+    C_BIG_IMAGE = 201
+    C_RIGHT_IMAGE = 210
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -531,13 +535,13 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         prop_list = simplejson.loads(self.item)
         for key, value in prop_list.iteritems():
             log(key + " = " + value)
-        self.getControl(200).setText(prop_list["description"])
-        self.getControl(201).setLabel(prop_list["eventname"])
+        self.getControl(self.C_TEXT_FIELD).setText(prop_list["description"])
+        self.getControl(self.C_TITLE).setLabel(prop_list["eventname"])
         self.getControl(202).setLabel(prop_list["date"])
         self.getControl(203).setLabel(prop_list["name"])
         self.getControl(204).setLabel(prop_list["street"])
-        self.getControl(210).setImage(prop_list["venue_image"])
-        self.getControl(211).setImage(prop_list["artist_image"])
+        self.getControl(self.C_RIGHT_IMAGE).setImage(prop_list["venue_image"])
+        self.getControl(self.C_BIG_IMAGE).setImage(prop_list["artist_image"])
 
 
     def onAction(self, action):
