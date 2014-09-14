@@ -93,6 +93,19 @@ def ParseGeoTags(lat, lon):
     return lat, lon
 
 
+def GetLocationCoordinates():
+    try:
+        url = 'http://www.telize.com/geoip'
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+        lat = results["latitude"]
+        lon = results["longitude"]
+        return lat, lon
+    except Exception as e:
+        log(e)
+        return "", ""
+
+
 def save_to_file(content, filename, path=""):
     if path == "":
         text_file_path = get_browse_dialog() + filename + ".txt"

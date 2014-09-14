@@ -22,7 +22,6 @@ __addonpath__ = __addon__.getAddonInfo('path')
 
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 googlemaps_key_places = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 foursquare_id = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 foursquare_secret = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
@@ -30,6 +29,7 @@ lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
 factual_key = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
 factual_secret = '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
 wunderground_key = "xx"
+bing_key = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 max_limit = 25
 
 
@@ -119,17 +119,6 @@ def GetGeoCodes(self, show_dialog, search_string):
     except Exception as e:
         log(e)
         return ("", "")
-
-
-def GetLocationCoordinates(self):
-    try:
-        url = 'http://www.telize.com/geoip'
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        self.lat = results["latitude"]
-        self.lon = results["longitude"]
-    except Exception as e:
-        log(e)
 
 
 def HandleFourSquarePlacesResult(self, results):

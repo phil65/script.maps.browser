@@ -43,7 +43,6 @@ addon_path = addon.getAddonInfo('path')
 addon_name = addon.getAddonInfo('name')
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
-bing_key = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 
 
 class GUI(xbmcgui.WindowXML):
@@ -139,7 +138,7 @@ class GUI(xbmcgui.WindowXML):
         if self.location == "geocode":
             self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
         elif (self.location == "") and (self.strlat == ""):
-            self.GetLocationCoordinates()
+            self.lat, self.lon = GetLocationCoordinates()
             self.location = str(self.lat) + "," + str(self.lon)
             self.zoom_level = 2
         elif (not self.location == "") and (self.strlat == ""):
