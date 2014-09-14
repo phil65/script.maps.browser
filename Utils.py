@@ -130,14 +130,23 @@ def read_from_file(path=""):
 
 def cleanText(text):
     import re
-    text = re.sub('<br \/>', '[CR]', text)
-    text = re.sub('<(.|\n|\r)*?>', '', text)
-    text = re.sub('&quot;', '"', text)
-    text = re.sub('&amp;', '&', text)
-    text = re.sub('&gt;', '>', text)
-    text = re.sub('&lt;', '<', text)
-    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '', text)
-    return text.strip()
+    if text is not None:
+        text = re.sub('<br \/>', '[CR]', text)
+        text = re.sub('<br\/>', '[CR]', text)
+        text = re.sub('<(.|\n|\r)*?>', '', text)
+        text = re.sub('&quot;', '"', text)
+        text = re.sub('&amp;', '&', text)
+        text = re.sub('&gt;', '>', text)
+        text = re.sub('&lt;', '<', text)
+        text = re.sub('&#;', "'", text)
+        text = re.sub('<i>', '[I]', text)
+        text = re.sub('<\/i>', '[/I]', text)
+        text = re.sub('<strong>', '[B]', text)
+        text = re.sub('<\/strong>', '[/B]', text)
+        text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '', text)
+        return text.strip()
+    else:
+        return ""
 
 
 def Notify(header, line='', line2='', line3=''):

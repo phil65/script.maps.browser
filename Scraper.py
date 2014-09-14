@@ -31,6 +31,7 @@ foursquare_secret = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
 factual_key = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
 factual_secret = '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
+eventful_key = 'Nw3rh3mXn8RhMQNK'
 wunderground_key = "xx"
 max_limit = 25
 
@@ -143,18 +144,25 @@ def GetImages(self, path=""):
             exif_data = get_exif_data(img)
             lat, lon = get_lat_lon(exif_data)
             if lat:
+                prop_list = {"name": filename,
+                             "lat": str(lat),
+                             "lon": str(lon),
+                             "thumb": path + filename,
+                             "index": path + str(count),
+                             "sortletter": chr(letter),
+                             }
                 item = xbmcgui.ListItem(filename)
                 item.setLabel(filename)
                 item.setProperty("name", filename)
                 item.setProperty("lat", str(lat))
                 item.setProperty("lon", str(lon))
-                item.setArt({'thumb': path + filename})
-                images_list.append(item)
                 item.setProperty("index", str(count))
+                item.setArt({'thumb': path + filename})
                 if len(PinString) < 1850:
                     PinString = PinString + "%7C" + str(lat) + "," + str(lon)
                     item.setProperty("sortletter", chr(letter))
                     letter += 1
+                images_list.append(item)
                 count += 1
         except Exception as e:
             log("Error when handling GetImages results")
@@ -344,6 +352,45 @@ def HandleFourSquarePlacesResult(self, results):
     return places_list
 
 
+def HandleEventfulEventResult(self, results):
+    places_list = list()
+    letter = ord('A')
+    count = 0
+    for venue in results:
+        formattedAddress = venue["venue_address"]
+        lat = str(venue['latitude'])
+        lon = str(venue['longitude'])
+        if venue["image"] is not None:
+            photo = venue["image"]["medium"]["url"]
+        else:
+            photo = ""
+        prop_list = {"id": str(venue['id']),
+                     "eventname": formattedAddress,
+                     "description": cleanText(venue['description']),
+                     "name": venue['venue_name'],
+                     "photo": photo,
+                     "Venue_Image": photo,
+                     "GoogleMap": photo,
+                     "index":  str(count),
+                     "sortletter": chr(letter),
+                     "lat": lat,
+                     "lon": lon}
+        item = xbmcgui.ListItem(venue['venue_name'])
+        for key, value in prop_list.iteritems():
+            item.setProperty(key, value)
+        item.setProperty("item_info", simplejson.dumps(prop_list))
+        item.setArt({'thumb': photo})
+        item.setLabel(venue['venue_name'])
+        item.setLabel2(venue['venue_name'])
+        self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+        places_list.append(item)
+        count += 1
+        letter += 1
+        if count > max_limit:
+            break
+    return places_list
+
+
 def GetPlacesList(self, query=""):
     if query is not "":
         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, query, foursquare_id, foursquare_secret)
@@ -363,7 +410,19 @@ def GetPlacesList(self, query=""):
     else:
         log("ERROR")
     return []
- 
+
+
+def GetEventfulList(self, query=""):
+    if query is not "":
+        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&page_size=25date&sort_order=date&within=30&date=Future&query=%s&app_key=%s' % (self.lat, self.lon, query, eventful_key)
+    else:
+        url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&page_size=25date&sort_order=date&within=30&date=Future&app_key=%s' % (self.lat, self.lon, eventful_key)
+  #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
+    self.PinString = ""
+    response = GetStringFromUrl(url)
+    results = simplejson.loads(response)
+    return self.HandleEventfulEventResult(results['events']['event'])
+
 
 def GetPlacesListExplore(self, placetype):
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)

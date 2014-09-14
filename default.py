@@ -383,6 +383,7 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34016))  # concerts
         modeselect.append(__language__(34017))  # festivals
         modeselect.append(__language__(34027))  # geopics
+        modeselect.append(__language__(34028))  # toppicks
         modeselect.append(__language__(34005))  # toppicks
         modeselect.append(__language__(34006))  # food
         modeselect.append(__language__(34007))  # drinks
@@ -431,6 +432,8 @@ class GUI(xbmcgui.WindowXML):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = self.GetImages(folder_path)
+            elif modeselect[provider_index] == __language__(34028):
+                itemlist = self.GetEventfulList()
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
