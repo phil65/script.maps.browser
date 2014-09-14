@@ -26,6 +26,7 @@ import xbmcgui
 from Utils import *
 from LastFM import LastFM
 from Eventful import Eventful
+from GooglePlaces import GooglePlaces
 from math import sin, cos, radians, pow, pi
 if sys.version_info < (2, 7):
     import simplejson
@@ -407,7 +408,8 @@ class GUI(xbmcgui.WindowXML):
         if not provider_index < 0:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if modeselect[provider_index] == "Google Places":
-                self.PinString, itemlist = self.GetGooglePlacesList("food")
+                GP = GooglePlaces()
+                self.PinString, itemlist = GP.GetGooglePlacesList("food")
             elif modeselect[provider_index] == __language__(34005):
                 itemlist = self.GetPlacesListExplore("topPicks")
             elif modeselect[provider_index] == __language__(34006):

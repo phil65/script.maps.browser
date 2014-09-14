@@ -22,7 +22,6 @@ __addonpath__ = __addon__.getAddonInfo('path')
 
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-googlemaps_key_places = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 foursquare_id = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 foursquare_secret = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
@@ -222,54 +221,3 @@ def GetPlacesListExplore(self, placetype):
         log("ERROR")
     return []
 
-
-def GetGooglePlacesList(self, locationtype):
-    location = str(self.lat) + "," + str(self.lon)
-    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location, locationtype, googlemaps_key_places)
- #   log(url)
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
-    places_list = list()
-    PinString = ""
-    letter = ord('A')
-    count = 0
-    if "results" in results:
-        for v in results['results']:
-            item = xbmcgui.ListItem(v['name'])
-            try:
-                photo_ref = v['photos'][0]['photo_reference']
-                photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
-            except:
-                photo = ""
-            typestring = ""
-            typestring = " / ".join(v['types'])
-            item.setArt({'thumb': photo})
-            item.setArt({'icon': v['icon']})
-            item.setLabel(v['name'])
-            item.setProperty('name', v['name'])
-            item.setProperty('description', v['vicinity'])
-            item.setLabel2(typestring)
-            item.setProperty("sortletter", chr(letter))
-            item.setProperty("index", str(count))
-            lat = str(v['geometry']['location']['lat'])
-            lon = str(v['geometry']['location']['lng'])
-            item.setProperty("lat", lat)
-            item.setProperty("lon", lon)
-            item.setProperty("index", str(count))
-            if "rating" in v:
-                rating = str(v['rating'] * 2.0)
-                item.setProperty("rating", rating)
-            PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places_list.append(item)
-            count += 1
-            letter += 1
-            if count > max_limit:
-                break
-      #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
-       # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-       # log(difference_lat)
-    elif results['meta']['code'] == 400:
-        log("LIMIT EXCEEDED")
-    else:
-        log("ERROR")
-    return PinString, places_list
