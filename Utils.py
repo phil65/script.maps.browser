@@ -5,6 +5,8 @@ import urllib2
 import os
 import sys
 import re
+from PIL import Image
+from ImageTags import *
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -55,6 +57,43 @@ def log(txt):
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
+
+def GetImages(self, path=""):
+    PinString = "&markers=color:blue"
+    letter = ord('A')
+    count = 0
+    images_list = list()
+    prettyprint(xbmcvfs.listdir(path))
+    for filename in xbmcvfs.listdir(path)[-1]:
+        try:
+            img = Image.open(path + filename)
+            exif_data = get_exif_data(img)
+            lat, lon = get_lat_lon(exif_data)
+            if lat:
+                prop_list = {"name": filename,
+                             "lat": str(lat),
+                             "lon": str(lon),
+                             "thumb": path + filename,
+                             "index": path + str(count),
+                             "sortletter": chr(letter),
+                             }
+                item = xbmcgui.ListItem(filename)
+                item.setLabel(filename)
+                item.setProperty("name", filename)
+                item.setProperty("lat", str(lat))
+                item.setProperty("lon", str(lon))
+                item.setProperty("index", str(count))
+                item.setArt({'thumb': path + filename})
+                if len(PinString) < 1850:
+                    PinString = PinString + "%7C" + str(lat) + "," + str(lon)
+                    item.setProperty("sortletter", chr(letter))
+                    letter += 1
+                images_list.append(item)
+                count += 1
+        except Exception as e:
+            log("Error when handling GetImages results")
+            log(e)
+    return images_list, PinString
 
 def string2deg(string):
     string = string.strip().replace('"', '').replace("'", "")

@@ -4,11 +4,8 @@ import os
 import sys
 import xbmcgui
 import xbmcaddon
-import xbmcvfs
 import urllib
 from default import dialog_select_UI
-from ImageTags import *
-from PIL import Image
 from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
@@ -35,43 +32,6 @@ max_limit = 25
 # def GetRadarImage(self, lat, lon):
 #     url = "http://api.wunderground.com/api/%s/animatedradar/image.gif?centerlat=%s&centerlon=%s&radius=100&width=280&height=280&newmaps=0" % (wunderground_key, str(self.lat), str(self.lon))
 #     pass
-
-def GetImages(self, path=""):
-    PinString = "&markers=color:blue"
-    letter = ord('A')
-    count = 0
-    images_list = list()
-    prettyprint(xbmcvfs.listdir(path))
-    for filename in xbmcvfs.listdir(path)[-1]:
-        try:
-            img = Image.open(path + filename)
-            exif_data = get_exif_data(img)
-            lat, lon = get_lat_lon(exif_data)
-            if lat:
-                prop_list = {"name": filename,
-                             "lat": str(lat),
-                             "lon": str(lon),
-                             "thumb": path + filename,
-                             "index": path + str(count),
-                             "sortletter": chr(letter),
-                             }
-                item = xbmcgui.ListItem(filename)
-                item.setLabel(filename)
-                item.setProperty("name", filename)
-                item.setProperty("lat", str(lat))
-                item.setProperty("lon", str(lon))
-                item.setProperty("index", str(count))
-                item.setArt({'thumb': path + filename})
-                if len(PinString) < 1850:
-                    PinString = PinString + "%7C" + str(lat) + "," + str(lon)
-                    item.setProperty("sortletter", chr(letter))
-                    letter += 1
-                images_list.append(item)
-                count += 1
-        except Exception as e:
-            log("Error when handling GetImages results")
-            log(e)
-    return images_list, PinString
 
 # def GetBingMap(self):
    # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%s?mapSize=800,600&key=%s' % (urllib.quote(self.search_string),bing_key)
@@ -178,11 +138,11 @@ def HandleFourSquarePlacesResult(self, results):
     return places_list
 
 
-def GetPlacesList(self, query=""):
+def GetPlacesList(self, lat, lon, query=""):
     if query is not "":
-        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, query, foursquare_id, foursquare_secret)
+        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, query, foursquare_id, foursquare_secret)
     else:
-        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
+        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     self.PinString = ""
     response = GetStringFromUrl(url)

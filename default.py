@@ -473,7 +473,7 @@ class GUI(xbmcgui.WindowXML):
                 itemlist = LFM.GetNearEvents(self.lat, self.lon, tag, False)
             elif modeselect[provider_index] == __language__(34004):
                 query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetPlacesList(query)
+                itemlist = self.GetPlacesList(self.lat, self.lon, query)
             elif modeselect[provider_index] == __language__(34023):
                 artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
