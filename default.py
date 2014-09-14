@@ -299,7 +299,10 @@ class GUI(xbmcgui.WindowXML):
             if not self.c_places_list.getSelectedItem().getProperty("index") == getWindowProperty(self.window, 'index'):
                 setWindowProperty(self.window, 'index', self.c_places_list.getSelectedItem().getProperty("index"))
             else:
-                xbmc.executebuiltin("SetFocus(9023)")
+                info_dict = self.c_places_list.getSelectedItem().getProperty("item_info")
+                log("info_dict:" + info_dict)
+                dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=info_dict)
+                dialog.doModal()
         self.GetGoogleMapURLs()
         self.c_streetview_image.setImage(self.GoogleStreetViewURL)
         self.c_map_image.setImage(self.GoogleMapURL)
@@ -466,14 +469,12 @@ class GUI(xbmcgui.WindowXML):
             self.c_places_list.addItems(items=itemlist)
             self.street_view = False
 
-
     def toggleInfo(self):
         self.show_info = not self.show_info
         self.info_controller.setVisible(self.show_info)
 
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
-    from Utils import *
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
@@ -484,18 +485,12 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
         self.lat = ''
 
     def onInit(self):
-        if True:
-            self.img_list = self.getControl(6)
-            self.img_list.controlLeft(self.img_list)
-            self.img_list.controlRight(self.img_list)
-            self.getControl(3).setVisible(False)
-        else:
-           # print_exc()
-            self.img_list = self.getControl(3)
-
+        self.img_list = self.getControl(6)
+        self.img_list.controlLeft(self.img_list)
+        self.img_list.controlRight(self.img_list)
+        self.getControl(3).setVisible(False)
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(__language__(32015))
-
         for entry in self.listing:
             listitem = xbmcgui.ListItem('%s' % (entry['generalinfo']))
             listitem.setIconImage(entry['preview'])
@@ -510,13 +505,44 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-      # log('# GUI control: %s' % controlID)
         if controlID == 6 or controlID == 3:
-       #     num = self.img_list.getSelectedPosition()
-       # log('# GUI position: %s' % num)
             self.selected_id = self.img_list.getSelectedItem().getLabel2()
             self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))
+            xbmc.log('# GUI selected lat: %s' % self.selected_id)
+            self.close()
+
+    def onFocus(self, controlID):
+        pass
+
+
+class EventInfoDialog(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+        self.item = kwargs.get('item')
+
+    def onInit(self):
+        log("EventInfoDialog onInit")
+        prop_list = simplejson.loads(self.item)
+        for key, value in prop_list.iteritems():
+            log(key + " = " + value)
+        self.getControl(200).setText(prop_list["description"])
+        self.getControl(201).setLabel(prop_list["eventname"])
+        self.getControl(202).setLabel(prop_list["date"])
+        self.getControl(203).setLabel(prop_list["name"])
+        self.getControl(204).setLabel(prop_list["street"])
+        self.getControl(210).setImage(prop_list["venue_image"])
+        self.getControl(211).setImage(prop_list["artist_image"])
+
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def onClick(self, controlID):
+        if controlID == 100:
             xbmc.log('# GUI selected lat: %s' % self.selected_id)
             self.close()
 
@@ -531,6 +557,10 @@ if __name__ == '__main__':
         xbmc.log("param = " + param)
         if param.startswith('prefix='):
             startGUI = False
+      #  elif xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
+      #      Notify("Instance already running","ddd")
+      #      xbmc.executebuiltin("ReplaceWindow(home)")
+      #      xbmc.sleep(1000)
     if startGUI:
         gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
     else:

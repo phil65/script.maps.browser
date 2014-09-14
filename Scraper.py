@@ -11,6 +11,7 @@ from default import dialog_select_UI
 from ImageTags import *
 from PIL import Image
 from Utils import *
+from math import cos, pow, pi
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -39,56 +40,6 @@ max_limit = 25
 #     pass
 
 
-def HandleLastFMEventResult(self, results):
-    events = []
-    if "events" in results and results['events'].get("event"):
-        for event in results['events']['event']:
-            artists = event['artists']['artist']
-            if isinstance(artists, list):
-                my_arts = ' / '.join(artists)
-            else:
-                my_arts = artists
-            lat = ""
-            lon = ""
-            try:
-                if event['venue']['location']['geo:point']['geo:long']:
-                    lon = event['venue']['location']['geo:point']['geo:long']
-                    lat = event['venue']['location']['geo:point']['geo:lat']
-                    search_string = lat + "," + lon
-                elif event['venue']['location']['street']:
-                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
-                elif event['venue']['location']['city']:
-                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
-                else:
-                    search_string = urllib.quote_plus(event['venue']['name'])
-            except:
-                search_string = ""
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (
-                search_string, search_string, googlemaps_key_old)
-            event = {'date': event['startDate'],
-                     'name': event['venue']['name'],
-                     'id': event['venue']['id'],
-                     'street': event['venue']['location']['street'],
-                     'eventname': event['title'],
-                     'website': event['website'],
-                     'description': cleanText(event['description']),
-                     # 'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
-                     'city': event['venue']['location']['city'],
-                     'country': event['venue']['location']['country'],
-                     'geolong': lon,
-                     'geolat': lat,
-                     'artists': my_arts,
-                     'googlemap': googlemap,
-                     'artist_image': event['image'][-1]['#text'],
-                     'venue_image': event['venue']['image'][-1]['#text'],
-                     'headliner': event['artists']['headliner']}
-            events.append(event)
-    else:
-        log("Error in HandleLastFMEventResult. JSON query follows:")
-     #   prettyprint(results)
-    return events
-
-
 def GetNearEvents(self, tag=False, festivalsonly=False):
     if festivalsonly:
         festivalsonly = "1"
@@ -100,7 +51,6 @@ def GetNearEvents(self, tag=False, festivalsonly=False):
     if self.lat:
         url = url + '&lat=%s&long=%s&distance=30' % (self.lat, self.lon)  # &distance=60
     results = GetLastFMData(self, url)
-  #  prettyprint(results)
     return self.CreateVenueList(results)
 
 
@@ -135,24 +85,32 @@ def CreateVenueList(self, results):
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (
                     search_string, search_string, googlemaps_key_normal)
                 item = xbmcgui.ListItem(event['venue']['name'])
-                item.setProperty("date", event['startDate'])
-                item.setProperty("name", event['venue']['name'])
-                item.setProperty("id", event['startDate'])
-                item.setProperty("street", event['venue']['location']['street'])
-                item.setProperty("eventname", event['title'])
-                item.setProperty("website", event['website'])
-                item.setProperty("description", cleanText(event['description']))
-                item.setProperty("city", event['venue']['location']['city'])
-                item.setProperty("country", event['venue']['location']['country'])
-                item.setProperty("lon", lon)
-                item.setProperty("lat", lat)
-                item.setProperty("index", str(count))
-                item.setProperty("artists", my_arts)
-                item.setProperty("sortletter", chr(letter))
-                item.setProperty("googlemap", googlemap)
-                item.setProperty("artist_image", event['image'][-1]['#text'])
-                item.setProperty("venue_image", event['venue']['image'][-1]['#text'])
-                item.setProperty("headliner", event['artists']['headliner'])
+                formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
+                prop_list = {"date": event['startDate'],
+                             "name": event['venue']['name'],
+                             "id": event['startDate'],
+                             "street": event['venue']['location']['street'],
+                             "eventname": event['title'],
+                             "website": event['website'],
+                             "description": cleanText(event['description']),
+                             "city": event['venue']['location']['city'],
+                             "country": event['venue']['location']['country'],
+                             "address": formattedAddress,
+                             "lon": lon,
+                             "lat": lat,
+                             "index": str(count),
+                             "artists": my_arts,
+                             "sortletter": chr(letter),
+                             "googlemap": googlemap,
+                             "artist_image": event['image'][-1]['#text'],
+                             "venue_image": event['venue']['image'][-1]['#text'],
+                             "headliner": event['artists']['headliner'],
+                             "thumb": event['venue']['image'][-1]['#text'],
+                             "label": event['venue']['name'],
+                             "label2": event['startDate']}
+                for key, value in prop_list.iteritems():
+                    item.setProperty(key, value)
+                item.setProperty("item_info", simplejson.dumps(prop_list))
                 item.setArt({'thumb': event['venue']['image'][-1]['#text']})
                 item.setLabel(event['venue']['name'])
                 item.setLabel2(event['startDate'])
@@ -164,7 +122,7 @@ def CreateVenueList(self, results):
                 if count > max_limit:
                     break
         else:
-            Notify("Error", "No concerts found")            
+            Notify("Error", "No concerts found")
     elif "error" in results:
         Notify("Error", results["message"])
     else:
@@ -236,7 +194,6 @@ def GetEvents(self, id, pastevents=False):
     return self.CreateVenueList(results)
 
 
-
 def GetGoogleMapURLs(self):
     try:
         if self.street_view is True:
@@ -263,6 +220,15 @@ def GetGoogleMapURLs(self):
         setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
         setWindowProperty(self.window, self.prefix + 'NavMode', "")
         setWindowProperty(self.window, self.prefix + 'streetview', "")
+        hor_px = int(size.split("x")[0])
+        ver_px = int(size.split("x")[1])
+        dLongitude = (hor_px / 256) * (360 / pow(2, self.zoom_level))
+        pixels_per_kilometer = (ver_px * 1000) / ((cos(self.lat * pi / 180) * 2 * pi * 6378137) / (256 * pow(2, self.zoom_level)) * 600)
+        log("dLongitude: " + str(dLongitude) + "  pixels_per_kilometer: " + str(pixels_per_kilometer))
+        # import MercatorProjection
+        # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
+        # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
+        # prettyprint(corners)
         if self.street_view:
             setWindowProperty(self.window, self.prefix + 'streetview', "True")
         if self.NavMode_active:
@@ -327,131 +293,104 @@ def GetLocationCoordinates(self):
         log(e)
 
 
-def GetPlacesList(self, query=""):
-    if query is not "":
-         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, query, foursquare_id, foursquare_secret)
-    else:
-         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
-  #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-   # url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "topPicks", foursquare_id, foursquare_secret)
- #   log(url)
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
- #   prettyprint(results)
+def HandleFourSquarePlacesResult(self, results):
     places_list = list()
-    self.PinString = ""
     letter = ord('A')
     count = 0
-    if True:
-        if results and 'meta' in results:
-            if results['meta']['code'] == 200:
-                for v in results['response']['venues']:
-                    item = xbmcgui.ListItem(v['name'])
-                    if 'formattedAddress' in v['location']:
-                        item.setProperty("eventname", ', '.join(filter(None, v['location']['formattedAddress'])))
-                    if 'phone' in v['contact']:
-                        item.setProperty("phone", v['contact']['phone'])
-                    if 'twitter' in v['contact']:
-                        item.setProperty("twitter", v['contact']['twitter'])
-                             # create a list item
-                    item.setProperty("id", str(v['id']))
-                    item.setProperty("distance", str(v['location']['distance']))
-                    item.setProperty("comments", str(v['stats']['tipCount']))
-                    item.setProperty("visited", str(v['stats']['usersCount']))
-                    item.setProperty("lat", str(v['location']['lat']))
-                    item.setProperty("lon", str(v['location']['lng']))
-                    self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + str(v['location']['lat']) + "," + str(v['location']['lng'])
-                    try:
-                        icon = v['categories'][0]['icon']['prefix'] + "88" + v['categories'][0]['icon']['suffix']
-#                        if count < 12:
-                   #     self.PinString = self.PinString + "&markers=icon:" + v['categories'][0]['icon']['prefix'] + "64" +  v['categories'][0]['icon']['suffix'] + "|" + str(v['location']['lat']) + "," + str(v['location']['lng'])
-                    #    self.PinString = self.PinString + "&markers="+ str(v['location']['lat']) + "," + str(v['location']['lng'])
-                    #
-                    except Exception as e:
-                        icon = ""
-                        log("Error: Exception in GetPlacesList with message:")
-                        log(e)
-                    item.setArt({'thumb': icon})
-                    item.setLabel(v['name'])
-                    item.setLabel2(v['name'])
-                    item.setProperty("name", v['name'])
-                    item.setProperty("index", str(count))
-                    item.setProperty("sortletter", chr(letter))
-                    item.setProperty("Venue_Image", icon)
-                    item.setProperty("GoogleMap", icon)
-                    places_list.append(item)
-                    count += 1
-                    letter += 1
-                    if count > max_limit:
-                        break
-            elif results['meta']['code'] == 400:
-                log("LIMIT EXCEEDED")
-            else:
-                log("ERROR")
+    for venue in results:
+        try:
+            photo_node = venue['venue']['photos']['groups'][0]['items'][0]
+            photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
+        except:
+            photo = ""
+        if not "name" in venue:
+            venue = venue["venue"]
+        if len(venue['categories']) > 0:
+            icon = venue['categories'][0]['icon']['prefix'] + "88" + venue['categories'][0]['icon']['suffix']
         else:
-            log("ERROR")
-    else:
-        log("ERROR")
+            icon = ""
+        if 'formattedAddress' in venue['location']:
+            formattedAddress = "[CR]".join(filter(None, venue['location']['formattedAddress']))
+        lat = str(venue['location']['lat'])
+        lon = str(venue['location']['lng'])
+        prop_list = {"id": str(venue['id']),
+                     "distance": str(venue['location']['distance']),
+                     "visited": str(venue['stats']['usersCount']),
+                     "twitter": venue['contact'].get('twitter', ""),
+                     "eventname": formattedAddress,
+                     "description": formattedAddress,
+                     "name": venue['name'],
+                     "icon": icon,
+                     "photo": photo,
+                     "Venue_Image": icon,
+                     "GoogleMap": icon,
+                     "index":  str(count),
+                     "sortletter": chr(letter),
+                     "lat": lat,
+                     "lon": lon,
+                     "phone": venue['contact'].get('phone', ""),
+                     "comments": str(venue['stats']['tipCount'])}
+        item = xbmcgui.ListItem(venue['name'])
+        for key, value in prop_list.iteritems():
+            item.setProperty(key, value)
+        item.setProperty("item_info", simplejson.dumps(prop_list))
+        if photo is not "":
+            item.setArt({'thumb': photo})
+        else:
+            item.setArt({'thumb': icon})
+        item.setLabel(venue['name'])
+        item.setLabel2(venue['name'])
+        self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+        places_list.append(item)
+        count += 1
+        letter += 1
+        if count > max_limit:
+            break
     return places_list
 
+
+def GetPlacesList(self, query=""):
+    if query is not "":
+        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, query, foursquare_id, foursquare_secret)
+    else:
+        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
+  #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
+    self.PinString = ""
+    response = GetStringFromUrl(url)
+    results = simplejson.loads(response)
+    if results and 'meta' in results:
+        if results['meta']['code'] == 200:
+            return self.HandleFourSquarePlacesResult(results['response']['venues'])
+        elif results['meta']['code'] == 400:
+            Notify("Error", "LIMIT EXCEEDED")
+        else:
+            Notify("ERROR", "Could not get requested information")
+    else:
+        log("ERROR")
+    return []
+ 
 
 def GetPlacesListExplore(self, placetype):
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=25&venuePhotos=1&client_id=%s&client_secret=%s&v=20130815' % (
         self.lat, self.lon, placetype, foursquare_id, foursquare_secret)
-  #  log(url)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
- #   prettyprint(results)
-    places_list = list()
     self.PinString = ""
-    letter = ord('A')
-    count = 0
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
             if len(results['response']['groups'][0]['items']) > 0:
-                for v in results['response']['groups'][0]['items']:
-                    item = xbmcgui.ListItem(v['venue']['name'])
-                    icon = v['venue']['categories'][0]['icon']['prefix'] + "88" + v['venue']['categories'][0]['icon']['suffix']
-                    try:
-                        photo_node = v['venue']['photos']['groups'][0]['items'][0]
-                        photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
-                    except:
-                        photo = ""
-                    lat = str(v['venue']['location']['lat'])
-                    lon = str(v['venue']['location']['lng'])
-                    item.setArt({'thumb': photo})
-                    item.setArt({'icon': icon})
-                    item.setLabel(v['venue']['name'])
-                    item.setProperty('name', v['venue']['name'])
-                    item.setLabel2(v['venue']['categories'][0]['name'])
-                    item.setProperty("sortletter", chr(letter))
-                    item.setProperty("index", str(count))
-                    item.setProperty("Venue_Image", photo)
-                    address = "[CR]".join(v['venue']['location']['formattedAddress'])
-                    item.setProperty("description", address)
-                    item.setProperty("eventname", address)
-                    item.setProperty("lat", lat)
-                    item.setProperty("lon", lon)
-                    self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                    places_list.append(item)
-                    count += 1
-                    letter += 1
-                    if count > max_limit:
-                        break
+                return self.HandleFourSquarePlacesResult(results['response']['groups'][0]['items'])
             else:
                 Notify("Error", "No results found near the selected area.")
-          #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
-           # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # log(difference_lat)
         elif results['meta']['code'] == 400:
             log("LIMIT EXCEEDED")
         else:
             log("ERROR")
     else:
         log("ERROR")
-    return places_list
+    return []
 
 
 def GetGooglePlacesList(self, locationtype):
@@ -465,45 +404,42 @@ def GetGooglePlacesList(self, locationtype):
     letter = ord('A')
     count = 0
     if "results" in results:
-        if True:
-            for v in results['results']:
-                item = xbmcgui.ListItem(v['name'])
-                try:
-                    photo_ref = v['photos'][0]['photo_reference']
-                    photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
-                except:
-                    photo = ""
-                typestring = ""
-                typestring = " / ".join(v['types'])
-                item.setArt({'thumb': photo})
-                item.setArt({'icon': v['icon']})
-                item.setLabel(v['name'])
-                item.setProperty('name', v['name'])
-                item.setProperty('description', v['vicinity'])
-                item.setLabel2(typestring)
-                item.setProperty("sortletter", chr(letter))
-                item.setProperty("index", str(count))
-                lat = str(v['geometry']['location']['lat'])
-                lon = str(v['geometry']['location']['lng'])
-                item.setProperty("lat", lat)
-                item.setProperty("lon", lon)
-                item.setProperty("index", str(count))
-                if "rating" in v:
-                    rating = str(v['rating'] * 2.0)
-                    item.setProperty("rating", rating)
-                PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places_list.append(item)
-                count += 1
-                letter += 1
-                if count > max_limit:
-                    break
-          #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
-           # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # log(difference_lat)
-        elif results['meta']['code'] == 400:
-            log("LIMIT EXCEEDED")
-        else:
-            log("ERROR")
+        for v in results['results']:
+            item = xbmcgui.ListItem(v['name'])
+            try:
+                photo_ref = v['photos'][0]['photo_reference']
+                photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
+            except:
+                photo = ""
+            typestring = ""
+            typestring = " / ".join(v['types'])
+            item.setArt({'thumb': photo})
+            item.setArt({'icon': v['icon']})
+            item.setLabel(v['name'])
+            item.setProperty('name', v['name'])
+            item.setProperty('description', v['vicinity'])
+            item.setLabel2(typestring)
+            item.setProperty("sortletter", chr(letter))
+            item.setProperty("index", str(count))
+            lat = str(v['geometry']['location']['lat'])
+            lon = str(v['geometry']['location']['lng'])
+            item.setProperty("lat", lat)
+            item.setProperty("lon", lon)
+            item.setProperty("index", str(count))
+            if "rating" in v:
+                rating = str(v['rating'] * 2.0)
+                item.setProperty("rating", rating)
+            PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            places_list.append(item)
+            count += 1
+            letter += 1
+            if count > max_limit:
+                break
+      #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
+       # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
+       # log(difference_lat)
+    elif results['meta']['code'] == 400:
+        log("LIMIT EXCEEDED")
     else:
         log("ERROR")
     return PinString, places_list

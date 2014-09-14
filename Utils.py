@@ -36,19 +36,18 @@ def GetStringFromUrl(encurl):
            # request.add_header('Accept-encoding', 'gzip')
             response = urllib2.urlopen(request)
            # if response.info().get('Content-Encoding') == 'gzip':
-            if False:
-                buf = StringIO(response.read())
-                compr = gzip.GzipFile(fileobj=buf)
-                data = compr.read()
-            else:
-                data = response.read()
-       #     log("URL String: " + data)
+           #     buf = StringIO(response.read())
+           #     compr = gzip.GzipFile(fileobj=buf)
+           #     data = compr.read()
+           # else:
+            data = response.read()
             return data
         except:
             log("GetStringFromURL: could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
     return ""
+
 
 def log(txt):
     if isinstance(txt, str):
