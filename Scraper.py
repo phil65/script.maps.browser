@@ -135,35 +135,30 @@ def GetImages(self, path=""):
     PinString = "&markers=color:blue"
     letter = ord('A')
     count = 0
-   # results = GetLastFMData(self,url)
     images_list = list()
-    if True:
-        for image in xbmcvfs.listdir(path):  # check that
-            for test in image:
-                try:
-                    img = Image.open(path + test)
-                    exif_data = get_exif_data(img)
-                    lat, lon = get_lat_lon(exif_data)
-                    if lat:
-                        log(lat)
-                        item = xbmcgui.ListItem(test)
-                        item.setLabel(test)
-                        item.setProperty("name", test)
-                        item.setProperty("lat", str(lat))
-                        item.setProperty("lon", str(lon))
-                        item.setArt({'thumb': path + test})
-                        images_list.append(item)
-                        item.setProperty("index", str(count))
-                        if len(PinString) < 1850:
-                            PinString = PinString + "%7C" + str(lat) + "," + str(lon)
-                            item.setProperty("sortletter", chr(letter))
-                            letter += 1
-                        count += 1
-                except Exception as e:
-                    log("Error when handling GetImages results")
-                    log(e)
-    else:
-        log("Error when handling GetImages results")
+    prettyprint(xbmcvfs.listdir(path))
+    for filename in xbmcvfs.listdir(path)[-1]:
+        try:
+            img = Image.open(path + filename)
+            exif_data = get_exif_data(img)
+            lat, lon = get_lat_lon(exif_data)
+            if lat:
+                item = xbmcgui.ListItem(filename)
+                item.setLabel(filename)
+                item.setProperty("name", filename)
+                item.setProperty("lat", str(lat))
+                item.setProperty("lon", str(lon))
+                item.setArt({'thumb': path + filename})
+                images_list.append(item)
+                item.setProperty("index", str(count))
+                if len(PinString) < 1850:
+                    PinString = PinString + "%7C" + str(lat) + "," + str(lon)
+                    item.setProperty("sortletter", chr(letter))
+                    letter += 1
+                count += 1
+        except Exception as e:
+            log("Error when handling GetImages results")
+            log(e)
     return images_list, PinString
 
 
