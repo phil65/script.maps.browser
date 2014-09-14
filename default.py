@@ -24,7 +24,9 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from Utils import *
-from math import sin, cos, radians, pow
+from LastFM import LastFM
+from Eventful import Eventful
+from math import sin, cos, radians, pow, pi
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -39,6 +41,8 @@ __language__ = __addon__.getLocalizedString
 addon = xbmcaddon.Addon()
 addon_path = addon.getAddonInfo('path')
 addon_name = addon.getAddonInfo('name')
+googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 bing_key = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 
 
@@ -114,14 +118,17 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = self.GetImages(folder)
             elif param.startswith('artist='):
                 artist = (param[7:])
-                itemlist, self.PinString = self.GetEvents(artist)
+                LFM = LastFM()
+                itemlist, self.PinString = LFM.GetEvents(artist)
             elif param.startswith('list='):
                 listtype = (param[5:])
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
-                    itemlist, self.PinString = self.GetNearEvents(False, True)
+                    LFM = LastFM()
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, False, True)
                 elif listtype == "nearconcerts":
-                    itemlist, self.PinString = self.GetNearEvents()
+                    LFM = LastFM()
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon)
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -425,15 +432,18 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34015):
                 itemlist = self.GetPlacesListExplore("nextVenues")
             elif modeselect[provider_index] == __language__(34016):
-                itemlist, self.PinString = self.GetNearEvents()
+                LFM = LastFM()
+                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon)
             elif modeselect[provider_index] == __language__(34017):
-                itemlist, self.PinString = self.GetNearEvents(False, True)
+                LFM = LastFM()
+                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, False, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = self.GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34028):
-                itemlist = self.GetEventfulList()
+                EF = Eventful()
+                itemlist, self.PinString = EF.GetEventfulList(self.lat,self.lon)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
@@ -458,13 +468,15 @@ class GUI(xbmcgui.WindowXML):
                 itemlist = []
             elif modeselect[provider_index] == __language__(34018):
                 tag = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetNearEvents(tag, False)
+                LFM = LastFM()
+                itemlist = LFM.GetNearEvents(self.lat, self.lon, tag, False)
             elif modeselect[provider_index] == __language__(34004):
                 query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 itemlist = self.GetPlacesList(query)
             elif modeselect[provider_index] == __language__(34023):
                 artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist, self.PinString = self.GetEvents(artist)
+                LFM = LastFM()
+                itemlist, self.PinString = LFM.GetEvents(artist)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
@@ -475,6 +487,48 @@ class GUI(xbmcgui.WindowXML):
     def toggleInfo(self):
         self.show_info = not self.show_info
         self.info_controller.setVisible(self.show_info)
+
+    def GetGoogleMapURLs(self):
+        try:
+            if self.street_view is True:
+                size = "320x200"
+            else:
+                size = "640x400"
+            if self.lat and self.lon:
+                self.search_string = str(self.lat) + "," + str(self.lon)
+            else:
+                self.search_string = urllib.quote_plus(self.location.replace('"', ''))
+            base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
+            self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
+            zoom = 120 - int(self.zoom_level_streetview) * 6
+            base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
+            self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
+            setWindowProperty(self.window, self.prefix + 'location', self.location)
+            setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
+            setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
+            setWindowProperty(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
+            setWindowProperty(self.window, self.prefix + 'direction', str(self.direction / 18))
+            setWindowProperty(self.window, self.prefix + 'type', self.type)
+            setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
+            setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
+            setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+            setWindowProperty(self.window, self.prefix + 'NavMode', "")
+            setWindowProperty(self.window, self.prefix + 'streetview', "")
+            hor_px = int(size.split("x")[0])
+            ver_px = int(size.split("x")[1])
+            dLongitude = (hor_px / 256) * (360 / pow(2, self.zoom_level))
+            pixels_per_kilometer = (ver_px * 1000) / ((cos(self.lat * pi / 180) * 2 * pi * 6378137) / (256 * pow(2, self.zoom_level)) * 600)
+            log("dLongitude: " + str(dLongitude) + "  pixels_per_kilometer: " + str(pixels_per_kilometer))
+            # import MercatorProjection
+            # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
+            # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
+            # prettyprint(corners)
+            if self.street_view:
+                setWindowProperty(self.window, self.prefix + 'streetview', "True")
+            if self.NavMode_active:
+                setWindowProperty(self.window, self.prefix + 'NavMode', "True")
+        except Exception as e:
+            log(e)
 
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
