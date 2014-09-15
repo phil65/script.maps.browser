@@ -96,11 +96,12 @@ def GetStringFromUrl(encurl):
     return ""
 
 
-def Get_JSON_response(base_url="", custom_url="", cache_days=1):
+def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     from base64 import b64encode
     filename = b64encode(custom_url).replace("/", "XXXX")
     path = Addon_Data_Path + "\\&" + filename + ".txt"
-    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
+    cache_seconds = int(cache_days * 86400.0)
+    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         return read_from_file(path)
     else:
         url = base_url + custom_url
