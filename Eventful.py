@@ -43,10 +43,13 @@ class Eventful():
                 photo = venue["image"]["large"]["url"]
             else:
                 photo = ""
+         #   start_time = venue["start_time"].split(" ")
+          #  stop_time = venue["stop_time"].split(" ")
             if (venue["start_time"] == venue["stop_time"]) or (venue["stop_time"] is None):
                 date = venue["start_time"]
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
+            date = date.replace("00:00:00", "")
             prop_list = {"id": str(venue['id']),
                          "eventname": eventname,
                          "description": cleanText(venue['description']),
