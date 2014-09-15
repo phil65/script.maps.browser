@@ -118,7 +118,7 @@ class FourSquare():
         base_url = "https://api.foursquare.com/v2/venues/explore?limit=26&client_id=%s&client_secret=%s&v=20130815&venuePhotos=1" % (foursquare_id, foursquare_secret)
        # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-        url = '&ll=%.8f,%.8f&section=%s' % (lat, lon, placetype)
+        url = '&ll=%.8f,%.8f&section=%s' % (float(lat), float(lon), placetype)
         results = Get_JSON_response(base_url, url)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
@@ -138,7 +138,6 @@ class FourSquare():
         url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
         results = Get_JSON_response("", url, 7)
         modeselect = []
-        prettyprint(results)
         modeselect.append("All Categories")
         for item in results["categories"]:
             modeselect.append(cleanText(item["name"]))

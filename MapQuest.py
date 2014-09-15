@@ -31,7 +31,6 @@ class MapQuest():
         url = '&boundingBox=%s' % (boundings)
         log(base_url + url)
         results = Get_JSON_response(base_url, url)
-        prettyprint(results)
         places_list = list()
         PinString = ""
         letter = ord('A')

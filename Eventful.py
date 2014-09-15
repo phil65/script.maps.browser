@@ -56,7 +56,6 @@ class Eventful():
         places_list = list()
         letter = ord('A')
         count = 0
-        prettyprint(results)
         if not isinstance(results, list):
             results = [results]
         for venue in results:

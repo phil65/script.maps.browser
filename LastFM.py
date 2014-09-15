@@ -127,7 +127,6 @@ class LastFM():
         url = '&method=tag.getTopTags'
         results = Get_JSON_response(base_url, url, 7)
         modeselect = []
-        prettyprint(results)
         modeselect.append("All Categories")
         for item in results["toptags"]["tag"]:
             modeselect.append(cleanText(item["name"]))

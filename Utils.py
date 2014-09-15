@@ -121,7 +121,6 @@ def GetImages(self, path=""):
     letter = ord('A')
     count = 0
     images_list = list()
-    prettyprint(xbmcvfs.listdir(path))
     for filename in xbmcvfs.listdir(path)[-1]:
         try:
             img = Image.open(path + filename)
