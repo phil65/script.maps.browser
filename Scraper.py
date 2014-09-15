@@ -112,6 +112,7 @@ def HandleFourSquarePlacesResult(self, results):
                      "name": venue['name'],
                      "icon": icon,
                      "photo": photo,
+                     "thumb": photo,
                      "Venue_Image": icon,
                      "GoogleMap": googlemap,
                      "index":  str(count),

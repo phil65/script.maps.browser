@@ -388,12 +388,12 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
         itemlist = None
-        # modeselect.append("Google Places")
         modeselect.append(__language__(34016))  # concerts
         modeselect.append(__language__(34017))  # festivals
         modeselect.append(__language__(34027))  # geopics
         modeselect.append(__language__(34028))  # eventful
         modeselect.append(__language__(34029))  # FourSquare
+        modeselect.append("Google Places")
         modeselect.append(__language__(34019))  # reset
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
@@ -401,22 +401,27 @@ class GUI(xbmcgui.WindowXML):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if modeselect[provider_index] == "Google Places":
                 GP = GooglePlaces()
-                self.PinString, itemlist = GP.GetGooglePlacesList("food")
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                category = GP.SelectCategory()
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                if category:
+                    self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[provider_index] == __language__(34029):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 section = self.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                itemlist = self.GetPlacesListExplore(section)
+                if section:
+                    itemlist = self.GetPlacesListExplore(section)
             elif modeselect[provider_index] == __language__(34016):
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 LFM = LastFM()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
             elif modeselect[provider_index] == __language__(34017):
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 LFM = LastFM()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
@@ -426,8 +431,8 @@ class GUI(xbmcgui.WindowXML):
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = self.GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34028):
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 EF = Eventful()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = EF.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
@@ -502,7 +507,10 @@ class GUI(xbmcgui.WindowXML):
         mx, my = LatLonToMeters(self.lat, self.lon)
         px, py = MetersToPixels(mx, my, self.zoom_level)
         mx2, my2 = PixelsToMeters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
-        self.radius = abs((mx - mx2) / 1000)
+        self.radiusx = abs((mx - mx2) / 1000)
+        self.radius = abs((my - my2) / 1000)
+        if self.radius > 500:
+            self.radius = 500
         cache_path = xbmc.getCacheThumbName(self.GoogleMapURL)
         log(cache_path)
        # my = my - my2

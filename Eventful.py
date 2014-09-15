@@ -84,6 +84,7 @@ class Eventful():
                          "description": cleanText(venue['description']),
                          "name": venuename,
                          "photo": photo,
+                         "thumb": photo,
                          "date": date,
                          "address": formattedAddress,
                          "Venue_Image": photo,
