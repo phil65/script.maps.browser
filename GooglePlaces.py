@@ -140,30 +140,36 @@ class GooglePlaces():
         count = 0
         if "results" in results:
             for place in results['results']:
-                item = xbmcgui.ListItem(place['name'])
                 try:
                     photo_ref = place['photos'][0]['photo_reference']
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
                 except:
                     photo = ""
+                prettyprint(place)
+                if "vicinity" in place:
+                    description = place['vicinity']
+                else:
+                    description = place.get('formatted_address', "")
                 typestring = ""
                 typestring = " / ".join(place['types'])
-                item.setArt({'thumb': photo})
-                item.setArt({'icon': place['icon']})
-                item.setLabel(place['name'])
-                item.setProperty('name', place['name'])
-                item.setProperty('description', place['vicinity'])
-                item.setLabel2(typestring)
-                item.setProperty("sortletter", chr(letter))
-                item.setProperty("index", str(count))
                 lat = str(place['geometry']['location']['lat'])
                 lon = str(place['geometry']['location']['lng'])
-                item.setProperty("lat", lat)
-                item.setProperty("lon", lon)
-                item.setProperty("index", str(count))
+                rating = ""
                 if "rating" in place:
                     rating = str(place['rating'] * 2.0)
-                    item.setProperty("rating", rating)
+                prop_list = {'name': place['name'],
+                             'label': place['name'],
+                             'label2': typestring,
+                             'description': description,
+                             "sortletter": chr(letter),
+                             "index": str(count),
+                             "thumb": photo,
+                             "icon": place['icon'],
+                             "lat": lat,
+                             "lon": lon,
+                             "rating": rating,
+                             "index": str(count)}
+                item = CreateListItem(prop_list)
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)
                 count += 1

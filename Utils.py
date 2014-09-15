@@ -1,6 +1,7 @@
 import xbmc
 import xbmcaddon
 import xbmcvfs
+import xbmcgui
 import urllib2
 import os
 import sys
@@ -98,7 +99,7 @@ def GetStringFromUrl(encurl):
 def Get_JSON_response(base_url="", custom_url="", cache_days=1):
     from base64 import b64encode
     filename = b64encode(custom_url).replace("/", "XXXX")
-    path = Addon_Data_Path + "/" + filename + ".txt"
+    path = Addon_Data_Path + "\\&" + filename + ".txt"
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
         return read_from_file(path)
     else:
@@ -187,6 +188,20 @@ def ParseGeoTags(lat, lon):
         lat = float(string2deg(coords[0]))
         lon = float(string2deg(coords[1]))
     return lat, lon
+
+
+def CreateListItem(json_array):
+    item = xbmcgui.ListItem("Undefined")
+    for key, value in json_array.iteritems():
+        item.setProperty(key, value)
+        if key in ["thumb", "poster", "banner", "icon"]:
+            item.setArt({key: value})
+        elif key == "label":
+            item.setLabel(value)
+        elif key == "label2":
+            item.setLabel2(value)
+    item.setProperty("item_info", simplejson.dumps(json_array))
+    return item
 
 
 def GetLocationCoordinates():

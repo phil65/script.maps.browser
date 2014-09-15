@@ -40,6 +40,7 @@ else:
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __language__ = __addon__.getLocalizedString
+__addonpath__ = __addon__.getAddonInfo('path')
 
 
 addon = xbmcaddon.Addon()
@@ -108,8 +109,10 @@ class GUI(xbmcgui.WindowXML):
                 self.location = (param[9:])
             elif param.startswith('lat='):
                 self.strlat = (param[4:])
+                self.lat = float(self.strlat)
             elif param.startswith('lon='):
                 self.strlon = (param[4:])
+                self.lon = float(self.strlon)
             elif param.startswith('type='):
                 self.type = (param[5:])
             elif param.startswith('zoom='):
@@ -119,6 +122,8 @@ class GUI(xbmcgui.WindowXML):
             elif param.startswith('folder='):
                 folder = (param[7:])
                 itemlist, self.PinString = self.GetImages(folder)
+            elif param.startswith('venueid='):
+                self.venueid = (param[8:])
             elif param.startswith('artist='):
                 artist = (param[7:])
                 LFM = LastFM()
@@ -138,17 +143,20 @@ class GUI(xbmcgui.WindowXML):
                 self.prefix = param[7:]
                 if not self.prefix.endswith('.') and self.prefix != "":
                     self.prefix = self.prefix + '.'
-
         if self.location == "geocode":
             self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
-        elif (self.location == "") and (self.strlat == ""):
+        elif (self.location == "") and (self.strlat == ""): # both empty
             self.lat, self.lon = GetLocationCoordinates()
             self.location = str(self.lat) + "," + str(self.lon)
             self.zoom_level = 2
-        elif (not self.location == "") and (self.strlat == ""):
+        elif (not self.location == "") and (self.strlat == ""): # latlon empty
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
         self.GetGoogleMapURLs()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        if self.venueid is not None:
+            log(str(self.venueid))
+            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=self.venueid)
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            dialog.doModal()
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.getControls()
@@ -182,6 +190,7 @@ class GUI(xbmcgui.WindowXML):
         self.lon = 0.0
         self.strlon = ""
         self.pitch = 0
+        self.venueid = None
         self.location = ""
         self.PinString = ""
         self.direction = 0
@@ -304,20 +313,23 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_LOOK_DOWN:
             self.PitchDown()
         elif controlId == self.CONTROL_PLACES_LIST:
-            self.lat = float(self.c_places_list.getSelectedItem().getProperty("lat"))
-            self.lon = float(self.c_places_list.getSelectedItem().getProperty("lon"))
+            selecteditem = self.c_places_list.getSelectedItem()
+            self.lat = float(selecteditem.getProperty("lat"))
+            self.lon = float(selecteditem.getProperty("lon"))
             self.zoom_level = 12
-            if not self.c_places_list.getSelectedItem().getProperty("index") == getWindowProperty(self.window, 'index'):
-                setWindowProperty(self.window, 'index', self.c_places_list.getSelectedItem().getProperty("index"))
+            if not selecteditem.getProperty("index") == getWindowProperty(self.window, 'index'):
+                setWindowProperty(self.window, 'index', selecteditem.getProperty("index"))
             else:
-                info_dict = self.c_places_list.getSelectedItem().getProperty("item_info")
-                log("info_dict:" + info_dict)
-                dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=info_dict)
+                venue_id = selecteditem.getProperty("venue_id")
+                if venue_id is not "":
+                    dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
+                else:
+                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=selecteditem.getProperty("item_info"))
                 dialog.doModal()
-                if len(dialog.itemlist) > 0:
-                    self.PinString = dialog.PinString
+                if len(dialog.GetEventsitemlist) > 0:
+                    self.PinString = dialog.GetEventsPinString
                     self.c_places_list.reset()
-                    self.c_places_list.addItems(items=dialog.itemlist)
+                    self.c_places_list.addItems(items=dialog.GetEventsitemlist)
         self.GetGoogleMapURLs()
         self.c_streetview_image.setImage(self.GoogleStreetViewURL)
         self.c_map_image.setImage(self.GoogleMapURL)
@@ -457,6 +469,7 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34024))
         modeselect.append(__language__(34004))
         modeselect.append(__language__(34023))
+        modeselect.append(__language__(34033))
         modeselect.append(__language__(34019))
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34026), modeselect)
@@ -471,6 +484,11 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34023):
                 artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
+                itemlist, self.PinString = LFM.GetEvents(artist)
+            elif modeselect[provider_index] == __language__(34033):
+                venue = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
+                LFM = LastFM()
+                venueid = LFM.GetVenueID(venue)
                 itemlist, self.PinString = LFM.GetEvents(artist)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
@@ -629,24 +647,24 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.item = kwargs.get('item')
         self.prop_list = simplejson.loads(self.item)
-
-    def onInit(self):
-        for key, value in self.prop_list.iteritems():
-            log(key + " = " + value)
         self.PinString = ""
         self.itemlist = []
+
+    def onInit(self):
         LFM = LastFM()
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        itemlist, PinString = LFM.GetVenueEvents(self.prop_list["venue_id"])
-        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
-        self.getControl(202).setLabel(self.prop_list["date"])
-        self.getControl(203).setLabel(self.prop_list["name"])
-        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
-        self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
-        self.getControl(204).setLabel(self.prop_list["street"])
-        self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
-        self.getControl(self.C_ARTIST_LIST).addItems(items=itemlist)
+        self.setControls()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+    def setControls(self):
+        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
+     #   self.getControl(202).setLabel(self.prop_list["date"])
+        self.getControl(self.C_TITLE).setLabel(self.prop_list["name"])
+        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
+    #    self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
+    #    self.getControl(204).setLabel(self.prop_list["street"])
+    #    self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
+    #    self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -663,6 +681,59 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlID):
         pass
+
+
+class VenueInfoDialog(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+    C_TEXT_FIELD = 200
+    C_TITLE = 201
+    C_BIG_IMAGE = 211
+    C_RIGHT_IMAGE = 210
+    C_ARTIST_LIST = 500
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+        self.venueid = kwargs.get('venueid')
+        self.prop_list = []
+        self.PinString = ""
+        self.GetEventsPinString = ""
+        self.itemlist = []
+        self.GetEventsitemlist = []
+
+    def onInit(self):
+        LFM = LastFM()
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.itemlist, PinString = LFM.GetVenueEvents(self.venueid)
+        self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
+        self.setControls()
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+    def setControls(self):
+        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
+        self.getControl(202).setLabel(self.prop_list["date"])
+        self.getControl(203).setLabel(self.prop_list["name"])
+        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
+        self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
+        self.getControl(204).setLabel(self.prop_list["street"])
+        self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
+        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def onClick(self, controlID):
+        if controlID == self.C_ARTIST_LIST:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
+            self.close()
+            LFM = LastFM()
+            self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+    def onFocus(self, controlID):
+        pass
+
 
 
 if __name__ == '__main__':

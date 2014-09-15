@@ -52,15 +52,14 @@ class LastFM():
                     else:
                         search_string = event['venue']['name']
                     googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
-                    item = xbmcgui.ListItem(event['venue']['name'])
                     formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
                     description = cleanText(event['description'])
                     if my_arts != event['artists']['headliner']:
-                        description = "[B]" + my_arts + "[/B][CR]" +  description
-                    prop_list = {"date": event['startDate'],
+                        description = "[B]" + my_arts + "[/B][CR]" + description
+                    prop_list = {"date": event['startDate'][:-8],
                                  "name": event['venue']['name'],
-                                 "id": event['startDate'],
                                  "venue_id": event['venue']['id'],
+                                 "event_id": event['id'],
                                  "street": event['venue']['location']['street'],
                                  "eventname": event['title'],
                                  "website": event['website'],
@@ -79,13 +78,8 @@ class LastFM():
                                  "headliner": event['artists']['headliner'],
                                  "thumb": event['venue']['image'][-1]['#text'],
                                  "label": event['venue']['name'],
-                                 "label2": event['startDate']}
-                    for key, value in prop_list.iteritems():
-                        item.setProperty(key, value)
-                    item.setProperty("item_info", simplejson.dumps(prop_list))
-                    item.setArt({'thumb': event['venue']['image'][-1]['#text']})
-                    item.setLabel(event['venue']['name'])
-                    item.setLabel2(event['startDate'])
+                                 "label2": event['startDate'][:-8]}
+                    item = CreateListItem(prop_list)
                     events_list.append(item)
                     PinString = PinString + "&markers=color:blue%7Clabel:" + \
                         chr(letter) + "%7C" + lat + "," + lon
@@ -127,6 +121,7 @@ class LastFM():
         return self.CreateVenueList(results)
 
     def SelectCategory(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=tag.getTopTags'
         results = Get_JSON_response(base_url, url, 7)
@@ -135,6 +130,7 @@ class LastFM():
         for item in results["toptags"]["tag"]:
             modeselect.append(cleanText(item["name"]))
         categorydialog = xbmcgui.Dialog()
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         provider_index = categorydialog.select("Choose Category", modeselect)
         if provider_index > 0:
             return results["toptags"]["tag"][provider_index - 1]["name"]
@@ -148,3 +144,12 @@ class LastFM():
         url = '&method=venue.getevents&venue=%s' % (venueid)
         results = Get_JSON_response(base_url, url)
         return self.CreateVenueList(results)
+
+    def GetVenueID(self, venuename=""):
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+        url = '&method=venue.search&venue=%s' % (venuename)
+        results = Get_JSON_response(base_url, url)
+        if len(results["venuematches"]) > 0:
+            return results["venuematches"][0]["id"]
+        else:
+            return None

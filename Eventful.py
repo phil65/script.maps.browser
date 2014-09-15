@@ -51,6 +51,14 @@ class Eventful():
         results = Get_JSON_response(base_url, url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
+    def GetEventInfo(self, event_id=""):
+        base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (eventful_key)
+        url = '&id=%s' % (str(event_id))
+        log(url)
+        results = Get_JSON_response(base_url, url)
+        prettyprint(results)
+        return self.HandleEventfulEventResult(results['venue'])
+
     def HandleEventfulEventResult(self, results):
         PinString = ""
         places_list = list()
@@ -81,24 +89,20 @@ class Eventful():
                          "eventname": eventname,
                          "description": cleanText(venue['description']),
                          "name": venuename,
+                         "label": venuename,
+                         "label2": date,
                          "photo": photo,
                          "thumb": photo,
                          "date": date,
                          "address": formattedAddress,
                          "Venue_Image": photo,
-                         "venue_id": venue['venue_id'],
+                         "venue_id_eventful": venue['venue_id'],
                          "GoogleMap": googlemap,
                          "index":  str(count),
                          "sortletter": chr(letter),
                          "lat": lat,
                          "lon": lon}
-            item = xbmcgui.ListItem(venuename)
-            for key, value in prop_list.iteritems():
-                item.setProperty(key, value)
-            item.setProperty("item_info", simplejson.dumps(prop_list))
-            item.setArt({'thumb': photo})
-            item.setLabel(venuename)
-            item.setLabel2(date)
+            item = CreateListItem(prop_list)
             PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places_list.append(item)
             count += 1

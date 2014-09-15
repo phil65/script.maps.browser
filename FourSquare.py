@@ -68,6 +68,8 @@ class FourSquare():
                          "eventname": formattedAddress,
                          "description": formattedAddress,
                          "name": venue['name'],
+                         "label": venue['name'],
+                         "label2": venue['name'],
                          "icon": icon,
                          "photo": photo,
                          "thumb": photo,
@@ -79,16 +81,7 @@ class FourSquare():
                          "lon": lon,
                          "phone": venue['contact'].get('phone', ""),
                          "comments": str(venue['stats']['tipCount'])}
-            item = xbmcgui.ListItem(venue['name'])
-            for key, value in prop_list.iteritems():
-                item.setProperty(key, value)
-            item.setProperty("item_info", simplejson.dumps(prop_list))
-            if photo is not "":
-                item.setArt({'thumb': photo})
-            else:
-                item.setArt({'thumb': icon})
-            item.setLabel(venue['name'])
-            item.setLabel2(venue['name'])
+            item = CreateListItem(prop_list)
             self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places_list.append(item)
             count += 1

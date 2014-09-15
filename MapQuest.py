@@ -56,6 +56,8 @@ class MapQuest():
                 elif place['type'] == 4:
                     incidenttype = "Incident/accident"
                 prop_list = {'name': place['shortDesc'],
+                             'label': place['shortDesc'],
+                             'label2': place['startTime'],
                              'description': place['fullDesc'],
                              'distance': str(place['distance']),
                              'delaytypical': str(place['delayFromTypical']),
@@ -63,6 +65,7 @@ class MapQuest():
                              "GoogleMap": googlemap,
                              "venue_image": image,
                              "thumb": image,
+                             "icon": place['iconURL'],
                              'date': place['startTime'],
                              'severity': str(place['severity']),
                              'type': incidenttype,
@@ -71,14 +74,7 @@ class MapQuest():
                              "lat": lat,
                              "lon": lon,
                              "index": str(count)}
-                item = xbmcgui.ListItem(place['shortDesc'])
-                for key, value in prop_list.iteritems():
-                    item.setProperty(key, value)
-                item.setProperty("item_info", simplejson.dumps(prop_list))
-                item.setArt({'thumb': image})
-                item.setArt({'icon': place['iconURL']})
-                item.setLabel(place['shortDesc'])
-                item.setLabel2(place['startTime'])
+                item = CreateListItem(prop_list)
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)
                 count += 1
