@@ -140,30 +140,30 @@ class GooglePlaces():
         letter = ord('A')
         count = 0
         if "results" in results:
-            for v in results['results']:
-                item = xbmcgui.ListItem(v['name'])
+            for place in results['results']:
+                item = xbmcgui.ListItem(place['name'])
                 try:
-                    photo_ref = v['photos'][0]['photo_reference']
+                    photo_ref = place['photos'][0]['photo_reference']
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
                 except:
                     photo = ""
                 typestring = ""
-                typestring = " / ".join(v['types'])
+                typestring = " / ".join(place['types'])
                 item.setArt({'thumb': photo})
-                item.setArt({'icon': v['icon']})
-                item.setLabel(v['name'])
-                item.setProperty('name', v['name'])
-                item.setProperty('description', v['vicinity'])
+                item.setArt({'icon': place['icon']})
+                item.setLabel(place['name'])
+                item.setProperty('name', place['name'])
+                item.setProperty('description', place['vicinity'])
                 item.setLabel2(typestring)
                 item.setProperty("sortletter", chr(letter))
                 item.setProperty("index", str(count))
-                lat = str(v['geometry']['location']['lat'])
-                lon = str(v['geometry']['location']['lng'])
+                lat = str(place['geometry']['location']['lat'])
+                lon = str(place['geometry']['location']['lng'])
                 item.setProperty("lat", lat)
                 item.setProperty("lon", lon)
                 item.setProperty("index", str(count))
-                if "rating" in v:
-                    rating = str(v['rating'] * 2.0)
+                if "rating" in place:
+                    rating = str(place['rating'] * 2.0)
                     item.setProperty("rating", rating)
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)

@@ -26,6 +26,7 @@ import xbmcgui
 from Utils import *
 from LastFM import LastFM
 from Eventful import Eventful
+from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
 from math import sin, cos, radians, pow, pi
 if sys.version_info < (2, 7):
@@ -393,6 +394,7 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34027))  # geopics
         modeselect.append(__language__(34028))  # eventful
         modeselect.append(__language__(34029))  # FourSquare
+        modeselect.append(__language__(34030))  # MapQuest
         modeselect.append("Google Places")
         modeselect.append(__language__(34019))  # reset
         dialogSelection = xbmcgui.Dialog()
@@ -419,6 +421,9 @@ class GUI(xbmcgui.WindowXML):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
+            elif modeselect[provider_index] == __language__(34030):
+                MQ = MapQuest()
+                itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
             elif modeselect[provider_index] == __language__(34017):
                 LFM = LastFM()
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -487,7 +492,8 @@ class GUI(xbmcgui.WindowXML):
         else:
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
         base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
-        self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
+        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal)
+        self.GoogleMapURL = url + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
         self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
