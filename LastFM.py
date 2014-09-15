@@ -118,7 +118,7 @@ class LastFM():
         else:
             festivalsonly = "0"
         url = '&method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
-        if tag is not "":
+        if (tag is not "") and (tag is not None):
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=30' % (lat, lon)  # &distance=60

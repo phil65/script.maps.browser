@@ -32,20 +32,20 @@ class Eventful():
         else:
             return None
 
-    def GetEventfulEventList(self, lat="", lon="", query="", category=""):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&page_size=25&sort_order=date&within=30&date=Future&app_key=%s" % (eventful_key)
-        url = '&where=%.8f,%.8f' % (lat, lon)
+    def GetEventfulEventList(self, lat="", lon="", query="", category="", radius=30):
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=25&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
+        log(url)
         if query is not "":
             url = url + '&query=%s' % (query)
         if category is not "":
             url = url + '&category=%s' % (category)
-      #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
         results = Get_JSON_response(base_url, url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetEventfulVenueList(self, lat="", lon="", query=""):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&page_size=25&sort_order=date&within=30&date=Future&app_key=%s" % (eventful_key)
-        url = '&where=%.8f,%.8f' % (lat, lon)
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=25&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         if query is not "":
             url = url + '&query=%s' % (query)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)

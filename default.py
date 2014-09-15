@@ -185,6 +185,7 @@ class GUI(xbmcgui.WindowXML):
         self.saved_id = 100
         self.aspect = "640x400"
         self.prefix = ""
+        self.radius = 50
         self.GoogleMapURL = ""
         self.GoogleStreetViewURL = ""
 
@@ -426,7 +427,7 @@ class GUI(xbmcgui.WindowXML):
                 EF = Eventful()
                 category = EF.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category)
+                itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
@@ -467,46 +468,47 @@ class GUI(xbmcgui.WindowXML):
         self.info_controller.setVisible(self.show_info)
 
     def GetGoogleMapURLs(self):
-        try:
-            if self.street_view is True:
-                size = "320x200"
-            else:
-                size = "640x400"
-            if self.lat and self.lon:
-                self.search_string = str(self.lat) + "," + str(self.lon)
-            else:
-                self.search_string = urllib.quote_plus(self.location.replace('"', ''))
-            base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
-            self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
-            zoom = 120 - int(self.zoom_level_streetview) * 6
-            base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
-            self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
-            setWindowProperty(self.window, self.prefix + 'location', self.location)
-            setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
-            setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
-            setWindowProperty(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
-            setWindowProperty(self.window, self.prefix + 'direction', str(self.direction / 18))
-            setWindowProperty(self.window, self.prefix + 'type', self.type)
-            setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
-            setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
-            setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
-            setWindowProperty(self.window, self.prefix + 'NavMode', "")
-            setWindowProperty(self.window, self.prefix + 'streetview', "")
-            hor_px = int(size.split("x")[0])
-            ver_px = int(size.split("x")[1])
-            dLongitude = (hor_px / 256) * (360 / pow(2, self.zoom_level))
-            pixels_per_kilometer = (ver_px * 1000) / ((cos(self.lat * pi / 180) * 2 * pi * 6378137) / (256 * pow(2, self.zoom_level)) * 600)
-            log("dLongitude: " + str(dLongitude) + "  pixels_per_kilometer: " + str(pixels_per_kilometer))
-            # import MercatorProjection
-            # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
-            # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
-            # prettyprint(corners)
-            if self.street_view:
-                setWindowProperty(self.window, self.prefix + 'streetview', "True")
-            if self.NavMode_active:
-                setWindowProperty(self.window, self.prefix + 'NavMode', "True")
-        except Exception as e:
-            log(e)
+        if self.street_view is True:
+            size = "320x200"
+        else:
+            size = "640x400"
+        if self.lat and self.lon:
+            self.search_string = str(self.lat) + "," + str(self.lon)
+        else:
+            self.search_string = urllib.quote_plus(self.location.replace('"', ''))
+        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
+        self.GoogleMapURL = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal) + self.PinString
+        zoom = 120 - int(self.zoom_level_streetview) * 6
+        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
+        self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
+        setWindowProperty(self.window, self.prefix + 'location', self.location)
+        setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
+        setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
+        setWindowProperty(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
+        setWindowProperty(self.window, self.prefix + 'direction', str(self.direction / 18))
+        setWindowProperty(self.window, self.prefix + 'type', self.type)
+        setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
+        setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
+        setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+        setWindowProperty(self.window, self.prefix + 'NavMode', "")
+        setWindowProperty(self.window, self.prefix + 'streetview', "")
+        hor_px = int(size.split("x")[0])
+        ver_px = int(size.split("x")[1])
+        mx, my = LatLonToMeters(self.lat, self.lon)
+        px, py = MetersToPixels(mx, my, self.zoom_level)
+        mx2, my2 = PixelsToMeters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
+        self.radius = abs((mx - mx2) / 1000)
+       # my = my - my2
+      #  log("mx: " + str(mx) + "my: " + str(my) + "px: " + str(px) + "py: " + str(py))
+
+        # import MercatorProjection
+        # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
+        # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
+        # prettyprint(corners)
+        if self.street_view:
+            setWindowProperty(self.window, self.prefix + 'streetview', "True")
+        if self.NavMode_active:
+            setWindowProperty(self.window, self.prefix + 'NavMode', "True")
 
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
