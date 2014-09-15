@@ -380,7 +380,7 @@ class GUI(xbmcgui.WindowXML):
             setWindowProperty(self.window, 'streetview', 'True')
 
     def SearchLocation(self):
-        self.location = xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
+        self.location = xbmcgui.Dialog().input(__language__(34032), type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
             self.lat, self.lon = self.GetGeoCodes(True, self.location)
@@ -395,29 +395,25 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34028))  # eventful
         modeselect.append(__language__(34029))  # FourSquare
         modeselect.append(__language__(34030))  # MapQuest
-        modeselect.append("Google Places")
+        modeselect.append(__language__(34031))  # Google Places
         modeselect.append(__language__(34019))  # reset
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
         if not provider_index < 0:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            if modeselect[provider_index] == "Google Places":
+            if modeselect[provider_index] == __language__(34031):
                 GP = GooglePlaces()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = GP.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[provider_index] == __language__(34029):
                 FS = FourSquare()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 section = FS.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if section:
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[provider_index] == __language__(34016):
                 LFM = LastFM()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
@@ -427,7 +423,6 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
             elif modeselect[provider_index] == __language__(34017):
                 LFM = LastFM()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
@@ -438,7 +433,6 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = self.GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34028):
                 EF = Eventful()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 category = EF.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
@@ -641,7 +635,6 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         self.getControl(self.C_RIGHT_IMAGE).setImage(prop_list["venue_image"])
         self.getControl(204).setLabel(prop_list["street"])
         self.getControl(self.C_TITLE).setLabel(prop_list["eventname"])
-
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
