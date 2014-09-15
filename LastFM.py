@@ -60,7 +60,7 @@ class LastFM():
                                  "street": event['venue']['location']['street'],
                                  "eventname": event['title'],
                                  "website": event['website'],
-                                 "description": cleanText(event['description']),
+                                 "description": "[B]" + my_arts + "[/B][CR]" + cleanText(event['description']),
                                  "city": event['venue']['location']['city'],
                                  "country": event['venue']['location']['country'],
                                  "address": formattedAddress,

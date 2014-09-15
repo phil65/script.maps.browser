@@ -404,19 +404,19 @@ class GUI(xbmcgui.WindowXML):
                 GP = GooglePlaces()
                 category = GP.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if category:
+                if category is not None:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[provider_index] == __language__(34029):
                 FS = FourSquare()
                 section = FS.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if section:
+                if section is not None:
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[provider_index] == __language__(34016):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if category:
+                if category is not None:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
             elif modeselect[provider_index] == __language__(34030):
                 MQ = MapQuest()
@@ -425,7 +425,7 @@ class GUI(xbmcgui.WindowXML):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if category:
+                if category is not None:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
@@ -435,7 +435,7 @@ class GUI(xbmcgui.WindowXML):
                 EF = Eventful()
                 category = EF.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if category:
+                if category is not None:
                     itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
