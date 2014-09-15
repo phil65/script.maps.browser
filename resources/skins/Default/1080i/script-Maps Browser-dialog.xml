@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window id="1165" type="dialog">
-    <defaultcontrol>5085</defaultcontrol>
+    <defaultcontrol>1000</defaultcontrol>
     <backgroundcolor>backgroundcolor</backgroundcolor>
     <coordinates>
         <posx>0</posx>
@@ -121,7 +121,7 @@
                     <aligny>top</aligny>
                     <font>Font_Reg30_2</font>
                     <textcolor>white6</textcolor>
-                    <pagecontrol>5089</pagecontrol>
+                    <pagecontrol>1004</pagecontrol>
                     <autoscroll delay="5000" time="AutoScrollTime" repeat="8000">Skin.HasSetting(AutoScroll)</autoscroll>
                 </control>
                 </control>
@@ -132,7 +132,139 @@
                     <height>1</height>
                     <texture>views/lowlistpanel_line.png</texture>
                 </control>
-                <control type="grouplist" id="5080">
+                   <control type="list" id="500">
+                        <posx>620</posx>
+                        <posy>320</posy>
+                        <width>1290</width>
+                        <height>350</height>
+                        <onleft>9000</onleft>
+                        <onright>9000</onright>
+                        <onup>500</onup>
+                        <ondown>500</ondown>
+                        <pagecontrol>61</pagecontrol>
+                        <scrolltime>200</scrolltime>
+                        <orientation>vertical</orientation>
+                        <itemlayout height="50" width="710">
+                            <control type="image">
+                                <width>710</width>
+                                <height>50</height>
+                                <texture>button-nofocus.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>640</width>
+                                <height>50</height>
+                                <textoffsetx>15</textoffsetx>
+                                <textcolor>grey2</textcolor>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                <visible>IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                            </control>
+                            <control type="label">
+                                <width>640</width>
+                                <height>50</height>
+                                <textoffsetx>15</textoffsetx>
+                                <textcolor>$VAR[FontColorVar]</textcolor>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                            </control>
+                            <control type="label">
+                                <posx>690</posx>
+                                <width>300</width>
+                                <height>50</height>
+                                <textoffsetx>15</textoffsetx>
+                                <align>right</align>
+                                <label>$INFO[ListItem.Property(Date)]</label>
+                                <scroll>true</scroll>
+                            </control>
+                            <control type="image">
+                                <posx>675</posx>
+                                <posy>7</posy>
+                                <width>35</width>
+                                <height>35</height>
+                                <texture>OverlayWatched.png</texture>
+                                <visible>IntegerGreaterThan(ListItem.Property(PlayCount),0)</visible>
+                            </control>
+                        </itemlayout>
+                        <focusedlayout height="50" width="710">
+                            <control type="group">
+                                <visible>!Control.HasFocus(500)</visible>
+                                <control type="image">
+                                    <width>710</width>
+                                    <height>50</height>
+                                    <texture>button-nofocus.png</texture>
+                                </control>
+                                <control type="label">
+                                    <width>640</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <textcolor>grey2</textcolor>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                    <visible>IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                                </control>
+                                <control type="label">
+                                    <width>585</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <textcolor>$VAR[FontColorVar]</textcolor>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                    <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                                    <scroll>true</scroll>
+                                </control>
+                                <control type="label">
+                                    <posx>690</posx>
+                                    <width>300</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <align>right</align>
+                                    <label>$INFO[ListItem.Property(Date)]</label>
+                                    <scroll>true</scroll>
+                                </control>
+                            </control>
+                            <control type="group">
+                                <visible>Control.HasFocus(500)</visible>
+                                <control type="image">
+                                    <width>710</width>
+                                    <height>50</height>
+                <texture colordiffuse="$VAR[FocusTextureColorVar]">views/tripanel/listselect_fo.png</texture>
+                                </control>
+                                <control type="label">
+                                    <width>640</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                    <visible>IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                                    <scroll>true</scroll>
+                                </control>
+                                <control type="label">
+                                    <width>585</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <textcolor>$VAR[FontColorVar]</textcolor>
+                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                    <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
+                                    <scroll>true</scroll>
+                                </control>
+                                <control type="label">
+                                    <posx>690</posx>
+                                    <width>300</width>
+                                    <height>50</height>
+                                    <textoffsetx>15</textoffsetx>
+                                    <align>right</align>
+                                    <label>$INFO[ListItem.Property(date)]</label>
+                                    <scroll>true</scroll>
+                                </control>
+                            </control>
+                            <control type="image">
+                                <posx>675</posx>
+                                <posy>7</posy>
+                                <width>35</width>
+                                <height>35</height>
+                                <texture>OverlayWatched.png</texture>
+                                <visible>IntegerGreaterThan(ListItem.Property(PlayCount),0)</visible>
+                            </control>
+                        </focusedlayout>
+                    </control>
+
+                <control type="grouplist" id="1000">
                     <posx>627</posx>
                     <posy>258</posy>
                     <width>1373</width>
@@ -144,7 +276,7 @@
                     <onleft>11</onleft>
                     <onright>11</onright>
                     <usecontrolcoords>true</usecontrolcoords>
-                    <control type="button" id="5085">
+                    <control type="button" id="1001">
                         <width>330</width>
                         <height>45</height>
                         <textoffsetx>20</textoffsetx>
@@ -157,7 +289,7 @@
                         <onclick condition="!IsEmpty(Window(home).Property(Street))">RunScript(script.maps.browser,location=$INFO[Window(home).Property(City)] $INFO[Window(home).Property(Street)],artist=$INFO[Window(home).Property(Headliner)])</onclick>
                         <onclick condition="IsEmpty(Window(home).Property(Street))">RunScript(script.maps.browser,location=$INFO[Window(home).Property(City)] $INFO[Window(home).Property(Name)],artist=$INFO[Window(home).Property(Headliner)])</onclick>
                     </control>
-                    <control type="button" id="5086">
+                    <control type="button" id="1002">
                         <width>330</width>
                         <height>45</height>
                         <textoffsetx>20</textoffsetx>
@@ -170,7 +302,7 @@
                         <onclick>RunScript(script.extendedinfo,info=venueevents,id=$INFO[Window(home).Property(ID)],silent=False)</onclick>
                         <onclick>ActivateWindow(1139)</onclick>
                     </control>
-                    <control type="button" id="5088">
+                    <control type="button" id="1003">
                         <width>330</width>
                         <height>45</height>
                         <textoffsetx>20</textoffsetx>
@@ -182,7 +314,7 @@
                         <onclick>SetProperty(listcontent,$INFO[Window(home).Property(Headliner)],home)</onclick>
                         <onclick>ActivateWindow(1168)</onclick>
                     </control>
-                    <control type="spincontrol" id="5089">
+                    <control type="spincontrol" id="1004">
                         <posx>0</posx>
                         <posy>-20</posy>
                         <width>50</width>

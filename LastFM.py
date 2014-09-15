@@ -31,7 +31,7 @@ class LastFM():
       #  prettyprint(results)
         if "events" in results:
             if "@attr" in results["events"]:
-                if int(results["events"]["@attr"]["total"]) == 1:
+                if not isinstance(results['events']['event'], list):
                     results['events']['event'] = [results['events']['event']]
                 for event in results['events']['event']:
                     artists = event['artists']['artist']
@@ -60,6 +60,7 @@ class LastFM():
                     prop_list = {"date": event['startDate'],
                                  "name": event['venue']['name'],
                                  "id": event['startDate'],
+                                 "venue_id": event['venue']['id'],
                                  "street": event['venue']['location']['street'],
                                  "eventname": event['title'],
                                  "website": event['website'],
@@ -142,3 +143,8 @@ class LastFM():
         else:
             return None
 
+    def GetVenueEvents(self, venueid=""):
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+        url = '&method=venue.getevents&venue=%s' % (venueid)
+        results = Get_JSON_response(base_url, url)
+        return self.CreateVenueList(results)
