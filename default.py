@@ -125,7 +125,7 @@ class GUI(xbmcgui.WindowXML):
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, False, True)
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, "", True)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon)

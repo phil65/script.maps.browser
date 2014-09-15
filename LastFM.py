@@ -112,13 +112,13 @@ class LastFM():
       #  prettyprint(results)
         return self.CreateVenueList(results)
 
-    def GetNearEvents(self, lat="", lon="", tag=False, festivalsonly=False):
+    def GetNearEvents(self, lat="", lon="", tag="", festivalsonly=False):
         if festivalsonly:
             festivalsonly = "1"
         else:
             festivalsonly = "0"
         url = '&method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
-        if tag:
+        if tag is not "":
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=30' % (lat, lon)  # &distance=60
