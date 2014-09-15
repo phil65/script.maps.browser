@@ -8,17 +8,17 @@
 	<string id="34002">Press context menu button to toggle navigation mode</string>
 	<string id="34003">Press "info" button to change map type</string>
 	<string id="34004">FourSquare Places Search</string>
-	<string id="34005">FourSquare Top Picks</string>
-	<string id="34006">FourSquare Food</string>
-	<string id="34007">FourSquare Drinks</string>
-	<string id="34008">FourSquare Coffee</string>
-	<string id="34009">FourSquare Shops</string>
-	<string id="34010">FourSquare Arts</string>
-	<string id="34011">FourSquare Outdoors</string>
-	<string id="34012">FourSquare Sights</string>
-	<string id="34013">FourSquare Trending</string>
-	<string id="34014">FourSquare Specials</string>
-	<string id="34015">FourSquare Next venues</string>
+	<string id="34005">Top Picks</string>
+	<string id="34006">Food</string>
+	<string id="34007">Drinks</string>
+	<string id="34008">Coffee</string>
+	<string id="34009">Shops</string>
+	<string id="34010">Arts</string>
+	<string id="34011">Outdoors</string>
+	<string id="34012">Sights</string>
+	<string id="34013">Trending</string>
+	<string id="34014">Specials</string>
+	<string id="34015">Next venues</string>
 	<string id="34016">Last.Fm near concerts</string>
 	<string id="34017">Last.Fm near festivals</string>
 	<string id="34018">Last.Fm concert search (by tag)</string>
@@ -32,4 +32,5 @@
 	<string id="34026">Choose search type</string>
 	<string id="34027">Places from geotagged images</string>
 	<string id="34028">Eventful Near Events</string>
+	<string id="34029">FourSquare Explore</string>
 </strings>

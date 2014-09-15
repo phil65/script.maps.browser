@@ -17,7 +17,7 @@ class Eventful():
 
     def SelectCategory(self):
         url = "http://api.eventful.com/json/categories/list?app_key=%s" % (eventful_key)
-        results = Get_JSON_response("", url)
+        results = Get_JSON_response("", url, 7)
         modeselect = []
         prettyprint(results)
         modeselect.append("All Categories")
@@ -41,7 +41,6 @@ class Eventful():
             url = url + '&category=%s' % (category)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
         results = Get_JSON_response(base_url, url)
-        prettyprint(results)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetEventfulVenueList(self, lat="", lon="", query=""):
@@ -51,7 +50,6 @@ class Eventful():
             url = url + '&query=%s' % (query)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
         results = Get_JSON_response(base_url, url)
-        prettyprint(results)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def HandleEventfulEventResult(self, results):
@@ -59,6 +57,9 @@ class Eventful():
         places_list = list()
         letter = ord('A')
         count = 0
+        prettyprint(results)
+        if not isinstance(results, list):
+            results = [results]
         for venue in results:
             eventname = cleanText(venue['title'])
             venuename = cleanText(venue['venue_name'])

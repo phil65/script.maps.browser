@@ -390,18 +390,8 @@ class GUI(xbmcgui.WindowXML):
         modeselect.append(__language__(34016))  # concerts
         modeselect.append(__language__(34017))  # festivals
         modeselect.append(__language__(34027))  # geopics
-        modeselect.append(__language__(34028))  # toppicks
-        modeselect.append(__language__(34005))  # toppicks
-        modeselect.append(__language__(34006))  # food
-        modeselect.append(__language__(34007))  # drinks
-        modeselect.append(__language__(34008))  # coffee
-        modeselect.append(__language__(34009))  # shops
-        modeselect.append(__language__(34010))  # arts
-        modeselect.append(__language__(34011))  # outdoors
-        modeselect.append(__language__(34012))  # sights
-        modeselect.append(__language__(34013))  # trending
-        modeselect.append(__language__(34014))  # specials
-        modeselect.append(__language__(34015))  # nextvenues
+        modeselect.append(__language__(34028))  # eventful
+        modeselect.append(__language__(34029))  # FourSquare
         modeselect.append(__language__(34019))  # reset
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(__language__(34020), modeselect)
@@ -410,34 +400,23 @@ class GUI(xbmcgui.WindowXML):
             if modeselect[provider_index] == "Google Places":
                 GP = GooglePlaces()
                 self.PinString, itemlist = GP.GetGooglePlacesList("food")
-            elif modeselect[provider_index] == __language__(34005):
-                itemlist = self.GetPlacesListExplore("topPicks")
-            elif modeselect[provider_index] == __language__(34006):
-                itemlist = self.GetPlacesListExplore("food")
-            elif modeselect[provider_index] == __language__(34007):
-                itemlist = self.GetPlacesListExplore("drinks")
-            elif modeselect[provider_index] == __language__(34008):
-                itemlist = self.GetPlacesListExplore("coffee")
-            elif modeselect[provider_index] == __language__(34009):
-                itemlist = self.GetPlacesListExplore("shops")
-            elif modeselect[provider_index] == __language__(34010):
-                itemlist = self.GetPlacesListExplore("arts")
-            elif modeselect[provider_index] == __language__(34011):
-                itemlist = self.GetPlacesListExplore("outdoors")
-            elif modeselect[provider_index] == __language__(34012):
-                itemlist = self.GetPlacesListExplore("sights")
-            elif modeselect[provider_index] == __language__(34013):
-                itemlist = self.GetPlacesListExplore("trending")
-            elif modeselect[provider_index] == __language__(34014):
-                itemlist = self.GetPlacesListExplore("specials")
-            elif modeselect[provider_index] == __language__(34015):
-                itemlist = self.GetPlacesListExplore("nextVenues")
+            elif modeselect[provider_index] == __language__(34004):
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                section = self.SelectSection()
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                itemlist = self.GetPlacesListExplore(section)
             elif modeselect[provider_index] == __language__(34016):
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 LFM = LastFM()
-                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon)
+                category = LFM.SelectCategory()
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
             elif modeselect[provider_index] == __language__(34017):
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 LFM = LastFM()
-                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, False, True)
+                category = LFM.SelectCategory()
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
@@ -461,7 +440,6 @@ class GUI(xbmcgui.WindowXML):
         modeselect = []
         modeselect.append(__language__(34024))
         modeselect.append(__language__(34004))
-        modeselect.append(__language__(34018))
         modeselect.append(__language__(34023))
         modeselect.append(__language__(34019))
         dialogSelection = xbmcgui.Dialog()
@@ -470,10 +448,6 @@ class GUI(xbmcgui.WindowXML):
             if modeselect[provider_index] == __language__(34024):
                 self.SearchLocation()
                 itemlist = []
-            elif modeselect[provider_index] == __language__(34018):
-                tag = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                LFM = LastFM()
-                itemlist = LFM.GetNearEvents(self.lat, self.lon, tag, False)
             elif modeselect[provider_index] == __language__(34004):
                 query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
                 itemlist = self.GetPlacesList(self.lat, self.lon, query)

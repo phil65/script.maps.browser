@@ -139,12 +139,13 @@ def HandleFourSquarePlacesResult(self, results):
     return places_list
 
 
-def GetPlacesList(self, lat, lon, query=""):
+def GetPlacesList(self, lat, lon, query="", categoryid=""):
     base_url = "https://api.foursquare.com/v2/venues/search?limit=25&client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
+    url = '&ll=%.8f,%.8f' % (lat, lon)
     if query is not "":
-        url = '&ll=%.8f,%.8f&query=%s' % (lat, lon, query)
-    else:
-        url = '&ll=%.8f,%.8f' % (lat, lon)
+        url = url + "&query=%s" % (query)
+    if categoryid is not "":
+        url = url + "&categoryId=%s" % (categoryid)
     results = Get_JSON_response(base_url, url)
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
@@ -178,3 +179,45 @@ def GetPlacesListExplore(self, placetype):
         log("ERROR")
     return []
 
+
+def SelectCategory(self):
+    url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
+    results = Get_JSON_response("", url, 7)
+    modeselect = []
+    prettyprint(results)
+    modeselect.append("All Categories")
+    for item in results["categories"]:
+        modeselect.append(cleanText(item["name"]))
+    categorydialog = xbmcgui.Dialog()
+    provider_index = categorydialog.select("Choose Category", modeselect)
+    if provider_index > 0:
+        return results["categories"][provider_index - 1]["id"]
+    elif provider_index > -1:
+        return ""
+    else:
+        return None
+
+def SelectSection(self):
+    Sections = {"topPicks": __language__(34005),
+                "food": __language__(34006),
+                "drinks": __language__(34007),
+                "coffee": __language__(34008),
+                "shops": __language__(34009),
+                "arts": __language__(34010),
+                "outdoors": __language__(34011),
+                "sights": __language__(34012),
+                "trending": __language__(34013),
+                "specials": __language__(34014),
+                "nextVenues": __language__(34015)}
+    modeselect = []
+    modeselect.append("All Sections")
+    for value in Sections.itervalues():
+        modeselect.append(value)
+    categorydialog = xbmcgui.Dialog()
+    provider_index = categorydialog.select("Choose Section", modeselect)
+    if provider_index > 0:
+        return Sections.keys()[provider_index - 1]
+    elif provider_index > -1:
+        return ""
+    else:
+        return None

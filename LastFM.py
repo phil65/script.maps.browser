@@ -103,11 +103,11 @@ class LastFM():
         id = urllib.quote(id)
         if pastevents:
      #       url = 'method=artist.getpastevents&mbid=%s' % (id)
-            url = 'method=artist.getpastevents&autocorrect=1&artist=%s' % (id)
+            url = '&method=artist.getpastevents&autocorrect=1&artist=%s' % (id)
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
-            url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
+            url = '&method=artist.getevents&autocorrect=1&artist=%s' % (id)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
       #  prettyprint(results)
         return self.CreateVenueList(results)
@@ -117,11 +117,30 @@ class LastFM():
             festivalsonly = "1"
         else:
             festivalsonly = "0"
-        url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
+        url = '&method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
         if tag:
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=30' % (lat, lon)  # &distance=60
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
         return self.CreateVenueList(results)
+
+    def SelectCategory(self):
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+        url = '&method=tag.getTopTags'
+        results = Get_JSON_response(base_url, url, 7)
+        modeselect = []
+        prettyprint(results)
+        modeselect.append("All Categories")
+        for item in results["toptags"]["tag"]:
+            modeselect.append(cleanText(item["name"]))
+        categorydialog = xbmcgui.Dialog()
+        provider_index = categorydialog.select("Choose Category", modeselect)
+        if provider_index > 0:
+            return results["toptags"]["tag"][provider_index - 1]["name"]
+        elif provider_index > -1:
+            return ""
+        else:
+            return None
+
