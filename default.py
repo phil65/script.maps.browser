@@ -414,7 +414,7 @@ class GUI(xbmcgui.WindowXML):
                 section = FS.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if section:
-                    itemlist, self.PinString = FS.GetPlacesListExplore(section, self.lat, self.lon)
+                    itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[provider_index] == __language__(34016):
                 LFM = LastFM()
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
