@@ -96,7 +96,7 @@
         </control>
         <control type="group">
             <include>Animation_VisibleChange200</include>
-            <visible>IsEmpty(Window.Property(streetview))</visible>
+            <visible>IsEmpty(Window.Property(streetview)) + IntegerGreaterThan(Container(200).NumItems,0)</visible>
             <animation condition="Control.HasFocus(725)" effect="fade" end="0" start="100" time="280">Conditional</animation>
             <control id="200" type="list">
                 <width>1920</width>

@@ -137,10 +137,10 @@
                         <posy>320</posy>
                         <width>1290</width>
                         <height>350</height>
-                        <onleft>9000</onleft>
-                        <onright>9000</onright>
-                        <onup>500</onup>
-                        <ondown>500</ondown>
+                        <onleft>500</onleft>
+                        <onright>500</onright>
+                        <onup>1000</onup>
+                        <ondown>1000</ondown>
                         <pagecontrol>61</pagecontrol>
                         <scrolltime>200</scrolltime>
                         <orientation>vertical</orientation>
@@ -271,24 +271,11 @@
                     <onleft>5030</onleft>
                     <orientation>horizontal</orientation>
                     <onright>5030</onright>
-                    <onup>10</onup>
-                    <ondown>10</ondown>
-                    <onleft>11</onleft>
-                    <onright>11</onright>
+                    <onup>500</onup>
+                    <ondown>500</ondown>
+                    <onleft>1000</onleft>
+                    <onright>1000</onright>
                     <usecontrolcoords>true</usecontrolcoords>
-                    <control type="button" id="1001">
-                        <width>330</width>
-                        <height>45</height>
-                        <textoffsetx>20</textoffsetx>
-                        <align>center</align>
-                        <font>Font_Reg28</font>
-                        <textcolor>grey2</textcolor>
-                        <label>Show artist tour on map</label>
-                        <focusedcolor>white3</focusedcolor>
-                        <onclick>Dialog.Close(all,true)</onclick>
-                        <onclick condition="!IsEmpty(Window(home).Property(Street))">RunScript(script.maps.browser,location=$INFO[Window(home).Property(City)] $INFO[Window(home).Property(Street)],artist=$INFO[Window(home).Property(Headliner)])</onclick>
-                        <onclick condition="IsEmpty(Window(home).Property(Street))">RunScript(script.maps.browser,location=$INFO[Window(home).Property(City)] $INFO[Window(home).Property(Name)],artist=$INFO[Window(home).Property(Headliner)])</onclick>
-                    </control>
                     <control type="button" id="1002">
                         <width>330</width>
                         <height>45</height>
@@ -298,9 +285,6 @@
                         <label>Venue schedule</label>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white3</focusedcolor>
-                        <onclick>Dialog.Close(1165)</onclick>
-                        <onclick>RunScript(script.extendedinfo,info=venueevents,id=$INFO[Window(home).Property(ID)],silent=False)</onclick>
-                        <onclick>ActivateWindow(1139)</onclick>
                     </control>
                     <control type="button" id="1003">
                         <width>330</width>
