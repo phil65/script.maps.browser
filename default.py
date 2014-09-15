@@ -567,6 +567,7 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
             self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
             self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))
             xbmc.log('# GUI selected lat: %s' % self.selected_id)
+            self.zoom_level = 12
             self.close()
 
     def onFocus(self, controlID):
@@ -577,7 +578,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
     C_TEXT_FIELD = 200
     C_TITLE = 201
-    C_BIG_IMAGE = 201
+    C_BIG_IMAGE = 211
     C_RIGHT_IMAGE = 210
 
     def __init__(self, *args, **kwargs):
@@ -590,12 +591,12 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         for key, value in prop_list.iteritems():
             log(key + " = " + value)
         self.getControl(self.C_TEXT_FIELD).setText(prop_list["description"])
-        self.getControl(self.C_TITLE).setLabel(prop_list["eventname"])
         self.getControl(202).setLabel(prop_list["date"])
         self.getControl(203).setLabel(prop_list["name"])
-        self.getControl(204).setLabel(prop_list["street"])
+        self.getControl(self.C_BIG_IMAGE).setImage(prop_list["thumb"])
         self.getControl(self.C_RIGHT_IMAGE).setImage(prop_list["venue_image"])
-        self.getControl(self.C_BIG_IMAGE).setImage(prop_list["artist_image"])
+        self.getControl(204).setLabel(prop_list["street"])
+        self.getControl(self.C_TITLE).setLabel(prop_list["eventname"])
 
 
     def onAction(self, action):

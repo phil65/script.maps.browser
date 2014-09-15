@@ -6,7 +6,6 @@ else:
     import json as simplejson
 
 googlemaps_key_places = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
-max_limit = 25
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 
 __addon__ = xbmcaddon.Addon()
@@ -169,8 +168,6 @@ class GooglePlaces():
                 places_list.append(item)
                 count += 1
                 letter += 1
-                if count > max_limit:
-                    break
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
            # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
            # log(difference_lat)

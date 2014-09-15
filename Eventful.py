@@ -7,7 +7,6 @@ else:
 
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 eventful_key = 'Nw3rh3mXn8RhMQNK'
-max_limit = 25
 
 
 class Eventful():
@@ -33,7 +32,7 @@ class Eventful():
             return None
 
     def GetEventfulEventList(self, lat="", lon="", query="", category="", radius=30):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=25&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (eventful_key)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         log(url)
         if query is not "":
@@ -44,7 +43,7 @@ class Eventful():
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetEventfulVenueList(self, lat="", lon="", query=""):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=25&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (eventful_key)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         if query is not "":
             url = url + '&query=%s' % (query)
@@ -105,7 +104,5 @@ class Eventful():
             places_list.append(item)
             count += 1
             letter += 1
-            if count > max_limit:
-                break
         return places_list, PinString
 

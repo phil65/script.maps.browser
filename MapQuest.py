@@ -45,9 +45,9 @@ class MapQuest():
                 lon = str(place['lng'])
                 base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (mapquest_key)
                 url = "&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (lat, lon)
+                image = base_url + url
                 search_string = lat + "," + lon
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
-                image = base_url + url
                 if place['type'] == 1:
                     incidenttype = "Construction"
                 elif place['type'] == 2:
@@ -58,7 +58,12 @@ class MapQuest():
                     incidenttype = "Incident/accident"
                 prop_list = {'name': place['shortDesc'],
                              'description': place['fullDesc'],
+                             'distance': str(place['distance']),
+                             'delaytypical': str(place['delayFromTypical']),
+                             'delayfreeflow': str(place['delayFromFreeFlow']),
                              "GoogleMap": googlemap,
+                             "venue_image": image,
+                             "thumb": image,
                              'date': place['startTime'],
                              'severity': str(place['severity']),
                              'type': incidenttype,

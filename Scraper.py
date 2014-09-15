@@ -26,8 +26,6 @@ factual_key = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
 factual_secret = '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
 wunderground_key = "xx"
 bing_key = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
-max_limit = 25
-
 
 # def GetRadarImage(self, lat, lon):
 #     url = "http://api.wunderground.com/api/%s/animatedradar/image.gif?centerlat=%s&centerlon=%s&radius=100&width=280&height=280&newmaps=0" % (wunderground_key, str(self.lat), str(self.lon))
@@ -68,6 +66,7 @@ def GetGeoCodes(self, show_dialog, search_string):
                 w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
                 w.doModal()
                 log(w.lat)
+                self.zoom_level = 12
                 return (w.lat, w.lon)
             elif len(results["results"]) == 1:
                 self.zoom_level = 12
@@ -137,13 +136,11 @@ def HandleFourSquarePlacesResult(self, results):
         places_list.append(item)
         count += 1
         letter += 1
-        if count > max_limit:
-            break
     return places_list
 
 
 def GetPlacesList(self, lat, lon, query="", categoryid=""):
-    base_url = "https://api.foursquare.com/v2/venues/search?limit=25&client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
+    base_url = "https://api.foursquare.com/v2/venues/search?limit=26&client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
     url = '&ll=%.8f,%.8f' % (lat, lon)
     if query is not "":
         url = url + "&query=%s" % (query)
@@ -163,7 +160,7 @@ def GetPlacesList(self, lat, lon, query="", categoryid=""):
 
 
 def GetPlacesListExplore(self, placetype):
-    base_url = "https://api.foursquare.com/v2/venues/explore?limit=25&client_id=%s&client_secret=%s&v=20130815&venuePhotos=1" % (foursquare_id, foursquare_secret)
+    base_url = "https://api.foursquare.com/v2/venues/explore?limit=26&client_id=%s&client_secret=%s&v=20130815&venuePhotos=1" % (foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
     url = '&ll=%.8f,%.8f&section=%s' % (self.lat, self.lon, placetype)

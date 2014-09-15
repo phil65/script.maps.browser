@@ -16,7 +16,6 @@ __addonpath__ = __addon__.getAddonInfo('path')
 
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
-max_limit = 25
 
 
 class LastFM():
@@ -88,8 +87,6 @@ class LastFM():
                         chr(letter) + "%7C" + lat + "," + lon
                     count += 1
                     letter += 1
-                    if count > max_limit:
-                        break
             else:
                 Notify("Error", "No concerts found")
         elif "error" in results:
@@ -99,17 +96,16 @@ class LastFM():
             prettyprint(results)
         return events_list, PinString
 
-    def GetEvents(self, id, pastevents=False):
-        id = urllib.quote(id)
+    def GetEvents(self, artist, pastevents=False):
+        artist = urllib.quote(artist)
         if pastevents:
      #       url = 'method=artist.getpastevents&mbid=%s' % (id)
-            url = '&method=artist.getpastevents&autocorrect=1&artist=%s' % (id)
+            url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1' % (artist)
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
-            url = '&method=artist.getevents&autocorrect=1&artist=%s' % (id)
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+            url = '&method=artist.getevents&autocorrect=1&artist=%s' % (artist)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
-      #  prettyprint(results)
         return self.CreateVenueList(results)
 
     def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
@@ -117,12 +113,12 @@ class LastFM():
             festivalsonly = "1"
         else:
             festivalsonly = "0"
-        url = '&method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
+        url = '&method=geo.getevents&festivalsonly=%s&page=1' % (festivalsonly)
         if (tag is not "") and (tag is not None):
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
         return self.CreateVenueList(results)
 
