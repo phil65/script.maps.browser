@@ -45,6 +45,8 @@ class MapQuest():
                 lon = str(place['lng'])
                 base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (mapquest_key)
                 url = "&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (lat, lon)
+                search_string = lat + "," + lon
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
                 image = base_url + url
                 if place['type'] == 1:
                     incidenttype = "Construction"
@@ -54,21 +56,25 @@ class MapQuest():
                     incidenttype = "Congestion/Flow"
                 elif place['type'] == 4:
                     incidenttype = "Incident/accident"
+                prop_list = {'name': place['shortDesc'],
+                             'description': place['fullDesc'],
+                             "GoogleMap": googlemap,
+                             'date': place['startTime'],
+                             'severity': str(place['severity']),
+                             'type': incidenttype,
+                             "sortletter": chr(letter),
+                             "index": str(count),
+                             "lat": lat,
+                             "lon": lon,
+                             "index": str(count)}
                 item = xbmcgui.ListItem(place['shortDesc'])
+                for key, value in prop_list.iteritems():
+                    item.setProperty(key, value)
+                item.setProperty("item_info", simplejson.dumps(prop_list))
                 item.setArt({'thumb': image})
                 item.setArt({'icon': place['iconURL']})
                 item.setLabel(place['shortDesc'])
-                item.setProperty('name', place['shortDesc'])
-                item.setProperty('description', place['fullDesc'])
-                item.setProperty('date', place['startTime'])
-                item.setProperty('severity', str(place['severity']))
-                item.setProperty('type', incidenttype)
                 item.setLabel2(place['startTime'])
-                item.setProperty("sortletter", chr(letter))
-                item.setProperty("index", str(count))
-                item.setProperty("lat", lat)
-                item.setProperty("lon", lon)
-                item.setProperty("index", str(count))
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(item)
                 count += 1
