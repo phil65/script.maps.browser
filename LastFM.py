@@ -54,13 +54,16 @@ class LastFM():
                     googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
                     item = xbmcgui.ListItem(event['venue']['name'])
                     formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
+                    description = cleanText(event['description'])
+                    if my_arts != event['artists']['headliner']:
+                        description = "[B]" + my_arts + "[/B][CR]" +  description
                     prop_list = {"date": event['startDate'],
                                  "name": event['venue']['name'],
                                  "id": event['startDate'],
                                  "street": event['venue']['location']['street'],
                                  "eventname": event['title'],
                                  "website": event['website'],
-                                 "description": "[B]" + my_arts + "[/B][CR]" + cleanText(event['description']),
+                                 "description": description,
                                  "city": event['venue']['location']['city'],
                                  "country": event['venue']['location']['country'],
                                  "address": formattedAddress,
