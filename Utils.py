@@ -5,6 +5,7 @@ import urllib2
 import os
 import sys
 import re
+import time
 from PIL import Image
 from ImageTags import *
 if sys.version_info < (2, 7):
@@ -49,6 +50,20 @@ def GetStringFromUrl(encurl):
             xbmc.sleep(1000)
             succeed += 1
     return ""
+
+
+def Get_JSON_response(base_url="", custom_url="", cache_days=1):
+    from base64 import b64encode
+    filename = b64encode(custom_url).replace("/", "XXXX")
+    path = Addon_Data_Path + "/" + filename + ".txt"
+    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
+        return read_from_file(path)
+    else:
+        url = base_url + custom_url
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+        save_to_file(results, filename, Addon_Data_Path)
+        return results
 
 
 def log(txt):

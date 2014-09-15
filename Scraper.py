@@ -81,6 +81,7 @@ def GetGeoCodes(self, show_dialog, search_string):
 
 
 def HandleFourSquarePlacesResult(self, results):
+    self.PinString = ""
     places_list = list()
     letter = ord('A')
     count = 0
@@ -143,8 +144,6 @@ def GetPlacesList(self, lat, lon, query=""):
         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, query, foursquare_id, foursquare_secret)
     else:
         url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, foursquare_id, foursquare_secret)
-  #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-    self.PinString = ""
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
     if results and 'meta' in results:
@@ -166,7 +165,6 @@ def GetPlacesListExplore(self, placetype):
         self.lat, self.lon, placetype, foursquare_id, foursquare_secret)
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    self.PinString = ""
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
             if len(results['response']['groups'][0]['items']) > 0:

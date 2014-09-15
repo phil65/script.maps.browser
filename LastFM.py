@@ -1,11 +1,9 @@
 import sys
 import xbmcgui
 import xbmcaddon
-import xbmcvfs
 from ImageTags import *
 from Utils import *
 import urllib
-import time
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -101,19 +99,6 @@ class LastFM():
             prettyprint(results)
         return events_list, PinString
 
-    def GetLastFMData(self, url="", cache_days=1):
-        from base64 import b64encode
-        filename = b64encode(url).replace("/", "XXXX")
-        path = Addon_Data_Path + "/" + filename + ".txt"
-        if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-            return read_from_file(path)
-        else:
-            url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-            save_to_file(results, filename, Addon_Data_Path)
-            return results
-
     def GetEvents(self, id, pastevents=False):
         id = urllib.quote(id)
         if pastevents:
@@ -122,7 +107,8 @@ class LastFM():
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
             url = 'method=artist.getevents&autocorrect=1&artist=%s' % (id)
-        results = self.GetLastFMData(url)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
+        results = Get_JSON_response(base_url, url)
       #  prettyprint(results)
         return self.CreateVenueList(results)
 
@@ -136,5 +122,6 @@ class LastFM():
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=30' % (lat, lon)  # &distance=60
-        results = self.GetLastFMData(url)
+        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
+        results = Get_JSON_response(base_url, url)
         return self.CreateVenueList(results)

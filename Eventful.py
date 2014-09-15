@@ -16,13 +16,14 @@ class Eventful():
         pass
 
     def GetEventfulList(self, lat="", lon="", query=""):
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&page_size=25&sort_order=date&within=30&date=Future&app_key=%s" % (eventful_key)
         if query is not "":
-            url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&image_sizes=large&include=price&page_size=25date&sort_order=date&within=30&date=Future&query=%s&app_key=%s' % (lat, lon, query, eventful_key)
+            url = '&where=%.8f,%.8f&query=%s' % (lat, lon, query)
         else:
-            url = 'http://api.eventful.com/json/events/search?where=%.8f,%.8f&image_sizes=large&include=price&page_size=25date&sort_order=date&within=30&date=Future&app_key=%s' % (lat, lon, eventful_key)
+            url = '&where=%.8f,%.8f' % (lat, lon)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        results = Get_JSON_response(base_url, url)
+        prettyprint(results)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def HandleEventfulEventResult(self, results):
