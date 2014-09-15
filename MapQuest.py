@@ -41,6 +41,11 @@ class MapQuest():
             return [], ""
         elif "incidents" in results:
             for place in results['incidents']:
+                lat = str(place['lat'])
+                lon = str(place['lng'])
+                base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (mapquest_key)
+                url = "&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (lat, lon)
+                image = base_url + url
                 if place['type'] == 1:
                     incidenttype = "Construction"
                 elif place['type'] == 2:
@@ -50,7 +55,7 @@ class MapQuest():
                 elif place['type'] == 4:
                     incidenttype = "Incident/accident"
                 item = xbmcgui.ListItem(place['shortDesc'])
-                item.setArt({'thumb': place['iconURL']})
+                item.setArt({'thumb': image})
                 item.setArt({'icon': place['iconURL']})
                 item.setLabel(place['shortDesc'])
                 item.setProperty('name', place['shortDesc'])
@@ -61,8 +66,6 @@ class MapQuest():
                 item.setLabel2(place['startTime'])
                 item.setProperty("sortletter", chr(letter))
                 item.setProperty("index", str(count))
-                lat = str(place['lat'])
-                lon = str(place['lng'])
                 item.setProperty("lat", lat)
                 item.setProperty("lon", lon)
                 item.setProperty("index", str(count))
