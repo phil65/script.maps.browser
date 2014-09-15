@@ -16,9 +16,9 @@ class GooglePlaces():
 
     def GetGooglePlacesList(self, locationtype):
         location = str(self.lat) + "," + str(self.lon)
-        url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&types=%s&radius=500&key=%s' % (location, locationtype, googlemaps_key_places)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?radius=500&key=%s' % (googlemaps_key_places)
+        url = '&location=%s&types=%s' % (location, locationtype)
+        results = Get_JSON_response(base_url, url)
         places_list = list()
         PinString = ""
         letter = ord('A')
