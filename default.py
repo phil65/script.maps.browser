@@ -387,7 +387,7 @@ class GUI(xbmcgui.WindowXML):
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
-        itemlist = []
+        itemlist = None
         # modeselect.append("Google Places")
         modeselect.append(__language__(34016))  # concerts
         modeselect.append(__language__(34017))  # festivals
@@ -402,7 +402,7 @@ class GUI(xbmcgui.WindowXML):
             if modeselect[provider_index] == "Google Places":
                 GP = GooglePlaces()
                 self.PinString, itemlist = GP.GetGooglePlacesList("food")
-            elif modeselect[provider_index] == __language__(34004):
+            elif modeselect[provider_index] == __language__(34029):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 section = self.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -435,8 +435,9 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
-            self.c_places_list.reset()
-            self.c_places_list.addItems(items=itemlist)
+            if itemlist is not None:
+                self.c_places_list.reset()
+                self.c_places_list.addItems(items=itemlist)
             self.street_view = False
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -502,6 +503,8 @@ class GUI(xbmcgui.WindowXML):
         px, py = MetersToPixels(mx, my, self.zoom_level)
         mx2, my2 = PixelsToMeters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
         self.radius = abs((mx - mx2) / 1000)
+        cache_path = xbmc.getCacheThumbName(self.GoogleMapURL)
+        log(cache_path)
        # my = my - my2
       #  log("mx: " + str(mx) + "my: " + str(my) + "px: " + str(px) + "py: " + str(py))
 
