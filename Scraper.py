@@ -140,12 +140,12 @@ def HandleFourSquarePlacesResult(self, results):
 
 
 def GetPlacesList(self, lat, lon, query=""):
+    base_url = "https://api.foursquare.com/v2/venues/search?limit=25&client_id=%s&client_secret=%s&v=20130815" % (foursquare_id, foursquare_secret)
     if query is not "":
-        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&query=%s&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, query, foursquare_id, foursquare_secret)
+        url = '&ll=%.8f,%.8f&query=%s' % (lat, lon, query)
     else:
-        url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=25&client_id=%s&client_secret=%s&v=20130815' % (lat, lon, foursquare_id, foursquare_secret)
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
+        url = '&ll=%.8f,%.8f' % (lat, lon)
+    results = Get_JSON_response(base_url, url)
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
             return self.HandleFourSquarePlacesResult(results['response']['venues'])
@@ -159,12 +159,11 @@ def GetPlacesList(self, lat, lon, query=""):
 
 
 def GetPlacesListExplore(self, placetype):
+    base_url = "https://api.foursquare.com/v2/venues/explore?limit=25&client_id=%s&client_secret=%s&v=20130815&venuePhotos=1" % (foursquare_id, foursquare_secret)
    # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, foursquare_id, foursquare_secret)
   #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-    url = 'https://api.foursquare.com/v2/venues/explore?ll=%.8f,%.8f&section=%s&limit=25&venuePhotos=1&client_id=%s&client_secret=%s&v=20130815' % (
-        self.lat, self.lon, placetype, foursquare_id, foursquare_secret)
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
+    url = '&ll=%.8f,%.8f&section=%s' % (self.lat, self.lon, placetype)
+    results = Get_JSON_response(base_url, url)
     if results and 'meta' in results:
         if results['meta']['code'] == 200:
             if len(results['response']['groups'][0]['items']) > 0:

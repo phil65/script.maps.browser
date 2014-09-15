@@ -443,8 +443,11 @@ class GUI(xbmcgui.WindowXML):
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = self.GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34028):
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 EF = Eventful()
-                itemlist, self.PinString = EF.GetEventfulList(self.lat,self.lon)
+                category = EF.SelectCategory()
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
