@@ -70,10 +70,12 @@ def GetGeoCodes(self, show_dialog, search_string):
                 log(w.lat)
                 return (w.lat, w.lon)
             elif len(results["results"]) == 1:
+                self.zoom_level = 12
                 return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
             else:
                 return (self.lat, self.lon)  # old values when no hit
         else:
+            self.zoom_level = 12
             return (first_hit["lat"], first_hit["lng"])
     except Exception as e:
         log(e)

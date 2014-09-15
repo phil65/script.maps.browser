@@ -126,10 +126,10 @@ class GUI(xbmcgui.WindowXML):
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, "", True)
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, "", True)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon)
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius)
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -383,7 +383,6 @@ class GUI(xbmcgui.WindowXML):
         if not self.location == "":
             self.street_view = False
             self.lat, self.lon = self.GetGeoCodes(True, self.location)
-            self.PinString = ""
 
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
@@ -420,7 +419,7 @@ class GUI(xbmcgui.WindowXML):
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
             elif modeselect[provider_index] == __language__(34030):
                 MQ = MapQuest()
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
@@ -430,7 +429,7 @@ class GUI(xbmcgui.WindowXML):
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category:
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category, True)
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)

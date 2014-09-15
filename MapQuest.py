@@ -36,7 +36,10 @@ class MapQuest():
         PinString = ""
         letter = ord('A')
         count = 0
-        if "incidents" in results:
+        if results['info']['statuscode'] == 400:
+            Notify("Error", " - ".join(results['info']['messages']))
+            return [], ""
+        elif "incidents" in results:
             for place in results['incidents']:
                 if place['type'] == 1:
                     incidenttype = "Construction"
@@ -69,11 +72,12 @@ class MapQuest():
                 letter += 1
                 if count > max_limit:
                     break
+            FillArea = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lathigh, lonhigh, lathigh, lonlow, latlow, lonlow, latlow, lonhigh)
+            PinString = PinString + FillArea.replace("|", "%7C")
+            return places_list, PinString
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
            # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
            # log(difference_lat)
-        elif results['info']['statuscode'] == 400:
-            Notify(" - ".join(results['info']['messages']))
         else:
-            log("ERROR")
-        return places_list, PinString
+            Notify("Error", "Could not fetch results")
+            return [], ""

@@ -112,7 +112,7 @@ class LastFM():
       #  prettyprint(results)
         return self.CreateVenueList(results)
 
-    def GetNearEvents(self, lat="", lon="", tag="", festivalsonly=False):
+    def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
         if festivalsonly:
             festivalsonly = "1"
         else:
@@ -121,7 +121,7 @@ class LastFM():
         if (tag is not "") and (tag is not None):
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
-            url = url + '&lat=%s&long=%s&distance=30' % (lat, lon)  # &distance=60
+            url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
         return self.CreateVenueList(results)
