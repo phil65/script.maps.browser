@@ -387,6 +387,7 @@ class GUI(xbmcgui.WindowXML):
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
+        itemlist = []
         # modeselect.append("Google Places")
         modeselect.append(__language__(34016))  # concerts
         modeselect.append(__language__(34017))  # festivals
@@ -411,13 +412,15 @@ class GUI(xbmcgui.WindowXML):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
+                if category:
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category)
             elif modeselect[provider_index] == __language__(34017):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category, True)
+                if category:
+                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, category, True)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
@@ -427,7 +430,8 @@ class GUI(xbmcgui.WindowXML):
                 EF = Eventful()
                 category = EF.SelectCategory()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
+                if category:
+                    itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
