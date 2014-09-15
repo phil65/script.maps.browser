@@ -23,12 +23,14 @@
 import xbmc
 import xbmcaddon
 import xbmcgui
+import urllib
 from Utils import *
 from LastFM import LastFM
 from Eventful import Eventful
 from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
-from math import sin, cos, radians, pow, pi
+from FourSquare import FourSquare
+from math import sin, cos, radians, pow
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -48,7 +50,6 @@ googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
 
 class GUI(xbmcgui.WindowXML):
-    from Scraper import *
     CONTROL_SEARCH = 101
     CONTROL_STREET_VIEW = 102
     CONTROL_ZOOM_IN = 103
@@ -408,11 +409,12 @@ class GUI(xbmcgui.WindowXML):
                 if category:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[provider_index] == __language__(34029):
+                FS = FourSquare()
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                section = self.SelectSection()
+                section = FS.SelectSection()
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if section:
-                    itemlist = self.GetPlacesListExplore(section)
+                    itemlist, self.PinString = FS.GetPlacesListExplore(section, self.lat, self.lon)
             elif modeselect[provider_index] == __language__(34016):
                 LFM = LastFM()
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -465,7 +467,8 @@ class GUI(xbmcgui.WindowXML):
                 itemlist = []
             elif modeselect[provider_index] == __language__(34004):
                 query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
-                itemlist = self.GetPlacesList(self.lat, self.lon, query)
+                FS = FourSquare()
+                itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
             elif modeselect[provider_index] == __language__(34023):
                 artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
@@ -529,6 +532,47 @@ class GUI(xbmcgui.WindowXML):
             setWindowProperty(self.window, self.prefix + 'streetview', "True")
         if self.NavMode_active:
             setWindowProperty(self.window, self.prefix + 'NavMode', "True")
+
+    def GetGeoCodes(self, show_dialog, search_string):
+        try:
+            search_string = urllib.quote_plus(search_string)
+            url = 'https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&address=%s' % (search_string)
+            log("Google Geocodes Search:" + url)
+            response = GetStringFromUrl(url)
+            results = simplejson.loads(response)
+            events = []
+            for item in results["results"]:
+                locationinfo = item["geometry"]["location"]
+                lat = str(locationinfo["lat"])
+                lon = str(locationinfo["lng"])
+                search_string = lat + "," + lon
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+                event = {'generalinfo': item['formatted_address'],
+                         'lat': lat,
+                         'lon': lon,
+                         'map': lon,
+                         'preview': googlemap,
+                         'id': item['formatted_address']}
+                events.append(event)
+            first_hit = results["results"][0]["geometry"]["location"]
+            if show_dialog:
+                if len(results["results"]) > 1:  # open dialog when more than one hit
+                    w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
+                    w.doModal()
+                    log(w.lat)
+                    self.zoom_level = 12
+                    return (w.lat, w.lon)
+                elif len(results["results"]) == 1:
+                    self.zoom_level = 12
+                    return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
+                else:
+                    return (self.lat, self.lon)  # old values when no hit
+            else:
+                self.zoom_level = 12
+                return (first_hit["lat"], first_hit["lng"])
+        except Exception as e:
+            log(e)
+            return ("", "")
 
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
