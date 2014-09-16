@@ -441,7 +441,7 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
-                itemlist, self.PinString = self.GetImages(folder_path)
+                itemlist, self.PinString = GetImages(folder_path)
             elif modeselect[provider_index] == __language__(34028):
                 EF = Eventful()
                 category = EF.SelectCategory()

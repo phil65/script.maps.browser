@@ -118,7 +118,7 @@ def log(txt):
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 
-def GetImages(self, path=""):
+def GetImages(path=""):
     PinString = "&markers=color:blue"
     letter = ord('A')
     count = 0
