@@ -128,21 +128,24 @@ def GetImages(path=""):
             img = Image.open(path + filename)
             exif_data = get_exif_data(img)
             lat, lon = get_lat_lon(exif_data)
+            if "DateTimeOriginal" in exif_data:
+                date = exif_data["DateTimeOriginal"]
+            elif "DateTime" in exif_data:
+                date = exif_data["DateTime"]
+            else:
+                date = ""
             if lat:
                 prop_list = {"name": filename,
+                             "label": filename,
                              "lat": str(lat),
                              "lon": str(lon),
+                             "date": date,
+                             "description": date,
                              "thumb": path + filename,
-                             "index": path + str(count),
+                             "index": str(count),
                              "sortletter": chr(letter),
                              }
-                item = xbmcgui.ListItem(filename)
-                item.setLabel(filename)
-                item.setProperty("name", filename)
-                item.setProperty("lat", str(lat))
-                item.setProperty("lon", str(lon))
-                item.setProperty("index", str(count))
-                item.setArt({'thumb': path + filename})
+                item = CreateListItem(prop_list)
                 if len(PinString) < 1850:
                     PinString = PinString + "%7C" + str(lat) + "," + str(lon)
                     item.setProperty("sortletter", chr(letter))
@@ -153,6 +156,7 @@ def GetImages(path=""):
             log("Error when handling GetImages results")
             log(e)
     return images_list, PinString
+
 
 def string2deg(string):
     string = string.strip().replace('"', '').replace("'", "")
