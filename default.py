@@ -122,8 +122,6 @@ class GUI(xbmcgui.WindowXML):
             elif param.startswith('folder='):
                 folder = (param[7:])
                 itemlist, self.PinString = self.GetImages(folder)
-            elif param.startswith('venueid='):
-                self.venueid = (param[8:])
             elif param.startswith('artist='):
                 artist = (param[7:])
                 LFM = LastFM()
@@ -152,11 +150,7 @@ class GUI(xbmcgui.WindowXML):
         elif (not self.location == "") and (self.strlat == ""): # latlon empty
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
         self.GetGoogleMapURLs()
-        if self.venueid is not None:
-            log(str(self.venueid))
-            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=self.venueid)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         if startGUI:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.getControls()
@@ -735,7 +729,6 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-
 if __name__ == '__main__':
     startGUI = True
     for arg in sys.argv:
@@ -743,10 +736,11 @@ if __name__ == '__main__':
         xbmc.log("param = " + param)
         if param.startswith('prefix='):
             startGUI = False
-      #  elif xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-      #      Notify("Instance already running","ddd")
-      #      xbmc.executebuiltin("ReplaceWindow(home)")
-      #      xbmc.sleep(1000)
+        if param.startswith('venueid='):
+            startGUI = False
+            venueid = (param[8:])
+            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venueid)
+            dialog.doModal()
     if startGUI:
         gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
     else:
