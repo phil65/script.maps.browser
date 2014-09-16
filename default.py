@@ -504,11 +504,11 @@ class GUI(xbmcgui.WindowXML):
             self.search_string = str(self.lat) + "," + str(self.lon)
         else:
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
-        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&' % (__addon__.getSetting("ImageFormat"))
+        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (__addon__.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
         url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal)
         self.GoogleMapURL = url + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
-        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
+        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&language=%s&' % (__addon__.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
         self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
         setWindowProperty(self.window, self.prefix + 'location', self.location)
         setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
