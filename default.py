@@ -394,7 +394,12 @@ class GUI(xbmcgui.WindowXML):
         self.location = xbmcgui.Dialog().input(__language__(34032), type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
-            self.lat, self.lon = self.GetGeoCodes(True, self.location)
+            lat, lon = self.GetGeoCodes(True, self.location)
+            if lat is not None:
+                self.lat = lat
+                self.lon = lon
+            else:
+                Notify("Error", "No Search results found.")
 
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
@@ -539,10 +544,15 @@ class GUI(xbmcgui.WindowXML):
         # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
         # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
         # prettyprint(corners)
-        if self.street_view:
-            setWindowProperty(self.window, self.prefix + 'streetview', "True")
-        if self.NavMode_active:
-            setWindowProperty(self.window, self.prefix + 'NavMode', "True")
+        if self.prefix == "":
+            if self.street_view:
+                setWindowProperty(self.window, self.prefix + 'streetview', "True")
+            else:
+                setWindowProperty(self.window, self.prefix + 'streetview', "")
+            if self.NavMode_active:
+                setWindowProperty(self.window, self.prefix + 'NavMode', "True")
+            else:
+                setWindowProperty(self.window, self.prefix + 'NavMode', "")
 
     def GetGeoCodes(self, show_dialog, search_string):
         try:
@@ -570,7 +580,6 @@ class GUI(xbmcgui.WindowXML):
                 if len(results["results"]) > 1:  # open dialog when more than one hit
                     w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
                     w.doModal()
-                    log(w.lat)
                     self.zoom_level = 12
                     return (w.lat, w.lon)
                 elif len(results["results"]) == 1:
@@ -583,7 +592,7 @@ class GUI(xbmcgui.WindowXML):
                 return (first_hit["lat"], first_hit["lng"])
         except Exception as e:
             log(e)
-            return ("", "")
+            return (None, None)
 
 
 class dialog_select_UI(xbmcgui.WindowXMLDialog):
