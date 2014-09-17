@@ -108,10 +108,8 @@ class GUI(xbmcgui.WindowXML):
                 self.location = (param[9:])
             elif param.startswith('lat='):
                 self.strlat = (param[4:])
-                self.lat = float(self.strlat)
             elif param.startswith('lon='):
                 self.strlon = (param[4:])
-                self.lon = float(self.strlon)
             elif param.startswith('type='):
                 self.type = (param[5:])
             elif param.startswith('zoom='):
@@ -140,14 +138,17 @@ class GUI(xbmcgui.WindowXML):
                 self.prefix = param[7:]
                 if not self.prefix.endswith('.') and self.prefix != "":
                     self.prefix = self.prefix + '.'
+            # get lat / lon values
         if self.location == "geocode":
             self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
-        elif (self.location == "") and (self.strlat == ""): # both empty
+        elif (self.location == "") and (self.strlat == ""):  # both empty
             self.lat, self.lon = GetLocationCoordinates()
-            self.location = str(self.lat) + "," + str(self.lon)
             self.zoom_level = 2
-        elif (not self.location == "") and (self.strlat == ""): # latlon empty
+        elif (not self.location == "") and (self.strlat == ""):  # latlon empty
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
+        else:
+            self.lat = float(self.strlat)
+            self.lon = float(self.strlon)
         self.GetGoogleMapURLs()
         if startGUI:
             self.getControls()
@@ -593,7 +594,7 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
-        self.listing = kwargs.get('listing')
+        self.items = kwargs.get('listing')
         self.lon = ''
         self.lat = ''
 
@@ -604,7 +605,7 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
         self.getControl(3).setVisible(False)
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(__language__(32015))
-        self.list.addItems(self.listing)
+        self.list.addItems(self.items)
         self.setFocus(self.list)
 
     def onAction(self, action):
