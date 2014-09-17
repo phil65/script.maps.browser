@@ -90,7 +90,6 @@ class GUI(xbmcgui.WindowXML):
 
     def onInit(self, startGUI=True):
         log('onInit')
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         itemlist = []
         self.init_vars()
         log("WindowID:" + str(xbmcgui.getCurrentWindowId()))
@@ -150,9 +149,7 @@ class GUI(xbmcgui.WindowXML):
         elif (not self.location == "") and (self.strlat == ""): # latlon empty
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
         self.GetGoogleMapURLs()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
         if startGUI:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.getControls()
             self.c_places_list.reset()
             self.GetGoogleMapURLs()
@@ -164,7 +161,6 @@ class GUI(xbmcgui.WindowXML):
                 log("Error: Exception in onInit with message:")
                 log(e)
             settings = xbmcaddon.Addon(id='script.maps.browser')
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
             if not settings.getSetting('firststart') == "true":
                 settings.setSetting(id='firststart', value='true')
                 dialog = xbmcgui.Dialog()
@@ -419,19 +415,16 @@ class GUI(xbmcgui.WindowXML):
             if modeselect[provider_index] == __language__(34031):
                 GP = GooglePlaces()
                 category = GP.SelectCategory()
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category is not None:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[provider_index] == __language__(34029):
                 FS = FourSquare()
                 section = FS.SelectSection()
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if section is not None:
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[provider_index] == __language__(34016):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category is not None:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
             elif modeselect[provider_index] == __language__(34030):
@@ -440,7 +433,6 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34017):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category is not None:
                     itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
             elif modeselect[provider_index] == __language__(34027):
@@ -450,7 +442,6 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34028):
                 EF = Eventful()
                 category = EF.SelectCategory()
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if category is not None:
                     itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[provider_index] == __language__(34019):
@@ -460,7 +451,6 @@ class GUI(xbmcgui.WindowXML):
                 self.c_places_list.reset()
                 self.c_places_list.addItems(items=itemlist)
             self.street_view = False
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def SearchDialog(self):
         setWindowProperty(self.window, 'index', "")
@@ -531,8 +521,8 @@ class GUI(xbmcgui.WindowXML):
         mx, my = LatLonToMeters(self.lat, self.lon)
         px, py = MetersToPixels(mx, my, self.zoom_level)
         mx2, my2 = PixelsToMeters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
-        self.radiusx = abs((mx - mx2) / 1000)
-        self.radius = abs((my - my2) / 1000)
+        self.radiusx = abs((mx - mx2) / 2000)
+        self.radius = abs((my - my2) / 2000)
         if self.radius > 500:
             self.radius = 500
         cache_path = xbmc.getCacheThumbName(self.GoogleMapURL)
@@ -557,10 +547,10 @@ class GUI(xbmcgui.WindowXML):
     def GetGeoCodes(self, show_dialog, search_string):
         try:
             search_string = urllib.quote_plus(search_string)
-            url = 'https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&address=%s' % (search_string)
+            base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
+            url = "&address=%s" % (search_string)
             log("Google Geocodes Search:" + url)
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
+            results = Get_JSON_response(base_url, url)
             events = []
             for item in results["results"]:
                 locationinfo = item["geometry"]["location"]
@@ -655,9 +645,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         LFM = LastFM()
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.setControls()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def setControls(self):
         self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
@@ -675,12 +663,10 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID == self.C_ARTIST_LIST:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
             self.itemlist, self.PinString = LFM.GetEvents(artist)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onFocus(self, controlID):
         pass
@@ -705,11 +691,9 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         LFM = LastFM()
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist, PinString = LFM.GetVenueEvents(self.venueid)
         self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
         self.setControls()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def setControls(self):
         self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
@@ -727,12 +711,10 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID == self.C_ARTIST_LIST:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
             self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onFocus(self, controlID):
         pass

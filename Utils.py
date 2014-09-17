@@ -98,16 +98,20 @@ def GetStringFromUrl(encurl):
 
 def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     from base64 import b64encode
+    xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = b64encode(custom_url).replace("/", "XXXX")
     path = Addon_Data_Path + "\\&" + filename + ".txt"
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
-        return read_from_file(path)
+        results = read_from_file(path)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return results
     else:
         url = base_url + custom_url
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         save_to_file(results, filename, Addon_Data_Path)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         return results
 
 

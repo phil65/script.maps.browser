@@ -149,7 +149,8 @@ class LastFM():
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.search&venue=%s' % (venuename)
         results = Get_JSON_response(base_url, url)
-        if len(results["venuematches"]) > 0:
-            return results["venuematches"][0]["id"]
+        prettyprint(results["results"]["venuematches"])
+        if len(results["results"]["venuematches"]) > 0:
+            return results["results"]["venuematches"]["venue"][0]["id"]
         else:
             return None
