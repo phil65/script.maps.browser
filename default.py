@@ -551,27 +551,30 @@ class GUI(xbmcgui.WindowXML):
             url = "&address=%s" % (search_string)
             log("Google Geocodes Search:" + url)
             results = Get_JSON_response(base_url, url)
-            events = []
+            places_list = []
             for item in results["results"]:
                 locationinfo = item["geometry"]["location"]
                 lat = str(locationinfo["lat"])
                 lon = str(locationinfo["lng"])
                 search_string = lat + "," + lon
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
-                event = {'generalinfo': item['formatted_address'],
-                         'lat': lat,
-                         'lon': lon,
-                         'map': lon,
-                         'preview': googlemap,
-                         'id': item['formatted_address']}
-                events.append(event)
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, googlemaps_key_normal)
+                prop_list = {'label': item['formatted_address'],
+                             'lat': lat,
+                             'lon': lon,
+                             'thumb': googlemap,
+                             'id': item['formatted_address']}
+                item = CreateListItem(prop_list)
+                places_list.append(item)
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=events)
+                    w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=places_list)
                     w.doModal()
-                    self.zoom_level = 12
-                    return (w.lat, w.lon)
+                    if w.lat is not "":
+                        self.zoom_level = 12
+                        return (float(w.lat), float(w.lon))
+                    else:
+                        return (self.lat, self.lon)
                 elif len(results["results"]) == 1:
                     self.zoom_level = 12
                     return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
@@ -591,25 +594,18 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.listing = kwargs.get('listing')
-        self.selected_id = ''
         self.lon = ''
         self.lat = ''
 
     def onInit(self):
-        self.img_list = self.getControl(6)
-        self.img_list.controlLeft(self.img_list)
-        self.img_list.controlRight(self.img_list)
+        self.list = self.getControl(6)
+        self.list.controlLeft(self.list)
+        self.list.controlRight(self.list)
         self.getControl(3).setVisible(False)
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(__language__(32015))
-        for entry in self.listing:
-            listitem = xbmcgui.ListItem('%s' % (entry['generalinfo']))
-            listitem.setIconImage(entry['preview'])
-            listitem.setLabel2(entry['id'])
-            listitem.setProperty("lat", entry['lat'])
-            listitem.setProperty("lon", entry['lon'])
-            self.img_list.addItem(listitem)
-        self.setFocus(self.img_list)
+        self.list.addItems(self.listing)
+        self.setFocus(self.list)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -617,11 +613,8 @@ class dialog_select_UI(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID == 6 or controlID == 3:
-            self.selected_id = self.img_list.getSelectedItem().getLabel2()
-            self.lat = float(self.img_list.getSelectedItem().getProperty("lat"))
-            self.lon = float(self.img_list.getSelectedItem().getProperty("lon"))
-            xbmc.log('# GUI selected lat: %s' % self.selected_id)
-            self.zoom_level = 12
+            self.lat = self.list.getSelectedItem().getProperty("lat")
+            self.lon = self.list.getSelectedItem().getProperty("lon")
             self.close()
 
     def onFocus(self, controlID):
@@ -644,7 +637,6 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         self.itemlist = []
 
     def onInit(self):
-        LFM = LastFM()
         self.setControls()
 
     def setControls(self):
