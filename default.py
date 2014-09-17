@@ -478,7 +478,7 @@ class GUI(xbmcgui.WindowXML):
                 venue = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 venueid = LFM.GetVenueID(venue)
-                itemlist, self.PinString = LFM.GetEvents(artist)
+                itemlist, self.PinString = LFM.GetVenueEvents(venueid)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
