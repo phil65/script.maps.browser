@@ -100,7 +100,7 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     from base64 import b64encode
     xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = b64encode(custom_url).replace("/", "XXXX")
-    path = Addon_Data_Path + "\\&" + filename + ".txt"
+    path = Addon_Data_Path + "\\" + filename + ".txt"
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
