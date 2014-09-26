@@ -7,6 +7,7 @@
         <posy>0</posy>
         <system>1</system>
     </coordinates>
+    <zorder>2</zorder>
     <controls>
         <include>DialogBackFade</include>
         <control type="group">
@@ -276,6 +277,16 @@
                     <onleft>1000</onleft>
                     <onright>1000</onright>
                     <usecontrolcoords>true</usecontrolcoords>
+                    <control type="button" id="1001">
+                        <width>330</width>
+                        <height>45</height>
+                        <textoffsetx>20</textoffsetx>
+                        <align>center</align>
+                        <font>Font_Reg28</font>
+                        <textcolor>grey2</textcolor>
+                        <label>Show artist tour on map</label>
+                        <focusedcolor>white3</focusedcolor>
+                    </control>
                     <control type="button" id="1002">
                         <width>330</width>
                         <height>45</height>
@@ -285,6 +296,9 @@
                         <label>Venue schedule</label>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white3</focusedcolor>
+                        <onclick>Dialog.Close(1165)</onclick>
+                        <onclick>RunScript(script.maps.browser,id=$INFO[Window(home).Property(venue_id)],silent=False)</onclick>
+                        <onclick>ActivateWindow(1139)</onclick>
                     </control>
                     <control type="button" id="1003">
                         <width>330</width>
