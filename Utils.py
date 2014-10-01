@@ -30,7 +30,8 @@ originShift = 2 * math.pi * 6378137 / 2.0
 
 def LatLonToMeters(lat, lon):
         "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
-
+        if not lon:
+            return None
         mx = lon * originShift / 180.0
         my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
         my = my * originShift / 180.0
@@ -90,6 +91,7 @@ def GetStringFromUrl(encurl):
             data = response.read()
             return data
         except:
+            Notify("Exception in GetStringFromUrl()")
             log("GetStringFromURL: could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
@@ -104,15 +106,13 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return results
     else:
         url = base_url + custom_url
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         save_to_file(results, filename, Addon_Data_Path)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return results
+    xbmc.executebuiltin("Dialog.Close(busydialog)")
+    return results
 
 
 def log(txt):
@@ -222,6 +222,7 @@ def GetLocationCoordinates():
         lon = results["longitude"]
         return lat, lon
     except Exception as e:
+        Notify("Exception in GetLocationCoordinates()")
         log(e)
         return "", ""
 
@@ -254,7 +255,7 @@ def read_from_file(path=""):
         try:
             return fc
         except:
-            log("error when loading file")
+            Notify("Exception in read_from_file()")
             log(fc)
             return []
     else:

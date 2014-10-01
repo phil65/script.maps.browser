@@ -585,6 +585,7 @@ class GUI(xbmcgui.WindowXML):
                 self.zoom_level = 12
                 return (first_hit["lat"], first_hit["lng"])
         except Exception as e:
+            log("Exception in GetGeoCodes")
             log(e)
             return (None, None)
 
@@ -709,7 +710,19 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             LFM = LastFM()
             self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
         elif controlID == 1001:
-            pass
+            self.close()
+            log("show arist events on map")
+            gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
+            artist = "65daysofstatic"
+            LFM = LastFM()
+            log("search for artist")
+            itemlist, self.PinString = LFM.GetEvents(artist)
+   #         prettyprint(itemlist)
+            gui.c_places_list.reset()
+            gui.GetGoogleMapURLs()
+            gui.c_places_list.addItems(items=itemlist)
+
+
         elif controlID == 1002:
             pass
 

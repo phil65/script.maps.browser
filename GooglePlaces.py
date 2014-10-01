@@ -145,7 +145,7 @@ class GooglePlaces():
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, googlemaps_key_places)
                 except:
                     photo = ""
-                prettyprint(place)
+       #         prettyprint(place)
                 if "vicinity" in place:
                     description = place['vicinity']
                 else:

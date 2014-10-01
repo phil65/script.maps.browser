@@ -143,14 +143,14 @@ class LastFM():
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.getevents&venue=%s' % (venueid)
         results = Get_JSON_response(base_url, url)
-        prettyprint(results)
+    #    prettyprint(results)
         return self.CreateVenueList(results)
 
     def GetVenueID(self, venuename=""):
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(base_url, url)
-        prettyprint(results["results"]["venuematches"])
+  #     prettyprint(results["results"]["venuematches"])
         if len(results["results"]["venuematches"]) > 0:
             return results["results"]["venuematches"]["venue"][0]["id"]
         else:

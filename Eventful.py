@@ -18,7 +18,7 @@ class Eventful():
         url = "http://api.eventful.com/json/categories/list?app_key=%s" % (eventful_key)
         results = Get_JSON_response("", url, 7)
         modeselect = []
-        prettyprint(results)
+   #     prettyprint(results)
         modeselect.append("All Categories")
         for item in results["category"]:
             modeselect.append(cleanText(item["name"]))
@@ -56,7 +56,7 @@ class Eventful():
         url = '&id=%s' % (str(event_id))
         log(url)
         results = Get_JSON_response(base_url, url)
-        prettyprint(results)
+   #     prettyprint(results)
         return self.HandleEventfulEventResult(results['venue'])
 
     def HandleEventfulEventResult(self, results):
