@@ -708,6 +708,10 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             self.close()
             LFM = LastFM()
             self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
+        elif controlID == 1001:
+            pass
+        elif controlID == 1002:
+            pass
 
     def onFocus(self, controlID):
         pass

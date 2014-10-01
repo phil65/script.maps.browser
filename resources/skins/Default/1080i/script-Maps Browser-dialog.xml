@@ -296,9 +296,6 @@
                         <label>Venue schedule</label>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white3</focusedcolor>
-                        <onclick>Dialog.Close(1165)</onclick>
-                        <onclick>RunScript(script.maps.browser,id=$INFO[Window(home).Property(venue_id)],silent=False)</onclick>
-                        <onclick>ActivateWindow(1139)</onclick>
                     </control>
                     <control type="button" id="1003">
                         <width>330</width>
