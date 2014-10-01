@@ -30,6 +30,8 @@ from Eventful import Eventful
 from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
+from Search_Select_Dialog import Search_Select_Dialog
+from VenueInfoDialog import VenueInfoDialog
 from math import sin, cos, radians, pow
 if sys.version_info < (2, 7):
     import simplejson
@@ -85,7 +87,7 @@ class GUI(xbmcgui.WindowXML):
     ACTION_PLAY = [79]
     ACTION_SELECT_ITEM = [7]
 
-    def __init__(self, skin_file, addon_path):
+    def __init__(self, skin_file, addon_path, *args, **kwargs):
         log('__init__')
 
     def onInit(self, startGUI=True):
@@ -569,7 +571,7 @@ class GUI(xbmcgui.WindowXML):
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = dialog_select_UI('DialogSelect.xml', __addonpath__, listing=places_list)
+                    w = Search_Select_Dialog('DialogSelect.xml', __addonpath__, listing=places_list)
                     w.doModal()
                     if w.lat is not "":
                         self.zoom_level = 12
@@ -588,147 +590,6 @@ class GUI(xbmcgui.WindowXML):
             log("Exception in GetGeoCodes")
             log(e)
             return (None, None)
-
-
-class dialog_select_UI(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.items = kwargs.get('listing')
-        self.lon = ''
-        self.lat = ''
-
-    def onInit(self):
-        self.list = self.getControl(6)
-        self.list.controlLeft(self.list)
-        self.list.controlRight(self.list)
-        self.getControl(3).setVisible(False)
-        self.getControl(5).setVisible(False)
-        self.getControl(1).setLabel(__language__(32015))
-        self.list.addItems(self.items)
-        self.setFocus(self.list)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, controlID):
-        if controlID == 6 or controlID == 3:
-            self.lat = self.list.getSelectedItem().getProperty("lat")
-            self.lon = self.list.getSelectedItem().getProperty("lon")
-            self.close()
-
-    def onFocus(self, controlID):
-        pass
-
-
-class EventInfoDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_TEXT_FIELD = 200
-    C_TITLE = 201
-    C_BIG_IMAGE = 211
-    C_RIGHT_IMAGE = 210
-    C_ARTIST_LIST = 500
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.item = kwargs.get('item')
-        self.prop_list = simplejson.loads(self.item)
-        self.PinString = ""
-        self.itemlist = []
-
-    def onInit(self):
-        self.setControls()
-
-    def setControls(self):
-        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
-     #   self.getControl(202).setLabel(self.prop_list["date"])
-        self.getControl(self.C_TITLE).setLabel(self.prop_list["name"])
-        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
-    #    self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
-    #    self.getControl(204).setLabel(self.prop_list["street"])
-    #    self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
-    #    self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, controlID):
-        if controlID == self.C_ARTIST_LIST:
-            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
-            self.close()
-            LFM = LastFM()
-            self.itemlist, self.PinString = LFM.GetEvents(artist)
-
-    def onFocus(self, controlID):
-        pass
-
-
-class VenueInfoDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_TEXT_FIELD = 200
-    C_TITLE = 201
-    C_BIG_IMAGE = 211
-    C_RIGHT_IMAGE = 210
-    C_ARTIST_LIST = 500
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.venueid = kwargs.get('venueid')
-        self.prop_list = []
-        self.PinString = ""
-        self.GetEventsPinString = ""
-        self.itemlist = []
-        self.GetEventsitemlist = []
-
-    def onInit(self):
-        LFM = LastFM()
-        self.itemlist, PinString = LFM.GetVenueEvents(self.venueid)
-        self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
-        self.setControls()
-
-    def setControls(self):
-        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
-        self.getControl(202).setLabel(self.prop_list["date"])
-        self.getControl(203).setLabel(self.prop_list["name"])
-        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
-        self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
-        self.getControl(204).setLabel(self.prop_list["street"])
-        self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
-        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, controlID):
-        if controlID == self.C_ARTIST_LIST:
-            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
-            self.close()
-            LFM = LastFM()
-            self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
-        elif controlID == 1001:
-            self.close()
-            log("show arist events on map")
-            gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
-            artist = "65daysofstatic"
-            LFM = LastFM()
-            log("search for artist")
-            itemlist, self.PinString = LFM.GetEvents(artist)
-   #         prettyprint(itemlist)
-            gui.c_places_list.reset()
-            gui.GetGoogleMapURLs()
-            gui.c_places_list.addItems(items=itemlist)
-
-
-        elif controlID == 1002:
-            pass
-
-    def onFocus(self, controlID):
-        pass
-
 
 if __name__ == '__main__':
     startGUI = True
