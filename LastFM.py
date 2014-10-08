@@ -118,7 +118,7 @@ class LastFM():
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
-        return self.CreateVenueList(results)
+        return results
 
     def SelectCategory(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -143,8 +143,7 @@ class LastFM():
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.getevents&venue=%s' % (venueid)
         results = Get_JSON_response(base_url, url)
-    #    prettyprint(results)
-        return self.CreateVenueList(results)
+        return results
 
     def GetVenueID(self, venuename=""):
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)

@@ -130,10 +130,12 @@ class GUI(xbmcgui.WindowXML):
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, "", True)
+                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, "", True)
+                    itemlist, self.PinString = LFM.CreateVenueList(results)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius)
+                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius)
+                    itemlist, self.PinString = LFM.CreateVenueList(results)
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('prefix='):
@@ -429,7 +431,8 @@ class GUI(xbmcgui.WindowXML):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
+                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
+                    itemlist, self.PinString = LFM.CreateVenueList(results)
             elif modeselect[provider_index] == __language__(34030):
                 MQ = MapQuest()
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
@@ -437,7 +440,8 @@ class GUI(xbmcgui.WindowXML):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
-                    itemlist, self.PinString = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
+                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
+                    itemlist, self.PinString = LFM.CreateVenueList(results)
             elif modeselect[provider_index] == __language__(34027):
                 folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
@@ -481,7 +485,8 @@ class GUI(xbmcgui.WindowXML):
                 venue = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 venueid = LFM.GetVenueID(venue)
-                itemlist, self.PinString = LFM.GetVenueEvents(venueid)
+                results = LFM.GetVenueEvents(venueid)
+                itemlist, self.PinString = LFM.CreateVenueList(results)
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []

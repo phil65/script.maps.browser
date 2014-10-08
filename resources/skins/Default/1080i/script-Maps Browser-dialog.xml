@@ -168,7 +168,7 @@
                                 <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                             </control>
                             <control type="label">
-                                <posx>690</posx>
+                                <posx>390</posx>
                                 <width>300</width>
                                 <height>50</height>
                                 <textoffsetx>15</textoffsetx>
@@ -211,7 +211,7 @@
                                     <scroll>true</scroll>
                                 </control>
                                 <control type="label">
-                                    <posx>690</posx>
+                                    <posx>390</posx>
                                     <width>300</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>
@@ -245,7 +245,7 @@
                                     <scroll>true</scroll>
                                 </control>
                                 <control type="label">
-                                    <posx>690</posx>
+                                    <posx>390</posx>
                                     <width>300</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>

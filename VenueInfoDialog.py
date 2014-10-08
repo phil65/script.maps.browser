@@ -23,7 +23,8 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         LFM = LastFM()
-        self.itemlist, PinString = LFM.GetVenueEvents(self.venueid)
+        results = LFM.GetVenueEvents(self.venueid)
+        self.itemlist, PinString = LFM.CreateVenueList(results)
         self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
         self.setControls()
 
