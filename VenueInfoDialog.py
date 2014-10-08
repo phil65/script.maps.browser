@@ -24,6 +24,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
     def onInit(self):
         LFM = LastFM()
         results = LFM.GetVenueEvents(self.venueid)
+        prettyprint(results)
         self.itemlist, PinString = LFM.CreateVenueList(results)
         self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
         self.setControls()
@@ -47,7 +48,8 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
-            self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
+            results = LFM.GetEvents(artist)
+            self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
         elif controlID == 1001:
             self.close()
             log("show artist events on map")

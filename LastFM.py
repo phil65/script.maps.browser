@@ -104,7 +104,7 @@ class LastFM():
             url = '&method=artist.getevents&autocorrect=1&artist=%s' % (artist)
         base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
-        return self.CreateVenueList(results)
+        return results
 
     def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
         if festivalsonly:

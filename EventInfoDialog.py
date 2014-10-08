@@ -45,7 +45,8 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
-            self.itemlist, self.PinString = LFM.GetEvents(artist)
+            results = LFM.GetEvents(artist)
+            self.itemlist, self.PinString = LFM.CreateVenueList(results)
 
     def onFocus(self, controlID):
         pass
