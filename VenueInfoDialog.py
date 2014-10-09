@@ -7,10 +7,6 @@ googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 
 class VenueInfoDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_TEXT_FIELD = 200
-    C_TITLE = 201
-    C_BIG_IMAGE = 211
-    C_RIGHT_IMAGE = 210
     C_ARTIST_LIST = 500
 
     def __init__(self, *args, **kwargs):
@@ -30,8 +26,13 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         self.event = LFM.GetEventInfo(self.eventid)["event"]
         prettyprint(self.event)
         results = LFM.GetVenueEvents(self.event["venue"]["id"])
-        prettyprint(results)
         self.itemlist, PinString = LFM.CreateVenueList(results)
+        if isinstance(self.event['artists']['artist'], list):
+            artists = ' / '.join(self.event['artists']['artist'])
+        else:
+            artists = self.event['artists']['artist']
+        website = ""
+        description = "[B]Artists:[/B][CR]%s[CR][CR]%s" % (artists, cleanText(self.event["description"]))
         if self.event['venue']['location']['geo:point']['geo:long']:
             lon = self.event['venue']['location']['geo:point']['geo:long']
             lat = self.event['venue']['location']['geo:point']['geo:lat']
@@ -42,19 +43,19 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             search_string = self.event['venue']['location']['city'] + " " + self.event['venue']['name']
         else:
             search_string = self.event['venue']['name']
+        if "tags" in self.event:
+            tags = " / ".join(self.event['tags']['tag'])
         self.googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
-        self.setControls()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-
-    def setControls(self):
-        self.getControl(self.C_TEXT_FIELD).setText(cleanText(self.event["description"]))
+        self.getControl(200).setText(description)
         self.getControl(202).setLabel(self.event['startDate'][:-8])
         self.getControl(203).setLabel(self.event["venue"]["name"])
-        self.getControl(self.C_BIG_IMAGE).setImage(self.event['venue']['image'][-1]['#text'])
-        self.getControl(self.C_RIGHT_IMAGE).setImage(self.googlemap)
+        self.getControl(210).setImage(self.event['venue']['image'][-1]['#text'])
+        self.getControl(212).setImage(self.event['image'][-1]['#text'])
+        self.getControl(211).setImage(self.googlemap)
         self.getControl(204).setLabel(self.event['venue']['location']['street'])
-        self.getControl(self.C_TITLE).setLabel(self.event["title"])
+        self.getControl(201).setLabel(self.event["title"])
         self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

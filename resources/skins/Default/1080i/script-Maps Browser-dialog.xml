@@ -30,126 +30,134 @@
                 <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
                 <effect type="fade" start="100" end="0" time="240" />
             </animation>
-        <control type="group">
-            <control type="button" id="5055">
-                <include>HiddenObject</include>
-                <onfocus condition="Substring(Window(home).Property(WidgetType),concert)">SetFocus(5080)</onfocus>
-            </control>
-            <control type="image">
-                <posx>-100</posx>
-                <posy>-350</posy>
-                <width>1850</width>
-                <height>752</height>
-                <texture border="50">featured/panel_featured_shadow.png</texture>
-                <animation effect="fade" start="100" end="80" time="2000" pulse="true" condition="true">conditional</animation>
-                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
-                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
-                <include>Animation_VisibleChange400</include>
-            </control>
-            <control type="image">
-                <posx>-100</posx>
-                <posy>-350</posy>
-                <width>1850</width>
-                <height>752</height>
-                <texture border="50">featured/panel_featured.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>
-            <control type="group" id="54000">
-                <posx>-8</posx>
-                <posy>-346</posy>
-                <control type="image" id="211">
-                    <posx>-68</posx>
-                    <posy>31</posy>
-                    <width>690</width>
-                    <height>690</height>
-                    <aspectratio>keep</aspectratio>
-                </control>
-                <control type="image" id="210">
-                    <posx>1370</posx>
-                    <posy>311</posy>
-                    <width>350</width>
-                    <height>350</height>
-                    <aspectratio>keep</aspectratio>
+            <control type="group">
+                <control type="button" id="5055">
+                    <include>HiddenObject</include>
+                    <onfocus condition="Substring(Window(home).Property(WidgetType),concert)">SetFocus(5080)</onfocus>
                 </control>
                 <control type="image">
-                    <posx>452</posx>
-                    <posy>51</posy>
-                    <width>170</width>
-                    <height>170</height>
-                    <aspectratio align="right" aligny="top">keep</aspectratio>
-                    <texture background="true">$INFO[Window(home).Property(Venue_Image)]</texture>
-                </control>
-                <control type="grouplist">
-                    <posx>630</posx>
-                    <posy>30</posy>
-                    <orientation>vertical</orientation>
-                    <control type="label" id="201">
-                        <width>1251</width>
-                        <height>60</height>
-                        <textoffsetx>15</textoffsetx>
-                        <label>$INFO[Window(home).Property(EventName)]</label>
-                        <font>Font_MainClassic3</font>
-                    </control>
-                    <control type="label" id="202">
-                        <width>1251</width>
-                        <height>30</height>
-                        <textoffsetx>15</textoffsetx>
-                        <label>$INFO[Window(home).Property(Label2)]</label>
-                        <font>Font_Reg30_2</font>
-                        <textcolor>white2</textcolor>
-                    </control>
-                    <control type="label" id="203">
-                        <width>1251</width>
-                        <height>30</height>
-                        <textoffsetx>15</textoffsetx>
-                        <label>$INFO[Window(home).Property(Name)]</label>
-                        <font>Font_Reg30_2</font>
-                        <textcolor>grey2</textcolor>
-                    </control>
-                    <control type="label" id="204">
-                        <width>1251</width>
-                        <height>30</height>
-                        <textoffsetx>15</textoffsetx>
-                        <label>$INFO[Window(home).Property(City)]$INFO[Window(home).Property(Street), - ]$INFO[Window(home).Property(Country), - ]</label>
-                        <font>Font_Reg30_2</font>
-                        <textcolor>grey2</textcolor>
-                    </control>
-                </control>
-                 <control type="textbox" id="200">
-                    <posx>645</posx>
-                    <posy>315</posy>
-                    <width>710</width>
-                    <height>338</height>
-                    <aligny>top</aligny>
-                    <font>Font_Reg30_2</font>
-                    <textcolor>white6</textcolor>
-                    <pagecontrol>1004</pagecontrol>
-                    <autoscroll delay="5000" time="AutoScrollTime" repeat="8000">Skin.HasSetting(AutoScroll)</autoscroll>
-                    <visible>!Control.IsVisible(500)</visible>
+                    <posx>-100</posx>
+                    <posy>-350</posy>
+                    <width>1850</width>
+                    <height>752</height>
+                    <texture border="50">featured/panel_featured_shadow.png</texture>
+                    <animation effect="fade" start="100" end="80" time="2000" pulse="true" condition="true">conditional</animation>
+                    <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                    <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                    <include>Animation_VisibleChange400</include>
                 </control>
                 <control type="image">
-                    <posx>652</posx>
-                    <posy>670</posy>
-                    <width>1040</width>
-                    <height>1</height>
-                    <texture>views/lowlistpanel_line.png</texture>
+                    <posx>-100</posx>
+                    <posy>-350</posy>
+                    <width>1850</width>
+                    <height>752</height>
+                    <texture border="50">featured/panel_featured.png</texture>
+                    <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
                 </control>
-                   <control type="list" id="500">
+                <control type="group" id="54000">
+                    <posx>-8</posx>
+                    <posy>-346</posy>
+                    <control type="image" id="212">
+                        <posx>624</posx>
+                        <posy>23</posy>
+                        <width>1110</width>
+                        <height>698</height>
+                        <aspectratio>scale</aspectratio>
+                        <colordiffuse>44FFFFFF</colordiffuse>
+                    </control>
+                    <control type="image" id="211">
+                        <posx>-68</posx>
+                        <posy>23</posy>
+                        <width>690</width>
+                        <height>698</height>
+                        <aspectratio>scale</aspectratio>
+                    </control>
+                    <control type="image" id="210">
+                        <posx>1420</posx>
+                        <posy>35</posy>
+                        <width>297</width>
+                        <height>200</height>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                    <control type="grouplist">
+                        <posx>630</posx>
+                        <posy>30</posy>
+                        <orientation>vertical</orientation>
+                        <control type="label" id="201">
+                            <width>1251</width>
+                            <height>60</height>
+                            <textoffsetx>15</textoffsetx>
+                            <label>$INFO[Window(home).Property(EventName)]</label>
+                            <font>Font_MainClassic3</font>
+                        </control>
+                        <control type="label" id="202">
+                            <width>1251</width>
+                            <height>30</height>
+                            <textoffsetx>15</textoffsetx>
+                            <label>$INFO[Window(home).Property(Label2)]</label>
+                            <font>Font_Reg30_2</font>
+                            <textcolor>white2</textcolor>
+                        </control>
+                        <control type="label" id="203">
+                            <width>1251</width>
+                            <height>30</height>
+                            <textoffsetx>15</textoffsetx>
+                            <label>$INFO[Window(home).Property(Name)]</label>
+                            <font>Font_Reg30_2</font>
+                            <textcolor>grey2</textcolor>
+                        </control>
+                        <control type="label" id="204">
+                            <width>1251</width>
+                            <height>30</height>
+                            <textoffsetx>15</textoffsetx>
+                            <label>$INFO[Window(home).Property(City)]$INFO[Window(home).Property(Street), - ]$INFO[Window(home).Property(Country), - ]</label>
+                            <font>Font_Reg30_2</font>
+                            <textcolor>grey2</textcolor>
+                        </control>
+                    </control>
+                    <control type="textbox" id="200">
+                        <posx>645</posx>
+                        <posy>315</posy>
+                        <width>710</width>
+                        <height>338</height>
+                        <aligny>top</aligny>
+                        <font>Font_Reg30_2</font>
+                        <textcolor>white6</textcolor>
+                        <pagecontrol>1004</pagecontrol>
+                        <autoscroll delay="5000" time="AutoScrollTime" repeat="8000">Skin.HasSetting(AutoScroll)</autoscroll>
+                        <visible>!Control.IsVisible(500)</visible>
+                    </control>
+                    <control type="image">
+                        <posx>652</posx>
+                        <posy>670</posy>
+                        <width>1040</width>
+                        <height>1</height>
+                        <texture>views/lowlistpanel_line.png</texture>
+                    </control>
+                    <control type="image">
+                        <posx>1370</posx>
+                        <posy>311</posy>
+                        <width>350</width>
+                        <height>350</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>$INFO[Container(500).ListItem.Property(artist_image)]</texture>
+                    </control>
+                    <control type="list" id="500">
                         <posx>620</posx>
                         <posy>320</posy>
-                        <width>1290</width>
+                        <width>745</width>
                         <height>350</height>
-                        <onleft>500</onleft>
-                        <onright>500</onright>
+                        <onleft>1000</onleft>
+                        <onright>1000</onright>
                         <onup>1000</onup>
                         <ondown>1000</ondown>
                         <visible>ControlGroup(1000).HasFocus(1002)</visible>
                         <pagecontrol>61</pagecontrol>
                         <scrolltime>200</scrolltime>
                         <orientation>vertical</orientation>
-                        <itemlayout height="50" width="710">
+                        <itemlayout height="50" width="745">
                             <control type="image">
-                                <width>710</width>
+                                <width>745</width>
                                 <height>50</height>
                                 <texture>button-nofocus.png</texture>
                             </control>
@@ -158,7 +166,7 @@
                                 <height>50</height>
                                 <textoffsetx>15</textoffsetx>
                                 <textcolor>grey2</textcolor>
-                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                <label>$INFO[ListItem.Property(artists)]</label>
                                 <visible>IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                             </control>
                             <control type="label">
@@ -166,11 +174,11 @@
                                 <height>50</height>
                                 <textoffsetx>15</textoffsetx>
                                 <textcolor>$VAR[FontColorVar]</textcolor>
-                                    <label>$INFO[ListItem.Property(artists)]</label>
+                                <label>$INFO[ListItem.Property(artists)]</label>
                                 <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                             </control>
                             <control type="label">
-                                <posx>390</posx>
+                                <posx>452</posx>
                                 <width>300</width>
                                 <height>50</height>
                                 <textoffsetx>15</textoffsetx>
@@ -187,11 +195,11 @@
                                 <visible>IntegerGreaterThan(ListItem.Property(PlayCount),0)</visible>
                             </control>
                         </itemlayout>
-                        <focusedlayout height="50" width="710">
+                        <focusedlayout height="50" width="745">
                             <control type="group">
                                 <visible>!Control.HasFocus(500)</visible>
                                 <control type="image">
-                                    <width>710</width>
+                                    <width>745</width>
                                     <height>50</height>
                                     <texture>button-nofocus.png</texture>
                                 </control>
@@ -213,7 +221,7 @@
                                     <scroll>true</scroll>
                                 </control>
                                 <control type="label">
-                                    <posx>390</posx>
+                                    <posx>452</posx>
                                     <width>300</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>
@@ -225,9 +233,9 @@
                             <control type="group">
                                 <visible>Control.HasFocus(500)</visible>
                                 <control type="image">
-                                    <width>710</width>
+                                    <width>745</width>
                                     <height>50</height>
-                <texture colordiffuse="$VAR[FocusTextureColorVar]">views/tripanel/listselect_fo.png</texture>
+                                    <texture colordiffuse="$VAR[FocusTextureColorVar]">views/tripanel/listselect_fo.png</texture>
                                 </control>
                                 <control type="label">
                                     <width>640</width>
@@ -247,7 +255,7 @@
                                     <scroll>true</scroll>
                                 </control>
                                 <control type="label">
-                                    <posx>390</posx>
+                                    <posx>452</posx>
                                     <width>300</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>
@@ -266,69 +274,69 @@
                             </control>
                         </focusedlayout>
                     </control>
-
-                <control type="grouplist" id="1000">
-                    <posx>627</posx>
-                    <posy>258</posy>
-                    <width>1373</width>
-                    <onleft>5030</onleft>
-                    <orientation>horizontal</orientation>
-                    <onright>5030</onright>
-                    <onup>500</onup>
-                    <ondown>500</ondown>
-                    <onleft>1000</onleft>
-                    <onright>1000</onright>
-                    <usecontrolcoords>true</usecontrolcoords>
-                    <control type="button" id="1001">
-                        <width>330</width>
-                        <height>45</height>
-                        <textoffsetx>20</textoffsetx>
-                        <align>center</align>
-                        <font>Font_Reg28</font>
-                        <textcolor>grey2</textcolor>
-                        <label>Show artist tour on map</label>
-                        <focusedcolor>white3</focusedcolor>
-                    </control>
-                    <control type="button" id="1002">
-                        <width>330</width>
-                        <height>45</height>
-                        <textoffsetx>20</textoffsetx>
-                        <align>center</align>
-                        <font>Font_Reg28</font>
-                        <label>Venue schedule</label>
-                        <textcolor>grey2</textcolor>
-                        <focusedcolor>white3</focusedcolor>
-                    </control>
-                    <control type="button" id="1003">
-                        <width>330</width>
-                        <height>45</height>
-                        <textoffsetx>20</textoffsetx>
-                        <align>center</align>
-                        <label>$LOCALIZE[31927]</label>
-                        <textcolor>grey2</textcolor>
-                        <font>Font_Reg28</font>
-                        <focusedcolor>white3</focusedcolor>
-                        <onclick>SetProperty(listcontent,$INFO[Window(home).Property(Headliner)],home)</onclick>
-                        <onclick>ActivateWindow(1168)</onclick>
-                    </control>
-                    <control type="spincontrol" id="1004">
-                        <posx>0</posx>
-                        <posy>-20</posy>
-                        <width>50</width>
-                        <height>88</height>
-                    </control>
+                    <control type="grouplist" id="1000">
+                        <posx>627</posx>
+                        <posy>258</posy>
+                        <width>1373</width>
+                        <onleft>5030</onleft>
+                        <orientation>horizontal</orientation>
+                        <onright>5030</onright>
+                        <onup>500</onup>
+                        <ondown>500</ondown>
+                        <onleft>1000</onleft>
+                        <onright>1000</onright>
+                        <usecontrolcoords>true</usecontrolcoords>
+                        <control type="button" id="1001">
+                            <width>330</width>
+                            <height>45</height>
+                            <textoffsetx>20</textoffsetx>
+                            <align>center</align>
+                            <font>Font_Reg28</font>
+                            <textcolor>grey2</textcolor>
+                            <label>Show artist tour on map</label>
+                            <focusedcolor>white3</focusedcolor>
+                        </control>
+                        <control type="button" id="1002">
+                            <width>330</width>
+                            <height>45</height>
+                            <textoffsetx>20</textoffsetx>
+                            <align>center</align>
+                            <font>Font_Reg28</font>
+                            <label>Venue schedule</label>
+                            <textcolor>grey2</textcolor>
+                            <focusedcolor>white3</focusedcolor>
+                        </control>
+                        <control type="button" id="1003">
+                            <width>330</width>
+                            <height>45</height>
+                            <textoffsetx>20</textoffsetx>
+                            <align>center</align>
+                            <label>$LOCALIZE[31927]</label>
+                            <textcolor>grey2</textcolor>
+                            <font>Font_Reg28</font>
+                            <focusedcolor>white3</focusedcolor>
+                            <onclick>SetProperty(listcontent,$INFO[Window(home).Property(Headliner)],home)</onclick>
+                            <onclick>ActivateWindow(1168)</onclick>
+                        </control>
+                        <!--
+                        <control type="spincontrol" id="1004">
+                            <posx>0</posx>
+                            <posy>-20</posy>
+                            <width>50</width>
+                            <height>88</height>
+                        </control>--></control>
+                </control>
+                <control type="image">
+                    <posx>-79</posx>
+                    <posy>-329</posy>
+                    <width>1808</width>
+                    <height>710</height>
+                    <texture border="50">featured/panel_featured_overlay.png</texture>
+                    <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
                 </control>
             </control>
-            <control type="image">
-                <posx>-79</posx>
-                <posy>-329</posy>
-                <width>1808</width>
-                <height>710</height>
-                <texture border="50">featured/panel_featured_overlay.png</texture>
-                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
-            </control>
-        </control>
-            <!--    <control type="label">
+            <!--
+            <control type="label">
                 <posx>417</posx>
                 <posy>282</posy>
                 <width>575</width>
@@ -347,7 +355,6 @@
                 <font>Font_Reg22_Caps</font>
                 <shadowcolor>black</shadowcolor>
                 <label>$INFO[Window(home).Property(Homepage),Online Info: [LOWERCASE],[/LOWERCASE]</label>
-            </control> -->
-        </control>
+            </control>--></control>
     </controls>
 </window>
