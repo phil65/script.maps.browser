@@ -316,8 +316,11 @@ class GUI(xbmcgui.WindowXML):
             if not selecteditem.getProperty("index") == getWindowProperty(self.window, 'index'):
                 setWindowProperty(self.window, 'index', selecteditem.getProperty("index"))
             else:
+                event_id = selecteditem.getProperty("event_id")
                 venue_id = selecteditem.getProperty("venue_id")
-                if venue_id is not "":
+                if event_id is not "":
+                    dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=event_id)
+                elif venue_id is not "":
                     dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
                 else:
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=selecteditem.getProperty("item_info"))
@@ -609,6 +612,11 @@ if __name__ == '__main__':
             startGUI = False
             venueid = (param[8:])
             dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venueid)
+            dialog.doModal()
+        if param.startswith('eventid='):
+            startGUI = False
+            eventid = (param[8:])
+            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=eventid)
             dialog.doModal()
     if startGUI:
         gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
