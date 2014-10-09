@@ -22,11 +22,22 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
     def onInit(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         LFM = LastFM()
-        # prettyprint(results)
         self.event = LFM.GetEventInfo(self.eventid)["event"]
-        prettyprint(self.event)
         results = LFM.GetVenueEvents(self.event["venue"]["id"])
         self.itemlist, PinString = LFM.CreateVenueList(results)
+        self.setLabels()
+        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def updateLabels(self, eventid):
+        self.event = LFM.GetEventInfo(eventid)["event"]
+        self.setLabels()
+
+    def setLabels(self):
         if isinstance(self.event['artists']['artist'], list):
             artists = ' / '.join(self.event['artists']['artist'])
         else:
@@ -54,20 +65,17 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         self.getControl(211).setImage(self.googlemap)
         self.getControl(204).setLabel(self.event['venue']['location']['street'])
         self.getControl(201).setLabel(self.event["title"])
-        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
 
     def onClick(self, controlID):
         if controlID == self.C_ARTIST_LIST:
-            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
+            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("headliner")
             self.close()
-            LFM = LastFM()
-            results = LFM.GetArtistEvents(artist)
-            self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
+            if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
+                LFM = LastFM()
+                results = LFM.GetArtistEvents(artist)
+                self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
+            else:
+                xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (artist))
         elif controlID == 1001:
             self.close()
             log("show artist events on map")
