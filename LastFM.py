@@ -85,8 +85,10 @@ class LastFM():
                         events_list.append(prop_list)
                     else:
                         events_list.append(item)
-                    PinString = PinString + "&markers=color:blue%7Clabel:" + \
-                        chr(letter) + "%7C" + lat + "," + lon
+                    if count < 26:
+                        PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                    else:
+                        PinString = PinString + "&markers=color:blue%7C" + lat + "," + lon
                     count += 1
                     letter += 1
             else:
