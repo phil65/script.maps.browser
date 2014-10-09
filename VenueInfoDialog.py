@@ -50,7 +50,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
-            results = LFM.GetEvents(artist)
+            results = LFM.GetArtistEvents(artist)
             self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
         elif controlID == 1001:
             self.close()
@@ -59,11 +59,11 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             # artist = "65daysofstatic"
             # LFM = LastFM()
             # log("search for artist")
-            # itemlist, self.PinString = LFM.GetEvents(artist)
+            # itemlist, self.PinString = LFM.GetArtistEvents(artist)
             # gui.c_places_list.reset()
             # gui.GetGoogleMapURLs()
             # gui.c_places_list.addItems(items=itemlist)
-            xbmc.executebuiltin("RunScript(script.maps.browser,artist=65daysofstatic)")
+            xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % ("65daysofstatic"))
 
 
         elif controlID == 1002:

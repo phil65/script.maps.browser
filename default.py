@@ -124,7 +124,7 @@ class GUI(xbmcgui.WindowXML):
             elif param.startswith('artist='):
                 artist = (param[7:])
                 LFM = LastFM()
-                results = LFM.GetEvents(artist)
+                results = LFM.GetArtistEvents(artist)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
             elif param.startswith('list='):
                 listtype = (param[5:])
@@ -481,7 +481,7 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34023):
                 artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
-                results = LFM.GetEvents(artist)
+                results = LFM.GetArtistEvents(artist)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
             elif modeselect[provider_index] == __language__(34033):
                 venue = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)

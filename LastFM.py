@@ -16,6 +16,7 @@ __addonpath__ = __addon__.getAddonInfo('path')
 
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
+base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
 
 
 class LastFM():
@@ -97,15 +98,14 @@ class LastFM():
             prettyprint(results)
         return events_list, PinString
 
-    def GetEvents(self, artist, pastevents=False):
+    def GetArtistEvents(self, artist, pastevents=False):
         artist = urllib.quote(artist)
         if pastevents:
      #       url = 'method=artist.getpastevents&mbid=%s' % (id)
-            url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1' % (artist)
+            url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1&limit=26' % (artist)
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
-            url = '&method=artist.getevents&autocorrect=1&artist=%s' % (artist)
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
+            url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (artist)
         results = Get_JSON_response(base_url, url)
         return results
 
@@ -114,18 +114,16 @@ class LastFM():
             festivalsonly = "1"
         else:
             festivalsonly = "0"
-        url = '&method=geo.getevents&festivalsonly=%s&page=1' % (festivalsonly)
+        url = '&method=geo.getevents&festivalsonly=%s&page=1&limit=26' % (festivalsonly)
         if (tag is not "") and (tag is not None):
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&limit=26' % (lastfm_apikey)
         results = Get_JSON_response(base_url, url)
         return results
 
     def SelectCategory(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=tag.getTopTags'
         results = Get_JSON_response(base_url, url, 7)
         modeselect = []
@@ -143,13 +141,16 @@ class LastFM():
             return None
 
     def GetVenueEvents(self, venueid=""):
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.getevents&venue=%s' % (venueid)
         results = Get_JSON_response(base_url, url)
         return results
 
+    def GetEventInfo(self, eventid=""):
+        url = '&method=event.getinfo&event=%s' % (eventid)
+        results = Get_JSON_response(base_url, url)
+        return results
+
     def GetVenueID(self, venuename=""):
-        base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(base_url, url)
   #     prettyprint(results["results"]["venuematches"])
