@@ -77,7 +77,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             # gui.c_places_list.reset()
             # gui.GetGoogleMapURLs()
             # gui.c_places_list.addItems(items=itemlist)
-            xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % ("65daysofstatic"))
+            xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
 
 
         elif controlID == 1002:
