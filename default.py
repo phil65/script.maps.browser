@@ -25,13 +25,12 @@ import xbmcaddon
 import xbmcgui
 import urllib
 from Utils import *
-from LastFM import LastFM
+from LastFM import LastFM, LastFMDialog
 from Eventful import Eventful
 from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
 from Search_Select_Dialog import Search_Select_Dialog
-from VenueInfoDialog import VenueInfoDialog
 from EventInfoDialog import EventInfoDialog
 from math import sin, cos, radians, pow
 if sys.version_info < (2, 7):
@@ -320,9 +319,9 @@ class GUI(xbmcgui.WindowXML):
                 event_id = selecteditem.getProperty("event_id")
                 venue_id = selecteditem.getProperty("venue_id")
                 if event_id is not "":
-                    dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=event_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=event_id)
                 elif venue_id is not "":
-                    dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
                 else:
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=selecteditem.getProperty("item_info"))
                 dialog.doModal()
@@ -612,12 +611,12 @@ if __name__ == '__main__':
         if param.startswith('venueid='):
             startGUI = False
             venueid = (param[8:])
-            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venueid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venueid)
             dialog.doModal()
         if param.startswith('eventid='):
             startGUI = False
             eventid = (param[8:])
-            dialog = VenueInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=eventid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=eventid)
             dialog.doModal()
     if startGUI:
         gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
