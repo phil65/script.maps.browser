@@ -23,7 +23,7 @@ class LastFM():
     def __init__(self):
         pass
 
-    def CreateVenueList(self, results):
+    def CreateVenueList(self, results, return_proplist=False):
         PinString = ""
         letter = ord('A')
         count = 0
@@ -80,7 +80,10 @@ class LastFM():
                                  "label": event['venue']['name'],
                                  "label2": event['startDate'][:-8]}
                     item = CreateListItem(prop_list)
-                    events_list.append(item)
+                    if return_proplist is True:
+                        events_list.append(prop_list)
+                    else:
+                        events_list.append(item)
                     PinString = PinString + "&markers=color:blue%7Clabel:" + \
                         chr(letter) + "%7C" + lat + "," + lon
                     count += 1
