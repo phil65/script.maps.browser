@@ -269,6 +269,7 @@ def cleanText(text):
         text = re.sub('<br\/>', '[CR]', text)
         text = re.sub('<(.|\n|\r)*?>', '', text)
         text = re.sub('&quot;', '"', text)
+        text = re.sub('<*>', '', text)
         text = re.sub('&amp;', '&', text)
         text = re.sub('&gt;', '>', text)
         text = re.sub('&lt;', '<', text)

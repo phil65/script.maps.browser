@@ -114,6 +114,7 @@
                         <font>Font_Reg30_2</font>
                         <textcolor>grey2</textcolor>
                     </control>
+                </control>
                  <control type="textbox" id="200">
                     <posx>645</posx>
                     <posy>315</posy>
@@ -124,7 +125,7 @@
                     <textcolor>white6</textcolor>
                     <pagecontrol>1004</pagecontrol>
                     <autoscroll delay="5000" time="AutoScrollTime" repeat="8000">Skin.HasSetting(AutoScroll)</autoscroll>
-                </control>
+                    <visible>!Control.IsVisible(500)</visible>
                 </control>
                 <control type="image">
                     <posx>652</posx>
@@ -142,6 +143,7 @@
                         <onright>500</onright>
                         <onup>1000</onup>
                         <ondown>1000</ondown>
+                        <visible>ControlGroup(1000).HasFocus(1002)</visible>
                         <pagecontrol>61</pagecontrol>
                         <scrolltime>200</scrolltime>
                         <orientation>vertical</orientation>

@@ -24,12 +24,12 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         self.GetEventsitemlist = []
 
     def onInit(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         LFM = LastFM()
         # prettyprint(results)
         self.event = LFM.GetEventInfo(self.eventid)["event"]
         prettyprint(self.event)
         results = LFM.GetVenueEvents(self.event["venue"]["id"])
-        prettyprint(self.event)
         prettyprint(results)
         self.itemlist, PinString = LFM.CreateVenueList(results)
         if self.event['venue']['location']['geo:point']['geo:long']:
@@ -44,9 +44,10 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             search_string = self.event['venue']['name']
         self.googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
         self.setControls()
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def setControls(self):
-        self.getControl(self.C_TEXT_FIELD).setText(self.event["description"])
+        self.getControl(self.C_TEXT_FIELD).setText(cleanText(self.event["description"]))
         self.getControl(202).setLabel(self.event['startDate'][:-8])
         self.getControl(203).setLabel(self.event["venue"]["name"])
         self.getControl(self.C_BIG_IMAGE).setImage(self.event['venue']['image'][-1]['#text'])
