@@ -22,10 +22,9 @@ base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_
 class LastFM():
 
     def __init__(self):
-        pass
+        self.PinString = ""
 
     def CreateVenueList(self, results, return_proplist=False):
-        PinString = ""
         letter = ord('A')
         count = 0
         events_list = list()
@@ -86,9 +85,9 @@ class LastFM():
                     else:
                         events_list.append(item)
                     if count < 26:
-                        PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                        self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                     else:
-                        PinString = PinString + "&markers=color:blue%7C" + lat + "," + lon
+                        self.PinString = self.PinString + "&markers=color:blue%7C" + lat + "," + lon
                     count += 1
                     letter += 1
             else:
@@ -98,7 +97,7 @@ class LastFM():
         else:
             log("Error when handling LastFM results")
             prettyprint(results)
-        return events_list, PinString
+        return events_list, self.PinString
 
     def GetArtistEvents(self, artist, pastevents=False):
         artist = urllib.quote(artist)
@@ -236,15 +235,20 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         elif controlID == 1001:
             self.close()
             log("show artist events on map")
-            # gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
-            # artist = "65daysofstatic"
-            # LFM = LastFM()
-            # log("search for artist")
-            # itemlist, self.PinString = LFM.GetArtistEvents(artist)
-            # gui.c_places_list.reset()
-            # gui.GetGoogleMapURLs()
-            # gui.c_places_list.addItems(items=itemlist)
-            xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
+            if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
+                # gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
+                # artist = "65daysofstatic"
+                # LFM = LastFM()
+                # log("search for artist")
+                # itemlist, self.PinString = LFM.GetArtistEvents(artist)
+                # gui.c_places_list.reset()
+                # gui.GetGoogleMapURLs()
+                # gui.c_places_list.addItems(items=itemlist)
+                LFM = LastFM()
+                results = LFM.GetArtistEvents(self.event["artists"]["headliner"])
+                self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
+            else:
+                xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
 
 
         elif controlID == 1002:
