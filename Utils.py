@@ -91,7 +91,7 @@ def GetStringFromUrl(encurl):
             data = response.read()
             return data
         except:
-            Notify("Exception in GetStringFromUrl()")
+            Notify("Error", "Could not download data. Internet connection OK?")
             log("GetStringFromURL: could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
@@ -214,17 +214,12 @@ def CreateListItem(json_array):
 
 
 def GetLocationCoordinates():
-    try:
-        url = 'http://www.telize.com/geoip'
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        lat = results["latitude"]
-        lon = results["longitude"]
-        return lat, lon
-    except Exception as e:
-        Notify("Exception in GetLocationCoordinates()")
-        log(e)
-        return "", ""
+    url = 'http://www.telize.com/geoip'
+    response = GetStringFromUrl(url)
+    results = simplejson.loads(response)
+    lat = results["latitude"]
+    lon = results["longitude"]
+    return lat, lon
 
 
 def save_to_file(content, filename, path=""):

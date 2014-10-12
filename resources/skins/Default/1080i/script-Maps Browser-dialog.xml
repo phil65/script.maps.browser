@@ -9,7 +9,13 @@
     </coordinates>
     <zorder>2</zorder>
     <controls>
-        <include>DialogBackFade</include>
+        <control type="image">
+            <texture>diffuseoverlay.png</texture>
+            <width>1920</width>
+            <height>1080</height>
+            <animation effect="fade" end="100" time="560">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="240">WindowClose</animation>
+        </control>
         <control type="group">
             <posx>135</posx>
             <posy>400</posy>
@@ -31,28 +37,12 @@
                 <effect type="fade" start="100" end="0" time="240" />
             </animation>
             <control type="group">
-                <control type="button" id="5055">
-                    <include>HiddenObject</include>
-                    <onfocus condition="Substring(Window(home).Property(WidgetType),concert)">SetFocus(5080)</onfocus>
-                </control>
-                <control type="image">
-                    <posx>-100</posx>
-                    <posy>-350</posy>
-                    <width>1850</width>
-                    <height>752</height>
-                    <texture border="50">featured/panel_featured_shadow.png</texture>
-                    <animation effect="fade" start="100" end="80" time="2000" pulse="true" condition="true">conditional</animation>
-                    <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
-                    <visible>!Skin.HasSetting(DisableGlowbar)</visible>
-                    <include>Animation_VisibleChange400</include>
-                </control>
                 <control type="image">
                     <posx>-100</posx>
                     <posy>-350</posy>
                     <width>1850</width>
                     <height>752</height>
                     <texture border="50">featured/panel_featured.png</texture>
-                    <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
                 </control>
                 <control type="group" id="54000">
                     <posx>-8</posx>
@@ -173,7 +163,6 @@
                                 <width>640</width>
                                 <height>50</height>
                                 <textoffsetx>15</textoffsetx>
-                                <textcolor>$VAR[FontColorVar]</textcolor>
                                 <label>$INFO[ListItem.Property(artists)]</label>
                                 <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                             </control>
@@ -215,7 +204,6 @@
                                     <width>585</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>
-                                    <textcolor>$VAR[FontColorVar]</textcolor>
                                     <label>$INFO[ListItem.Property(artists)]</label>
                                     <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                                     <scroll>true</scroll>
@@ -235,7 +223,7 @@
                                 <control type="image">
                                     <width>745</width>
                                     <height>50</height>
-                                    <texture colordiffuse="$VAR[FocusTextureColorVar]">views/tripanel/listselect_fo.png</texture>
+                                    <texture>views/tripanel/listselect_fo.png</texture>
                                 </control>
                                 <control type="label">
                                     <width>640</width>
@@ -249,7 +237,6 @@
                                     <width>585</width>
                                     <height>50</height>
                                     <textoffsetx>15</textoffsetx>
-                                    <textcolor>$VAR[FontColorVar]</textcolor>
                                     <label>$INFO[ListItem.Property(artists)]</label>
                                     <visible>!IsEmpty(ListItem.Property(LibraryHasArtist))</visible>
                                     <scroll>true</scroll>
@@ -318,13 +305,7 @@
                             <onclick>SetProperty(listcontent,$INFO[Window(home).Property(Headliner)],home)</onclick>
                             <onclick>ActivateWindow(1168)</onclick>
                         </control>
-                        <!--
-                        <control type="spincontrol" id="1004">
-                            <posx>0</posx>
-                            <posy>-20</posy>
-                            <width>50</width>
-                            <height>88</height>
-                        </control>--></control>
+                    </control>
                 </control>
                 <control type="image">
                     <posx>-79</posx>
@@ -332,29 +313,8 @@
                     <width>1808</width>
                     <height>710</height>
                     <texture border="50">featured/panel_featured_overlay.png</texture>
-                    <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
                 </control>
             </control>
-            <!--
-            <control type="label">
-                <posx>417</posx>
-                <posy>282</posy>
-                <width>575</width>
-                <height>66</height>
-                <align>left</align>
-                <font>Font_Reg22_Caps</font>
-                <shadowcolor>black</shadowcolor>
-                <label>$INFO[Window(home).Property(Budget),Budget: , Dollars]</label>
-            </control>
-            <control type="label">
-                <posx>417</posx>
-                <posy>313</posy>
-                <width>575</width>
-                <height>66</height>
-                <align>left</align>
-                <font>Font_Reg22_Caps</font>
-                <shadowcolor>black</shadowcolor>
-                <label>$INFO[Window(home).Property(Homepage),Online Info: [LOWERCASE],[/LOWERCASE]</label>
-            </control>--></control>
+        </control>
     </controls>
 </window>

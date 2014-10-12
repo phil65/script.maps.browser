@@ -1,6 +1,11 @@
 import xbmcgui
 from Utils import *
 
+__addon__ = xbmcaddon.Addon()
+__addonid__ = __addon__.getAddonInfo('id')
+__language__ = __addon__.getLocalizedString
+__addonpath__ = __addon__.getAddonInfo('path')
+
 
 class Search_Select_Dialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
