@@ -174,14 +174,16 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.GetEventsPinString = ""
         self.itemlist = []
         self.GetEventsitemlist = []
-
-    def onInit(self):
         LFM = LastFM()
         self.event = LFM.GetEventInfo(self.eventid)["event"]
-        results = LFM.GetVenueEvents(self.event["venue"]["id"])
-        self.itemlist, PinString = LFM.CreateVenueList(results)
+        self.results = LFM.GetVenueEvents(self.event["venue"]["id"])
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.itemlist, self.PinString = LFM.CreateVenueList(self.results)
+
+    def onInit(self):
         self.setLabels()
         self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
