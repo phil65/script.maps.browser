@@ -209,7 +209,7 @@ def CreateListItem(json_array):
             item.setLabel(value)
         elif key == "label2":
             item.setLabel2(value)
-    item.setProperty("item_info", simplejson.dumps(json_array))
+    item.setProperty("item_info", simplejson.dumps(unicode(json_array)))
     return item
 
 
