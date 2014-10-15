@@ -61,13 +61,13 @@
             <height>60</height>
             <texture>Pin.png</texture>
         </control> -->
-        <control type="image">
+<!--         <control type="image">
             <posx>931</posx>
             <posy>433</posy>
             <width>114</width>
             <height>114</height>
             <texture>Pin.png</texture>
-        </control>
+        </control> -->
     </control>
            <!--       <control type="label">
             <posx>750</posx>
