@@ -61,8 +61,6 @@ class GUI(xbmcgui.WindowXML):
     CONTROL_MODE_HYBRID = 106
     CONTROL_MODE_SATELLITE = 107
     CONTROL_MODE_TERRAIN = 108
-    CONTROL_MAP_IMAGE = 109
-    CONTROL_STREETVIEW_IMAGE = 110
     CONTROL_GOTO_PLACE = 111
     CONTROL_SELECT_PROVIDER = 112
     CONTROL_LEFT = 120
@@ -159,13 +157,9 @@ class GUI(xbmcgui.WindowXML):
             self.getControls()
             self.c_places_list.reset()
             self.GetGoogleMapURLs()
-            try:
-                self.c_places_list.addItems(items=itemlist)
-                self.c_map_image.setImage(self.GoogleMapURL)
-                self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-            except Exception as e:
-                log("Error: Exception in onInit with message:")
-                log(e)
+            self.c_places_list.addItems(items=itemlist)
+            self.window.setProperty("map_image", self.GoogleMapURL)
+            self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
             settings = xbmcaddon.Addon(id='script.maps.browser')
             if not settings.getSetting('firststart') == "true":
                 settings.setSetting(id='firststart', value='true')
@@ -198,7 +192,6 @@ class GUI(xbmcgui.WindowXML):
         self.GoogleStreetViewURL = ""
 
     def getControls(self):
-        self.c_map_image = self.getControl(self.CONTROL_MAP_IMAGE)
         self.c_streetview_image = self.getControl(self.CONTROL_STREETVIEW_IMAGE)
         self.c_places_list = self.getControl(self.CONTROL_PLACES_LIST)
 
@@ -265,8 +258,8 @@ class GUI(xbmcgui.WindowXML):
                 self.lon += 180.0
             self.location = str(self.lat) + "," + str(self.lon)
         self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
+        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
+        self.window.setProperty("map_image", self.GoogleMapURL)
 
     def onClick(self, controlId):
         if controlId == self.CONTROL_ZOOM_IN:
@@ -330,8 +323,8 @@ class GUI(xbmcgui.WindowXML):
                     self.c_places_list.reset()
                     self.c_places_list.addItems(items=dialog.GetEventsitemlist)
         self.GetGoogleMapURLs()
-        self.c_streetview_image.setImage(self.GoogleStreetViewURL)
-        self.c_map_image.setImage(self.GoogleMapURL)
+        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
+        self.window.setProperty("map_image", self.GoogleMapURL)
 
     def ZoomIn(self):
         self.location = str(self.lat) + "," + str(self.lon)
@@ -527,8 +520,6 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
         setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
         setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
-        setWindowProperty(self.window, self.prefix + 'NavMode', "")
-        setWindowProperty(self.window, self.prefix + 'streetview', "")
         hor_px = int(size.split("x")[0])
         ver_px = int(size.split("x")[1])
         mx, my = LatLonToMeters(self.lat, self.lon)
