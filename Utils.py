@@ -67,12 +67,7 @@ def MetersToLatLon(mx, my):
     return lat, lon
 
 
-def getWindowProperty(window, key):
-    return window.getProperty(key)
-
-
 def setWindowProperty(window, key, value):
-  #  log("Key: " + key + " value:" + value)
     return window.setProperty(key, value)
 
 
