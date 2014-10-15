@@ -138,7 +138,7 @@ class GUI(xbmcgui.WindowXML):
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius)
                     itemlist, self.PinString = LFM.CreateVenueList(results)
             elif param.startswith('direction='):
-                self.direction = (param[10:])
+                self.direction = param[10:]
             elif param.startswith('prefix='):
                 self.prefix = param[7:]
                 if not self.prefix.endswith('.') and self.prefix != "":
@@ -292,7 +292,7 @@ class GUI(xbmcgui.WindowXML):
         elif controlId == self.CONTROL_MODE_TERRAIN:
             self.type = "terrain"
         elif controlId == self.CONTROL_GOTO_PLACE:
-            self.location = getWindowProperty(self.window, "Location")
+            self.location = self.window.getProperty("Location")
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
         elif controlId == self.CONTROL_SELECT_PROVIDER:
             self.SelectPlacesProvider()
@@ -313,7 +313,7 @@ class GUI(xbmcgui.WindowXML):
             self.lat = float(selecteditem.getProperty("lat"))
             self.lon = float(selecteditem.getProperty("lon"))
             self.zoom_level = 12
-            if not selecteditem.getProperty("index") == getWindowProperty(self.window, 'index'):
+            if not selecteditem.getProperty("index") == self.window.getProperty('index'):
                 setWindowProperty(self.window, 'index', selecteditem.getProperty("index"))
             else:
                 event_id = selecteditem.getProperty("event_id")
