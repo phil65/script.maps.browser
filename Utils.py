@@ -73,7 +73,7 @@ def setWindowProperty(window, key, value):
 
 def GetStringFromUrl(encurl):
     succeed = 0
-    while succeed < 5:
+    while (succeed < 5) and (not xbmc.abortRequested):
         try:
             request = urllib2.Request(encurl)
             request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
