@@ -53,7 +53,7 @@ class LastFM():
                         search_string = event['venue']['name']
                     googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
                     formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
-                    description = cleanText(event['description'])
+                    description = unicode(cleanText(event['description']))
                     if my_arts != event['artists']['headliner']:
                         description = "[B]" + my_arts + "[/B][CR]" + description
                     prop_list = {"date": event['startDate'][:-8],
@@ -167,6 +167,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.venueid = kwargs.get('venueid')
         self.eventid = kwargs.get('eventid')
         self.event = []
@@ -177,7 +178,6 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         LFM = LastFM()
         self.event = LFM.GetEventInfo(self.eventid)["event"]
         self.results = LFM.GetVenueEvents(self.event["venue"]["id"])
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist, self.PinString = LFM.CreateVenueList(self.results)
 
     def onInit(self):
