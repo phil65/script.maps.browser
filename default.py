@@ -157,7 +157,8 @@ class GUI(xbmcgui.WindowXML):
             self.venuelist = self.getControl(self.CONTROL_PLACES_LIST)
             self.venuelist.reset()
             self.GetGoogleMapURLs()
-            self.venuelist.addItems(items=itemlist)
+            listitems = CreateListItems(itemlist)
+            self.venuelist.addItems(items=listitems)
             self.window.setProperty("map_image", self.GoogleMapURL)
             self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
             settings = xbmcaddon.Addon(id='script.maps.browser')
@@ -449,8 +450,9 @@ class GUI(xbmcgui.WindowXML):
                 self.PinString = ""
                 itemlist = []
             if itemlist is not None:
+                listitems = CreateListItems(itemlist)
                 self.venuelist.reset()
-                self.venuelist.addItems(items=itemlist)
+                self.venuelist.addItems(items=listitems)
             self.street_view = False
 
     def SearchDialog(self):
@@ -485,8 +487,9 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(34019):
                 self.PinString = ""
                 itemlist = []
+            listitems = CreateListItems(itemlist)
             self.venuelist.reset()
-            self.venuelist.addItems(items=itemlist)
+            self.venuelist.addItems(items=listitems)
             self.street_view = False
 
     def toggleInfo(self):
@@ -564,8 +567,7 @@ class GUI(xbmcgui.WindowXML):
                              'lon': lon,
                              'thumb': googlemap,
                              'id': item['formatted_address']}
-                item = CreateListItem(prop_list)
-                places_list.append(item)
+                places_list.append(prop_list)
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit

@@ -102,9 +102,8 @@ class Eventful():
                          "sortletter": chr(letter),
                          "lat": lat,
                          "lon": lon}
-            item = CreateListItem(prop_list)
             PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places_list.append(item)
+            places_list.append(prop_list)
             count += 1
             letter += 1
         return places_list, PinString

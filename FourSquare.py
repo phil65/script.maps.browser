@@ -81,9 +81,8 @@ class FourSquare():
                          "lon": lon,
                          "phone": venue['contact'].get('phone', ""),
                          "comments": str(venue['stats']['tipCount'])}
-            item = CreateListItem(prop_list)
             self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places_list.append(item)
+            places_list.append(prop_list)
             count += 1
             letter += 1
         return places_list, self.PinString

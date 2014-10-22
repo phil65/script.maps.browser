@@ -144,12 +144,10 @@ def GetImages(path=""):
                              "index": str(count),
                              "sortletter": chr(letter),
                              }
-                item = CreateListItem(prop_list)
                 if len(PinString) < 1850:
                     PinString = PinString + "%7C" + str(lat) + "," + str(lon)
-                    item.setProperty("sortletter", chr(letter))
                     letter += 1
-                images_list.append(item)
+                images_list.append(prop_list)
                 count += 1
         except Exception as e:
             log("Error when handling GetImages results")
@@ -206,6 +204,33 @@ def CreateListItem(json_array):
             item.setLabel2(value)
     item.setProperty("item_info", simplejson.dumps(unicode(json_array)))
     return item
+
+
+def CreateListItems(data):
+    itemlist = []
+    if data is not None:
+        for (count, result) in enumerate(data):
+            listitem = xbmcgui.ListItem('%s' % (str(count)))
+            itempath = ""
+            for (key, value) in result.iteritems():
+                if str(key).lower() in ["name", "label", "title"]:
+                    listitem.setLabel(unicode(value))
+                if str(key).lower() in ["thumb"]:
+                    listitem.setThumbnailImage(unicode(value))
+                if str(key).lower() in ["icon"]:
+                    listitem.setIconImage(unicode(value))
+                if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                    listitem.setArt({str(key).lower(): unicode(value)})
+                if str(key).lower() in ["path"]:
+                    itempath = unicode(value)
+                listitem.setProperty('%s' % (str(key)), unicode(value))
+            listitem.setPath(path=itempath)
+            listitem.setProperty("target_url", itempath)
+            listitem.setProperty("node:target_url", itempath)
+            listitem.setProperty("node.target_url", itempath)
+            listitem.setProperty("item_info", simplejson.dumps(unicode(result)))
+            itemlist.append(listitem)
+    return itemlist
 
 
 def GetLocationCoordinates():

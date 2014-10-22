@@ -169,9 +169,8 @@ class GooglePlaces():
                              "lon": lon,
                              "rating": rating,
                              "index": str(count)}
-                item = CreateListItem(prop_list)
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places_list.append(item)
+                places_list.append(prop_list)
                 count += 1
                 letter += 1
           #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']

@@ -74,9 +74,8 @@ class MapQuest():
                              "lat": lat,
                              "lon": lon,
                              "index": str(count)}
-                item = CreateListItem(prop_list)
                 PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places_list.append(item)
+                places_list.append(prop_list)
                 count += 1
                 letter += 1
                 if count > max_limit:

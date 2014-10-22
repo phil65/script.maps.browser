@@ -79,11 +79,7 @@ class LastFM():
                                  "thumb": event['venue']['image'][-1]['#text'],
                                  "label": event['venue']['name'],
                                  "label2": event['startDate'][:-8]}
-                    item = CreateListItem(prop_list)
-                    if return_proplist is True:
-                        events_list.append(prop_list)
-                    else:
-                        events_list.append(item)
+                    events_list.append(prop_list)
                     if count < 26:
                         self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                     else:
@@ -182,7 +178,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self.setLabels()
-        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+        self.getControl(self.C_ARTIST_LIST).addItems(items=CreateListItems(self.itemlist))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onAction(self, action):
