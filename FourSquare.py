@@ -143,17 +143,17 @@ class FourSquare():
             return None
 
     def SelectSection(self):
-        Sections = {"topPicks": __language__(34005),
-                    "food": __language__(34006),
-                    "drinks": __language__(34007),
-                    "coffee": __language__(34008),
-                    "shops": __language__(34009),
-                    "arts": __language__(34010),
-                    "outdoors": __language__(34011),
-                    "sights": __language__(34012),
-                    "trending": __language__(34013),
-                    "specials": __language__(34014),
-                    "nextVenues": __language__(34015)}
+        Sections = {"topPicks": __language__(32005),
+                    "food": __language__(32006),
+                    "drinks": __language__(32007),
+                    "coffee": __language__(32008),
+                    "shops": __language__(32009),
+                    "arts": __language__(32010),
+                    "outdoors": __language__(32011),
+                    "sights": __language__(32012),
+                    "trending": __language__(32013),
+                    "specials": __language__(32014),
+                    "nextVenues": __language__(32015)}
         modeselect = []
         modeselect.append("All Sections")
         for value in Sections.itervalues():

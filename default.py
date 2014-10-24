@@ -165,7 +165,7 @@ class GUI(xbmcgui.WindowXML):
             if not settings.getSetting('firststart') == "true":
                 settings.setSetting(id='firststart', value='true')
                 dialog = xbmcgui.Dialog()
-                dialog.ok(__language__(34001), __language__(34002), __language__(34003))
+                dialog.ok(__language__(32001), __language__(32002), __language__(32003))
         log('onInit finished')
 
     def init_vars(self):
@@ -387,7 +387,7 @@ class GUI(xbmcgui.WindowXML):
             setWindowProperty(self.window, 'streetview', 'True')
 
     def SearchLocation(self):
-        self.location = xbmcgui.Dialog().input(__language__(34032), type=xbmcgui.INPUT_ALPHANUM)
+        self.location = xbmcgui.Dialog().input(__language__(32032), type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
             lat, lon = self.GetGeoCodes(True, self.location)
@@ -401,52 +401,52 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
         itemlist = None
-        modeselect.append(__language__(34016))  # concerts
-        modeselect.append(__language__(34017))  # festivals
-        modeselect.append(__language__(34027))  # geopics
-        modeselect.append(__language__(34028))  # eventful
-        modeselect.append(__language__(34029))  # FourSquare
-        modeselect.append(__language__(34030))  # MapQuest
-        modeselect.append(__language__(34031))  # Google Places
-        modeselect.append(__language__(34019))  # reset
+        modeselect.append(__language__(32016))  # concerts
+        modeselect.append(__language__(32017))  # festivals
+        modeselect.append(__language__(32027))  # geopics
+        modeselect.append(__language__(32028))  # eventful
+        modeselect.append(__language__(32029))  # FourSquare
+        modeselect.append(__language__(32030))  # MapQuest
+        modeselect.append(__language__(32031))  # Google Places
+        modeselect.append(__language__(32019))  # reset
         dialogSelection = xbmcgui.Dialog()
-        provider_index = dialogSelection.select(__language__(34020), modeselect)
+        provider_index = dialogSelection.select(__language__(32020), modeselect)
         if not provider_index < 0:
-            if modeselect[provider_index] == __language__(34031):
+            if modeselect[provider_index] == __language__(32031):
                 GP = GooglePlaces()
                 category = GP.SelectCategory()
                 if category is not None:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
-            elif modeselect[provider_index] == __language__(34029):
+            elif modeselect[provider_index] == __language__(32029):
                 FS = FourSquare()
                 section = FS.SelectSection()
                 if section is not None:
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
-            elif modeselect[provider_index] == __language__(34016):
+            elif modeselect[provider_index] == __language__(32016):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
                     itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(34030):
+            elif modeselect[provider_index] == __language__(32030):
                 MQ = MapQuest()
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
-            elif modeselect[provider_index] == __language__(34017):
+            elif modeselect[provider_index] == __language__(32017):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
                     itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(34027):
-                folder_path = xbmcgui.Dialog().browse(0, __language__(34021), 'pictures')
+            elif modeselect[provider_index] == __language__(32027):
+                folder_path = xbmcgui.Dialog().browse(0, __language__(32021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = GetImages(folder_path)
-            elif modeselect[provider_index] == __language__(34028):
+            elif modeselect[provider_index] == __language__(32028):
                 EF = Eventful()
                 category = EF.SelectCategory()
                 if category is not None:
                     itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
-            elif modeselect[provider_index] == __language__(34019):
+            elif modeselect[provider_index] == __language__(32019):
                 self.PinString = ""
                 itemlist = []
             if itemlist is not None:
@@ -458,33 +458,33 @@ class GUI(xbmcgui.WindowXML):
     def SearchDialog(self):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
-        modeselect.append(__language__(34024))
-        modeselect.append(__language__(34004))
-        modeselect.append(__language__(34023))
-        modeselect.append(__language__(34033))
-        modeselect.append(__language__(34019))
+        modeselect.append(__language__(32024))
+        modeselect.append(__language__(32004))
+        modeselect.append(__language__(32023))
+        modeselect.append(__language__(32033))
+        modeselect.append(__language__(32019))
         dialogSelection = xbmcgui.Dialog()
-        provider_index = dialogSelection.select(__language__(34026), modeselect)
+        provider_index = dialogSelection.select(__language__(32026), modeselect)
         if not provider_index < 0:
-            if modeselect[provider_index] == __language__(34024):
+            if modeselect[provider_index] == __language__(32024):
                 self.SearchLocation()
                 itemlist = []
-            elif modeselect[provider_index] == __language__(34004):
-                query = xbmcgui.Dialog().input(__language__(34022), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == __language__(32004):
+                query = xbmcgui.Dialog().input(__language__(32022), type=xbmcgui.INPUT_ALPHANUM)
                 FS = FourSquare()
                 itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
-            elif modeselect[provider_index] == __language__(34023):
-                artist = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == __language__(32023):
+                artist = xbmcgui.Dialog().input(__language__(32025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 results = LFM.GetArtistEvents(artist)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(34033):
-                venue = xbmcgui.Dialog().input(__language__(34025), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == __language__(32033):
+                venue = xbmcgui.Dialog().input(__language__(32025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 venueid = LFM.GetVenueID(venue)
                 results = LFM.GetVenueEvents(venueid)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(34019):
+            elif modeselect[provider_index] == __language__(32019):
                 self.PinString = ""
                 itemlist = []
             listitems = CreateListItems(itemlist)
@@ -571,7 +571,7 @@ class GUI(xbmcgui.WindowXML):
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = Search_Select_Dialog('DialogSelect.xml', __addonpath__, listing=places_list)
+                    w = Search_Select_Dialog('DialogSelect.xml', __addonpath__, listing=CreateListItems(places_list))
                     w.doModal()
                     if w.lat is not "":
                         self.zoom_level = 12
