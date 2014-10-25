@@ -1,9 +1,5 @@
 from Utils import *
 import xbmcgui
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 googlemaps_key_places = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'

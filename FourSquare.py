@@ -1,12 +1,7 @@
     # code for FourSquare Scraping based on script.maps by a.a.alsaleh. credits to him.
-import sys
 import xbmcgui
 import xbmcaddon
 from Utils import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')

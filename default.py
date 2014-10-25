@@ -33,11 +33,6 @@ from FourSquare import FourSquare
 from Search_Select_Dialog import Search_Select_Dialog
 from EventInfoDialog import EventInfoDialog
 from math import sin, cos, radians, pow
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
-
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')

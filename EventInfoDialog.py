@@ -1,11 +1,7 @@
-import sys
 import xbmcgui
 from LastFM import LastFM
 from Utils import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
+import simplejson
 
 
 class EventInfoDialog(xbmcgui.WindowXMLDialog):

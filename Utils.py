@@ -4,17 +4,13 @@ import xbmcvfs
 import xbmcgui
 import urllib2
 import os
-import sys
 import re
 import time
 import math
 from PIL import Image
 import hashlib
 from ImageTags import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
+import simplejson
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
