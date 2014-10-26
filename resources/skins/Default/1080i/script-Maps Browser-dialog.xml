@@ -265,7 +265,7 @@
                         <onright>1000</onright>
                         <usecontrolcoords>true</usecontrolcoords>
                         <control type="button" id="1001">
-                            <width>330</width>
+                            <width>500</width>
                             <height>45</height>
                             <textoffsetx>20</textoffsetx>
                             <align>center</align>
@@ -275,7 +275,7 @@
                             <focusedcolor>white3</focusedcolor>
                         </control>
                         <control type="button" id="1002">
-                            <width>330</width>
+                            <width>530</width>
                             <height>45</height>
                             <textoffsetx>20</textoffsetx>
                             <align>center</align>
@@ -284,7 +284,7 @@
                             <textcolor>grey2</textcolor>
                             <focusedcolor>white3</focusedcolor>
                         </control>
-                        <control type="button" id="1003">
+<!--                         <control type="button" id="1003">
                             <width>330</width>
                             <height>45</height>
                             <textoffsetx>20</textoffsetx>
@@ -295,7 +295,7 @@
                             <focusedcolor>white3</focusedcolor>
                             <onclick>SetProperty(listcontent,$INFO[Window(home).Property(Headliner)],home)</onclick>
                             <onclick>ActivateWindow(1168)</onclick>
-                        </control>
+                        </control> -->
                     </control>
                 </control>
                 <control type="image">

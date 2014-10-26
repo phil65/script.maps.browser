@@ -35,6 +35,12 @@ def LatLonToMeters(lat, lon):
         return mx, my
 
 
+def FillListControl(listcontrol, listitem_dict):
+    listcontrol.reset()
+    listitems = CreateListItems(listitem_dict)
+    listcontrol.addItems(items=listitems)
+    setWindowProperty(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
+
 def MetersToPixels(mx, my, zoom):
         "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
 

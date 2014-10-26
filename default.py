@@ -150,10 +150,8 @@ class GUI(xbmcgui.WindowXML):
         self.GetGoogleMapURLs()
         if startGUI:
             self.venuelist = self.getControl(self.CONTROL_PLACES_LIST)
-            self.venuelist.reset()
             self.GetGoogleMapURLs()
-            listitems = CreateListItems(itemlist)
-            self.venuelist.addItems(items=listitems)
+            FillListControl(self.venuelist, itemlist)
             self.window.setProperty("map_image", self.GoogleMapURL)
             self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
             settings = xbmcaddon.Addon(id='script.maps.browser')
@@ -299,8 +297,9 @@ class GUI(xbmcgui.WindowXML):
             self.lat = float(selecteditem.getProperty("lat"))
             self.lon = float(selecteditem.getProperty("lon"))
             self.zoom_level = 12
-            if not selecteditem.getProperty("index") == self.window.getProperty('index'):
-                setWindowProperty(self.window, 'index', selecteditem.getProperty("index"))
+            itemindex = selecteditem.getProperty("index")
+            if not itemindex == self.window.getProperty('index'):
+                setWindowProperty(self.window, 'index', itemindex)
             else:
                 event_id = selecteditem.getProperty("event_id")
                 venue_id = selecteditem.getProperty("venue_id")
@@ -313,8 +312,7 @@ class GUI(xbmcgui.WindowXML):
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
                     self.PinString = dialog.GetEventsPinString
-                    self.venuelist.reset()
-                    self.venuelist.addItems(items=CreateListItems(dialog.GetEventsitemlist))
+                    FillListControl(self.venuelist, dialog.GetEventsitemlist)
         self.GetGoogleMapURLs()
         self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
         self.window.setProperty("map_image", self.GoogleMapURL)
@@ -445,13 +443,10 @@ class GUI(xbmcgui.WindowXML):
                 self.PinString = ""
                 itemlist = []
             if itemlist is not None:
-                listitems = CreateListItems(itemlist)
-                self.venuelist.reset()
-                self.venuelist.addItems(items=listitems)
+                FillListControl(self.venuelist, itemlist)
             self.street_view = False
 
     def SearchDialog(self):
-        setWindowProperty(self.window, 'index', "")
         modeselect = []
         modeselect.append(__language__(32024))
         modeselect.append(__language__(32004))
@@ -482,9 +477,7 @@ class GUI(xbmcgui.WindowXML):
             elif modeselect[provider_index] == __language__(32019):
                 self.PinString = ""
                 itemlist = []
-            listitems = CreateListItems(itemlist)
-            self.venuelist.reset()
-            self.venuelist.addItems(items=listitems)
+            FillListControl(self.venuelist, itemlist)
             self.street_view = False
 
     def toggleInfo(self):
