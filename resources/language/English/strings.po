@@ -1,0 +1,163 @@
+# XBMC Media Center language file
+# Addon Name: Maps Browser
+# Addon id: script.maps.browser
+# Addon version: 0.8.0
+# Addon Provider: phil65
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2014-10-26 17:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Google Maps Browser (including Street View)"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This Maps Browser Add-on allows you to explore the map with a remote. It can also show Places (Source: FourSquare), Concerts (Source: Last.FM), geotagged images and much more on the map. Also offers skin integration."
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Welcome to XBMC Maps Browser"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Press context menu button to toggle navigation mode"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Press \"info\" button to change map type"
+msgstr ""
+
+msgctxt "#32004"
+msgid "FourSquare Places Search"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Top Picks"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Food"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Drinks"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Coffee"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Shops"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Arts"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Outdoors"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Sights"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Specials"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Next venues"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Last.Fm near concerts"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Last.Fm near festivals"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Last.Fm concert search (by tag)"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Reset places"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Choose places to display"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Choose folder with geotagged images"
+msgstr ""
+
+msgctxt "#32022"
+msgid "\"Enter music tags to search for\""
+msgstr ""
+
+msgctxt "#32023"
+msgid "Last.Fm concert cearch (by artist)"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Google maps search"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Type in artist name"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Choose search type"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Places from geotagged images"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Eventful Near Events"
+msgstr ""
+
+msgctxt "#32029"
+msgid "FourSquare Explore"
+msgstr ""
+
+msgctxt "#32030"
+msgid "MapQuest Traffic Incidents"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Google Places"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Enter search string"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Last.FM Venue Search"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Click again to show info"
+msgstr ""
