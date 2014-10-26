@@ -314,7 +314,7 @@ class GUI(xbmcgui.WindowXML):
                 if len(dialog.GetEventsitemlist) > 0:
                     self.PinString = dialog.GetEventsPinString
                     self.venuelist.reset()
-                    self.venuelist.addItems(items=dialog.GetEventsitemlist)
+                    self.venuelist.addItems(items=CreateListItems(dialog.GetEventsitemlist))
         self.GetGoogleMapURLs()
         self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
         self.window.setProperty("map_image", self.GoogleMapURL)
