@@ -289,7 +289,7 @@
                             <height>45</height>
                             <textoffsetx>20</textoffsetx>
                             <align>center</align>
-                            <label>$LOCALIZE[31927]</label>
+                            <label>$ADDON[script.maps.browser 31927]</label>
                             <textcolor>grey2</textcolor>
                             <font>Font_Reg28</font>
                             <focusedcolor>white3</focusedcolor>

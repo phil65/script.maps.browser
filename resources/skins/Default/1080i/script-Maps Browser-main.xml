@@ -197,7 +197,7 @@
                             <align>left</align>
                             <font>Font_Reg31_Caps</font>
                             <textcolor>white</textcolor>
-                            <label>$LOCALIZE[32034]</label>
+                            <label>$ADDON[script.maps.browser 32034]</label>
                             <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                         </control>
                     </control>
@@ -266,7 +266,7 @@
                             <align>left</align>
                             <font>Font_Reg31_Caps</font>
                             <textcolor>white</textcolor>
-                            <label>$LOCALIZE[32034]</label>
+                            <label>$ADDON[script.maps.browser 32034]</label>
                             <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
                         </control>
                     </control>
