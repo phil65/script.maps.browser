@@ -41,6 +41,7 @@ def FillListControl(listcontrol, listitem_dict):
     listcontrol.addItems(items=listitems)
     setWindowProperty(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
 
+
 def MetersToPixels(mx, my, zoom):
         "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
 
@@ -143,6 +144,7 @@ def GetImages(path=""):
                              "date": date,
                              "description": date,
                              "thumb": path + filename,
+                             "filepath": path + filename,
                              "index": str(count),
                              "sortletter": chr(letter),
                              }
@@ -300,6 +302,27 @@ def cleanText(text):
         return text.strip()
     else:
         return ""
+
+
+class PictureDialog(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+    C_ARTIST_LIST = 500
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def onInit(self):
+        pass
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def onClick(self, controlID):
+        pass
+
+    def onFocus(self, controlID):
+        pass
 
 
 def Notify(header, line='', line2='', line3=''):

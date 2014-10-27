@@ -303,16 +303,20 @@ class GUI(xbmcgui.WindowXML):
             else:
                 event_id = selecteditem.getProperty("event_id")
                 venue_id = selecteditem.getProperty("venue_id")
-                if event_id is not "":
+                picture_path = selecteditem.getProperty("filepath")
+                if event_id:
                     dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=event_id)
-                elif venue_id is not "":
+                elif venue_id:
                     dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
+                elif picture_path:
+                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % addon_name, addon_path)
                 else:
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=selecteditem.getProperty("item_info"))
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
                     self.PinString = dialog.GetEventsPinString
                     FillListControl(self.venuelist, dialog.GetEventsitemlist)
+                del dialog
         self.GetGoogleMapURLs()
         self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
         self.window.setProperty("map_image", self.GoogleMapURL)
