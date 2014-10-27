@@ -47,9 +47,17 @@ class Eventful():
         results = Get_JSON_response(base_url, url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
-    def GetEventInfo(self, event_id=""):
+    def GetVenueInfo(self, event_id=""):
         base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (eventful_key)
         url = '&id=%s' % (str(event_id))
+        log(url)
+        results = Get_JSON_response(base_url, url)
+   #     prettyprint(results)
+        return self.HandleEventfulEventResult(results['venue'])
+
+    def GetEventInfo(self, event_id=""):
+        base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (eventful_key)
+        url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
         log(url)
         results = Get_JSON_response(base_url, url)
    #     prettyprint(results)
@@ -63,6 +71,7 @@ class Eventful():
         if not isinstance(results, list):
             results = [results]
         for venue in results:
+         #   prettyprint(venue)
             eventname = cleanText(venue['title'])
             venuename = cleanText(venue['venue_name'])
             formattedAddress = cleanText(venue["venue_address"])
@@ -70,7 +79,7 @@ class Eventful():
             lon = str(venue['longitude'])
             search_string = lat + "," + lon
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
-            if venue["image"] is not None:
+            if ("image" in venue) and venue["image"]:
                 photo = venue["image"]["large"]["url"]
             else:
                 photo = ""
@@ -82,6 +91,7 @@ class Eventful():
                 date = venue["start_time"] + " - " + venue["stop_time"]
             date = date.replace("00:00:00", "")
             prop_list = {"id": str(venue['id']),
+                         "eventful_id": str(venue['venue_id']),
                          "eventname": eventname,
                          "description": cleanText(venue['description']),
                          "name": venuename,

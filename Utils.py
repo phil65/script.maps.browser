@@ -206,13 +206,13 @@ def CreateListItem(json_array):
             item.setLabel(value)
         elif key == "label2":
             item.setLabel2(value)
-    item.setProperty("item_info", simplejson.dumps(unicode(json_array)))
+    item.setProperty("item_info", simplejson.dumps(json_array))
     return item
 
 
 def CreateListItems(data):
     itemlist = []
-    if data is not None:
+    if data:
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
@@ -283,7 +283,7 @@ def read_from_file(path=""):
 
 def cleanText(text):
     import re
-    if text is not None:
+    if text:
         text = re.sub('<br \/>', '[CR]', text)
         text = re.sub('<br\/>', '[CR]', text)
         text = re.sub('<(.|\n|\r)*?>', '', text)

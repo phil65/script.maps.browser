@@ -1,7 +1,6 @@
 import xbmcgui
-from LastFM import LastFM
+from Eventful import Eventful
 from Utils import *
-import simplejson
 
 
 class EventInfoDialog(xbmcgui.WindowXMLDialog):
@@ -14,8 +13,15 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
-        self.item = kwargs.get('item')
-        self.prop_list = simplejson.loads(self.item)
+        self.eventful_id = kwargs.get('eventful_id')
+        self.foursquare_id = kwargs.get('foursquare_id')
+        if self.eventful_id:
+            EF = Eventful()
+            self.prop_list = EF.GetVenueInfo(self.eventful_id)
+            self.event_list = self.prop_list["events"]["event"]
+            prettyprint(self.event_list)
+        elif self.foursquare_id:
+            pass
         self.PinString = ""
         self.itemlist = []
 
@@ -38,11 +44,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID == self.C_ARTIST_LIST:
-            artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
-            LFM = LastFM()
-            results = LFM.GetArtistEvents(artist)
-            self.itemlist, self.PinString = LFM.CreateVenueList(results)
 
     def onFocus(self, controlID):
         pass
