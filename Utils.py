@@ -309,10 +309,11 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
     C_ARTIST_LIST = 500
 
     def __init__(self, *args, **kwargs):
-        pass
+        self.picture_path = kwargs.get('picture_path')
+
 
     def onInit(self):
-        pass
+        self.getControl(100).setImage(self.picture_path)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

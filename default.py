@@ -309,7 +309,7 @@ class GUI(xbmcgui.WindowXML):
                 elif venue_id:
                     dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
                 elif picture_path:
-                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % addon_name, addon_path)
+                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % addon_name, addon_path, picture_path=picture_path)
                 else:
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, item=selecteditem.getProperty("item_info"))
                 dialog.doModal()
