@@ -439,6 +439,9 @@
                     <height>135</height>
                     <texture flipy="true">osd/osd_back.png</texture>
                 </control>
+                <control type="group">
+                                        <posy>7</posy>
+
                 <control id="650" type="grouplist">
                     <orientation>horizontal</orientation>
                     <posx>50</posx>
@@ -447,28 +450,28 @@
                     <onleft>652</onleft>
                     <onright>103</onright>
                     <control id="112" type="button">
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <texturefocus colordiffuse="FF0084ff">googlemaps/Flag.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Flag.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/Flag.png</texturenofocus>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
                     </control>
                     <control id="101" type="button">
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
                         <texturefocus colordiffuse="FF0084ff">googlemaps/Search.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Search.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/Search.png</texturenofocus>
                     </control>
                     <control id="102" type="togglebutton">
                         <texturefocus colordiffuse="FF0084ff">googlemaps/streetview.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/streetview.png</texturenofocus>
-                        <alttexturefocus colordiffuse="FF0084ff">googlemaps/satellite.png</alttexturefocus>
-                        <alttexturenofocus colordiffuse="FFe5e5e5">googlemaps/satellite.png</alttexturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/streetview.png</texturenofocus>
+                        <alttexturefocus colordiffuse="FF0084ff">googlemaps/map.png</alttexturefocus>
+                        <alttexturenofocus colordiffuse="FFBBBBBB">googlemaps/map.png</alttexturenofocus>
                         <usealttexture>!IsEmpty(Window.Property(streetview))</usealttexture>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                     </control>
                 </control>
                 <control id="651" type="grouplist">
@@ -479,26 +482,26 @@
                     <onup>200</onup>
                     <onright>652</onright>
                     <control id="103" type="button">
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
                         <texturefocus colordiffuse="FF0084ff">googlemaps/zoomin.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/zoomin.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/zoomin.png</texturenofocus>
                     </control>
                     <!--
                     <control type="button" id="104">
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <animation effect="zoom" center="50,50" start="95" end="100" time="480" tween="back" reversible="false">Focus</animation>
                         <texturefocus colordiffuse="FF0084ff">googlemaps/Navigation.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/Navigation.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/Navigation.png</texturenofocus>
                     </control>-->
                     <control id="104" type="button">
                         <texturefocus colordiffuse="FF0084ff">googlemaps/zoomout.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/zoomout.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/zoomout.png</texturenofocus>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                     </control>
                 </control>
                 <control id="652" type="grouplist">
@@ -511,30 +514,31 @@
                     <onright>112</onright>
                     <itemgap>20</itemgap>
                     <control id="126" type="button">
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
                         <texturefocus colordiffuse="FF0084ff">googlemaps/hybrid.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/hybrid.png</texturenofocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/hybrid.png</texturenofocus>
                         <visible>IsEmpty(Window.Property(streetview))</visible>
                     </control>
                     <control id="124" type="button">
-                        <texturefocus colordiffuse="FF0084ff">googlemaps/moveup.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/moveup.png</texturenofocus>
+                        <texturefocus colordiffuse="FF0084ff">googlemaps/arrowup.png</texturefocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/arrowup.png</texturenofocus>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <visible>!IsEmpty(Window.Property(streetview))</visible>
                     </control>
                     <control id="125" type="button">
-                        <texturefocus colordiffuse="FF0084ff">googlemaps/movedown.png</texturefocus>
-                        <texturenofocus colordiffuse="FFe5e5e5">googlemaps/movedown.png</texturenofocus>
+                        <texturefocus colordiffuse="FF0084ff">googlemaps/arrowdown.png</texturefocus>
+                        <texturenofocus colordiffuse="FFBBBBBB">googlemaps/arrowdown.png</texturenofocus>
                         <animation center="50,50" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
-                        <width>100</width>
-                        <height>100</height>
+                        <width>60</width>
+                        <height>60</height>
                         <visible>!IsEmpty(Window.Property(streetview))</visible>
                     </control>
                 </control>
+            </control>
             </control>
         </control>
         <control id="725" type="button">

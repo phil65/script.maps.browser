@@ -146,10 +146,11 @@ class LastFM():
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(base_url, url)
   #     prettyprint(results["results"]["venuematches"])
-        if len(results["results"]["venuematches"]) > 0:
-            return results["results"]["venuematches"]["venue"][0]["id"]
+        venuematches = results["results"]["venuematches"]
+        if isinstance(venuematches["venue"], list):
+            return venuematches["venue"][0]["id"]
         else:
-            return None
+            return venuematches["venue"]["id"]
 
 
 class LastFMDialog(xbmcgui.WindowXMLDialog):
