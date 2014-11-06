@@ -609,4 +609,3 @@ if __name__ == '__main__':
     else:
         gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).onInit(startGUI)
     del gui
-    sys.modules.clear()
