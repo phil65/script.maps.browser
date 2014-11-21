@@ -14,6 +14,7 @@ import simplejson
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
+__addonicon__ = __addon__.getAddonInfo('icon')
 __language__ = __addon__.getLocalizedString
 
 
@@ -326,8 +327,9 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-def Notify(header, line='', line2='', line3=''):
-    xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3))
+def Notify(header="", message="", icon=__addonicon__, time=5000, sound=True):
+    dialog = xbmcgui.Dialog()
+    dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
 def prettyprint(string):
