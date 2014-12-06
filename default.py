@@ -38,11 +38,9 @@ __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __language__ = __addon__.getLocalizedString
 __addonpath__ = __addon__.getAddonInfo('path')
+__addonname__ = __addon__.getAddonInfo('name')
 
 
-addon = xbmcaddon.Addon()
-addon_path = addon.getAddonInfo('path')
-addon_name = addon.getAddonInfo('name')
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
@@ -80,7 +78,7 @@ class GUI(xbmcgui.WindowXML):
     ACTION_PLAY = [79]
     ACTION_SELECT_ITEM = [7]
 
-    def __init__(self, skin_file, addon_path, *args, **kwargs):
+    def __init__(self, skin_file, __addonpath__, *args, **kwargs):
         log('__init__')
 
     def onInit(self, startGUI=True):
@@ -307,15 +305,15 @@ class GUI(xbmcgui.WindowXML):
                 eventful_id = selecteditem.getProperty("eventful_id")
                 picture_path = selecteditem.getProperty("filepath")
                 if event_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=event_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventid=event_id)
                 elif venue_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venue_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, venueid=venue_id)
                 elif picture_path:
-                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % addon_name, addon_path, picture_path=picture_path)
+                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % __addonname__, __addonpath__, picture_path=picture_path)
                 elif foursquare_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, foursquare_id=foursquare_id)
+                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, foursquare_id=foursquare_id)
                 elif eventful_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventful_id=eventful_id)
+                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventful_id=eventful_id)
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
                     self.PinString = dialog.GetEventsPinString
@@ -597,15 +595,15 @@ if __name__ == '__main__':
         if param.startswith('venueid='):
             startGUI = False
             venueid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, venueid=venueid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, venueid=venueid)
             dialog.doModal()
         if param.startswith('eventid='):
             startGUI = False
             eventid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % addon_name, addon_path, eventid=eventid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventid=eventid)
             dialog.doModal()
     if startGUI:
-        gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
+        gui = GUI(u'script-%s-main.xml' % __addonname__, __addonpath__).doModal()
     else:
-        gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).onInit(startGUI)
+        gui = GUI(u'script-%s-main.xml' % __addonname__, __addonpath__).onInit(startGUI)
     del gui
