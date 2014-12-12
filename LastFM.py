@@ -10,7 +10,7 @@ __language__ = __addon__.getLocalizedString
 __addonpath__ = __addon__.getAddonInfo('path')
 
 googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
+lastfm_apikey = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
 
 
