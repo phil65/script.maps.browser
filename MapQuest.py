@@ -1,12 +1,8 @@
 from Utils import *
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__language__ = __addon__.getLocalizedString
-
-mapquest_key = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
-googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-max_limit = 25
+MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
+GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+MAX_LIMIT = 25
 
 
 class MapQuest():
@@ -15,7 +11,7 @@ class MapQuest():
         pass
 
     def GetItemList(self, lat, lon, zoom):
-        base_url = 'http://www.mapquestapi.com/traffic/v2/incidents?key=%s&inFormat=kvp' % (mapquest_key)
+        base_url = 'http://www.mapquestapi.com/traffic/v2/incidents?key=%s&inFormat=kvp' % (MAPQUEST_KEY)
         mx, my = LatLonToMeters(lat, lon)
         px, py = MetersToPixels(mx, my, zoom)
         mxhigh, myhigh = PixelsToMeters(px + 320, py + 200, zoom)
@@ -37,11 +33,11 @@ class MapQuest():
             for place in results['incidents']:
                 lat = str(place['lat'])
                 lon = str(place['lng'])
-                base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (mapquest_key)
+                base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (MAPQUEST_KEY)
                 url = "&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (lat, lon)
                 image = base_url + url
                 search_string = lat + "," + lon
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
                 if place['type'] == 1:
                     incidenttype = "Construction"
                 elif place['type'] == 2:
@@ -73,7 +69,7 @@ class MapQuest():
                 places_list.append(prop_list)
                 count += 1
                 letter += 1
-                if count > max_limit:
+                if count > MAX_LIMIT:
                     break
             FillArea = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lathigh, lonhigh, lathigh, lonlow, latlow, lonlow, latlow, lonhigh)
             PinString = PinString + FillArea.replace("|", "%7C")

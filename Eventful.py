@@ -1,8 +1,8 @@
 from Utils import *
 import xbmcgui
 
-googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-eventful_key = 'Nw3rh3mXn8RhMQNK'
+GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 
 
 class Eventful():
@@ -11,7 +11,7 @@ class Eventful():
         pass
 
     def SelectCategory(self):
-        url = "http://api.eventful.com/json/categories/list?app_key=%s" % (eventful_key)
+        url = "http://api.eventful.com/json/categories/list?app_key=%s" % (EVENTFUL_KEY)
         results = Get_JSON_response("", url, 7)
         modeselect = []
    #     prettyprint(results)
@@ -28,7 +28,7 @@ class Eventful():
             return None
 
     def GetEventfulEventList(self, lat="", lon="", query="", category="", radius=30):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         log(url)
         if query is not "":
@@ -39,7 +39,7 @@ class Eventful():
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetEventfulVenueList(self, lat="", lon="", query=""):
-        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         if query is not "":
             url = url + '&query=%s' % (query)
@@ -48,7 +48,7 @@ class Eventful():
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetVenueInfo(self, event_id=""):
-        base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s' % (str(event_id))
         log(url)
         results = Get_JSON_response(base_url, url)
@@ -56,7 +56,7 @@ class Eventful():
         return self.HandleEventfulEventResult(results['venue'])
 
     def GetEventInfo(self, event_id=""):
-        base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (eventful_key)
+        base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
         log(url)
         results = Get_JSON_response(base_url, url)
@@ -78,7 +78,7 @@ class Eventful():
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
             search_string = lat + "," + lon
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
             if ("image" in venue) and venue["image"]:
                 photo = venue["image"]["large"]["url"]
             else:

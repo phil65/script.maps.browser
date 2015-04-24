@@ -1,17 +1,11 @@
 import xbmcgui
-import xbmcaddon
 from ImageTags import *
 from Utils import *
 import urllib
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__language__ = __addon__.getLocalizedString
-__addonpath__ = __addon__.getAddonInfo('path')
-
-googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-lastfm_apikey = 'd942dd5ca4c9ee5bd821df58cf8130d4'
-base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (lastfm_apikey)
+GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+LASTFM_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
+BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (LASTFM_KEY)
 
 
 class LastFM():
@@ -23,7 +17,6 @@ class LastFM():
         letter = ord('A')
         count = 0
         events_list = list()
-      #  prettyprint(results)
         if "events" in results:
             if "@attr" in results["events"]:
                 if not isinstance(results['events']['event'], list):
@@ -46,7 +39,7 @@ class LastFM():
                         search_string = event['venue']['location']['city'] + " " + event['venue']['name']
                     else:
                         search_string = event['venue']['name']
-                    googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+                    googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
                     formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
                     description = unicode(cleanText(event['description']))
                     if my_arts != event['artists']['headliner']:
@@ -98,7 +91,7 @@ class LastFM():
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
             url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (artist)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(BASE_URL, url)
         return results
 
     def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
@@ -111,13 +104,13 @@ class LastFM():
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(BASE_URL, url)
         return results
 
     def SelectCategory(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         url = '&method=tag.getTopTags'
-        results = Get_JSON_response(base_url, url, 7)
+        results = Get_JSON_response(BASE_URL, url, 7)
         modeselect = []
         modeselect.append("All Categories")
         for item in results["toptags"]["tag"]:
@@ -134,17 +127,17 @@ class LastFM():
 
     def GetVenueEvents(self, venueid=""):
         url = '&method=venue.getevents&venue=%s' % (venueid)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(BASE_URL, url)
         return results
 
     def GetEventInfo(self, eventid=""):
         url = '&method=event.getinfo&event=%s' % (eventid)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(BASE_URL, url)
         return results
 
     def GetVenueID(self, venuename=""):
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(BASE_URL, url)
   #     prettyprint(results["results"]["venuematches"])
         venuematches = results["results"]["venuematches"]
         if isinstance(venuematches["venue"], list):
@@ -204,7 +197,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             search_string = self.event['venue']['name']
         if "tags" in self.event:
             tags = " / ".join(self.event['tags']['tag'])
-        self.googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_normal)
+        self.googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
         self.getControl(200).setText(description)
         self.getControl(202).setLabel(self.event['startDate'][:-8])
         self.getControl(203).setLabel(self.event["venue"]["name"])

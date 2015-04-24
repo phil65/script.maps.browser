@@ -12,17 +12,14 @@ import hashlib
 from ImageTags import *
 import simplejson
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonicon__ = __addon__.getAddonInfo('icon')
-__language__ = __addon__.getLocalizedString
-
-
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
-tileSize = 256
-initialResolution = 2 * math.pi * 6378137 / tileSize
+ADDON = xbmcaddon.Addon()
+ADDON_ID = ADDON.getAddonInfo('id')
+ADDON_ICON = ADDON.getAddonInfo('icon')
+ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
+TILESIZE = 256
+INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE
 # 156543.03392804062 for tileSize 256 pixels
-originShift = 2 * math.pi * 6378137 / 2.0
+ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0
 # 20037508.342789244
 
 
@@ -30,9 +27,9 @@ def LatLonToMeters(lat, lon):
         "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
         if not lon:
             return None
-        mx = lon * originShift / 180.0
+        mx = lon * ORIGIN_SHIFT / 180.0
         my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
-        my = my * originShift / 180.0
+        my = my * ORIGIN_SHIFT / 180.0
         return mx, my
 
 
@@ -46,26 +43,26 @@ def FillListControl(listcontrol, listitem_dict):
 def MetersToPixels(mx, my, zoom):
         "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
 
-        res = initialResolution / (2**zoom)
-        px = (mx + originShift) / res
-        py = (my + originShift) / res
+        res = INITIAL_RESOLUTION / (2**zoom)
+        px = (mx + ORIGIN_SHIFT) / res
+        py = (my + ORIGIN_SHIFT) / res
         return px, py
 
 
 def PixelsToMeters(px, py, zoom):
     "Converts pixel coordinates in given zoom level of pyramid to EPSG:900913"
 
-    res = initialResolution / (2**zoom)
-    mx = px * res - originShift
-    my = py * res - originShift
+    res = INITIAL_RESOLUTION / (2**zoom)
+    mx = px * res - ORIGIN_SHIFT
+    my = py * res - ORIGIN_SHIFT
     return mx, my
 
 
 def MetersToLatLon(mx, my):
     "Converts XY point from Spherical Mercator EPSG:900913 to lat/lon in WGS84 Datum"
 
-    lon = (mx / originShift) * 180.0
-    lat = (my / originShift) * 180.0
+    lon = (mx / ORIGIN_SHIFT) * 180.0
+    lat = (my / ORIGIN_SHIFT) * 180.0
 
     lat = 180 / math.pi * (2 * math.atan(math.exp(lat * math.pi / 180.0)) - math.pi / 2.0)
     return lat, lon
@@ -101,7 +98,7 @@ def GetStringFromUrl(encurl):
 def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = hashlib.md5(custom_url).hexdigest()
-    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
+    path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
@@ -109,7 +106,7 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
         url = base_url + custom_url
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
-        save_to_file(results, filename, Addon_Data_Path)
+        save_to_file(results, filename, ADDON_DATA_PATH)
     xbmc.executebuiltin("Dialog.Close(busydialog)")
     return results
 
@@ -117,7 +114,7 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (ADDON_ID, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 
@@ -327,7 +324,7 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-def Notify(header="", message="", icon=__addonicon__, time=5000, sound=True):
+def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
     dialog = xbmcgui.Dialog()
     dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 

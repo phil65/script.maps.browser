@@ -17,9 +17,6 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-
-    # code for FourSquare scraping based on script.maps by a.a.alsaleh. credits to him.
-
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -34,15 +31,14 @@ from Search_Select_Dialog import Search_Select_Dialog
 from EventInfoDialog import EventInfoDialog
 from math import sin, cos, radians, pow
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__language__ = __addon__.getLocalizedString
-__addonpath__ = __addon__.getAddonInfo('path')
-__addonname__ = __addon__.getAddonInfo('name')
+ADDON = xbmcaddon.Addon()
+ADDON_LANGUAGE = ADDON.getLocalizedString
+ADDON_PATH = ADDON.getAddonInfo('path')
+ADDON_NAME = ADDON.getAddonInfo('name')
 
 
-googlemaps_key_normal = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-googlemaps_key_streetview = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
+GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+GOOGLE_STREETVIEW_KEY = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
 
 class GUI(xbmcgui.WindowXML):
@@ -78,7 +74,7 @@ class GUI(xbmcgui.WindowXML):
     ACTION_PLAY = [79]
     ACTION_SELECT_ITEM = [7]
 
-    def __init__(self, skin_file, __addonpath__, *args, **kwargs):
+    def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
         log('__init__')
 
     def onInit(self, startGUI=True):
@@ -90,7 +86,7 @@ class GUI(xbmcgui.WindowXML):
         log("window = " + str(self.window))
         setWindowProperty(self.window, 'NavMode', '')
         setWindowProperty(self.window, 'streetview', '')
-        if __addon__.getSetting("VenueLayout") == "1":
+        if ADDON.getSetting("VenueLayout") == "1":
             setWindowProperty(self.window, 'ListLayout', '1')
         else:
             setWindowProperty(self.window, 'ListLayout', '0')
@@ -156,7 +152,7 @@ class GUI(xbmcgui.WindowXML):
             if not settings.getSetting('firststart') == "true":
                 settings.setSetting(id='firststart', value='true')
                 dialog = xbmcgui.Dialog()
-                dialog.ok(__language__(32001), __language__(32002), __language__(32003))
+                dialog.ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
         log('onInit finished')
 
     def init_vars(self):
@@ -187,7 +183,7 @@ class GUI(xbmcgui.WindowXML):
     def onAction(self, action):
         action_id = action.getId()
         if action_id in self.ACTION_SHOW_INFO:
-            if __addon__.getSetting("InfoButtonAction") == "1":
+            if ADDON.getSetting("InfoButtonAction") == "1":
                 self.ToggleMapMode()
             else:
                 if not self.street_view:
@@ -305,15 +301,15 @@ class GUI(xbmcgui.WindowXML):
                 eventful_id = selecteditem.getProperty("eventful_id")
                 picture_path = selecteditem.getProperty("filepath")
                 if event_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventid=event_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventid=event_id)
                 elif venue_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, venueid=venue_id)
+                    dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, venueid=venue_id)
                 elif picture_path:
-                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % __addonname__, __addonpath__, picture_path=picture_path)
+                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME, ADDON_PATH, picture_path=picture_path)
                 elif foursquare_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, foursquare_id=foursquare_id)
+                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, foursquare_id=foursquare_id)
                 elif eventful_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventful_id=eventful_id)
+                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventful_id=eventful_id)
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
                     self.PinString = dialog.GetEventsPinString
@@ -386,7 +382,7 @@ class GUI(xbmcgui.WindowXML):
             setWindowProperty(self.window, 'streetview', 'True')
 
     def SearchLocation(self):
-        self.location = xbmcgui.Dialog().input(__language__(32032), type=xbmcgui.INPUT_ALPHANUM)
+        self.location = xbmcgui.Dialog().input(ADDON_LANGUAGE(32032), type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
             lat, lon = self.GetGeoCodes(True, self.location)
@@ -400,52 +396,52 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, 'index', "")
         modeselect = []
         itemlist = None
-        modeselect.append(__language__(32016))  # concerts
-        modeselect.append(__language__(32017))  # festivals
-        modeselect.append(__language__(32027))  # geopics
-        modeselect.append(__language__(32028))  # eventful
-        modeselect.append(__language__(32029))  # FourSquare
-        modeselect.append(__language__(32030))  # MapQuest
-        modeselect.append(__language__(32031))  # Google Places
-        modeselect.append(__language__(32019))  # reset
+        modeselect.append(ADDON_LANGUAGE(32016))  # concerts
+        modeselect.append(ADDON_LANGUAGE(32017))  # festivals
+        modeselect.append(ADDON_LANGUAGE(32027))  # geopics
+        modeselect.append(ADDON_LANGUAGE(32028))  # eventful
+        modeselect.append(ADDON_LANGUAGE(32029))  # FourSquare
+        modeselect.append(ADDON_LANGUAGE(32030))  # MapQuest
+        modeselect.append(ADDON_LANGUAGE(32031))  # Google Places
+        modeselect.append(ADDON_LANGUAGE(32019))  # reset
         dialogSelection = xbmcgui.Dialog()
-        provider_index = dialogSelection.select(__language__(32020), modeselect)
+        provider_index = dialogSelection.select(ADDON_LANGUAGE(32020), modeselect)
         if not provider_index < 0:
-            if modeselect[provider_index] == __language__(32031):
+            if modeselect[provider_index] == ADDON_LANGUAGE(32031):
                 GP = GooglePlaces()
                 category = GP.SelectCategory()
                 if category is not None:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
-            elif modeselect[provider_index] == __language__(32029):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32029):
                 FS = FourSquare()
                 section = FS.SelectSection()
                 if section is not None:
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
-            elif modeselect[provider_index] == __language__(32016):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32016):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
                     itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(32030):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32030):
                 MQ = MapQuest()
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
-            elif modeselect[provider_index] == __language__(32017):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32017):
                 LFM = LastFM()
                 category = LFM.SelectCategory()
                 if category is not None:
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
                     itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(32027):
-                folder_path = xbmcgui.Dialog().browse(0, __language__(32021), 'pictures')
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32027):
+                folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
                 setWindowProperty(self.window, 'imagepath', folder_path)
                 itemlist, self.PinString = GetImages(folder_path)
-            elif modeselect[provider_index] == __language__(32028):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32028):
                 EF = Eventful()
                 category = EF.SelectCategory()
                 if category is not None:
                     itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
-            elif modeselect[provider_index] == __language__(32019):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32019):
                 self.PinString = ""
                 itemlist = []
             if itemlist is not None:
@@ -454,33 +450,33 @@ class GUI(xbmcgui.WindowXML):
 
     def SearchDialog(self):
         modeselect = []
-        modeselect.append(__language__(32024))
-        modeselect.append(__language__(32004))
-        modeselect.append(__language__(32023))
-        modeselect.append(__language__(32033))
-        modeselect.append(__language__(32019))
+        modeselect.append(ADDON_LANGUAGE(32024))
+        modeselect.append(ADDON_LANGUAGE(32004))
+        modeselect.append(ADDON_LANGUAGE(32023))
+        modeselect.append(ADDON_LANGUAGE(32033))
+        modeselect.append(ADDON_LANGUAGE(32019))
         dialogSelection = xbmcgui.Dialog()
-        provider_index = dialogSelection.select(__language__(32026), modeselect)
+        provider_index = dialogSelection.select(ADDON_LANGUAGE(32026), modeselect)
         if not provider_index < 0:
-            if modeselect[provider_index] == __language__(32024):
+            if modeselect[provider_index] == ADDON_LANGUAGE(32024):
                 self.SearchLocation()
                 itemlist = []
-            elif modeselect[provider_index] == __language__(32004):
-                query = xbmcgui.Dialog().input(__language__(32022), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32004):
+                query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
                 FS = FourSquare()
                 itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
-            elif modeselect[provider_index] == __language__(32023):
-                artist = xbmcgui.Dialog().input(__language__(32025), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32023):
+                artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 results = LFM.GetArtistEvents(artist)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(32033):
-                venue = xbmcgui.Dialog().input(__language__(32025), type=xbmcgui.INPUT_ALPHANUM)
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32033):
+                venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
                 LFM = LastFM()
                 venueid = LFM.GetVenueID(venue)
                 results = LFM.GetVenueEvents(venueid)
                 itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == __language__(32019):
+            elif modeselect[provider_index] == ADDON_LANGUAGE(32019):
                 self.PinString = ""
                 itemlist = []
             FillListControl(self.venuelist, itemlist)
@@ -499,12 +495,12 @@ class GUI(xbmcgui.WindowXML):
             self.search_string = str(self.lat) + "," + str(self.lon)
         else:
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
-        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (__addon__.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
-        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, googlemaps_key_normal)
+        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (ADDON.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
+        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, GOOGLE_MAPS_KEY)
         self.GoogleMapURL = url + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
-        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (__addon__.getSetting("ImageFormat"))
-        self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), googlemaps_key_streetview, str(self.direction), str(self.pitch))
+        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
+        self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
         setWindowProperty(self.window, self.prefix + 'location', self.location)
         setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
         setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
@@ -555,7 +551,7 @@ class GUI(xbmcgui.WindowXML):
                 lat = str(locationinfo["lat"])
                 lon = str(locationinfo["lng"])
                 search_string = lat + "," + lon
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, googlemaps_key_normal)
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
                 prop_list = {'label': item['formatted_address'],
                              'lat': lat,
                              'lon': lon,
@@ -565,7 +561,7 @@ class GUI(xbmcgui.WindowXML):
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = Search_Select_Dialog('DialogSelect.xml', __addonpath__, listing=CreateListItems(places_list))
+                    w = Search_Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=CreateListItems(places_list))
                     w.doModal()
                     if w.lat is not "":
                         self.zoom_level = 12
@@ -595,15 +591,15 @@ if __name__ == '__main__':
         if param.startswith('venueid='):
             startGUI = False
             venueid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, venueid=venueid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, venueid=venueid)
             dialog.doModal()
         if param.startswith('eventid='):
             startGUI = False
             eventid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % __addonname__, __addonpath__, eventid=eventid)
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventid=eventid)
             dialog.doModal()
     if startGUI:
-        gui = GUI(u'script-%s-main.xml' % __addonname__, __addonpath__).doModal()
+        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH).doModal()
     else:
-        gui = GUI(u'script-%s-main.xml' % __addonname__, __addonpath__).onInit(startGUI)
+        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH).onInit(startGUI)
     del gui

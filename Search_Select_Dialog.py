@@ -1,10 +1,7 @@
 import xbmcgui
 from Utils import *
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__language__ = __addon__.getLocalizedString
-__addonpath__ = __addon__.getAddonInfo('path')
+ADDON = xbmcaddon.Addon()
 
 
 class Search_Select_Dialog(xbmcgui.WindowXMLDialog):
@@ -22,7 +19,7 @@ class Search_Select_Dialog(xbmcgui.WindowXMLDialog):
         self.list.controlRight(self.list)
         self.getControl(3).setVisible(False)
         self.getControl(5).setVisible(False)
-        self.getControl(1).setLabel(__language__(32015))
+        self.getControl(1).setLabel(ADDON.getLocalizedString(32015))
         self.list.addItems(self.items)
         self.setFocus(self.list)
 
