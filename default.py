@@ -179,7 +179,6 @@ class GUI(xbmcgui.WindowXML):
         self.GoogleMapURL = ""
         self.GoogleStreetViewURL = ""
 
-
     def onAction(self, action):
         action_id = action.getId()
         if action_id in self.ACTION_SHOW_INFO:

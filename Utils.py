@@ -24,13 +24,13 @@ ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0
 
 
 def LatLonToMeters(lat, lon):
-        "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
-        if not lon:
-            return None
-        mx = lon * ORIGIN_SHIFT / 180.0
-        my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
-        my = my * ORIGIN_SHIFT / 180.0
-        return mx, my
+    "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
+    if not lon:
+        return None
+    mx = lon * ORIGIN_SHIFT / 180.0
+    my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
+    my = my * ORIGIN_SHIFT / 180.0
+    return mx, my
 
 
 def FillListControl(listcontrol, listitem_dict):
@@ -41,18 +41,18 @@ def FillListControl(listcontrol, listitem_dict):
 
 
 def MetersToPixels(mx, my, zoom):
-        "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
+    "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
 
-        res = INITIAL_RESOLUTION / (2**zoom)
-        px = (mx + ORIGIN_SHIFT) / res
-        py = (my + ORIGIN_SHIFT) / res
-        return px, py
+    res = INITIAL_RESOLUTION / (2 ** zoom)
+    px = (mx + ORIGIN_SHIFT) / res
+    py = (my + ORIGIN_SHIFT) / res
+    return px, py
 
 
 def PixelsToMeters(px, py, zoom):
     "Converts pixel coordinates in given zoom level of pyramid to EPSG:900913"
 
-    res = INITIAL_RESOLUTION / (2**zoom)
+    res = INITIAL_RESOLUTION / (2 ** zoom)
     mx = px * res - ORIGIN_SHIFT
     my = py * res - ORIGIN_SHIFT
     return mx, my
@@ -308,7 +308,6 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         self.picture_path = kwargs.get('picture_path')
-
 
     def onInit(self):
         self.getControl(100).setImage(self.picture_path)

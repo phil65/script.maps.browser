@@ -49,7 +49,7 @@ class FourSquare():
             search_string = lat + "," + lon
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
             prop_list = {"id": str(venue['id']),
-                         "FOURSQUARE_ID": str(venue['id']),
+                         "foursquare_id": str(venue['id']),
                          "distance": str(venue['location']['distance']),
                          "visited": str(venue['stats']['usersCount']),
                          "twitter": venue['contact'].get('twitter', ""),
