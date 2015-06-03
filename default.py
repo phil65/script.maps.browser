@@ -390,16 +390,15 @@ class GUI(xbmcgui.WindowXML):
 
     def SelectPlacesProvider(self):
         setWindowProperty(self.window, 'index', "")
-        modeselect = []
         itemlist = None
-        modeselect.append(ADDON_LANGUAGE(32016))  # concerts
-        modeselect.append(ADDON_LANGUAGE(32017))  # festivals
-        modeselect.append(ADDON_LANGUAGE(32027))  # geopics
-        modeselect.append(ADDON_LANGUAGE(32028))  # eventful
-        modeselect.append(ADDON_LANGUAGE(32029))  # FourSquare
-        modeselect.append(ADDON_LANGUAGE(32030))  # MapQuest
-        modeselect.append(ADDON_LANGUAGE(32031))  # Google Places
-        modeselect.append(ADDON_LANGUAGE(32019))  # reset
+        modeselect = [ADDON_LANGUAGE(32016),  # concerts
+                      ADDON_LANGUAGE(32017),  # festivals
+                      ADDON_LANGUAGE(32027),  # geopics
+                      ADDON_LANGUAGE(32028),  # eventful
+                      ADDON_LANGUAGE(32029),  # FourSquare
+                      ADDON_LANGUAGE(32030),  # MapQuest
+                      ADDON_LANGUAGE(32031),  # Google Places
+                      ADDON_LANGUAGE(32019)]  # reset
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(ADDON_LANGUAGE(32020), modeselect)
         if not provider_index < 0:
@@ -445,12 +444,11 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
 
     def SearchDialog(self):
-        modeselect = []
-        modeselect.append(ADDON_LANGUAGE(32024))
-        modeselect.append(ADDON_LANGUAGE(32004))
-        modeselect.append(ADDON_LANGUAGE(32023))
-        modeselect.append(ADDON_LANGUAGE(32033))
-        modeselect.append(ADDON_LANGUAGE(32019))
+        modeselect = [ADDON_LANGUAGE(32024),
+                      ADDON_LANGUAGE(32004),
+                      ADDON_LANGUAGE(32023),
+                      ADDON_LANGUAGE(32033),
+                      ADDON_LANGUAGE(32019)]
         dialogSelection = xbmcgui.Dialog()
         provider_index = dialogSelection.select(ADDON_LANGUAGE(32026), modeselect)
         if not provider_index < 0:
