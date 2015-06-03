@@ -75,21 +75,9 @@ class GUI(xbmcgui.WindowXML):
     ACTION_SELECT_ITEM = [7]
 
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
-        log('__init__')
-
-    def onInit(self, startGUI=True):
         log('onInit')
-        itemlist = []
+        self.itemlist = []
         self.init_vars()
-        log("WindowID:" + str(xbmcgui.getCurrentWindowId()))
-        self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        log("window = " + str(self.window))
-        setWindowProperty(self.window, 'NavMode', '')
-        setWindowProperty(self.window, 'streetview', '')
-        if ADDON.getSetting("VenueLayout") == "1":
-            setWindowProperty(self.window, 'ListLayout', '1')
-        else:
-            setWindowProperty(self.window, 'ListLayout', '0')
         for arg in sys.argv:
             param = arg.lower()
             log("param = " + param)
@@ -107,23 +95,23 @@ class GUI(xbmcgui.WindowXML):
                 self.aspect = param[7:]
             elif param.startswith('folder='):
                 folder = param[7:]
-                itemlist, self.PinString = self.GetImages(folder)
+                self.itemlist, self.PinString = self.GetImages(folder)
             elif param.startswith('artist='):
                 artist = param[7:]
                 LFM = LastFM()
                 results = LFM.GetArtistEvents(artist)
-                itemlist, self.PinString = LFM.CreateVenueList(results)
+                self.itemlist, self.PinString = LFM.CreateVenueList(results)
             elif param.startswith('list='):
                 listtype = param[5:]
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius, "", True)
-                    itemlist, self.PinString = LFM.CreateVenueList(results)
+                    self.itemlist, self.PinString = LFM.CreateVenueList(results)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
                     results = LFM.GetNearEvents(self.lat, self.lon, self.radius)
-                    itemlist, self.PinString = LFM.CreateVenueList(results)
+                    self.itemlist, self.PinString = LFM.CreateVenueList(results)
             elif param.startswith('direction='):
                 self.direction = param[10:]
             elif param.startswith('prefix='):
@@ -141,18 +129,27 @@ class GUI(xbmcgui.WindowXML):
         else:
             self.lat = float(self.strlat)
             self.lon = float(self.strlon)
+
+    def onInit(self):
+        log("WindowID:" + str(xbmcgui.getCurrentWindowId()))
+        self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+        log("window = " + str(self.window))
+        setWindowProperty(self.window, 'NavMode', '')
+        setWindowProperty(self.window, 'streetview', '')
+        if ADDON.getSetting("VenueLayout") == "1":
+            setWindowProperty(self.window, 'ListLayout', '1')
+        else:
+            setWindowProperty(self.window, 'ListLayout', '0')
+        self.venuelist = self.getControl(self.CONTROL_PLACES_LIST)
         self.GetGoogleMapURLs()
-        if startGUI:
-            self.venuelist = self.getControl(self.CONTROL_PLACES_LIST)
-            self.GetGoogleMapURLs()
-            FillListControl(self.venuelist, itemlist)
-            self.window.setProperty("map_image", self.GoogleMapURL)
-            self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
-            settings = xbmcaddon.Addon(id='script.maps.browser')
-            if not settings.getSetting('firststart') == "true":
-                settings.setSetting(id='firststart', value='true')
-                dialog = xbmcgui.Dialog()
-                dialog.ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
+        FillListControl(self.venuelist, self.itemlist)
+        self.window.setProperty("map_image", self.GoogleMapURL)
+        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
+        settings = xbmcaddon.Addon(id='script.maps.browser')
+        if not settings.getSetting('firststart') == "true":
+            settings.setSetting(id='firststart', value='true')
+            dialog = xbmcgui.Dialog()
+            dialog.ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
         log('onInit finished')
 
     def init_vars(self):
@@ -581,24 +578,20 @@ class GUI(xbmcgui.WindowXML):
             return (None, None)
 
 if __name__ == '__main__':
-    startGUI = True
     for arg in sys.argv:
         param = arg.lower()
         xbmc.log("param = " + param)
-        if param.startswith('prefix='):
-            startGUI = False
         if param.startswith('venueid='):
-            startGUI = False
             venueid = (param[8:])
             dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, venueid=venueid)
             dialog.doModal()
+            break
         if param.startswith('eventid='):
-            startGUI = False
             eventid = (param[8:])
             dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventid=eventid)
             dialog.doModal()
-    if startGUI:
-        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH).doModal()
+            break
     else:
-        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH).onInit(startGUI)
-    del gui
+        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
+        gui.doModal()
+        del gui
