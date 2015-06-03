@@ -42,37 +42,29 @@ GOOGLE_STREETVIEW_KEY = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
 
 class GUI(xbmcgui.WindowXML):
-    CONTROL_SEARCH = 101
-    CONTROL_STREET_VIEW = 102
-    CONTROL_ZOOM_IN = 103
-    CONTROL_ZOOM_OUT = 104
-    CONTROL_MODE_ROADMAP = 105
-    CONTROL_MODE_HYBRID = 106
-    CONTROL_MODE_SATELLITE = 107
-    CONTROL_MODE_TERRAIN = 108
-    CONTROL_GOTO_PLACE = 111
-    CONTROL_SELECT_PROVIDER = 112
-    CONTROL_LEFT = 120
-    CONTROL_RIGHT = 121
-    CONTROL_UP = 122
-    CONTROL_DOWN = 123
-    CONTROL_LOOK_UP = 124
-    CONTROL_LOOK_DOWN = 125
-    CONTROL_PLACES_LIST = 200
-    CONTROL_MODE_TOGGLE = 126
+    C_SEARCH = 101
+    C_STREET_VIEW = 102
+    C_ZOOM_IN = 103
+    C_ZOOM_OUT = 104
+    C_MODE_ROADMAP = 105
+    C_MODE_HYBRID = 106
+    C_MODE_SATELLITE = 107
+    C_MODE_TERRAIN = 108
+    C_GOTO_PLACE = 111
+    C_SELECT_PROVIDER = 112
+    C_LEFT = 120
+    C_RIGHT = 121
+    C_UP = 122
+    C_DOWN = 123
+    C_LOOK_UP = 124
+    C_LOOK_DOWN = 125
+    C_PLACES_LIST = 200
+    C_MODE_TOGGLE = 126
 
     ACTION_CONTEXT_MENU = [117]
-    ACTION_OSD = [122]
     ACTION_PREVIOUS_MENU = [9, 92, 10]
-    ACTION_SHOW_INFO = [11]
     ACTION_EXIT_SCRIPT = [13]
-    ACTION_DOWN = [4]
-    ACTION_UP = [3]
-    ACTION_LEFT = [1]
-    ACTION_RIGHT = [2]
     ACTION_0 = [58, 18]
-    ACTION_PLAY = [79]
-    ACTION_SELECT_ITEM = [7]
 
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
         log('onInit')
@@ -140,7 +132,7 @@ class GUI(xbmcgui.WindowXML):
             setWindowProperty(self.window, 'ListLayout', '1')
         else:
             setWindowProperty(self.window, 'ListLayout', '0')
-        self.venuelist = self.getControl(self.CONTROL_PLACES_LIST)
+        self.venuelist = self.getControl(self.C_PLACES_LIST)
         self.GetGoogleMapURLs()
         FillListControl(self.venuelist, self.itemlist)
         self.window.setProperty("map_image", self.GoogleMapURL)
@@ -178,7 +170,7 @@ class GUI(xbmcgui.WindowXML):
 
     def onAction(self, action):
         action_id = action.getId()
-        if action_id in self.ACTION_SHOW_INFO:
+        if action_id == xbmcgui.ACTION_SHOW_INFO:
             if ADDON.getSetting("InfoButtonAction") == "1":
                 self.ToggleMapMode()
             else:
@@ -204,28 +196,28 @@ class GUI(xbmcgui.WindowXML):
             log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if not self.street_view:
                 stepsize = 60.0 / pow(2, self.zoom_level)
-                if action_id in self.ACTION_UP:
+                if action_id == xbmcgui.ACTION_UP:
                     self.lat = float(self.lat) + stepsize
-                elif action_id in self.ACTION_DOWN:
+                elif action_id == xbmcgui.ACTION_DOWN:
                     self.lat = float(self.lat) - stepsize
-                elif action_id in self.ACTION_LEFT:
+                elif action_id == xbmcgui.ACTION_LEFT:
                     self.lon = float(self.lon) - 2.0 * stepsize
-                elif action_id in self.ACTION_RIGHT:
+                elif action_id == xbmcgui.ACTION_RIGHT:
                     self.lon = float(self.lon) + 2.0 * stepsize
             else:
                 stepsize = 0.0002
                 radiantdirection = float(radians(self.direction))
-                if action_id in self.ACTION_UP:
+                if action_id == xbmcgui.ACTION_UP:
                     self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
-                elif action_id in self.ACTION_DOWN:
+                elif action_id == xbmcgui.ACTION_DOWN:
                     self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
-                elif action_id in self.ACTION_LEFT:
+                elif action_id == xbmcgui.ACTION_LEFT:
                     if self.direction <= 0:
                         self.direction = 360
                     self.direction -= 18
-                elif action_id in self.ACTION_RIGHT:
+                elif action_id == xbmcgui.ACTION_RIGHT:
                     if self.direction >= 348:
                         self.direction = 0
                     self.direction += 18
@@ -243,46 +235,46 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty("map_image", self.GoogleMapURL)
 
     def onClick(self, controlId):
-        if controlId == self.CONTROL_ZOOM_IN:
+        if controlId == self.C_ZOOM_IN:
             self.ZoomIn()
-        elif controlId == self.CONTROL_ZOOM_OUT:
+        elif controlId == self.C_ZOOM_OUT:
             self.ZoomOut()
-        elif controlId == self.CONTROL_SEARCH:
+        elif controlId == self.C_SEARCH:
             self.SearchDialog()
-        elif controlId == self.CONTROL_MODE_TOGGLE:
+        elif controlId == self.C_MODE_TOGGLE:
             self.ToggleMapMode()
-        elif controlId == self.CONTROL_STREET_VIEW:
+        elif controlId == self.C_STREET_VIEW:
             if not self.street_view:
                 self.ToggleStreetMode()
                 self.ToggleNavMode()
             else:
                 self.ToggleStreetMode()
-        elif controlId == self.CONTROL_MODE_ROADMAP:
+        elif controlId == self.C_MODE_ROADMAP:
             self.type = "roadmap"
-        elif controlId == self.CONTROL_MODE_SATELLITE:
+        elif controlId == self.C_MODE_SATELLITE:
             self.type = "satellite"
-        elif controlId == self.CONTROL_MODE_HYBRID:
+        elif controlId == self.C_MODE_HYBRID:
             self.type = "hybrid"
-        elif controlId == self.CONTROL_MODE_TERRAIN:
+        elif controlId == self.C_MODE_TERRAIN:
             self.type = "terrain"
-        elif controlId == self.CONTROL_GOTO_PLACE:
+        elif controlId == self.C_GOTO_PLACE:
             self.location = self.window.getProperty("Location")
             self.lat, self.lon = self.GetGeoCodes(False, self.location)
-        elif controlId == self.CONTROL_SELECT_PROVIDER:
+        elif controlId == self.C_SELECT_PROVIDER:
             self.SelectPlacesProvider()
-        elif controlId == self.CONTROL_LEFT:
+        elif controlId == self.C_LEFT:
             pass
-        elif controlId == self.CONTROL_RIGHT:
+        elif controlId == self.C_RIGHT:
             pass
-        elif controlId == self.CONTROL_UP:
+        elif controlId == self.C_UP:
             pass
-        elif controlId == self.CONTROL_DOWN:
+        elif controlId == self.C_DOWN:
             pass
-        elif controlId == self.CONTROL_LOOK_UP:
+        elif controlId == self.C_LOOK_UP:
             self.PitchUp()
-        elif controlId == self.CONTROL_LOOK_DOWN:
+        elif controlId == self.C_LOOK_DOWN:
             self.PitchDown()
-        elif controlId == self.CONTROL_PLACES_LIST:
+        elif controlId == self.C_PLACES_LIST:
             selecteditem = self.venuelist.getSelectedItem()
             self.lat = float(selecteditem.getProperty("lat"))
             self.lon = float(selecteditem.getProperty("lon"))
