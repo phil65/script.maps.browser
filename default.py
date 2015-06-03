@@ -215,17 +215,17 @@ class GUI(xbmcgui.WindowXML):
             else:
                 stepsize = 0.0002
                 radiantdirection = float(radians(self.direction))
-                if action_id in self.ACTION_UP and self.street_view is True:
+                if action_id in self.ACTION_UP:
                     self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
-                elif action_id in self.ACTION_DOWN and self.street_view is True:
+                elif action_id in self.ACTION_DOWN:
                     self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
-                elif action_id in self.ACTION_LEFT and self.street_view is True:
+                elif action_id in self.ACTION_LEFT:
                     if self.direction <= 0:
                         self.direction = 360
                     self.direction -= 18
-                elif action_id in self.ACTION_RIGHT and self.street_view is True:
+                elif action_id in self.ACTION_RIGHT:
                     if self.direction >= 348:
                         self.direction = 0
                     self.direction += 18
