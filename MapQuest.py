@@ -43,9 +43,9 @@ class MapQuest():
                 elif place['type'] == 2:
                     incidenttype = "Event"
                 elif place['type'] == 3:
-                    incidenttype = "Congestion/Flow"
+                    incidenttype = "Congestion / Flow"
                 elif place['type'] == 4:
-                    incidenttype = "Incident/accident"
+                    incidenttype = "Incident / Accident"
                 prop_list = {'name': place['shortDesc'],
                              'label': place['shortDesc'],
                              'label2': place['startTime'],

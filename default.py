@@ -436,37 +436,40 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
 
     def SearchDialog(self):
-        modeselect = [ADDON_LANGUAGE(32024),
-                      ADDON_LANGUAGE(32004),
-                      ADDON_LANGUAGE(32023),
-                      ADDON_LANGUAGE(32033),
-                      ADDON_LANGUAGE(32019)]
-        dialogSelection = xbmcgui.Dialog()
-        provider_index = dialogSelection.select(ADDON_LANGUAGE(32026), modeselect)
-        if not provider_index < 0:
-            if modeselect[provider_index] == ADDON_LANGUAGE(32024):
-                self.SearchLocation()
-                itemlist = []
-            elif modeselect[provider_index] == ADDON_LANGUAGE(32004):
-                query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
-                FS = FourSquare()
-                itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
-            elif modeselect[provider_index] == ADDON_LANGUAGE(32023):
-                artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
-                LFM = LastFM()
-                results = LFM.GetArtistEvents(artist)
-                itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == ADDON_LANGUAGE(32033):
-                venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
-                LFM = LastFM()
-                venueid = LFM.GetVenueID(venue)
-                results = LFM.GetVenueEvents(venueid)
-                itemlist, self.PinString = LFM.CreateVenueList(results)
-            elif modeselect[provider_index] == ADDON_LANGUAGE(32019):
-                self.PinString = ""
-                itemlist = []
-            FillListControl(self.venuelist, itemlist)
-            self.street_view = False
+        modeselect = {"googlemaps": ADDON_LANGUAGE(32024),
+                      "foursquareplaces": ADDON_LANGUAGE(32004),
+                      "lastfmconcerts": ADDON_LANGUAGE(32023),
+                      "lastfmvenues": ADDON_LANGUAGE(32033),
+                      "reset": ADDON_LANGUAGE(32019)}
+        KEYS = [item for item in modeselect.keys()]
+        VALUES = [item for item in modeselect.values()]
+        dialog = xbmcgui.Dialog()
+        index = dialog.select(ADDON_LANGUAGE(32026), VALUES)
+        if index < 0:
+            return None
+        if KEYS[index] == "googlemaps":
+            self.SearchLocation()
+            itemlist = []
+        elif KEYS[index] == "foursquareplaces":
+            query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
+            FS = FourSquare()
+            itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
+        elif KEYS[index] == "lastfmconcerts":
+            artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
+            LFM = LastFM()
+            results = LFM.GetArtistEvents(artist)
+            itemlist, self.PinString = LFM.CreateVenueList(results)
+        elif KEYS[index] == "lastfmvenues":
+            venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
+            LFM = LastFM()
+            venueid = LFM.GetVenueID(venue)
+            results = LFM.GetVenueEvents(venueid)
+            itemlist, self.PinString = LFM.CreateVenueList(results)
+        elif KEYS[index] == "reset":
+            self.PinString = ""
+            itemlist = []
+        FillListControl(self.venuelist, itemlist)
+        self.street_view = False
 
     def toggleInfo(self):
         self.show_info = not self.show_info
@@ -507,13 +510,6 @@ class GUI(xbmcgui.WindowXML):
             self.radius = 500
         cache_path = xbmc.getCacheThumbName(self.GoogleMapURL)
         log(cache_path)
-       # my = my - my2
-      #  log("mx: " + str(mx) + "my: " + str(my) + "px: " + str(px) + "py: " + str(py))
-
-        # import MercatorProjection
-        # centerPoint = MercatorProjection.G_LatLng(self.lat, self.lon)
-        # corners = MercatorProjection.getCorners(centerPoint, zoom, mapWidth, mapHeight)
-        # prettyprint(corners)
         if self.prefix == "":
             if self.street_view:
                 setWindowProperty(self.window, self.prefix + 'streetview', "True")

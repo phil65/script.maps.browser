@@ -107,15 +107,14 @@ class GooglePlaces():
                       "veterinary_care": ADDON.getLocalizedString(32015),
                       "zoo": ADDON.getLocalizedString(32015)
                       }
-        modeselect = []
-        modeselect.append("All Sections")
+        modeselect = ["All Sections"]
         for value in Categories.iterkeys():
             modeselect.append(value)
-        categorydialog = xbmcgui.Dialog()
-        provider_index = categorydialog.select("Choose Section", modeselect)
-        if provider_index > 0:
-            return Categories.keys()[provider_index - 1]
-        elif provider_index > -1:
+        dialog = xbmcgui.Dialog()
+        index = dialog.select("Choose Section", modeselect)
+        if index > 0:
+            return Categories.keys()[index - 1]
+        elif index > -1:
             return ""
         else:
             return None
