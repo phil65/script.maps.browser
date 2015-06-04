@@ -67,7 +67,6 @@ class GUI(xbmcgui.WindowXML):
     ACTION_0 = [58, 18]
 
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
-        log('onInit')
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist = []
         self.init_vars()
@@ -125,9 +124,7 @@ class GUI(xbmcgui.WindowXML):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        log("WindowID:" + str(xbmcgui.getCurrentWindowId()))
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        log("window = " + str(self.window))
         setWindowProperty(self.window, 'NavMode', '')
         setWindowProperty(self.window, 'streetview', '')
         if ADDON.getSetting("VenueLayout") == "1":
