@@ -196,28 +196,28 @@ class GUI(xbmcgui.WindowXML):
             log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if not self.street_view:
                 stepsize = 60.0 / pow(2, self.zoom_level)
-                if action_id == xbmcgui.ACTION_UP:
+                if action_id == xbmcgui.ACTION_MOVE_UP:
                     self.lat = float(self.lat) + stepsize
-                elif action_id == xbmcgui.ACTION_DOWN:
+                elif action_id == xbmcgui.ACTION_MOVE_DOWN:
                     self.lat = float(self.lat) - stepsize
-                elif action_id == xbmcgui.ACTION_LEFT:
+                elif action_id == xbmcgui.ACTION_MOVE_LEFT:
                     self.lon = float(self.lon) - 2.0 * stepsize
-                elif action_id == xbmcgui.ACTION_RIGHT:
+                elif action_id == xbmcgui.ACTION_MOVE_RIGHT:
                     self.lon = float(self.lon) + 2.0 * stepsize
             else:
                 stepsize = 0.0002
                 radiantdirection = float(radians(self.direction))
-                if action_id == xbmcgui.ACTION_UP:
+                if action_id == xbmcgui.ACTION_MOVE_UP:
                     self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
-                elif action_id == xbmcgui.ACTION_DOWN:
+                elif action_id == xbmcgui.ACTION_MOVE_DOWN:
                     self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
-                elif action_id == xbmcgui.ACTION_LEFT:
+                elif action_id == xbmcgui.ACTION_MOVE_LEFT:
                     if self.direction <= 0:
                         self.direction = 360
                     self.direction -= 18
-                elif action_id == xbmcgui.ACTION_RIGHT:
+                elif action_id == xbmcgui.ACTION_MOVE_RIGHT:
                     if self.direction >= 348:
                         self.direction = 0
                     self.direction += 18
