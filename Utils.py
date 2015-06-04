@@ -236,7 +236,7 @@ def CreateListItems(data):
 
 
 def GetLocationCoordinates():
-    url = 'http://www.telize.com/geoip'
+    url = 'https://www.telize.com/geoip'
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
     lat = results["latitude"]

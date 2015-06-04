@@ -68,6 +68,7 @@ class GUI(xbmcgui.WindowXML):
 
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
         log('onInit')
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist = []
         self.init_vars()
         for arg in sys.argv:
@@ -121,6 +122,7 @@ class GUI(xbmcgui.WindowXML):
         else:
             self.lat = float(self.strlat)
             self.lon = float(self.strlon)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         log("WindowID:" + str(xbmcgui.getCurrentWindowId()))
