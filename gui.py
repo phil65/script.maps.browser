@@ -56,13 +56,12 @@ class GUI(xbmcgui.WindowXML):
         self.strlat = kwargs.get("lat", "")
         self.strlon = kwargs.get("lon", "")
         self.zoom_level = kwargs.get("zoom_level", 10)
+        self.aspect = kwargs.get("aspect", "640x400")
         self.init_vars()
         for arg in sys.argv:
             param = arg.lower()
             log("param = " + param)
-            if param.startswith('aspect='):
-                self.aspect = param[7:]
-            elif param.startswith('folder='):
+            if param.startswith('folder='):
                 folder = param[7:]
                 self.itemlist, self.PinString = self.GetImages(folder)
             elif param.startswith('artist='):
@@ -111,8 +110,8 @@ class GUI(xbmcgui.WindowXML):
         self.venuelist = self.getControl(self.C_PLACES_LIST)
         self.GetGoogleMapURLs()
         FillListControl(self.venuelist, self.itemlist)
-        self.window.setProperty("map_image", self.GoogleMapURL)
-        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
+        self.window.setProperty("map_image", self.map_url)
+        self.window.setProperty("streetview_image", self.street_view_url)
         settings = xbmcaddon.Addon(id='script.maps.browser')
         if not settings.getSetting('firststart') == "true":
             settings.setSetting(id='firststart', value='true')
@@ -133,11 +132,10 @@ class GUI(xbmcgui.WindowXML):
         self.PinString = ""
         self.direction = 0
         self.saved_id = 100
-        self.aspect = "640x400"
         self.prefix = ""
         self.radius = 50
-        self.GoogleMapURL = ""
-        self.GoogleStreetViewURL = ""
+        self.map_url = ""
+        self.street_view_url = ""
 
     def onAction(self, action):
         action_id = action.getId()
@@ -202,8 +200,8 @@ class GUI(xbmcgui.WindowXML):
                 self.lon += 180.0
             self.location = str(self.lat) + "," + str(self.lon)
         self.GetGoogleMapURLs()
-        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
-        self.window.setProperty("map_image", self.GoogleMapURL)
+        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("map_image", self.map_url)
 
     def onClick(self, controlId):
         if controlId == self.C_ZOOM_IN:
@@ -275,8 +273,8 @@ class GUI(xbmcgui.WindowXML):
                     FillListControl(self.venuelist, dialog.GetEventsitemlist)
                 del dialog
         self.GetGoogleMapURLs()
-        self.window.setProperty("streetview_image", self.GoogleStreetViewURL)
-        self.window.setProperty("map_image", self.GoogleMapURL)
+        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("map_image", self.map_url)
 
     def ZoomIn(self):
         self.location = str(self.lat) + "," + str(self.lon)
@@ -457,10 +455,10 @@ class GUI(xbmcgui.WindowXML):
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
         base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (ADDON.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
         url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, GOOGLE_MAPS_KEY)
-        self.GoogleMapURL = url + self.PinString
+        self.map_url = url + self.PinString
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
-        self.GoogleStreetViewURL = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
+        self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
         setWindowProperty(self.window, self.prefix + 'location', self.location)
         setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
         setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
@@ -468,8 +466,8 @@ class GUI(xbmcgui.WindowXML):
         setWindowProperty(self.window, self.prefix + 'direction', str(self.direction / 18))
         setWindowProperty(self.window, self.prefix + 'type', self.type)
         setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
-        setWindowProperty(self.window, self.prefix + 'map_image', self.GoogleMapURL)
-        setWindowProperty(self.window, self.prefix + 'streetview_image', self.GoogleStreetViewURL)
+        setWindowProperty(self.window, self.prefix + 'map_image', self.map_url)
+        setWindowProperty(self.window, self.prefix + 'streetview_image', self.street_view_url)
         hor_px = int(size.split("x")[0])
         ver_px = int(size.split("x")[1])
         mx, my = LatLonToMeters(self.lat, self.lon)
@@ -479,7 +477,7 @@ class GUI(xbmcgui.WindowXML):
         self.radius = abs((my - my2) / 2000)
         if self.radius > 500:
             self.radius = 500
-        cache_path = xbmc.getCacheThumbName(self.GoogleMapURL)
+        cache_path = xbmc.getCacheThumbName(self.map_url)
         log(cache_path)
         if self.prefix == "":
             if self.street_view:
