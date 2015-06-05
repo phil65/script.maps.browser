@@ -33,7 +33,7 @@ class MapQuest():
                 lat = str(place['lat'])
                 lon = str(place['lng'])
                 url = "flow?key=%s&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (MAPQUEST_KEY, lat, lon)
-                image = base_url + url
+                image = BASE_URL + url
                 search_string = lat + "," + lon
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
                 if place['type'] == 1:
