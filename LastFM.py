@@ -27,11 +27,9 @@ class LastFM():
                         my_arts = ' / '.join(artists)
                     else:
                         my_arts = artists
-                    lat = ""
-                    lon = ""
-                    if event['venue']['location']['geo:point']['geo:long']:
-                        lon = event['venue']['location']['geo:point']['geo:long']
-                        lat = event['venue']['location']['geo:point']['geo:lat']
+                    lat = event['venue']['location']['geo:point'].get('geo:lat')
+                    lon = event['venue']['location']['geo:point'].get('geo:long')
+                    if lat and lon:
                         search_string = lat + "," + lon
                     elif event['venue']['location']['street']:
                         search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']

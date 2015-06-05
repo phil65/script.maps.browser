@@ -13,16 +13,14 @@ class Eventful():
     def SelectCategory(self):
         url = "http://api.eventful.com/json/categories/list?app_key=%s" % (EVENTFUL_KEY)
         results = Get_JSON_response(url, 7)
-        modeselect = []
-   #     prettyprint(results)
-        modeselect.append("All Categories")
+        modeselect = ["All Categories"]
         for item in results["category"]:
             modeselect.append(cleanText(item["name"]))
-        categorydialog = xbmcgui.Dialog()
-        provider_index = categorydialog.select("Choose Category", modeselect)
-        if provider_index > 0:
-            return results["category"][provider_index - 1]["id"]
-        elif provider_index > -1:
+        dialog = xbmcgui.Dialog()
+        index = dialog.select("Choose Category", modeselect)
+        if index > 0:
+            return results["category"][index - 1]["id"]
+        elif index > -1:
             return ""
         else:
             return None
@@ -30,10 +28,9 @@ class Eventful():
     def GetEventfulEventList(self, lat="", lon="", query="", category="", radius=30):
         base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
-        log(url)
-        if query is not "":
+        if query:
             url = url + '&query=%s' % (query)
-        if category is not "":
+        if category:
             url = url + '&category=%s' % (category)
         results = Get_JSON_response(base_url + url)
         return self.HandleEventfulEventResult(results['events']['event'])
@@ -41,26 +38,22 @@ class Eventful():
     def GetEventfulVenueList(self, lat="", lon="", query=""):
         base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
-        if query is not "":
+        if query:
             url = url + '&query=%s' % (query)
-      #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
+        #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
         results = Get_JSON_response(base_url + url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetVenueInfo(self, event_id=""):
         base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s' % (str(event_id))
-        log(url)
         results = Get_JSON_response(base_url + url)
-   #     prettyprint(results)
         return self.HandleEventfulEventResult(results['venue'])
 
     def GetEventInfo(self, event_id=""):
         base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
-        log(url)
         results = Get_JSON_response(base_url + url)
-   #     prettyprint(results)
         return self.HandleEventfulEventResult(results['venue'])
 
     def HandleEventfulEventResult(self, results):
@@ -71,7 +64,6 @@ class Eventful():
         if not isinstance(results, list):
             results = [results]
         for venue in results:
-         #   prettyprint(venue)
             eventname = cleanText(venue['title'])
             venuename = cleanText(venue['venue_name'])
             formattedAddress = cleanText(venue["venue_address"])
@@ -83,8 +75,8 @@ class Eventful():
                 photo = venue["image"]["large"]["url"]
             else:
                 photo = ""
-         #   start_time = venue["start_time"].split(" ")
-          #  stop_time = venue["stop_time"].split(" ")
+            #  start_time = venue["start_time"].split(" ")
+            #  stop_time = venue["stop_time"].split(" ")
             if (venue["start_time"] == venue["stop_time"]) or (venue["stop_time"] is None):
                 date = venue["start_time"]
             else:
