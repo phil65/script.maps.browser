@@ -100,7 +100,7 @@ class LastFM():
         else:
             festivalsonly = "0"
         url = '&method=geo.getevents&festivalsonly=%s&page=1&limit=26' % (festivalsonly)
-        if (tag is not "") and (tag is not None):
+        if tag:
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
@@ -111,16 +111,15 @@ class LastFM():
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         url = '&method=tag.getTopTags'
         results = Get_JSON_response(BASE_URL + url, 7)
-        modeselect = []
-        modeselect.append("All Categories")
+        modeselect = ["All Categories"]
         for item in results["toptags"]["tag"]:
             modeselect.append(cleanText(item["name"]))
         categorydialog = xbmcgui.Dialog()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        provider_index = categorydialog.select("Choose Category", modeselect)
-        if provider_index > 0:
-            return results["toptags"]["tag"][provider_index - 1]["name"]
-        elif provider_index > -1:
+        index = categorydialog.select("Choose Category", modeselect)
+        if index > 0:
+            return results["toptags"]["tag"][index - 1]["name"]
+        elif index > -1:
             return ""
         else:
             return None
@@ -221,21 +220,11 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             self.close()
             log("show artist events on map")
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                # gui = GUI(u'script-%s-main.xml' % addon_name, addon_path).doModal()
-                # artist = "65daysofstatic"
-                # LFM = LastFM()
-                # log("search for artist")
-                # itemlist, self.PinString = LFM.GetArtistEvents(artist)
-                # gui.c_places_list.reset()
-                # gui.GetGoogleMapURLs()
-                # gui.c_places_list.addItems(items=itemlist)
                 LFM = LastFM()
                 results = LFM.GetArtistEvents(self.event["artists"]["headliner"])
                 self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
-
-
         elif controlID == 1002:
             pass
 

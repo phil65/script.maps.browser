@@ -152,18 +152,13 @@ def GetImages(path=""):
 
 def string2deg(string):
     string = string.strip().replace('"', '').replace("'", "")
-    log("String:" + string)
-    if string[0].lower() == "w" or string[0].lower() == "s":
-        negative = True
-    else:
-        negative = False
-    string = string[1:]
-    string = string.replace("d", "")
-    string = string.replace("  ", " ")
+    clean_string = string[1:]
+    clean_string = clean_string.replace("d", "")
+    clean_string = clean_string.replace("  ", " ")
     div = '[|:|\s]'  # allowable field delimiters "|", ":", whitespace
     sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
     co_re = re.compile(sdec)
-    co_search = co_re.search(string)
+    co_search = co_re.search(clean_string)
     if co_search is None:
         raise ValueError("Invalid input string: %s" % string)
     elems = co_search.groups()
@@ -171,7 +166,7 @@ def string2deg(string):
     arcminutes = float(elems[1])
     arcseconds = float(elems[2])
     decDegrees = degrees + arcminutes / 60.0 + arcseconds / 3600.0
-    if negative:
+    if string[0].lower() == "w" or string[0].lower() == "s":
         decDegrees = -1.0 * decDegrees
     return decDegrees
 
@@ -202,29 +197,25 @@ def CreateListItem(json_array):
 
 
 def CreateListItems(data):
+    if not data:
+        return []
     itemlist = []
-    if data:
-        for (count, result) in enumerate(data):
-            listitem = xbmcgui.ListItem('%s' % (str(count)))
-            itempath = ""
-            for (key, value) in result.iteritems():
-                if str(key).lower() in ["name", "label", "title"]:
-                    listitem.setLabel(unicode(value))
-                if str(key).lower() in ["thumb"]:
-                    listitem.setThumbnailImage(unicode(value))
-                if str(key).lower() in ["icon"]:
-                    listitem.setIconImage(unicode(value))
-                if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                    listitem.setArt({str(key).lower(): unicode(value)})
-                if str(key).lower() in ["path"]:
-                    itempath = unicode(value)
-                listitem.setProperty('%s' % (str(key)), unicode(value))
-            listitem.setPath(path=itempath)
-            listitem.setProperty("target_url", itempath)
-            listitem.setProperty("node:target_url", itempath)
-            listitem.setProperty("node.target_url", itempath)
-            listitem.setProperty("item_info", simplejson.dumps(unicode(result)))
-            itemlist.append(listitem)
+    for (count, result) in enumerate(data):
+        listitem = xbmcgui.ListItem('%s' % (str(count)))
+        for (key, value) in result.iteritems():
+            if str(key).lower() in ["name", "label", "title"]:
+                listitem.setLabel(unicode(value))
+            if str(key).lower() in ["thumb"]:
+                listitem.setThumbnailImage(unicode(value))
+            if str(key).lower() in ["icon"]:
+                listitem.setIconImage(unicode(value))
+            if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                listitem.setArt({str(key).lower(): unicode(value)})
+            if str(key).lower() in ["path"]:
+                listitem.setPath(path=unicode(value))
+            listitem.setProperty('%s' % (str(key)), unicode(value))
+        listitem.setProperty("item_info", simplejson.dumps(unicode(result)))
+        itemlist.append(listitem)
     return itemlist
 
 
@@ -232,9 +223,7 @@ def GetLocationCoordinates():
     url = 'https://www.telize.com/geoip'
     response = GetStringFromUrl(url)
     results = simplejson.loads(response)
-    lat = results["latitude"]
-    lon = results["longitude"]
-    return lat, lon
+    return results["latitude"], results["longitude"]
 
 
 def save_to_file(content, filename, path=""):

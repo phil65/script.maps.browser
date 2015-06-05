@@ -75,13 +75,13 @@ class FourSquare():
             letter += 1
         return places_list, self.PinString
 
-    def GetPlacesList(self, lat, lon, query="", categoryid=""):
+    def GetPlacesList(self, lat, lon, query="", category_id=""):
         base_url = "https://api.foursquare.com/v2/venues/search?limit=26&client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
         url = '&ll=%.8f,%.8f' % (lat, lon)
         if query is not "":
             url = url + "&query=%s" % (query)
-        if categoryid is not "":
-            url = url + "&categoryId=%s" % (categoryid)
+        if category_id is not "":
+            url = url + "&categoryId=%s" % (category_id)
         results = Get_JSON_response(base_url + url)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
@@ -117,15 +117,14 @@ class FourSquare():
     def SelectCategory(self):
         url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
         results = Get_JSON_response(url, 7)
-        modeselect = []
-        modeselect.append("All Categories")
+        modeselect = ["All Categories"]
         for item in results["categories"]:
             modeselect.append(cleanText(item["name"]))
-        categorydialog = xbmcgui.Dialog()
-        provider_index = categorydialog.select("Choose Category", modeselect)
-        if provider_index > 0:
-            return results["categories"][provider_index - 1]["id"]
-        elif provider_index > -1:
+        dialog = xbmcgui.Dialog()
+        index = dialog.select("Choose Category", modeselect)
+        if index > 0:
+            return results["categories"][index - 1]["id"]
+        elif index > -1:
             return ""
         else:
             return None
@@ -142,15 +141,14 @@ class FourSquare():
                     "trending": ADDON.getLocalizedString(32013),
                     "specials": ADDON.getLocalizedString(32014),
                     "nextVenues": ADDON.getLocalizedString(32015)}
-        modeselect = []
-        modeselect.append("All Sections")
+        modeselect = ["All Sections"]
         for value in Sections.itervalues():
             modeselect.append(value)
-        categorydialog = xbmcgui.Dialog()
-        provider_index = categorydialog.select("Choose Section", modeselect)
-        if provider_index > 0:
-            return Sections.keys()[provider_index - 1]
-        elif provider_index > -1:
+        dialog = xbmcgui.Dialog()
+        index = dialog.select("Choose Section", modeselect)
+        if index > 0:
+            return Sections.keys()[index - 1]
+        elif index > -1:
             return ""
         else:
             return None

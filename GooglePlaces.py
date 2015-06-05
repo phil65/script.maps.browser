@@ -125,7 +125,7 @@ class GooglePlaces():
         url = '&radius=%i&location=%s&types=%s' % (radius, location, locationtype)
         results = Get_JSON_response(base_url + url)
         log(url)
-        places_list = list()
+        places_list = []
         PinString = ""
         letter = ord('A')
         count = 0
@@ -136,12 +136,10 @@ class GooglePlaces():
                     photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, GOOGLE_PLACES_KEY)
                 except:
                     photo = ""
-       #         prettyprint(place)
                 if "vicinity" in place:
                     description = place['vicinity']
                 else:
                     description = place.get('formatted_address', "")
-                typestring = ""
                 typestring = " / ".join(place['types'])
                 lat = str(place['geometry']['location']['lat'])
                 lon = str(place['geometry']['location']['lng'])
@@ -164,9 +162,6 @@ class GooglePlaces():
                 places_list.append(prop_list)
                 count += 1
                 letter += 1
-          #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
-           # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # log(difference_lat)
         elif results['meta']['code'] == 400:
             log("LIMIT EXCEEDED")
         else:
