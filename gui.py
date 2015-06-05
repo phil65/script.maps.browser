@@ -507,7 +507,7 @@ class GUI(xbmcgui.WindowXML):
             base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
             url = "&address=%s" % (search_string)
             log("Google Geocodes Search:" + url)
-            results = Get_JSON_response(base_url, url)
+            results = Get_JSON_response(base_url + url)
             places_list = []
             for item in results["results"]:
                 locationinfo = item["geometry"]["location"]

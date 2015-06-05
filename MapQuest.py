@@ -3,6 +3,7 @@ from Utils import *
 MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 MAX_LIMIT = 25
+BASE_URL = 'http://www.mapquestapi.com/traffic/v2/'
 
 
 class MapQuest():
@@ -11,7 +12,6 @@ class MapQuest():
         pass
 
     def GetItemList(self, lat, lon, zoom):
-        base_url = 'http://www.mapquestapi.com/traffic/v2/incidents?key=%s&inFormat=kvp' % (MAPQUEST_KEY)
         mx, my = LatLonToMeters(lat, lon)
         px, py = MetersToPixels(mx, my, zoom)
         mxhigh, myhigh = PixelsToMeters(px + 320, py + 200, zoom)
@@ -19,10 +19,9 @@ class MapQuest():
         lathigh, lonhigh = MetersToLatLon(mxhigh, myhigh)
         latlow, lonlow = MetersToLatLon(mxlow, mylow)
         boundings = str(lathigh) + "," + str(lonhigh) + "," + str(latlow) + "," + str(lonlow)
-        url = '&boundingBox=%s' % (boundings)
-        log(base_url + url)
-        results = Get_JSON_response(base_url, url)
-        places_list = list()
+        url = '%sincidents?key=%s&inFormat=kvp&boundingBox=%s' % (BASE_URL, MAPQUEST_KEY, boundings)
+        results = Get_JSON_response(url)
+        places_list = []
         PinString = ""
         letter = ord('A')
         count = 0
@@ -33,8 +32,7 @@ class MapQuest():
             for place in results['incidents']:
                 lat = str(place['lat'])
                 lon = str(place['lng'])
-                base_url = "http://www.mapquestapi.com/traffic/v2/flow?key=%s" % (MAPQUEST_KEY)
-                url = "&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (lat, lon)
+                url = "flow?key=%s&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (MAPQUEST_KEY, lat, lon)
                 image = base_url + url
                 search_string = lat + "," + lon
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
@@ -61,7 +59,6 @@ class MapQuest():
                              'severity': str(place['severity']),
                              'type': incidenttype,
                              "sortletter": chr(letter),
-                             "index": str(count),
                              "lat": lat,
                              "lon": lon,
                              "index": str(count)}
@@ -74,9 +71,6 @@ class MapQuest():
             FillArea = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lathigh, lonhigh, lathigh, lonlow, latlow, lonlow, latlow, lonhigh)
             PinString = PinString + FillArea.replace("|", "%7C")
             return places_list, PinString
-          #  difference_lat = results['response']['suggestedBounds']['ne']['lat'] - results['response']['suggestedBounds']['sw']['lat']
-           # difference_lon = results['response']['suggestedBounds']['ne']['lng'] - results['response']['suggestedBounds']['sw']['lng']
-           # log(difference_lat)
         else:
             Notify("Error", "Could not fetch results")
             return [], ""

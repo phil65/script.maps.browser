@@ -82,7 +82,7 @@ class FourSquare():
             url = url + "&query=%s" % (query)
         if categoryid is not "":
             url = url + "&categoryId=%s" % (categoryid)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
                 return self.HandleFourSquarePlacesResult(results['response']['venues'])
@@ -99,7 +99,7 @@ class FourSquare():
         # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, FOURSQUARE_ID, FOURSQUARE_SECRET)
         # url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", FOURSQUARE_ID, FOURSQUARE_SECRET)
         url = '&ll=%.8f,%.8f&section=%s' % (float(lat), float(lon), placetype)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
                 if len(results['response']['groups'][0]['items']) > 0:
@@ -116,7 +116,7 @@ class FourSquare():
 
     def SelectCategory(self):
         url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
-        results = Get_JSON_response("", url, 7)
+        results = Get_JSON_response(url, 7)
         modeselect = []
         modeselect.append("All Categories")
         for item in results["categories"]:

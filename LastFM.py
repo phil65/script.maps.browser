@@ -91,7 +91,7 @@ class LastFM():
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
             url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (artist)
-        results = Get_JSON_response(BASE_URL, url)
+        results = Get_JSON_response(BASE_URL + url)
         return results
 
     def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
@@ -104,13 +104,13 @@ class LastFM():
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
-        results = Get_JSON_response(BASE_URL, url)
+        results = Get_JSON_response(BASE_URL + url)
         return results
 
     def SelectCategory(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         url = '&method=tag.getTopTags'
-        results = Get_JSON_response(BASE_URL, url, 7)
+        results = Get_JSON_response(BASE_URL + url, 7)
         modeselect = []
         modeselect.append("All Categories")
         for item in results["toptags"]["tag"]:
@@ -127,17 +127,17 @@ class LastFM():
 
     def GetVenueEvents(self, venueid=""):
         url = '&method=venue.getevents&venue=%s' % (venueid)
-        results = Get_JSON_response(BASE_URL, url)
+        results = Get_JSON_response(BASE_URL + url)
         return results
 
     def GetEventInfo(self, eventid=""):
         url = '&method=event.getinfo&event=%s' % (eventid)
-        results = Get_JSON_response(BASE_URL, url)
+        results = Get_JSON_response(BASE_URL + url)
         return results
 
     def GetVenueID(self, venuename=""):
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
-        results = Get_JSON_response(BASE_URL, url)
+        results = Get_JSON_response(BASE_URL + url)
   #     prettyprint(results["results"]["venuematches"])
         venuematches = results["results"]["venuematches"]
         if isinstance(venuematches["venue"], list):

@@ -72,38 +72,31 @@ def setWindowProperty(window, key, value):
     return window.setProperty(key, value)
 
 
-def GetStringFromUrl(encurl):
+def GetStringFromUrl(url):
     succeed = 0
     while (succeed < 5) and (not xbmc.abortRequested):
         try:
-            request = urllib2.Request(encurl)
-            request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
-           # request.add_header('Accept-encoding', 'gzip')
+            request = urllib2.Request(url)
+            request.add_header('User-agent', 'XBMC/14.2 ( phil65@kodi.tv )')
             response = urllib2.urlopen(request)
-           # if response.info().get('Content-Encoding') == 'gzip':
-           #     buf = StringIO(response.read())
-           #     compr = gzip.GzipFile(fileobj=buf)
-           #     data = compr.read()
-           # else:
             data = response.read()
             return data
         except:
             Notify("Error", "Could not download data. Internet connection OK?")
-            log("GetStringFromURL: could not get data from %s" % encurl)
+            log("GetStringFromURL: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return ""
 
 
-def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
+def Get_JSON_response(url="", cache_days=0.5):
     xbmc.executebuiltin("ActivateWindow(busydialog)")
-    filename = hashlib.md5(custom_url).hexdigest()
+    filename = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
     else:
-        url = base_url + custom_url
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         save_to_file(results, filename, ADDON_DATA_PATH)

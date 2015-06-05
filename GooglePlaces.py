@@ -123,7 +123,7 @@ class GooglePlaces():
         location = str(lat) + "," + str(lon)
         base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=%s' % (GOOGLE_PLACES_KEY)
         url = '&radius=%i&location=%s&types=%s' % (radius, location, locationtype)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         log(url)
         places_list = list()
         PinString = ""

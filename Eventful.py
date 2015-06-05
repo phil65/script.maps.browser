@@ -12,7 +12,7 @@ class Eventful():
 
     def SelectCategory(self):
         url = "http://api.eventful.com/json/categories/list?app_key=%s" % (EVENTFUL_KEY)
-        results = Get_JSON_response("", url, 7)
+        results = Get_JSON_response(url, 7)
         modeselect = []
    #     prettyprint(results)
         modeselect.append("All Categories")
@@ -35,7 +35,7 @@ class Eventful():
             url = url + '&query=%s' % (query)
         if category is not "":
             url = url + '&category=%s' % (category)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetEventfulVenueList(self, lat="", lon="", query=""):
@@ -44,14 +44,14 @@ class Eventful():
         if query is not "":
             url = url + '&query=%s' % (query)
       #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         return self.HandleEventfulEventResult(results['events']['event'])
 
     def GetVenueInfo(self, event_id=""):
         base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s' % (str(event_id))
         log(url)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
    #     prettyprint(results)
         return self.HandleEventfulEventResult(results['venue'])
 
@@ -59,7 +59,7 @@ class Eventful():
         base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
         log(url)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
    #     prettyprint(results)
         return self.HandleEventfulEventResult(results['venue'])
 
