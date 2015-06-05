@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2014 Philipp Temminghoff (philipptemminghoff@gmail.com)
+#     Copyright (C) 2015 Philipp Temminghoff (phil65@kodi.tv)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,32 +17,57 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
+import os
 import xbmc
 import xbmcaddon
 from Utils import *
-from LastFM import LastFMDialog
 from gui import GUI
 
 ADDON = xbmcaddon.Addon()
-ADDON_PATH = ADDON.getAddonInfo('path')
+ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_NAME = ADDON.getAddonInfo('name')
+ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
+# sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
+from process import StartInfoActions
 
 
-if __name__ == '__main__':
-    for arg in sys.argv:
-        param = arg.lower()
-        xbmc.log("param = " + param)
-        if param.startswith('venueid='):
-            venueid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, venueid=venueid)
-            dialog.doModal()
-            break
-        if param.startswith('eventid='):
-            eventid = (param[8:])
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventid=eventid)
-            dialog.doModal()
-            break
-    else:
-        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
-        gui.doModal()
-        del gui
+class Main:
+
+    def __init__(self):
+        xbmc.log("version %s started" % ADDON_VERSION)
+        xbmc.executebuiltin('SetProperty(mapsbrowser_running,True,home)')
+        # try:
+        self._parse_argv()
+        if self.infos:
+            StartInfoActions(self.infos, self.params)
+        else:
+            gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
+            gui.doModal()
+            del gui
+        xbmc.executebuiltin('ClearProperty(mapsbrowser_running,home)')
+        # except Exception:
+        #     xbmc.executebuiltin('Dialog.Close(busydialog)')
+        #     buggalo.onExceptionRaised()
+        #     xbmc.executebuiltin('ClearProperty(mapsbrowser_running,home)')
+
+    def _parse_argv(self):
+        self.handle = None
+        self.infos = []
+        self.params = {"handle": None,
+                       "control": None}
+        for arg in sys.argv:
+            if arg == 'script.maps.browser':
+                continue
+            param = arg.replace('"', '').replace("'", " ")
+            if param.startswith('info='):
+                self.infos.append(param[5:])
+            else:
+                try:
+                    self.params[param.split("=")[0].lower()] = "=".join(param.split("=")[1:]).strip()
+                except:
+                    pass
+
+if (__name__ == "__main__"):
+    Main()
+xbmc.log('finished')

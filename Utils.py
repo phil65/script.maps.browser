@@ -103,6 +103,15 @@ def Get_JSON_response(url="", cache_days=0.5):
     xbmc.executebuiltin("Dialog.Close(busydialog)")
     return results
 
+def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
+    base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
+    url = '&query=artist:%s' % urllib.quote_plus(artist)
+    results = Get_JSON_response(base_url + url, 30)
+    if results and len(results["artists"]) > 0:
+        log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
+        return results["artists"][0]["id"]
+    else:
+        return None
 
 def log(txt):
     if isinstance(txt, str):
