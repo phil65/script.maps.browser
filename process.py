@@ -29,4 +29,7 @@ def StartInfoActions(infos, params):
             dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, eventid=params.get("id", ""), name=params.get("name", ""))
             dialog.doModal()
             HOME.clearProperty('infodialogs.active')
-
+        elif info == "map":
+            gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
+            gui.doModal()
+            del gui

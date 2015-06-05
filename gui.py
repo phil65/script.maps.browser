@@ -51,21 +51,16 @@ class GUI(xbmcgui.WindowXML):
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist = []
+        self.location = kwargs.get("location", "")
+        self.type = kwargs.get("type", "roadmap")
+        self.strlat = kwargs.get("lat", "")
+        self.strlon = kwargs.get("lon", "")
+        self.zoom_level = kwargs.get("zoom_level", 10)
         self.init_vars()
         for arg in sys.argv:
             param = arg.lower()
             log("param = " + param)
-            if param.startswith('location='):
-                self.location = param[9:]
-            elif param.startswith('lat='):
-                self.strlat = param[4:]
-            elif param.startswith('lon='):
-                self.strlon = param[4:]
-            elif param.startswith('type='):
-                self.type = param[5:]
-            elif param.startswith('zoom='):
-                self.zoom_level = param[5:]
-            elif param.startswith('aspect='):
+            if param.startswith('aspect='):
                 self.aspect = param[7:]
             elif param.startswith('folder='):
                 folder = param[7:]
@@ -129,17 +124,12 @@ class GUI(xbmcgui.WindowXML):
         self.NavMode_active = False
         self.street_view = False
         self.search_string = ""
-        self.zoom_level = 10
         self.zoom_level_saved = 10
         self.zoom_level_streetview = 0
-        self.type = "roadmap"
         self.lat = 0.0
-        self.strlat = ""
         self.lon = 0.0
-        self.strlon = ""
         self.pitch = 0
         self.venueid = None
-        self.location = ""
         self.PinString = ""
         self.direction = 0
         self.saved_id = 100
