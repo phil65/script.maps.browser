@@ -142,7 +142,7 @@ def log(txt):
 
 
 def get_images(path=""):
-    PinString = "&markers=color:blue"
+    pin_string = "&markers=color:blue"
     letter = ord('A')
     count = 0
     images_list = list()
@@ -169,20 +169,20 @@ def get_images(path=""):
                              "index": str(count),
                              "sortletter": chr(letter),
                              }
-                if len(PinString) < 1850:
-                    PinString = PinString + "%7C" + str(lat) + "," + str(lon)
+                if len(pin_string) < 1850:
+                    pin_string = pin_string + "%7C" + str(lat) + "," + str(lon)
                     letter += 1
                 images_list.append(prop_list)
                 count += 1
         except Exception as e:
             log("Error when handling get_images results")
             log(e)
-    return images_list, PinString
+    return images_list, pin_string
 
 
-def string_to_deg(string):
-    string = string.strip().replace('"', '').replace("'", "")
-    clean_string = string[1:]
+def string_to_deg(raw_string):
+    raw_string = raw_string.strip().replace('"', '').replace("'", "")
+    clean_string = raw_string[1:]
     clean_string = clean_string.replace("d", "")
     clean_string = clean_string.replace("  ", " ")
     div = '[|:|\s]'  # allowable field delimiters "|", ":", whitespace
@@ -190,15 +190,15 @@ def string_to_deg(string):
     co_re = re.compile(sdec)
     co_search = co_re.search(clean_string)
     if co_search is None:
-        raise ValueError("Invalid input string: %s" % string)
+        raise ValueError("Invalid input string: %s" % raw_string)
     elems = co_search.groups()
     degrees = float(elems[0])
-    arcminutes = float(elems[1])
-    arcseconds = float(elems[2])
-    decDegrees = degrees + arcminutes / 60.0 + arcseconds / 3600.0
-    if string[0].lower() == "w" or string[0].lower() == "s":
-        decDegrees = -1.0 * decDegrees
-    return decDegrees
+    arc_minutes = float(elems[1])
+    arc_seconds = float(elems[2])
+    dec_degrees = degrees + arc_minutes / 60.0 + arc_seconds / 3600.0
+    if raw_string[0].lower() == "w" or raw_string[0].lower() == "s":
+        dec_degrees = -1.0 * dec_degrees
+    return dec_degrees
 
 
 def parse_geotags(lat, lon):

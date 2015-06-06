@@ -10,7 +10,7 @@ class Eventful():
     def __init__(self):
         pass
 
-    def SelectCategory(self):
+    def select_category(self):
         url = "http://api.eventful.com/json/categories/list?app_key=%s" % (EVENTFUL_KEY)
         results = Get_JSON_response(url, 7)
         modeselect = ["All Categories"]
@@ -50,7 +50,7 @@ class Eventful():
         results = Get_JSON_response(base_url + url)
         return self.HandleEventfulEventResult(results['venue'])
 
-    def GetEventInfo(self, event_id=""):
+    def get_event_info(self, event_id=""):
         base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
         results = Get_JSON_response(base_url + url)

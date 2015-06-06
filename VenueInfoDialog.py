@@ -17,17 +17,17 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         self.venueid = kwargs.get('venueid')
         self.prop_list = []
         self.PinString = ""
-        self.GetEventsPinString = ""
+        self.events_pin_string = ""
         self.itemlist = []
         self.GetEventsitemlist = []
 
     def onInit(self):
         LFM = LastFM()
-        self.itemlist, PinString = LFM.GetVenueEvents(self.venueid)
+        self.itemlist, PinString = LFM.get_venue_events(self.venueid)
         self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
-        self.setControls()
+        self.set_controls()
 
-    def setControls(self):
+    def set_controls(self):
         self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
         self.getControl(202).setLabel(self.prop_list["date"])
         self.getControl(203).setLabel(self.prop_list["name"])
@@ -46,7 +46,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
-            self.GetEventsitemlist, self.GetEventsPinString = LFM.GetEvents(artist)
+            self.GetEventsitemlist, self.events_pin_string = LFM.GetEvents(artist)
         elif controlID == 1001:
 
             self.close()

@@ -114,7 +114,7 @@ class FourSquare():
             log("ERROR")
         return [], ""
 
-    def SelectCategory(self):
+    def select_category(self):
         url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
         results = Get_JSON_response(url, 7)
         modeselect = ["All Categories"]

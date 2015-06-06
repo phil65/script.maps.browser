@@ -67,18 +67,18 @@ class GUI(xbmcgui.WindowXML):
             elif param.startswith('artist='):
                 artist = param[7:]
                 LFM = LastFM()
-                results = LFM.GetArtistEvents(artist)
+                results = LFM.get_artist_events(artist)
                 self.itemlist, self.PinString = LFM.create_venue_list(results)
             elif param.startswith('list='):
                 listtype = param[5:]
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
-                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, "", True)
+                    results = LFM.get_near_events(self.lat, self.lon, self.radius, "", True)
                     self.itemlist, self.PinString = LFM.create_venue_list(results)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
-                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius)
+                    results = LFM.get_near_events(self.lat, self.lon, self.radius)
                     self.itemlist, self.PinString = LFM.create_venue_list(results)
             elif param.startswith('direction='):
                 self.direction = param[10:]
@@ -269,7 +269,7 @@ class GUI(xbmcgui.WindowXML):
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventful_id=eventful_id)
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
-                    self.PinString = dialog.GetEventsPinString
+                    self.PinString = dialog.events_pin_string
                     fill_list_control(self.venue_list, dialog.GetEventsitemlist)
                 del dialog
         self.get_map_urls()
@@ -365,7 +365,7 @@ class GUI(xbmcgui.WindowXML):
         if not index < 0:
             if modeselect[index] == ADDON_LANGUAGE(32031):
                 GP = GooglePlaces()
-                category = GP.SelectCategory()
+                category = GP.select_category()
                 if category is not None:
                     self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[index] == ADDON_LANGUAGE(32029):
@@ -375,18 +375,18 @@ class GUI(xbmcgui.WindowXML):
                     itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[index] == ADDON_LANGUAGE(32016):
                 LFM = LastFM()
-                category = LFM.SelectCategory()
+                category = LFM.select_category()
                 if category is not None:
-                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category)
+                    results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
                     itemlist, self.PinString = LFM.create_venue_list(results)
             elif modeselect[index] == ADDON_LANGUAGE(32030):
                 MQ = MapQuest()
                 itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
             elif modeselect[index] == ADDON_LANGUAGE(32017):
                 LFM = LastFM()
-                category = LFM.SelectCategory()
+                category = LFM.select_category()
                 if category is not None:
-                    results = LFM.GetNearEvents(self.lat, self.lon, self.radius, category, True)
+                    results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
                     itemlist, self.PinString = LFM.create_venue_list(results)
             elif modeselect[index] == ADDON_LANGUAGE(32027):
                 folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
@@ -394,7 +394,7 @@ class GUI(xbmcgui.WindowXML):
                 itemlist, self.PinString = get_images(folder_path)
             elif modeselect[index] == ADDON_LANGUAGE(32028):
                 EF = Eventful()
-                category = EF.SelectCategory()
+                category = EF.select_category()
                 if category is not None:
                     itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[index] == ADDON_LANGUAGE(32019):
@@ -426,13 +426,13 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "lastfmconcerts":
             artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
-            results = LFM.GetArtistEvents(artist)
+            results = LFM.get_artist_events(artist)
             itemlist, self.PinString = LFM.create_venue_list(results)
         elif KEYS[index] == "lastfmvenues":
             venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
-            venueid = LFM.GetVenueID(venue)
-            results = LFM.GetVenueEvents(venueid)
+            venueid = LFM.get_venue_id(venue)
+            results = LFM.get_venue_events(venueid)
             itemlist, self.PinString = LFM.create_venue_list(results)
         elif KEYS[index] == "reset":
             self.PinString = ""

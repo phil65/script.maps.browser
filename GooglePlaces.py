@@ -10,7 +10,7 @@ class GooglePlaces():
     def __init__(self):
         pass
 
-    def SelectCategory(self):
+    def select_category(self):
         Categories = {"accounting": ADDON.getLocalizedString(32005),
                       "airport": ADDON.getLocalizedString(32006),
                       "amusement_park": ADDON.getLocalizedString(32007),

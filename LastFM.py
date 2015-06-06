@@ -80,7 +80,7 @@ class LastFM():
             prettyprint(results)
         return events_list, self.PinString
 
-    def GetArtistEvents(self, artist, pastevents=False):
+    def get_artist_events(self, artist, pastevents=False):
         if pastevents:
      #       url = 'method=artist.getpastevents&mbid=%s&page=1&limit=26' % (id)
             url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1&limit=26' % (urllib.quote(artist))
@@ -90,7 +90,7 @@ class LastFM():
         results = Get_JSON_response(BASE_URL + url)
         return results
 
-    def GetNearEvents(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
+    def get_near_events(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
         if festivalsonly:
             festivalsonly = "1"
         else:
@@ -103,7 +103,7 @@ class LastFM():
         results = Get_JSON_response(BASE_URL + url)
         return results
 
-    def SelectCategory(self):
+    def select_category(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         url = '&method=tag.getTopTags'
         results = Get_JSON_response(BASE_URL + url, 7)
@@ -120,17 +120,17 @@ class LastFM():
         else:
             return None
 
-    def GetVenueEvents(self, venueid=""):
+    def get_venue_events(self, venueid=""):
         url = '&method=venue.getevents&venue=%s' % (venueid)
         results = Get_JSON_response(BASE_URL + url)
         return results
 
-    def GetEventInfo(self, eventid=""):
+    def get_event_info(self, eventid=""):
         url = '&method=event.getinfo&event=%s' % (eventid)
         results = Get_JSON_response(BASE_URL + url)
         return results
 
-    def GetVenueID(self, venuename=""):
+    def get_venue_id(self, venuename=""):
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(BASE_URL + url)
   #     prettyprint(results["results"]["venuematches"])
@@ -153,23 +153,23 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.eventid = kwargs.get('eventid')
         self.event = []
         self.PinString = ""
-        self.GetEventsPinString = ""
+        self.events_pin_string = ""
         self.itemlist = []
         self.GetEventsitemlist = []
-        self.event = self.LFM.GetEventInfo(self.eventid)["event"]
-        self.results = self.LFM.GetVenueEvents(self.event["venue"]["id"])
+        self.event = self.LFM.get_event_info(self.eventid)["event"]
+        self.results = self.LFM.get_venue_events(self.event["venue"]["id"])
         self.itemlist, self.PinString = self.LFM.create_venue_list(self.results)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        self.setLabels()
+        self.set_labels()
         self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.itemlist))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
 
-    def setLabels(self):
+    def set_labels(self):
         if isinstance(self.event['artists']['artist'], list):
             artists = ' / '.join(self.event['artists']['artist'])
         else:
@@ -203,16 +203,16 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("headliner")
             self.close()
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                results = self.LFM.GetArtistEvents(artist)
-                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.create_venue_list(results)
+                results = self.LFM.get_artist_events(artist)
+                self.GetEventsitemlist, self.events_pin_string = self.LFM.create_venue_list(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (artist))
         elif controlID == 1001:
             self.close()
             log("show artist events on map")
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                results = self.LFM.GetArtistEvents(self.event["artists"]["headliner"])
-                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.create_venue_list(results)
+                results = self.LFM.get_artist_events(self.event["artists"]["headliner"])
+                self.GetEventsitemlist, self.events_pin_string = self.LFM.create_venue_list(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
         elif controlID == 1002:
