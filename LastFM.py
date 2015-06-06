@@ -12,7 +12,7 @@ class LastFM():
     def __init__(self):
         self.PinString = ""
 
-    def CreateVenueList(self, results, return_proplist=False):
+    def create_venue_list(self, results, return_proplist=False):
         letter = ord('A')
         count = 0
         events_list = list()
@@ -158,7 +158,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.GetEventsitemlist = []
         self.event = self.LFM.GetEventInfo(self.eventid)["event"]
         self.results = self.LFM.GetVenueEvents(self.event["venue"]["id"])
-        self.itemlist, self.PinString = self.LFM.CreateVenueList(self.results)
+        self.itemlist, self.PinString = self.LFM.create_venue_list(self.results)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -204,7 +204,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             self.close()
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
                 results = self.LFM.GetArtistEvents(artist)
-                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.CreateVenueList(results)
+                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.create_venue_list(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (artist))
         elif controlID == 1001:
@@ -212,7 +212,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             log("show artist events on map")
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
                 results = self.LFM.GetArtistEvents(self.event["artists"]["headliner"])
-                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.CreateVenueList(results)
+                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.create_venue_list(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
         elif controlID == 1002:

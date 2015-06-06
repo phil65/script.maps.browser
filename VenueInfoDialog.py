@@ -58,7 +58,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             # log("search for artist")
             # itemlist, self.PinString = LFM.GetEvents(artist)
             # gui.c_places_list.reset()
-            # gui.GetGoogleMapURLs()
+            # gui.get_map_urls()
             # gui.c_places_list.addItems(items=itemlist)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (xbmc.getInfoLabel("Window(home).Property(headliner)")))

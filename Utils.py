@@ -33,11 +33,32 @@ def LatLonToMeters(lat, lon):
     return mx, my
 
 
-def FillListControl(listcontrol, listitem_dict):
+def fill_list_control(listcontrol, listitem_dict):
     listcontrol.reset()
     listitems = CreateListItems(listitem_dict)
     listcontrol.addItems(items=listitems)
     setWindowProperty(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
+
+
+def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=10000):
+    skinwindow = xbmcgui.Window(window)
+    if data is not None:
+        threads = []
+        image_requests = []
+        for (key, value) in data.iteritems():
+            value = unicode(value)
+            # if precache:
+            #     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+            #         if value not in image_requests and value:
+            #             thread = Get_File_Thread(value)
+            #             threads += [thread]
+            #             thread.start()
+            #             image_requests.append(value)
+            skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
+            if debug:
+                log('%s%s' % (prefix, str(key)) + value)
+        for x in threads:
+            x.join()
 
 
 def MetersToPixels(mx, my, zoom):
