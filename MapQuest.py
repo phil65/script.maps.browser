@@ -14,11 +14,11 @@ class MapQuest():
     def GetItemList(self, lat, lon, zoom):
         mx, my = latlon_to_meters(lat, lon)
         px, py = meters_to_pixels(mx, my, zoom)
-        mxhigh, myhigh = pixels_to_meters(px + 320, py + 200, zoom)
-        mxlow, mylow = pixels_to_meters(px - 320, py - 200, zoom)
-        lathigh, lonhigh = meters_to_latlon(mxhigh, myhigh)
-        latlow, lonlow = meters_to_latlon(mxlow, mylow)
-        boundings = str(lathigh) + "," + str(lonhigh) + "," + str(latlow) + "," + str(lonlow)
+        mx_high, my_high = pixels_to_meters(px + 320, py + 200, zoom)
+        mx_low, my_low = pixels_to_meters(px - 320, py - 200, zoom)
+        lat_high, lon_high = meters_to_latlon(mx_high, my_high)
+        lat_low, lon_low = meters_to_latlon(mx_low, my_low)
+        boundings = str(lat_high) + "," + str(lon_high) + "," + str(lat_low) + "," + str(lon_low)
         url = '%sincidents?key=%s&inFormat=kvp&boundingBox=%s' % (BASE_URL, MAPQUEST_KEY, boundings)
         results = Get_JSON_response(url)
         places_list = []
@@ -35,15 +35,15 @@ class MapQuest():
                 url = "flow?key=%s&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (MAPQUEST_KEY, lat, lon)
                 image = BASE_URL + url
                 search_string = lat + "," + lon
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+                google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
                 if place['type'] == 1:
-                    incidenttype = "Construction"
+                    incident_type = "Construction"
                 elif place['type'] == 2:
-                    incidenttype = "Event"
+                    incident_type = "Event"
                 elif place['type'] == 3:
-                    incidenttype = "Congestion / Flow"
+                    incident_type = "Congestion / Flow"
                 elif place['type'] == 4:
-                    incidenttype = "Incident / Accident"
+                    incident_type = "Incident / Accident"
                 prop_list = {'name': place['shortDesc'],
                              'label': place['shortDesc'],
                              'label2': place['startTime'],
@@ -51,13 +51,13 @@ class MapQuest():
                              'distance': str(place['distance']),
                              'delaytypical': str(place['delayFromTypical']),
                              'delayfreeflow': str(place['delayFromFreeFlow']),
-                             "GoogleMap": googlemap,
+                             "GoogleMap": google_map,
                              "venue_image": image,
                              "thumb": image,
                              "icon": place['iconURL'],
                              'date': place['startTime'],
                              'severity': str(place['severity']),
-                             'type': incidenttype,
+                             'type': incident_type,
                              "sortletter": chr(letter),
                              "lat": lat,
                              "lon": lon,
@@ -68,8 +68,8 @@ class MapQuest():
                 letter += 1
                 if count > MAX_LIMIT:
                     break
-            FillArea = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lathigh, lonhigh, lathigh, lonlow, latlow, lonlow, latlow, lonhigh)
-            pin_string = pin_string + FillArea.replace("|", "%7C")
+            fill_area = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lat_high, lon_high, lat_high, lon_low, lat_low, lon_low, lat_low, lon_high)
+            pin_string = pin_string + fill_area.replace("|", "%7C")
             return places_list, pin_string
         else:
             Notify("Error", "Could not fetch results")

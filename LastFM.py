@@ -36,8 +36,8 @@ class LastFM():
                         search_string = event['venue']['location']['city'] + " " + event['venue']['name']
                     else:
                         search_string = event['venue']['name']
-                    googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
-                    formattedAddress = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
+                    google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+                    address_formatted = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
                     description = unicode(cleanText(event['description']))
                     if my_arts != event['artists']['headliner']:
                         description = "[B]" + my_arts + "[/B][CR]" + description
@@ -51,13 +51,13 @@ class LastFM():
                                  "description": description,
                                  "city": event['venue']['location']['city'],
                                  "country": event['venue']['location']['country'],
-                                 "address": formattedAddress,
+                                 "address": address_formatted,
                                  "lon": lon,
                                  "lat": lat,
                                  "index": str(count),
                                  "artists": my_arts,
                                  "sortletter": chr(letter),
-                                 "googlemap": googlemap,
+                                 "googlemap": google_map,
                                  "artist_image": event['image'][-1]['#text'],
                                  "venue_image": event['venue']['image'][-1]['#text'],
                                  "headliner": event['artists']['headliner'],
@@ -90,12 +90,12 @@ class LastFM():
         results = Get_JSON_response(BASE_URL + url)
         return results
 
-    def get_near_events(self, lat="", lon="", radius=30, tag="", festivalsonly=False):
-        if festivalsonly:
-            festivalsonly = "1"
+    def get_near_events(self, lat="", lon="", radius=30, tag="", only_festivals=False):
+        if only_festivals:
+            only_festivals = "1"
         else:
-            festivalsonly = "0"
-        url = '&method=geo.getevents&festivalsonly=%s&page=1&limit=26' % (festivalsonly)
+            only_festivals = "0"
+        url = '&method=geo.getevents&festivalsonly=%s&page=1&limit=26' % (only_festivals)
         if tag:
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
@@ -131,11 +131,11 @@ class LastFM():
     def get_venue_id(self, venuename=""):
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(BASE_URL + url)
-        venuematches = results["results"]["venuematches"]
-        if isinstance(venuematches["venue"], list):
-            return venuematches["venue"][0]["id"]
+        matches = results["results"]["venuematches"]
+        if isinstance(matches["venue"], list):
+            return matches["venue"][0]["id"]
         else:
-            return venuematches["venue"]["id"]
+            return matches["venue"]["id"]
 
 
 class LastFMDialog(xbmcgui.WindowXMLDialog):
@@ -151,16 +151,16 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.event = []
         self.pin_string = ""
         self.events_pin_string = ""
-        self.itemlist = []
+        self.item_list = []
         self.events_items = []
         self.event = self.LFM.get_event_info(self.event_id)["event"]
         self.results = self.LFM.get_venue_events(self.event["venue"]["id"])
-        self.itemlist, self.pin_string = self.LFM.create_venue_list(self.results)
+        self.item_list, self.pin_string = self.LFM.create_venue_list(self.results)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         self.set_labels()
-        self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.itemlist))
+        self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.item_list))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -185,13 +185,13 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             search_string = self.event['venue']['name']
         if "tags" in self.event:
             tags = " / ".join(self.event['tags']['tag'])
-        self.googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+        self.google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
         self.getControl(200).setText(description)
         self.getControl(202).setLabel(self.event['startDate'][:-8])
         self.getControl(203).setLabel(self.event["venue"]["name"])
         self.getControl(210).setImage(self.event['venue']['image'][-1]['#text'])
         self.getControl(212).setImage(self.event['image'][-1]['#text'])
-        self.getControl(211).setImage(self.googlemap)
+        self.getControl(211).setImage(self.google_map)
         self.getControl(204).setLabel(self.event['venue']['location']['street'])
         self.getControl(201).setLabel(self.event["title"])
 
