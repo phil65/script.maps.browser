@@ -57,7 +57,7 @@ class Eventful():
         return self.HandleEventfulEventResult(results['venue'])
 
     def HandleEventfulEventResult(self, results):
-        PinString = ""
+        pin_string = ""
         places_list = list()
         letter = ord('A')
         count = 0
@@ -100,9 +100,9 @@ class Eventful():
                          "sortletter": chr(letter),
                          "lat": lat,
                          "lon": lon}
-            PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places_list.append(prop_list)
             count += 1
             letter += 1
-        return places_list, PinString
+        return places_list, pin_string
 

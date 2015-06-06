@@ -10,7 +10,7 @@ BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (LASTFM_
 class LastFM():
 
     def __init__(self):
-        self.PinString = ""
+        self.pin_string = ""
 
     def create_venue_list(self, results, return_proplist=False):
         letter = ord('A')
@@ -66,9 +66,9 @@ class LastFM():
                                  "label2": event['startDate'][:-8]}
                     events_list.append(prop_list)
                     if count < 26:
-                        self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                        self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                     else:
-                        self.PinString = self.PinString + "&markers=color:blue%7C" + lat + "," + lon
+                        self.pin_string = self.pin_string + "&markers=color:blue%7C" + lat + "," + lon
                     count += 1
                     letter += 1
             else:
@@ -78,7 +78,7 @@ class LastFM():
         else:
             log("Error when handling LastFM results")
             prettyprint(results)
-        return events_list, self.PinString
+        return events_list, self.pin_string
 
     def get_artist_events(self, artist, pastevents=False):
         if pastevents:
@@ -110,9 +110,9 @@ class LastFM():
         modeselect = ["All Categories"]
         for item in results["toptags"]["tag"]:
             modeselect.append(cleanText(item["name"]))
-        categorydialog = xbmcgui.Dialog()
+        dialog = xbmcgui.Dialog()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        index = categorydialog.select("Choose Category", modeselect)
+        index = dialog.select("Choose Category", modeselect)
         if index > 0:
             return results["toptags"]["tag"][index - 1]["name"]
         elif index == 0:
@@ -122,18 +122,15 @@ class LastFM():
 
     def get_venue_events(self, venueid=""):
         url = '&method=venue.getevents&venue=%s' % (venueid)
-        results = Get_JSON_response(BASE_URL + url)
-        return results
+        return Get_JSON_response(BASE_URL + url)
 
     def get_event_info(self, eventid=""):
         url = '&method=event.getinfo&event=%s' % (eventid)
-        results = Get_JSON_response(BASE_URL + url)
-        return results
+        return Get_JSON_response(BASE_URL + url)
 
     def get_venue_id(self, venuename=""):
         url = '&method=venue.search&venue=%s' % (urllib.quote_plus(venuename))
         results = Get_JSON_response(BASE_URL + url)
-  #     prettyprint(results["results"]["venuematches"])
         venuematches = results["results"]["venuematches"]
         if isinstance(venuematches["venue"], list):
             return venuematches["venue"][0]["id"]
@@ -149,16 +146,16 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.venueid = kwargs.get('venueid')
-        self.eventid = kwargs.get('eventid')
+        self.venue_id = kwargs.get('venueid')
+        self.event_id = kwargs.get('eventid')
         self.event = []
-        self.PinString = ""
+        self.pin_string = ""
         self.events_pin_string = ""
         self.itemlist = []
         self.GetEventsitemlist = []
-        self.event = self.LFM.get_event_info(self.eventid)["event"]
+        self.event = self.LFM.get_event_info(self.event_id)["event"]
         self.results = self.LFM.get_venue_events(self.event["venue"]["id"])
-        self.itemlist, self.PinString = self.LFM.create_venue_list(self.results)
+        self.itemlist, self.pin_string = self.LFM.create_venue_list(self.results)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):

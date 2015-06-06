@@ -22,7 +22,7 @@ class MapQuest():
         url = '%sincidents?key=%s&inFormat=kvp&boundingBox=%s' % (BASE_URL, MAPQUEST_KEY, boundings)
         results = Get_JSON_response(url)
         places_list = []
-        PinString = ""
+        pin_string = ""
         letter = ord('A')
         count = 0
         if results['info']['statuscode'] == 400:
@@ -62,15 +62,15 @@ class MapQuest():
                              "lat": lat,
                              "lon": lon,
                              "index": str(count)}
-                PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(prop_list)
                 count += 1
                 letter += 1
                 if count > MAX_LIMIT:
                     break
             FillArea = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lathigh, lonhigh, lathigh, lonlow, latlow, lonlow, latlow, lonhigh)
-            PinString = PinString + FillArea.replace("|", "%7C")
-            return places_list, PinString
+            pin_string = pin_string + FillArea.replace("|", "%7C")
+            return places_list, pin_string
         else:
             Notify("Error", "Could not fetch results")
             return [], ""

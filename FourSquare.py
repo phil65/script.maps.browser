@@ -26,7 +26,7 @@ class FourSquare():
         pass
 
     def HandleFourSquarePlacesResult(self, results):
-        self.PinString = ""
+        self.pin_string = ""
         places_list = list()
         letter = ord('A')
         count = 0
@@ -69,11 +69,11 @@ class FourSquare():
                          "lon": lon,
                          "phone": venue['contact'].get('phone', ""),
                          "comments": str(venue['stats']['tipCount'])}
-            self.PinString = self.PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places_list.append(prop_list)
             count += 1
             letter += 1
-        return places_list, self.PinString
+        return places_list, self.pin_string
 
     def GetPlacesList(self, lat, lon, query="", category_id=""):
         base_url = "https://api.foursquare.com/v2/venues/search?limit=26&client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)

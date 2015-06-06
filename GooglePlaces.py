@@ -126,7 +126,7 @@ class GooglePlaces():
         results = Get_JSON_response(base_url + url)
         log(url)
         places_list = []
-        PinString = ""
+        pin_string = ""
         letter = ord('A')
         count = 0
         if "results" in results:
@@ -158,7 +158,7 @@ class GooglePlaces():
                              "lon": lon,
                              "rating": rating,
                              "index": str(count)}
-                PinString = PinString + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
                 places_list.append(prop_list)
                 count += 1
                 letter += 1
@@ -166,4 +166,4 @@ class GooglePlaces():
             log("LIMIT EXCEEDED")
         else:
             log("ERROR")
-        return PinString, places_list
+        return pin_string, places_list

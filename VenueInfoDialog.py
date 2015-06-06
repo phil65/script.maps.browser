@@ -14,17 +14,17 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
-        self.venueid = kwargs.get('venueid')
+        self.venue_id = kwargs.get('venueid')
         self.prop_list = []
-        self.PinString = ""
+        self.pin_string = ""
         self.events_pin_string = ""
-        self.itemlist = []
-        self.GetEventsitemlist = []
+        self.item_list = []
+        self.events_item_list = []
 
     def onInit(self):
         LFM = LastFM()
-        self.itemlist, PinString = LFM.get_venue_events(self.venueid)
-        self.prop_list = simplejson.loads(self.itemlist[0].getProperty("item_info"))
+        self.item_list, pin_string = LFM.get_venue_events(self.venue_id)
+        self.prop_list = simplejson.loads(self.item_list[0].getProperty("item_info"))
         self.set_controls()
 
     def set_controls(self):
@@ -35,7 +35,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
         self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
         self.getControl(204).setLabel(self.prop_list["street"])
         self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
-        self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
+        self.getControl(self.C_ARTIST_LIST).addItems(items=self.item_list)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -46,7 +46,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("artists")
             self.close()
             LFM = LastFM()
-            self.GetEventsitemlist, self.events_pin_string = LFM.GetEvents(artist)
+            self.events_item_list, self.events_pin_string = LFM.GetEvents(artist)
         elif controlID == 1001:
 
             self.close()
@@ -56,10 +56,10 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
             # artist = "65daysofstatic"
             # LFM = LastFM()
             # log("search for artist")
-            # itemlist, self.PinString = LFM.GetEvents(artist)
+            # item_list, self.pin_string = LFM.GetEvents(artist)
             # gui.c_places_list.reset()
             # gui.get_map_urls()
-            # gui.c_places_list.addItems(items=itemlist)
+            # gui.c_places_list.addItems(items=item_list)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (xbmc.getInfoLabel("Window(home).Property(headliner)")))
         elif controlID == 1002:

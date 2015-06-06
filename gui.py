@@ -63,23 +63,23 @@ class GUI(xbmcgui.WindowXML):
             log("param = " + param)
             if param.startswith('folder='):
                 folder = param[7:]
-                self.itemlist, self.PinString = self.get_images(folder)
+                self.itemlist, self.pin_string = self.get_images(folder)
             elif param.startswith('artist='):
                 artist = param[7:]
                 LFM = LastFM()
                 results = LFM.get_artist_events(artist)
-                self.itemlist, self.PinString = LFM.create_venue_list(results)
+                self.itemlist, self.pin_string = LFM.create_venue_list(results)
             elif param.startswith('list='):
                 listtype = param[5:]
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, "", True)
-                    self.itemlist, self.PinString = LFM.create_venue_list(results)
+                    self.itemlist, self.pin_string = LFM.create_venue_list(results)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
                     results = LFM.get_near_events(self.lat, self.lon, self.radius)
-                    self.itemlist, self.PinString = LFM.create_venue_list(results)
+                    self.itemlist, self.pin_string = LFM.create_venue_list(results)
             elif param.startswith('direction='):
                 self.direction = param[10:]
             elif param.startswith('prefix='):
@@ -129,7 +129,7 @@ class GUI(xbmcgui.WindowXML):
         self.lon = 0.0
         self.pitch = 0
         self.venueid = None
-        self.PinString = ""
+        self.pin_string = ""
         self.direction = 0
         self.saved_id = 100
         self.prefix = ""
@@ -269,7 +269,7 @@ class GUI(xbmcgui.WindowXML):
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventful_id=eventful_id)
                 dialog.doModal()
                 if len(dialog.GetEventsitemlist) > 0:
-                    self.PinString = dialog.events_pin_string
+                    self.pin_string = dialog.events_pin_string
                     fill_list_control(self.venue_list, dialog.GetEventsitemlist)
                 del dialog
         self.get_map_urls()
@@ -367,38 +367,38 @@ class GUI(xbmcgui.WindowXML):
                 GP = GooglePlaces()
                 category = GP.select_category()
                 if category is not None:
-                    self.PinString, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
+                    self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif modeselect[index] == ADDON_LANGUAGE(32029):
                 FS = FourSquare()
                 section = FS.SelectSection()
                 if section is not None:
-                    itemlist, self.PinString = FS.GetPlacesListExplore(self.lat, self.lon, section)
+                    itemlist, self.pin_string = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif modeselect[index] == ADDON_LANGUAGE(32016):
                 LFM = LastFM()
                 category = LFM.select_category()
                 if category is not None:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
-                    itemlist, self.PinString = LFM.create_venue_list(results)
+                    itemlist, self.pin_string = LFM.create_venue_list(results)
             elif modeselect[index] == ADDON_LANGUAGE(32030):
                 MQ = MapQuest()
-                itemlist, self.PinString = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
+                itemlist, self.pin_string = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
             elif modeselect[index] == ADDON_LANGUAGE(32017):
                 LFM = LastFM()
                 category = LFM.select_category()
                 if category is not None:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
-                    itemlist, self.PinString = LFM.create_venue_list(results)
+                    itemlist, self.pin_string = LFM.create_venue_list(results)
             elif modeselect[index] == ADDON_LANGUAGE(32027):
                 folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
                 set_window_prop(self.window, 'imagepath', folder_path)
-                itemlist, self.PinString = get_images(folder_path)
+                itemlist, self.pin_string = get_images(folder_path)
             elif modeselect[index] == ADDON_LANGUAGE(32028):
                 EF = Eventful()
                 category = EF.select_category()
                 if category is not None:
-                    itemlist, self.PinString = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
+                    itemlist, self.pin_string = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif modeselect[index] == ADDON_LANGUAGE(32019):
-                self.PinString = ""
+                self.pin_string = ""
                 itemlist = []
             if itemlist is not None:
                 fill_list_control(self.venue_list, itemlist)
@@ -422,20 +422,20 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
-            itemlist, self.PinString = FS.GetPlacesList(self.lat, self.lon, query)
+            itemlist, self.pin_string = FS.GetPlacesList(self.lat, self.lon, query)
         elif KEYS[index] == "lastfmconcerts":
             artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
             results = LFM.get_artist_events(artist)
-            itemlist, self.PinString = LFM.create_venue_list(results)
+            itemlist, self.pin_string = LFM.create_venue_list(results)
         elif KEYS[index] == "lastfmvenues":
             venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
             venueid = LFM.get_venue_id(venue)
             results = LFM.get_venue_events(venueid)
-            itemlist, self.PinString = LFM.create_venue_list(results)
+            itemlist, self.pin_string = LFM.create_venue_list(results)
         elif KEYS[index] == "reset":
-            self.PinString = ""
+            self.pin_string = ""
             itemlist = []
         fill_list_control(self.venue_list, itemlist)
         self.street_view = False
@@ -455,7 +455,7 @@ class GUI(xbmcgui.WindowXML):
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
         base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (ADDON.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
         url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, GOOGLE_MAPS_KEY)
-        self.map_url = url + self.PinString
+        self.map_url = url + self.pin_string
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
         self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
