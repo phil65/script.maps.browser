@@ -12,12 +12,12 @@ class MapQuest():
         pass
 
     def GetItemList(self, lat, lon, zoom):
-        mx, my = LatLonToMeters(lat, lon)
-        px, py = MetersToPixels(mx, my, zoom)
-        mxhigh, myhigh = PixelsToMeters(px + 320, py + 200, zoom)
-        mxlow, mylow = PixelsToMeters(px - 320, py - 200, zoom)
-        lathigh, lonhigh = MetersToLatLon(mxhigh, myhigh)
-        latlow, lonlow = MetersToLatLon(mxlow, mylow)
+        mx, my = latlon_to_meters(lat, lon)
+        px, py = meters_to_pixels(mx, my, zoom)
+        mxhigh, myhigh = pixels_to_meters(px + 320, py + 200, zoom)
+        mxlow, mylow = pixels_to_meters(px - 320, py - 200, zoom)
+        lathigh, lonhigh = meters_to_latlon(mxhigh, myhigh)
+        latlow, lonlow = meters_to_latlon(mxlow, mylow)
         boundings = str(lathigh) + "," + str(lonhigh) + "," + str(latlow) + "," + str(lonlow)
         url = '%sincidents?key=%s&inFormat=kvp&boundingBox=%s' % (BASE_URL, MAPQUEST_KEY, boundings)
         results = Get_JSON_response(url)

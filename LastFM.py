@@ -163,7 +163,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self.setLabels()
-        self.getControl(self.C_ARTIST_LIST).addItems(items=CreateListItems(self.itemlist))
+        self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.itemlist))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

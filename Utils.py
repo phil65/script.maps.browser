@@ -23,7 +23,7 @@ ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0
 # 20037508.342789244
 
 
-def LatLonToMeters(lat, lon):
+def latlon_to_meters(lat, lon):
     "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
     if not lon:
         return None
@@ -35,12 +35,12 @@ def LatLonToMeters(lat, lon):
 
 def fill_list_control(listcontrol, listitem_dict):
     listcontrol.reset()
-    listitems = CreateListItems(listitem_dict)
+    listitems = create_listitems(listitem_dict)
     listcontrol.addItems(items=listitems)
-    setWindowProperty(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
+    set_window_prop(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
 
 
-def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=10000):
+def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
     skinwindow = xbmcgui.Window(window)
     if data is not None:
         threads = []
@@ -61,7 +61,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             x.join()
 
 
-def MetersToPixels(mx, my, zoom):
+def meters_to_pixels(mx, my, zoom):
     "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
 
     res = INITIAL_RESOLUTION / (2 ** zoom)
@@ -70,7 +70,7 @@ def MetersToPixels(mx, my, zoom):
     return px, py
 
 
-def PixelsToMeters(px, py, zoom):
+def pixels_to_meters(px, py, zoom):
     "Converts pixel coordinates in given zoom level of pyramid to EPSG:900913"
 
     res = INITIAL_RESOLUTION / (2 ** zoom)
@@ -79,7 +79,7 @@ def PixelsToMeters(px, py, zoom):
     return mx, my
 
 
-def MetersToLatLon(mx, my):
+def meters_to_latlon(mx, my):
     "Converts XY point from Spherical Mercator EPSG:900913 to lat/lon in WGS84 Datum"
 
     lon = (mx / ORIGIN_SHIFT) * 180.0
@@ -89,11 +89,11 @@ def MetersToLatLon(mx, my):
     return lat, lon
 
 
-def setWindowProperty(window, key, value):
+def set_window_prop(window, key, value):
     return window.setProperty(key, value)
 
 
-def GetStringFromUrl(url):
+def get_string_from_url(url):
     succeed = 0
     while (succeed < 5) and (not xbmc.abortRequested):
         try:
@@ -104,7 +104,7 @@ def GetStringFromUrl(url):
             return data
         except:
             Notify("Error", "Could not download data. Internet connection OK?")
-            log("GetStringFromURL: could not get data from %s" % url)
+            log("get_string_from_url: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return ""
@@ -118,7 +118,7 @@ def Get_JSON_response(url="", cache_days=0.5):
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
     else:
-        response = GetStringFromUrl(url)
+        response = get_string_from_url(url)
         results = simplejson.loads(response)
         save_to_file(results, filename, ADDON_DATA_PATH)
     xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -141,7 +141,7 @@ def log(txt):
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 
-def GetImages(path=""):
+def get_images(path=""):
     PinString = "&markers=color:blue"
     letter = ord('A')
     count = 0
@@ -175,12 +175,12 @@ def GetImages(path=""):
                 images_list.append(prop_list)
                 count += 1
         except Exception as e:
-            log("Error when handling GetImages results")
+            log("Error when handling get_images results")
             log(e)
     return images_list, PinString
 
 
-def string2deg(string):
+def string_to_deg(string):
     string = string.strip().replace('"', '').replace("'", "")
     clean_string = string[1:]
     clean_string = clean_string.replace("d", "")
@@ -201,18 +201,18 @@ def string2deg(string):
     return decDegrees
 
 
-def ParseGeoTags(lat, lon):
+def parse_geotags(lat, lon):
     if not lon == "":
-        lat = float(string2deg(lat))
-        lon = float(string2deg(lon))
+        lat = float(string_to_deg(lat))
+        lon = float(string_to_deg(lon))
     else:
         coords = lat.split(",lon=")
-        lat = float(string2deg(coords[0]))
-        lon = float(string2deg(coords[1]))
+        lat = float(string_to_deg(coords[0]))
+        lon = float(string_to_deg(coords[1]))
     return lat, lon
 
 
-def CreateListItem(json_array):
+def create_listitem(json_array):
     item = xbmcgui.ListItem("Undefined")
     for key, value in json_array.iteritems():
         item.setProperty(key, value)
@@ -226,7 +226,7 @@ def CreateListItem(json_array):
     return item
 
 
-def CreateListItems(data):
+def create_listitems(data):
     if not data:
         return []
     itemlist = []
@@ -251,7 +251,7 @@ def CreateListItems(data):
 
 def GetLocationCoordinates():
     url = 'https://www.telize.com/geoip'
-    response = GetStringFromUrl(url)
+    response = get_string_from_url(url)
     results = simplejson.loads(response)
     return results["latitude"], results["longitude"]
 

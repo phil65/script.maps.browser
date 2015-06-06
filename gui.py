@@ -63,7 +63,7 @@ class GUI(xbmcgui.WindowXML):
             log("param = " + param)
             if param.startswith('folder='):
                 folder = param[7:]
-                self.itemlist, self.PinString = self.GetImages(folder)
+                self.itemlist, self.PinString = self.get_images(folder)
             elif param.startswith('artist='):
                 artist = param[7:]
                 LFM = LastFM()
@@ -88,7 +88,7 @@ class GUI(xbmcgui.WindowXML):
                     self.prefix = self.prefix + '.'
             # get lat / lon values
         if self.location == "geocode":
-            self.lat, self.lon = ParseGeoTags(self.strlat, self.strlon)
+            self.lat, self.lon = parse_geotags(self.strlat, self.strlon)
         elif (self.location == "") and (self.strlat == ""):  # both empty
             self.lat, self.lon = GetLocationCoordinates()
             self.zoom_level = 2
@@ -101,12 +101,12 @@ class GUI(xbmcgui.WindowXML):
 
     def onInit(self):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        setWindowProperty(self.window, 'NavMode', '')
-        setWindowProperty(self.window, 'streetview', '')
+        set_window_prop(self.window, 'NavMode', '')
+        set_window_prop(self.window, 'streetview', '')
         if ADDON.getSetting("VenueLayout") == "1":
-            setWindowProperty(self.window, 'ListLayout', '1')
+            set_window_prop(self.window, 'ListLayout', '1')
         else:
-            setWindowProperty(self.window, 'ListLayout', '0')
+            set_window_prop(self.window, 'ListLayout', '0')
         self.venue_list = self.getControl(self.C_PLACES_LIST)
         self.get_map_urls()
         fill_list_control(self.venue_list, self.itemlist)
@@ -152,8 +152,8 @@ class GUI(xbmcgui.WindowXML):
             self.toggle_nav_mode()
         elif action_id in self.ACTION_PREVIOUS_MENU:
             if self.nav_mode_active or self.street_view:
-                setWindowProperty(self.window, 'NavMode', '')
-                setWindowProperty(self.window, 'streetview', '')
+                set_window_prop(self.window, 'NavMode', '')
+                set_window_prop(self.window, 'streetview', '')
                 self.nav_mode_active = False
                 self.street_view = False
                 xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
@@ -250,7 +250,7 @@ class GUI(xbmcgui.WindowXML):
             self.zoom_level = 12
             itemindex = selecteditem.getProperty("index")
             if not itemindex == self.window.getProperty('index'):
-                setWindowProperty(self.window, 'index', itemindex)
+                set_window_prop(self.window, 'index', itemindex)
             else:
                 event_id = selecteditem.getProperty("event_id")
                 venue_id = selecteditem.getProperty("venue_id")
@@ -307,12 +307,12 @@ class GUI(xbmcgui.WindowXML):
     def toggle_nav_mode(self):
         if self.nav_mode_active:
             self.nav_mode_active = False
-            setWindowProperty(self.window, 'NavMode', '')
+            set_window_prop(self.window, 'NavMode', '')
             xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
         else:
             self.saved_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
             self.nav_mode_active = True
-            setWindowProperty(self.window, 'NavMode', 'True')
+            set_window_prop(self.window, 'NavMode', 'True')
             xbmc.executebuiltin("SetFocus(725)")
 
     def toggle_map_mode(self):
@@ -330,13 +330,13 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
             log("StreetView Off")
             self.zoom_level = self.zoom_level_saved
-            setWindowProperty(self.window, 'streetview', '')
+            set_window_prop(self.window, 'streetview', '')
         else:
             self.street_view = True
             log("StreetView On")
             self.zoom_level_saved = self.zoom_level
             self.zoom_level = 15
-            setWindowProperty(self.window, 'streetview', 'True')
+            set_window_prop(self.window, 'streetview', 'True')
 
     def search_location(self):
         self.location = xbmcgui.Dialog().input(ADDON_LANGUAGE(32032), type=xbmcgui.INPUT_ALPHANUM)
@@ -350,7 +350,7 @@ class GUI(xbmcgui.WindowXML):
                 Notify("Error", "No Search results found.")
 
     def select_places_provider(self):
-        setWindowProperty(self.window, 'index', "")
+        set_window_prop(self.window, 'index', "")
         itemlist = None
         modeselect = [ADDON_LANGUAGE(32016),  # concerts
                       ADDON_LANGUAGE(32017),  # festivals
@@ -390,8 +390,8 @@ class GUI(xbmcgui.WindowXML):
                     itemlist, self.PinString = LFM.create_venue_list(results)
             elif modeselect[index] == ADDON_LANGUAGE(32027):
                 folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
-                setWindowProperty(self.window, 'imagepath', folder_path)
-                itemlist, self.PinString = GetImages(folder_path)
+                set_window_prop(self.window, 'imagepath', folder_path)
+                itemlist, self.PinString = get_images(folder_path)
             elif modeselect[index] == ADDON_LANGUAGE(32028):
                 EF = Eventful()
                 category = EF.SelectCategory()
@@ -459,20 +459,20 @@ class GUI(xbmcgui.WindowXML):
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
         self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
-        setWindowProperty(self.window, self.prefix + 'location', self.location)
-        setWindowProperty(self.window, self.prefix + 'lat', str(self.lat))
-        setWindowProperty(self.window, self.prefix + 'lon', str(self.lon))
-        setWindowProperty(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
-        setWindowProperty(self.window, self.prefix + 'direction', str(self.direction / 18))
-        setWindowProperty(self.window, self.prefix + 'type', self.type)
-        setWindowProperty(self.window, self.prefix + 'aspect', self.aspect)
-        setWindowProperty(self.window, self.prefix + 'map_image', self.map_url)
-        setWindowProperty(self.window, self.prefix + 'streetview_image', self.street_view_url)
+        set_window_prop(self.window, self.prefix + 'location', self.location)
+        set_window_prop(self.window, self.prefix + 'lat', str(self.lat))
+        set_window_prop(self.window, self.prefix + 'lon', str(self.lon))
+        set_window_prop(self.window, self.prefix + 'zoomlevel', str(self.zoom_level))
+        set_window_prop(self.window, self.prefix + 'direction', str(self.direction / 18))
+        set_window_prop(self.window, self.prefix + 'type', self.type)
+        set_window_prop(self.window, self.prefix + 'aspect', self.aspect)
+        set_window_prop(self.window, self.prefix + 'map_image', self.map_url)
+        set_window_prop(self.window, self.prefix + 'streetview_image', self.street_view_url)
         hor_px = int(size.split("x")[0])
         ver_px = int(size.split("x")[1])
-        mx, my = LatLonToMeters(self.lat, self.lon)
-        px, py = MetersToPixels(mx, my, self.zoom_level)
-        mx2, my2 = PixelsToMeters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
+        mx, my = latlon_to_meters(self.lat, self.lon)
+        px, py = meters_to_pixels(mx, my, self.zoom_level)
+        mx2, my2 = pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
         self.radiusx = abs((mx - mx2) / 2000)
         self.radius = abs((my - my2) / 2000)
         if self.radius > 500:
@@ -481,13 +481,13 @@ class GUI(xbmcgui.WindowXML):
         log(cache_path)
         if self.prefix == "":
             if self.street_view:
-                setWindowProperty(self.window, self.prefix + 'streetview', "True")
+                set_window_prop(self.window, self.prefix + 'streetview', "True")
             else:
-                setWindowProperty(self.window, self.prefix + 'streetview', "")
+                set_window_prop(self.window, self.prefix + 'streetview', "")
             if self.nav_mode_active:
-                setWindowProperty(self.window, self.prefix + 'NavMode', "True")
+                set_window_prop(self.window, self.prefix + 'NavMode', "True")
             else:
-                setWindowProperty(self.window, self.prefix + 'NavMode', "")
+                set_window_prop(self.window, self.prefix + 'NavMode', "")
 
     def get_geocodes(self, show_dialog, search_string):
         try:
@@ -512,7 +512,7 @@ class GUI(xbmcgui.WindowXML):
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = Search_Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=CreateListItems(places_list))
+                    w = Search_Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(places_list))
                     w.doModal()
                     if w.lat is not "":
                         self.zoom_level = 12
