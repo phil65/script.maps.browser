@@ -90,7 +90,7 @@ class GUI(xbmcgui.WindowXML):
         if self.location == "geocode":
             self.lat, self.lon = parse_geotags(self.strlat, self.strlon)
         elif (self.location == "") and (self.strlat == ""):  # both empty
-            self.lat, self.lon = GetLocationCoordinates()
+            self.lat, self.lon = get_location_coords()
             self.zoom_level = 2
         elif (not self.location == "") and (self.strlat == ""):  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)

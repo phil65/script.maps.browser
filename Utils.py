@@ -25,7 +25,10 @@ HOME = xbmcgui.Window(10000)
 
 
 def latlon_to_meters(lat, lon):
-    "Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913"
+    '''
+    Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
+    '''
+
     if not lon:
         return None
     mx = lon * ORIGIN_SHIFT / 180.0
@@ -45,7 +48,7 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=
     skinwindow = xbmcgui.Window(window)
     if data is not None:
         threads = []
-        image_requests = []
+        # image_requests = []
         for (key, value) in data.iteritems():
             value = unicode(value)
             # if precache:
@@ -63,7 +66,9 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=
 
 
 def meters_to_pixels(mx, my, zoom):
-    "Converts EPSG:900913 to pyramid pixel coordinates in given zoom level"
+    '''
+    Converts EPSG:900913 to pyramid pixel coordinates in given zoom level
+    '''
 
     res = INITIAL_RESOLUTION / (2 ** zoom)
     px = (mx + ORIGIN_SHIFT) / res
@@ -72,7 +77,9 @@ def meters_to_pixels(mx, my, zoom):
 
 
 def pixels_to_meters(px, py, zoom):
-    "Converts pixel coordinates in given zoom level of pyramid to EPSG:900913"
+    '''
+    Converts pixel coordinates in given zoom level of pyramid to EPSG:900913
+    '''
 
     res = INITIAL_RESOLUTION / (2 ** zoom)
     mx = px * res - ORIGIN_SHIFT
@@ -81,7 +88,9 @@ def pixels_to_meters(px, py, zoom):
 
 
 def meters_to_latlon(mx, my):
-    "Converts XY point from Spherical Mercator EPSG:900913 to lat/lon in WGS84 Datum"
+    '''
+    Converts XY point from Spherical Mercator EPSG:900913 to lat/lon in WGS84 Datum
+    '''
 
     lon = (mx / ORIGIN_SHIFT) * 180.0
     lat = (my / ORIGIN_SHIFT) * 180.0
@@ -250,7 +259,7 @@ def create_listitems(data):
     return itemlist
 
 
-def GetLocationCoordinates():
+def get_location_coords():
     url = 'https://www.telize.com/geoip'
     response = get_string_from_url(url)
     results = simplejson.loads(response)
