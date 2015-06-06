@@ -6,8 +6,6 @@ import urllib
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 LASTFM_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (LASTFM_KEY)
-LFM = LastFM()
-
 
 class LastFM():
 
@@ -83,13 +81,12 @@ class LastFM():
         return events_list, self.PinString
 
     def GetArtistEvents(self, artist, pastevents=False):
-        artist = urllib.quote(artist)
         if pastevents:
-     #       url = 'method=artist.getpastevents&mbid=%s' % (id)
-            url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1&limit=26' % (artist)
+     #       url = 'method=artist.getpastevents&mbid=%s&page=1&limit=26' % (id)
+            url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1&limit=26' % (urllib.quote(artist))
         else:
       #      url = 'method=artist.getevents&mbid=%s' % (id)
-            url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (artist)
+            url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (urllib.quote(artist))
         results = Get_JSON_response(BASE_URL + url)
         return results
 
@@ -118,7 +115,7 @@ class LastFM():
         index = categorydialog.select("Choose Category", modeselect)
         if index > 0:
             return results["toptags"]["tag"][index - 1]["name"]
-        elif index > -1:
+        elif index == 0:
             return ""
         else:
             return None
@@ -147,6 +144,7 @@ class LastFM():
 class LastFMDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
     C_ARTIST_LIST = 500
+    LFM = LastFM()
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -158,10 +156,9 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.GetEventsPinString = ""
         self.itemlist = []
         self.GetEventsitemlist = []
-        self.event = LFM.GetEventInfo(self.eventid)["event"]
-        self.results = LFM.GetVenueEvents(self.event["venue"]["id"])
-        self.itemlist, self.PinString = LFM.CreateVenueList(self.results)
-        self.event = LFM.GetEventInfo(eventid)["event"]
+        self.event = self.LFM.GetEventInfo(self.eventid)["event"]
+        self.results = self.LFM.GetVenueEvents(self.event["venue"]["id"])
+        self.itemlist, self.PinString = self.LFM.CreateVenueList(self.results)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -206,16 +203,16 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("headliner")
             self.close()
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                results = LFM.GetArtistEvents(artist)
-                self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
+                results = self.LFM.GetArtistEvents(artist)
+                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.CreateVenueList(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (artist))
         elif controlID == 1001:
             self.close()
             log("show artist events on map")
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                results = LFM.GetArtistEvents(self.event["artists"]["headliner"])
-                self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
+                results = self.LFM.GetArtistEvents(self.event["artists"]["headliner"])
+                self.GetEventsitemlist, self.GetEventsPinString = self.LFM.CreateVenueList(results)
             else:
                 xbmc.executebuiltin("RunScript(script.maps.browser,artist=%s)" % (self.event["artists"]["headliner"]))
         elif controlID == 1002:
