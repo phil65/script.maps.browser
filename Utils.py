@@ -15,12 +15,13 @@ import simplejson
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
+ADDON_NAME = ADDON.getAddonInfo('name')
+ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 TILESIZE = 256
-INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE
-# 156543.03392804062 for tileSize 256 pixels
-ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0
-# 20037508.342789244
+INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE  # 156543.03392804062 for tileSize 256 pixels
+ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0  # 20037508.342789244
+HOME = xbmcgui.Window(10000)
 
 
 def latlon_to_meters(lat, lon):
