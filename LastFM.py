@@ -6,6 +6,7 @@ import urllib
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 LASTFM_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (LASTFM_KEY)
+LFM = LastFM()
 
 
 class LastFM():
@@ -157,23 +158,19 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.GetEventsPinString = ""
         self.itemlist = []
         self.GetEventsitemlist = []
-        LFM = LastFM()
         self.event = LFM.GetEventInfo(self.eventid)["event"]
         self.results = LFM.GetVenueEvents(self.event["venue"]["id"])
         self.itemlist, self.PinString = LFM.CreateVenueList(self.results)
+        self.event = LFM.GetEventInfo(eventid)["event"]
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         self.setLabels()
         self.getControl(self.C_ARTIST_LIST).addItems(items=CreateListItems(self.itemlist))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-
-    def updateLabels(self, eventid):
-        self.event = LFM.GetEventInfo(eventid)["event"]
-        self.setLabels()
 
     def setLabels(self):
         if isinstance(self.event['artists']['artist'], list):
@@ -209,7 +206,6 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             artist = self.getControl(self.C_ARTIST_LIST).getSelectedItem().getProperty("headliner")
             self.close()
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                LFM = LastFM()
                 results = LFM.GetArtistEvents(artist)
                 self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
             else:
@@ -218,7 +214,6 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             self.close()
             log("show artist events on map")
             if xbmc.getCondVisibility("Window.IsActive(script-Maps Browser-main.xml)"):
-                LFM = LastFM()
                 results = LFM.GetArtistEvents(self.event["artists"]["headliner"])
                 self.GetEventsitemlist, self.GetEventsPinString = LFM.CreateVenueList(results)
             else:
