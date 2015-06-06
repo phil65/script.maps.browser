@@ -268,9 +268,9 @@ class GUI(xbmcgui.WindowXML):
                 elif eventful_id:
                     dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventful_id=eventful_id)
                 dialog.doModal()
-                if len(dialog.GetEventsitemlist) > 0:
+                if len(dialog.events_items) > 0:
                     self.pin_string = dialog.events_pin_string
-                    fill_list_control(self.venue_list, dialog.GetEventsitemlist)
+                    fill_list_control(self.venue_list, dialog.events_items)
                 del dialog
         self.get_map_urls()
         self.window.setProperty("streetview_image", self.street_view_url)
