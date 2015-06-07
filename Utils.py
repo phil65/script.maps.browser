@@ -291,7 +291,8 @@ def create_listitems(data):
 
 
 def get_location_coords():
-    url = 'https://www.telize.com/geoip'
+    # url = 'https://www.telize.com/geoip'
+    url = 'http://freegeoip.net/json'
     response = get_string_from_url(url)
     results = simplejson.loads(response)
     return results["latitude"], results["longitude"]
