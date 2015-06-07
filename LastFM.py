@@ -7,6 +7,7 @@ GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 LASTFM_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json' % (LASTFM_KEY)
 
+
 class LastFM():
 
     def __init__(self):
@@ -82,10 +83,10 @@ class LastFM():
 
     def get_artist_events(self, artist, pastevents=False):
         if pastevents:
-     #       url = 'method=artist.getpastevents&mbid=%s&page=1&limit=26' % (id)
+            # url = 'method=artist.getpastevents&mbid=%s&page=1&limit=26' % (id)
             url = '&method=artist.getpastevents&autocorrect=1&artist=%s&page=1&limit=26' % (urllib.quote(artist))
         else:
-      #      url = 'method=artist.getevents&mbid=%s' % (id)
+            # url = 'method=artist.getevents&mbid=%s' % (id)
             url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (urllib.quote(artist))
         results = Get_JSON_response(BASE_URL + url)
         return results
@@ -143,9 +144,9 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
     C_ARTIST_LIST = 500
     LFM = LastFM()
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.venue_id = kwargs.get('venueid')
         self.event_id = kwargs.get('eventid')
         self.event = []
@@ -156,7 +157,6 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.event = self.LFM.get_event_info(self.event_id)["event"]
         self.results = self.LFM.get_venue_events(self.event["venue"]["id"])
         self.item_list, self.pin_string = self.LFM.create_venue_list(self.results)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         self.set_labels()

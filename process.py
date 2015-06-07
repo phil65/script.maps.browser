@@ -18,7 +18,7 @@ def StartInfoActions(infos, params):
         params["prefix"] = params["prefix"] + '.'
     # NOTICE: compatibility
     for info in infos:
-        data = []
+        # data = []
         if info == 'venueinfo':
             HOME.setProperty('infodialogs.active', "true")
             dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, venueid=params.get("id", ""), name=params.get("name", ""))

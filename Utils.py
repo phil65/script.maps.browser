@@ -11,6 +11,9 @@ from PIL import Image
 import hashlib
 from ImageTags import *
 import simplejson
+from functools import wraps
+import threading
+
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -22,6 +25,34 @@ TILESIZE = 256
 INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE  # 156543.03392804062 for tileSize 256 pixels
 ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0  # 20037508.342789244
 HOME = xbmcgui.Window(10000)
+
+
+def run_async(func):
+    """
+    Decorator to put a function into a separate thread
+    """
+    @wraps(func)
+    def async_func(*args, **kwargs):
+        func_hl = threading.Thread(target=func, args=args, kwargs=kwargs)
+        func_hl.start()
+        return func_hl
+
+    return async_func
+
+
+def busy_dialog(func):
+    """
+    Decorator to show busy dialog while function is running
+    Only one of the decorated functions may run simultaniously
+    """
+
+    def decorator(self, *args, **kwargs):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        result = func(self, *args, **kwargs)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return result
+
+    return decorator
 
 
 def latlon_to_meters(lat, lon):
@@ -121,7 +152,6 @@ def get_string_from_url(url):
 
 
 def Get_JSON_response(url="", cache_days=0.5):
-    xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
@@ -131,8 +161,8 @@ def Get_JSON_response(url="", cache_days=0.5):
         response = get_string_from_url(url)
         results = simplejson.loads(response)
         save_to_file(results, filename, ADDON_DATA_PATH)
-    xbmc.executebuiltin("Dialog.Close(busydialog)")
     return results
+
 
 def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
@@ -143,6 +173,7 @@ def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
         return results["artists"][0]["id"]
     else:
         return None
+
 
 def log(txt):
     if isinstance(txt, str):

@@ -48,8 +48,8 @@ class GUI(xbmcgui.WindowXML):
     ACTION_EXIT_SCRIPT = [13]
     ACTION_0 = [58, 18]
 
+    @busy_dialog
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.itemlist = []
         self.location = kwargs.get("location", "")
         self.type = kwargs.get("type", "roadmap")
@@ -97,7 +97,6 @@ class GUI(xbmcgui.WindowXML):
         else:
             self.lat = float(self.strlat)
             self.lon = float(self.strlon)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())

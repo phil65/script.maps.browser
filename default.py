@@ -18,7 +18,6 @@
 #
 
 import sys
-import os
 import xbmc
 import xbmcaddon
 from Utils import *
