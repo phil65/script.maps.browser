@@ -64,9 +64,7 @@ class Eventful():
         if not isinstance(results, list):
             results = [results]
         for venue in results:
-            eventname = cleanText(venue['title'])
             venuename = cleanText(venue['venue_name'])
-            formattedAddress = cleanText(venue["venue_address"])
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
             search_string = lat + "," + lon
@@ -84,7 +82,7 @@ class Eventful():
             date = date.replace("00:00:00", "")
             prop_list = {"id": str(venue['id']),
                          "eventful_id": str(venue['venue_id']),
-                         "eventname": eventname,
+                         "eventname": cleanText(venue['title']),
                          "description": cleanText(venue['description']),
                          "name": venuename,
                          "label": venuename,
@@ -92,7 +90,7 @@ class Eventful():
                          "photo": photo,
                          "thumb": photo,
                          "date": date,
-                         "address": formattedAddress,
+                         "address": cleanText(venue["venue_address"]),
                          "Venue_Image": photo,
                          "venue_id_eventful": venue['venue_id'],
                          "GoogleMap": googlemap,

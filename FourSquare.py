@@ -38,7 +38,7 @@ class FourSquare():
                 photo = ""
             if "name" not in venue:
                 venue = venue["venue"]
-            if len(venue['categories']) > 0:
+            if venue['categories']:
                 icon = venue['categories'][0]['icon']['prefix'] + "88" + venue['categories'][0]['icon']['suffix']
             else:
                 icon = ""
@@ -100,18 +100,17 @@ class FourSquare():
         # url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", FOURSQUARE_ID, FOURSQUARE_SECRET)
         url = '&ll=%.8f,%.8f&section=%s' % (float(lat), float(lon), placetype)
         results = Get_JSON_response(base_url + url)
-        if results and 'meta' in results:
-            if results['meta']['code'] == 200:
-                if len(results['response']['groups'][0]['items']) > 0:
-                    return self.HandleFourSquarePlacesResult(results['response']['groups'][0]['items'])
-                else:
-                    Notify("Error", "No results found near the selected area.")
-            elif results['meta']['code'] == 400:
-                log("LIMIT EXCEEDED")
+        if not results or 'meta' not in results:
+            return [], ""
+        if results['meta']['code'] == 200:
+            if results['response']['groups'][0]['items']:
+                return self.HandleFourSquarePlacesResult(results['response']['groups'][0]['items'])
             else:
-                log("ERROR")
+                Notify("Error", "No results found near the selected area.")
+        elif results['meta']['code'] == 400:
+            log("LIMIT EXCEEDED")
         else:
-            log("ERROR")
+            log("ERROR" + str(results['meta']['code']))
         return [], ""
 
     def select_category(self):
