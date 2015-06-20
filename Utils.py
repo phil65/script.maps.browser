@@ -136,17 +136,16 @@ def set_window_prop(window, key, value):
 
 def get_string_from_url(url):
     succeed = 0
-    while (succeed < 5) and (not xbmc.abortRequested):
+    while (succeed < 3) and (not xbmc.abortRequested):
         try:
             request = urllib2.Request(url)
             request.add_header('User-agent', 'XBMC/14.2 ( phil65@kodi.tv )')
-            response = urllib2.urlopen(request)
+            response = urllib2.urlopen(request, timeout=3)
             data = response.read()
             return data
         except:
             Notify("Error", "Could not download data. Internet connection OK?")
             log("get_string_from_url: could not get data from %s" % url)
-            xbmc.sleep(1000)
             succeed += 1
     return ""
 

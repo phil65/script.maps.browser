@@ -351,52 +351,54 @@ class GUI(xbmcgui.WindowXML):
     def select_places_provider(self):
         set_window_prop(self.window, 'index', "")
         itemlist = None
-        modeselect = [ADDON_LANGUAGE(32016),  # concerts
-                      ADDON_LANGUAGE(32017),  # festivals
-                      ADDON_LANGUAGE(32027),  # geopics
-                      ADDON_LANGUAGE(32028),  # eventful
-                      ADDON_LANGUAGE(32029),  # FourSquare
-                      ADDON_LANGUAGE(32030),  # MapQuest
-                      ADDON_LANGUAGE(32031),  # Google Places
-                      ADDON_LANGUAGE(32019)]  # reset
+        modeselect = [("concerts", ADDON_LANGUAGE(32016)),
+                      ("festivals", ADDON_LANGUAGE(32017)),
+                      ("geopics", ADDON_LANGUAGE(32027)),
+                      ("eventful", ADDON_LANGUAGE(32028)),
+                      ("foursquare", ADDON_LANGUAGE(32029)),
+                      ("mapquest", ADDON_LANGUAGE(32030)),
+                      ("googleplaces", ADDON_LANGUAGE(32031)),
+                      ("reset", ADDON_LANGUAGE(32019))]
+        listitems = [item[1] for item in modeselect]
+        keys = [item[0] for item in modeselect]
         dialog = xbmcgui.Dialog()
-        index = dialog.select(ADDON_LANGUAGE(32020), modeselect)
+        index = dialog.select(ADDON_LANGUAGE(32020), listitems)
         if not index < 0:
-            if modeselect[index] == ADDON_LANGUAGE(32031):
+            if keys[index] == "googleplaces":
                 GP = GooglePlaces()
                 category = GP.select_category()
                 if category is not None:
                     self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
-            elif modeselect[index] == ADDON_LANGUAGE(32029):
+            elif keys[index] == "foursquare":
                 FS = FourSquare()
                 section = FS.SelectSection()
                 if section is not None:
                     itemlist, self.pin_string = FS.GetPlacesListExplore(self.lat, self.lon, section)
-            elif modeselect[index] == ADDON_LANGUAGE(32016):
+            elif keys[index] == "concerts":
                 LFM = LastFM()
                 category = LFM.select_category()
                 if category is not None:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
                     itemlist, self.pin_string = LFM.create_venue_list(results)
-            elif modeselect[index] == ADDON_LANGUAGE(32030):
+            elif keys[index] == "mapquest":
                 MQ = MapQuest()
                 itemlist, self.pin_string = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
-            elif modeselect[index] == ADDON_LANGUAGE(32017):
+            elif keys[index] == "festivals":
                 LFM = LastFM()
                 category = LFM.select_category()
                 if category is not None:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
                     itemlist, self.pin_string = LFM.create_venue_list(results)
-            elif modeselect[index] == ADDON_LANGUAGE(32027):
+            elif keys[index] == "geopics":
                 folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
                 set_window_prop(self.window, 'imagepath', folder_path)
                 itemlist, self.pin_string = get_images(folder_path)
-            elif modeselect[index] == ADDON_LANGUAGE(32028):
+            elif keys[index] == "eventful":
                 EF = Eventful()
                 category = EF.select_category()
                 if category is not None:
                     itemlist, self.pin_string = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
-            elif modeselect[index] == ADDON_LANGUAGE(32019):
+            elif keys[index] == "reset":
                 self.pin_string = ""
                 itemlist = []
             if itemlist is not None:
@@ -404,13 +406,13 @@ class GUI(xbmcgui.WindowXML):
             self.street_view = False
 
     def open_search_dialog(self):
-        modeselect = {"googlemaps": ADDON_LANGUAGE(32024),
-                      "foursquareplaces": ADDON_LANGUAGE(32004),
-                      "lastfmconcerts": ADDON_LANGUAGE(32023),
-                      "lastfmvenues": ADDON_LANGUAGE(32033),
-                      "reset": ADDON_LANGUAGE(32019)}
-        KEYS = [item for item in modeselect.keys()]
-        VALUES = [item for item in modeselect.values()]
+        modeselect = [("googlemaps", ADDON_LANGUAGE(32024)),
+                      ("foursquareplaces", ADDON_LANGUAGE(32004)),
+                      ("lastfmconcerts", ADDON_LANGUAGE(32023)),
+                      ("lastfmvenues", ADDON_LANGUAGE(32033)),
+                      ("reset", ADDON_LANGUAGE(32019))]
+        KEYS = [item[0] for item in modeselect]
+        VALUES = [item[1] for item in modeselect]
         dialog = xbmcgui.Dialog()
         index = dialog.select(ADDON_LANGUAGE(32026), VALUES)
         if index < 0:
