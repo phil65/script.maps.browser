@@ -122,7 +122,7 @@ class GooglePlaces():
     def GetGooglePlacesList(self, lat, lon, radius, locationtype):
         location = str(lat) + "," + str(lon)
         if radius > 30000:
-          radius = 30000
+            radius = 30000
         base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=%s' % (GOOGLE_PLACES_KEY)
         url = '&radius=%i&location=%s&types=%s' % (radius, location, locationtype)
         results = Get_JSON_response(base_url + url)
