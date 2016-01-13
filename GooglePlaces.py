@@ -110,8 +110,7 @@ class GooglePlaces():
         modeselect = ["All Sections"]
         for value in Categories.iterkeys():
             modeselect.append(value)
-        dialog = xbmcgui.Dialog()
-        index = dialog.select("Choose Section", modeselect)
+        index = xbmcgui.Dialog().select("Choose Section", modeselect)
         if index > 0:
             return Categories.keys()[index - 1]
         elif index > -1:

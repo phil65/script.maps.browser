@@ -16,8 +16,7 @@ class Eventful():
         modeselect = ["All Categories"]
         for item in results["category"]:
             modeselect.append(cleanText(item["name"]))
-        dialog = xbmcgui.Dialog()
-        index = dialog.select("Choose Category", modeselect)
+        index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index > 0:
             return results["category"][index - 1]["id"]
         elif index > -1:

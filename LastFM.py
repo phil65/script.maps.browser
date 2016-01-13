@@ -27,18 +27,19 @@ class LastFM():
                         my_arts = ' / '.join(artists)
                     else:
                         my_arts = artists
-                    lat = event['venue']['location']['geo:point'].get('geo:lat')
-                    lon = event['venue']['location']['geo:point'].get('geo:long')
+                    location = event['venue']['location']
+                    lat = location['geo:point'].get('geo:lat')
+                    lon = location['geo:point'].get('geo:long')
                     if lat and lon:
                         search_string = lat + "," + lon
-                    elif event['venue']['location']['street']:
-                        search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
-                    elif event['venue']['location']['city']:
-                        search_string = event['venue']['location']['city'] + " " + event['venue']['name']
+                    elif location['street']:
+                        search_string = location['city'] + " " + location['street']
+                    elif location['city']:
+                        search_string = location['city'] + " " + event['venue']['name']
                     else:
                         search_string = event['venue']['name']
                     google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
-                    address_formatted = event['venue']['location']['street'] + "[CR]" + event['venue']['location']['city'] + "[CR]" + event['venue']['location']['country']
+                    address_formatted = location['street'] + "[CR]" + location['city'] + "[CR]" + location['country']
                     description = unicode(cleanText(event['description']))
                     if my_arts != event['artists']['headliner']:
                         description = "[B]" + my_arts + "[/B][CR]" + description
@@ -46,12 +47,12 @@ class LastFM():
                                  "name": event['venue']['name'],
                                  "venue_id": event['venue']['id'],
                                  "event_id": event['id'],
-                                 "street": event['venue']['location']['street'],
+                                 "street": location['street'],
                                  "eventname": event['title'],
                                  "website": event['website'],
                                  "description": description,
-                                 "city": event['venue']['location']['city'],
-                                 "country": event['venue']['location']['country'],
+                                 "city": location['city'],
+                                 "country": location['country'],
                                  "address": address_formatted,
                                  "lon": lon,
                                  "lat": lat,
@@ -111,9 +112,8 @@ class LastFM():
         modeselect = ["All Categories"]
         for item in results["toptags"]["tag"]:
             modeselect.append(cleanText(item["name"]))
-        dialog = xbmcgui.Dialog()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        index = dialog.select("Choose Category", modeselect)
+        index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index > 0:
             return results["toptags"]["tag"][index - 1]["name"]
         elif index == 0:
@@ -171,7 +171,6 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
             artists = ' / '.join(self.event['artists']['artist'])
         else:
             artists = self.event['artists']['artist']
-        website = ""
         description = "[B]Artists:[/B][CR]%s[CR][CR]%s" % (artists, cleanText(self.event["description"]))
         if self.event['venue']['location']['geo:point']['geo:long']:
             lon = self.event['venue']['location']['geo:point']['geo:long']

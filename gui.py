@@ -114,8 +114,7 @@ class GUI(xbmcgui.WindowXML):
         settings = xbmcaddon.Addon(id='script.maps.browser')
         if not settings.getSetting('firststart') == "true":
             settings.setSetting(id='firststart', value='true')
-            dialog = xbmcgui.Dialog()
-            dialog.ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
+            xbmcgui.Dialog().ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
         log('onInit finished')
 
     def init_vars(self):
@@ -361,23 +360,22 @@ class GUI(xbmcgui.WindowXML):
                       ("reset", ADDON_LANGUAGE(32019))]
         listitems = [item[1] for item in modeselect]
         keys = [item[0] for item in modeselect]
-        dialog = xbmcgui.Dialog()
-        index = dialog.select(ADDON_LANGUAGE(32020), listitems)
+        index = xbmcgui.Dialog().select(ADDON_LANGUAGE(32020), listitems)
         if not index < 0:
             if keys[index] == "googleplaces":
                 GP = GooglePlaces()
                 category = GP.select_category()
-                if category is not None:
+                if category:
                     self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif keys[index] == "foursquare":
                 FS = FourSquare()
                 section = FS.SelectSection()
-                if section is not None:
+                if section:
                     itemlist, self.pin_string = FS.GetPlacesListExplore(self.lat, self.lon, section)
             elif keys[index] == "concerts":
                 LFM = LastFM()
                 category = LFM.select_category()
-                if category is not None:
+                if category:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
                     itemlist, self.pin_string = LFM.create_venue_list(results)
             elif keys[index] == "mapquest":
@@ -386,7 +384,7 @@ class GUI(xbmcgui.WindowXML):
             elif keys[index] == "festivals":
                 LFM = LastFM()
                 category = LFM.select_category()
-                if category is not None:
+                if category:
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
                     itemlist, self.pin_string = LFM.create_venue_list(results)
             elif keys[index] == "geopics":
@@ -396,7 +394,7 @@ class GUI(xbmcgui.WindowXML):
             elif keys[index] == "eventful":
                 EF = Eventful()
                 category = EF.select_category()
-                if category is not None:
+                if category:
                     itemlist, self.pin_string = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
             elif keys[index] == "reset":
                 self.pin_string = ""
@@ -413,8 +411,7 @@ class GUI(xbmcgui.WindowXML):
                       ("reset", ADDON_LANGUAGE(32019))]
         KEYS = [item[0] for item in modeselect]
         VALUES = [item[1] for item in modeselect]
-        dialog = xbmcgui.Dialog()
-        index = dialog.select(ADDON_LANGUAGE(32026), VALUES)
+        index = xbmcgui.Dialog().select(ADDON_LANGUAGE(32026), VALUES)
         if index < 0:
             return None
         if KEYS[index] == "googlemaps":

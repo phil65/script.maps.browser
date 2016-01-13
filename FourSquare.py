@@ -29,8 +29,7 @@ class FourSquare():
         self.pin_string = ""
         places_list = list()
         letter = ord('A')
-        count = 0
-        for venue in results:
+        for count, venue in enumerate(results):
             try:
                 photo_node = venue['venue']['photos']['groups'][0]['items'][0]
                 photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
@@ -64,15 +63,13 @@ class FourSquare():
                          "Venue_Image": icon,
                          "GoogleMap": googlemap,
                          "index":  str(count),
-                         "sortletter": chr(letter),
+                         "sortletter": chr(letter + count),
                          "lat": lat,
                          "lon": lon,
                          "phone": venue['contact'].get('phone', ""),
                          "comments": str(venue['stats']['tipCount'])}
             self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places_list.append(prop_list)
-            count += 1
-            letter += 1
         return places_list, self.pin_string
 
     def GetPlacesList(self, lat, lon, query="", category_id=""):
@@ -119,8 +116,7 @@ class FourSquare():
         modeselect = ["All Categories"]
         for item in results["categories"]:
             modeselect.append(cleanText(item["name"]))
-        dialog = xbmcgui.Dialog()
-        index = dialog.select("Choose Category", modeselect)
+        index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index > 0:
             return results["categories"][index - 1]["id"]
         elif index > -1:
@@ -143,8 +139,7 @@ class FourSquare():
         modeselect = ["All Sections"]
         for value in Sections.itervalues():
             modeselect.append(value)
-        dialog = xbmcgui.Dialog()
-        index = dialog.select("Choose Section", modeselect)
+        index = xbmcgui.Dialog().select("Choose Section", modeselect)
         if index > 0:
             return Sections.keys()[index - 1]
         elif index > -1:
