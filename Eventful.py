@@ -24,7 +24,7 @@ class Eventful():
         else:
             return None
 
-    def GetEventfulEventList(self, lat="", lon="", query="", category="", radius=30):
+    def get_eventlist(self, lat="", lon="", query="", category="", radius=30):
         base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         if query:
@@ -32,30 +32,30 @@ class Eventful():
         if category:
             url = url + '&category=%s' % (category)
         results = Get_JSON_response(base_url + url)
-        return self.HandleEventfulEventResult(results['events']['event'])
+        return self.handle_events(results['events']['event'])
 
-    def GetEventfulVenueList(self, lat="", lon="", query=""):
+    def get_venuelist(self, lat="", lon="", query=""):
         base_url = "http://api.eventful.com/json/events/search?image_sizes=large&include=price&units=km&page_size=26&sort_order=date&date=Future&app_key=%s" % (EVENTFUL_KEY)
         url = '&where=%.8f,%.8f&within=%i' % (lat, lon, int(radius))
         if query:
             url = url + '&query=%s' % (query)
         #  url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", foursquare_id, foursquare_secret)
         results = Get_JSON_response(base_url + url)
-        return self.HandleEventfulEventResult(results['events']['event'])
+        return self.handle_events(results['events']['event'])
 
-    def GetVenueInfo(self, event_id=""):
+    def get_venue_info(self, event_id=""):
         base_url = "http://api.eventful.com/json/venues/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s' % (str(event_id))
         results = Get_JSON_response(base_url + url)
-        return self.HandleEventfulEventResult(results['venue'])
+        return self.handle_events(results['venue'])
 
     def get_event_info(self, event_id=""):
         base_url = "http://api.eventful.com/json/events/get?app_key=%s" % (EVENTFUL_KEY)
         url = '&id=%s&image_sizes=blackborder500,edpborder500' % (str(event_id))
         results = Get_JSON_response(base_url + url)
-        return self.HandleEventfulEventResult(results['venue'])
+        return self.handle_events(results['venue'])
 
-    def HandleEventfulEventResult(self, results):
+    def handle_events(self, results):
         pin_string = ""
         places_list = list()
         letter = ord('A')

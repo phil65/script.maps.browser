@@ -17,7 +17,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         self.foursquare_id = kwargs.get('foursquare_id')
         if self.eventful_id:
             EF = Eventful()
-            self.prop_list = EF.GetVenueInfo(self.eventful_id)
+            self.prop_list = EF.get_venue_info(self.eventful_id)
             self.event_list = self.prop_list["events"]["event"]
             prettyprint(self.event_list)
         elif self.foursquare_id:

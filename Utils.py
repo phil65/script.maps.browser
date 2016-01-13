@@ -55,19 +55,6 @@ def busy_dialog(func):
     return decorator
 
 
-def latlon_to_meters(lat, lon):
-    '''
-    Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
-    '''
-
-    if not lon:
-        return None
-    mx = lon * ORIGIN_SHIFT / 180.0
-    my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
-    my = my * ORIGIN_SHIFT / 180.0
-    return mx, my
-
-
 def fill_list_control(listcontrol, listitem_dict):
     listcontrol.reset()
     listitems = create_listitems(listitem_dict)
@@ -94,6 +81,19 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=
                 log('%s%s' % (prefix, str(key)) + value)
         for x in threads:
             x.join()
+
+
+def latlon_to_meters(lat, lon):
+    '''
+    Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
+    '''
+
+    if not lon:
+        return None
+    mx = lon * ORIGIN_SHIFT / 180.0
+    my = math.log(math.tan((90 + lat) * math.pi / 360.0)) / (math.pi / 180.0)
+    my = my * ORIGIN_SHIFT / 180.0
+    return mx, my
 
 
 def meters_to_pixels(mx, my, zoom):
@@ -326,7 +326,6 @@ def read_from_file(path=""):
             return fc
         except:
             Notify("Exception in read_from_file()")
-            log(fc)
             return []
     else:
         return False
@@ -377,8 +376,7 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
 
 
 def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
-    dialog = xbmcgui.Dialog()
-    dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
+    xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
 def prettyprint(string):

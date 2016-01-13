@@ -395,7 +395,7 @@ class GUI(xbmcgui.WindowXML):
                 EF = Eventful()
                 category = EF.select_category()
                 if category:
-                    itemlist, self.pin_string = EF.GetEventfulEventList(self.lat, self.lon, "", category, self.radius)
+                    itemlist, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
             elif keys[index] == "reset":
                 self.pin_string = ""
                 itemlist = []
