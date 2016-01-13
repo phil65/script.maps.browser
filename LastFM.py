@@ -16,7 +16,7 @@ class LastFM():
     def create_venue_list(self, results, return_proplist=False):
         letter = ord('A')
         count = 0
-        events_list = list()
+        events_list = []
         if "events" in results:
             if "@attr" in results["events"]:
                 if not isinstance(results['events']['event'], list):
@@ -89,8 +89,7 @@ class LastFM():
         else:
             # url = 'method=artist.getevents&mbid=%s' % (id)
             url = '&method=artist.getevents&autocorrect=1&artist=%s&limit=26' % (urllib.quote(artist))
-        results = Get_JSON_response(BASE_URL + url)
-        return results
+        return Get_JSON_response(BASE_URL + url)
 
     def get_near_events(self, lat="", lon="", radius=30, tag="", only_festivals=False):
         if only_festivals:
@@ -102,8 +101,7 @@ class LastFM():
             url = url + '&tag=%s' % (urllib.quote_plus(tag))
         if lat:
             url = url + '&lat=%s&long=%s&distance=%i' % (lat, lon, radius)  # &distance=60
-        results = Get_JSON_response(BASE_URL + url)
-        return results
+        return Get_JSON_response(BASE_URL + url)
 
     def select_category(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -172,14 +170,15 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         else:
             artists = self.event['artists']['artist']
         description = "[B]Artists:[/B][CR]%s[CR][CR]%s" % (artists, cleanText(self.event["description"]))
-        if self.event['venue']['location']['geo:point']['geo:long']:
-            lon = self.event['venue']['location']['geo:point']['geo:long']
-            lat = self.event['venue']['location']['geo:point']['geo:lat']
+        location = self.event['venue']['location']
+        if location['geo:point']['geo:long']:
+            lon = location['geo:point']['geo:long']
+            lat = location['geo:point']['geo:lat']
             search_string = lat + "," + lon
-        elif self.event['venue']['location']['street']:
-            search_string = self.event['venue']['location']['city'] + " " + self.event['venue']['location']['street']
-        elif self.event['venue']['location']['city']:
-            search_string = self.event['venue']['location']['city'] + " " + self.event['venue']['name']
+        elif location['street']:
+            search_string = location['city'] + " " + location['street']
+        elif location['city']:
+            search_string = location['city'] + " " + self.event['venue']['name']
         else:
             search_string = self.event['venue']['name']
         if "tags" in self.event:
@@ -191,7 +190,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
         self.getControl(210).setImage(self.event['venue']['image'][-1]['#text'])
         self.getControl(212).setImage(self.event['image'][-1]['#text'])
         self.getControl(211).setImage(self.google_map)
-        self.getControl(204).setLabel(self.event['venue']['location']['street'])
+        self.getControl(204).setLabel(location['street'])
         self.getControl(201).setLabel(self.event["title"])
 
     def onClick(self, controlID):
