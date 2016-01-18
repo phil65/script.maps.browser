@@ -10,7 +10,7 @@ import math
 from PIL import Image
 import hashlib
 from ImageTags import *
-import simplejson
+import simplejson as json
 from functools import wraps
 import threading
 
@@ -158,7 +158,7 @@ def Get_JSON_response(url="", cache_days=0.5):
         results = read_from_file(path)
     else:
         response = get_string_from_url(url)
-        results = simplejson.loads(response)
+        results = json.loads(response)
         save_to_file(results, filename, ADDON_DATA_PATH)
     return results
 
@@ -262,7 +262,7 @@ def create_listitem(json_array):
             item.setLabel(value)
         elif key == "label2":
             item.setLabel2(value)
-    item.setProperty("item_info", simplejson.dumps(json_array))
+    item.setProperty("item_info", json.dumps(json_array))
     return item
 
 
@@ -284,7 +284,7 @@ def create_listitems(data):
             if str(key).lower() in ["path"]:
                 listitem.setPath(path=unicode(value))
             listitem.setProperty('%s' % (str(key)), unicode(value))
-        listitem.setProperty("item_info", simplejson.dumps(unicode(result)))
+        listitem.setProperty("item_info", json.dumps(unicode(result)))
         itemlist.append(listitem)
     return itemlist
 
@@ -293,7 +293,7 @@ def get_location_coords():
     # url = 'https://www.telize.com/geoip'
     url = 'http://freegeoip.net/json'
     response = get_string_from_url(url)
-    results = simplejson.loads(response)
+    results = json.loads(response)
     return results["latitude"], results["longitude"]
 
 
@@ -307,7 +307,7 @@ def save_to_file(content, filename, path=""):
     log("save to textfile:")
     log(text_file_path)
     text_file = xbmcvfs.File(text_file_path, "w")
-    simplejson.dump(content, text_file)
+    json.dump(content, text_file)
     text_file.close()
     return True
 
@@ -320,7 +320,7 @@ def read_from_file(path=""):
     # Check to see if file exists
     if xbmcvfs.exists(path):
         f = open(path)
-        fc = simplejson.load(f)
+        fc = json.load(f)
         log("loaded textfile " + path)
         try:
             return fc
@@ -380,4 +380,4 @@ def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
 
 
 def prettyprint(string):
-    log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
+    log(json.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
