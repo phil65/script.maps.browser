@@ -69,12 +69,13 @@ def fill_list_control(listcontrol, listitem_dict):
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
     skinwindow = xbmcgui.Window(window)
-    if data:
-        for (key, value) in data.iteritems():
-            value = unicode(value)
-            skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
-            if debug:
-                log('%s%s' % (prefix, str(key)) + value)
+    if not data:
+        return None
+    for (key, value) in data.iteritems():
+        value = unicode(value)
+        skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
+        if debug:
+            log('%s%s' % (prefix, str(key)) + value)
 
 
 def latlon_to_meters(lat, lon):
@@ -161,7 +162,7 @@ def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = Get_JSON_response(base_url + url, 30)
-    if results and len(results["artists"]) > 0:
+    if results and results["artists"]:
         log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
         return results["artists"][0]["id"]
     else:
@@ -226,10 +227,7 @@ def string_to_deg(raw_string):
     if co_search is None:
         raise ValueError("Invalid input string: %s" % raw_string)
     elems = co_search.groups()
-    degrees = float(elems[0])
-    arc_minutes = float(elems[1])
-    arc_seconds = float(elems[2])
-    dec_degrees = degrees + arc_minutes / 60.0 + arc_seconds / 3600.0
+    dec_degrees = float(elems[0]) + float(elems[1]) / 60.0 + float(elems[2]) / 3600.0
     if raw_string[0].lower() == "w" or raw_string[0].lower() == "s":
         dec_degrees = -1.0 * dec_degrees
     return float(dec_degrees)
@@ -256,14 +254,13 @@ def create_listitem(json_array):
             item.setLabel(value)
         elif key == "label2":
             item.setLabel2(value)
-    item.setProperty("item_info", json.dumps(json_array))
     return item
 
 
 def create_listitems(data):
     if not data:
         return []
-    itemlist = []
+    items = []
     for (count, result) in enumerate(data):
         listitem = xbmcgui.ListItem('%s' % (str(count)))
         for (key, value) in result.iteritems():
@@ -273,14 +270,13 @@ def create_listitems(data):
                 listitem.setThumbnailImage(unicode(value))
             if str(key).lower() in ["icon"]:
                 listitem.setIconImage(unicode(value))
-            if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+            if str(key).lower() in ["thumb", "poster", "banner", "fanart"]:
                 listitem.setArt({str(key).lower(): unicode(value)})
             if str(key).lower() in ["path"]:
                 listitem.setPath(path=unicode(value))
             listitem.setProperty('%s' % (str(key)), unicode(value))
-        listitem.setProperty("item_info", json.dumps(unicode(result)))
-        itemlist.append(listitem)
-    return itemlist
+        items.append(listitem)
+    return items
 
 
 def get_location_coords():
