@@ -1,5 +1,6 @@
 from Utils import *
 import xbmcgui
+import urllib
 
 GOOGLE_PLACES_KEY = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 ADDON = xbmcaddon.Addon()
@@ -108,8 +109,7 @@ class GooglePlaces():
                       "zoo": ADDON.getLocalizedString(32015)
                       }
         modeselect = ["All Sections"]
-        for value in Categories.iterkeys():
-            modeselect.append(value)
+        modeselect += [value for value in Categories.iterkeys()]
         index = xbmcgui.Dialog().select("Choose Section", modeselect)
         if index > 0:
             return Categories.keys()[index - 1]
@@ -119,12 +119,12 @@ class GooglePlaces():
             return None
 
     def GetGooglePlacesList(self, lat, lon, radius, locationtype):
-        location = str(lat) + "," + str(lon)
-        if radius > 30000:
-            radius = 30000
-        base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=%s' % (GOOGLE_PLACES_KEY)
-        url = '&radius=%i&location=%s&types=%s' % (radius, location, locationtype)
-        results = Get_JSON_response(base_url + url)
+        params = {"key": GOOGLE_PLACES_KEY,
+                  "radius": min(30000, radius),
+                  "location": str(lat) + "," + str(lon),
+                  "types": locationtype}
+        base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+        results = Get_JSON_response(base_url + urllib.urlencode(params))
         places = []
         pin_string = ""
         letter = ord('A')
@@ -140,15 +140,12 @@ class GooglePlaces():
                     description = place['vicinity']
                 else:
                     description = place.get('formatted_address', "")
-                typestring = " / ".join(place['types'])
                 lat = str(place['geometry']['location']['lat'])
                 lon = str(place['geometry']['location']['lng'])
-                rating = ""
-                if "rating" in place:
-                    rating = str(place['rating'] * 2.0)
+                rating = str(place['rating'] * 2.0) if "rating" in place else ""
                 prop_list = {'name': place['name'],
                              'label': place['name'],
-                             'label2': typestring,
+                             'label2': " / ".join(place['types']),
                              'description': description,
                              "sortletter": chr(letter),
                              "index": str(count),

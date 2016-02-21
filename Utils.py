@@ -69,23 +69,12 @@ def fill_list_control(listcontrol, listitem_dict):
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
     skinwindow = xbmcgui.Window(window)
-    if data is not None:
-        threads = []
-        # image_requests = []
+    if data:
         for (key, value) in data.iteritems():
             value = unicode(value)
-            # if precache:
-            #     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-            #         if value not in image_requests and value:
-            #             thread = Get_File_Thread(value)
-            #             threads += [thread]
-            #             thread.start()
-            #             image_requests.append(value)
             skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)
-        for x in threads:
-            x.join()
 
 
 def latlon_to_meters(lat, lon):
@@ -243,17 +232,17 @@ def string_to_deg(raw_string):
     dec_degrees = degrees + arc_minutes / 60.0 + arc_seconds / 3600.0
     if raw_string[0].lower() == "w" or raw_string[0].lower() == "s":
         dec_degrees = -1.0 * dec_degrees
-    return dec_degrees
+    return float(dec_degrees)
 
 
 def parse_geotags(lat, lon):
-    if not lon == "":
-        lat = float(string_to_deg(lat))
-        lon = float(string_to_deg(lon))
+    if lon:
+        lat = string_to_deg(lat)
+        lon = string_to_deg(lon)
     else:
         coords = lat.split(",lon=")
-        lat = float(string_to_deg(coords[0]))
-        lon = float(string_to_deg(coords[1]))
+        lat = string_to_deg(coords[0])
+        lon = string_to_deg(coords[1])
     return lat, lon
 
 
@@ -296,14 +285,13 @@ def create_listitems(data):
 
 def get_location_coords():
     # url = 'https://www.telize.com/geoip'
-    url = 'http://freegeoip.net/json'
-    response = get_string_from_url(url)
+    response = get_string_from_url('http://freegeoip.net/json')
     results = json.loads(response)
     return results["latitude"], results["longitude"]
 
 
 def save_to_file(content, filename, path=""):
-    if path == "":
+    if not path:
         text_file_path = get_browse_dialog() + filename + ".txt"
     else:
         if not xbmcvfs.exists(path):
@@ -318,7 +306,6 @@ def save_to_file(content, filename, path=""):
 
 
 def read_from_file(path=""):
-    log("trying to load " + path)
     # Set path
     if path == "":
         path = get_browse_dialog(dlg_type=1)
