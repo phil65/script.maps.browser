@@ -15,7 +15,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         super(VenueInfoDialog, self).__init__(*args, **kwargs)
-        self.venue_id = kwargs.get('venueid')
+        self.venue_id = kwargs.get('venue_id')
         self.prop_list = []
         self.pin_string = ""
         self.events_pin_string = ""

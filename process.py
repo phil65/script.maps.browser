@@ -21,7 +21,7 @@ def StartInfoActions(infos, params):
         # data = []
         if info == 'venueinfo':
             HOME.setProperty('infodialogs.active', "true")
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, venueid=params.get("id", ""), name=params.get("name", ""))
+            dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, venue_id=params.get("id", ""), name=params.get("name", ""))
             dialog.doModal()
             HOME.clearProperty('infodialogs.active')
         elif info == 'eventinfo':

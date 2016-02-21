@@ -31,7 +31,7 @@ class FourSquare():
 
     def handle_places(self, results):
         self.pin_string = ""
-        places_list = list()
+        places = list()
         letter = ord('A')
         for count, venue in enumerate(results):
             try:
@@ -74,10 +74,10 @@ class FourSquare():
                          "phone": venue['contact'].get('phone', ""),
                          "comments": str(venue['stats']['tipCount'])}
             self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places_list.append(prop_list)
-        return places_list, self.pin_string
+            places.append(prop_list)
+        return places, self.pin_string
 
-    def get_places_list(self, lat, lon, query="", category_id=""):
+    def get_places(self, lat, lon, query="", category_id=""):
         params = {"limit": 26,
                   "ll": '%.8f,%.8f' % (lat, lon),
                   "query": query,

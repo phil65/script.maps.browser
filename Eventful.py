@@ -62,7 +62,7 @@ class Eventful():
 
     def handle_events(self, results):
         pin_string = ""
-        places_list = list()
+        places = []
         letter = ord('A')
         count = 0
         if not isinstance(results, list):
@@ -103,10 +103,10 @@ class Eventful():
                          "lat": lat,
                          "lon": lon}
             pin_string += "&markers=color:blue%7Clabel:%s%7C%s,%s" % (chr(letter), lat, lon)
-            places_list.append(prop_list)
+            places.append(prop_list)
             count += 1
             letter += 1
-        return places_list, pin_string
+        return places, pin_string
 
     def get_data(self, method, params={}, cache_days=0.5):
         params["app_key"] = EVENTFUL_KEY

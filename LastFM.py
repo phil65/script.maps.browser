@@ -118,8 +118,8 @@ class LastFM():
         else:
             return None
 
-    def get_venue_events(self, venueid=""):
-        url = '&method=venue.getevents&venue=%s' % (venueid)
+    def get_venue_events(self, venue_id=""):
+        url = '&method=venue.getevents&venue=%s' % (venue_id)
         return Get_JSON_response(BASE_URL + url)
 
     def get_event_info(self, eventid=""):
@@ -144,20 +144,20 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
     @busy_dialog
     def __init__(self, *args, **kwargs):
         super(LastFMDialog, self).__init__(*args, **kwargs)
-        self.venue_id = kwargs.get('venueid')
+        self.venue_id = kwargs.get('venue_id')
         self.event_id = kwargs.get('eventid')
         self.event = []
         self.pin_string = ""
         self.events_pin_string = ""
-        self.item_list = []
+        self.items = []
         self.events_items = []
         self.event = self.LFM.get_event_info(self.event_id)["event"]
         self.results = self.LFM.get_venue_events(self.event["venue"]["id"])
-        self.item_list, self.pin_string = self.LFM.create_venue_list(self.results)
+        self.items, self.pin_string = self.LFM.create_venue_list(self.results)
 
     def onInit(self):
         self.set_labels()
-        self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.item_list))
+        self.getControl(self.C_ARTIST_LIST).addItems(items=create_listitems(self.items))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

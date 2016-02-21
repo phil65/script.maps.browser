@@ -35,7 +35,7 @@ class MapQuest():
                   "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
         url = BASE_URL + 'incidents?' + urllib.urlencode(params)
         results = Get_JSON_response(url)
-        places_list = []
+        places = []
         pin_string = ""
         letter = ord('A')
         if results['info']['statuscode'] == 400:
@@ -85,10 +85,10 @@ class MapQuest():
                          "lon": lon,
                          "index": str(i)}
             pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places_list.append(prop_list)
+            places.append(prop_list)
             letter += 1
             if i > MAX_LIMIT:
                 break
         fill_area = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lat_high, lon_high, lat_high, lon_low, lat_low, lon_low, lat_low, lon_high)
         pin_string = pin_string + fill_area.replace("|", "%7C")
-        return places_list, pin_string
+        return places, pin_string

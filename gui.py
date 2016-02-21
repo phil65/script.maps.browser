@@ -59,7 +59,7 @@ class GUI(xbmcgui.WindowXML):
 
     @busy_dialog
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
-        self.itemlist = []
+        self.items = []
         self.location = kwargs.get("location", "")
         self.type = kwargs.get("type", "roadmap")
         self.strlat = kwargs.get("lat", "")
@@ -72,23 +72,23 @@ class GUI(xbmcgui.WindowXML):
             log("param = " + param)
             if param.startswith('folder='):
                 folder = param[7:]
-                self.itemlist, self.pin_string = self.get_images(folder)
+                self.items, self.pin_string = self.get_images(folder)
             elif param.startswith('artist='):
                 artist = param[7:]
                 LFM = LastFM()
                 results = LFM.get_artist_events(artist)
-                self.itemlist, self.pin_string = LFM.create_venue_list(results)
+                self.items, self.pin_string = LFM.create_venue_list(results)
             elif param.startswith('list='):
                 listtype = param[5:]
                 self.zoom_level = 14
                 if listtype == "nearfestivals":
                     LFM = LastFM()
                     results = LFM.get_near_events(self.lat, self.lon, self.radius, "", True)
-                    self.itemlist, self.pin_string = LFM.create_venue_list(results)
+                    self.items, self.pin_string = LFM.create_venue_list(results)
                 elif listtype == "nearconcerts":
                     LFM = LastFM()
                     results = LFM.get_near_events(self.lat, self.lon, self.radius)
-                    self.itemlist, self.pin_string = LFM.create_venue_list(results)
+                    self.items, self.pin_string = LFM.create_venue_list(results)
             elif param.startswith('direction='):
                 self.direction = param[10:]
             elif param.startswith('prefix='):
@@ -117,7 +117,7 @@ class GUI(xbmcgui.WindowXML):
             set_window_prop(self.window, 'ListLayout', '0')
         self.venue_list = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
-        fill_list_control(self.venue_list, self.itemlist)
+        fill_list_control(self.venue_list, self.items)
         self.window.setProperty("map_image", self.map_url)
         self.window.setProperty("streetview_image", self.street_view_url)
         if not ADDON.getSetting('firststart') == "true":
@@ -134,7 +134,7 @@ class GUI(xbmcgui.WindowXML):
         self.lat = 0.0
         self.lon = 0.0
         self.pitch = 0
-        self.venueid = None
+        self.venue_id = None
         self.pin_string = ""
         self.direction = 0
         self.saved_id = 100
@@ -262,7 +262,7 @@ class GUI(xbmcgui.WindowXML):
             elif venue_id:
                 dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME,
                                       ADDON_PATH,
-                                      venueid=venue_id)
+                                      venue_id=venue_id)
             elif picture_path:
                 dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
                                        ADDON_PATH,
@@ -317,12 +317,12 @@ class GUI(xbmcgui.WindowXML):
         if self.nav_mode_active:
             self.nav_mode_active = False
             set_window_prop(self.window, 'NavMode', '')
-            xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
+            self.window.setFocusId(self.saved_id)
         else:
             self.saved_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
             self.nav_mode_active = True
             set_window_prop(self.window, 'NavMode', 'True')
-            xbmc.executebuiltin("SetFocus(725)")
+            self.window.setFocusId(725)
 
     @ch.click(C_MODE_TOGGLE)
     def toggle_map_mode(self):
@@ -354,12 +354,10 @@ class GUI(xbmcgui.WindowXML):
     def toggle_street_mode(self):
         if self.street_view:
             self.street_view = False
-            log("StreetView Off")
             self.zoom_level = self.zoom_level_saved
             set_window_prop(self.window, 'streetview', '')
         else:
             self.street_view = True
-            log("StreetView On")
             self.zoom_level_saved = self.zoom_level
             self.zoom_level = 15
             set_window_prop(self.window, 'streetview', 'True')
@@ -370,7 +368,7 @@ class GUI(xbmcgui.WindowXML):
         if not self.location == "":
             self.street_view = False
             lat, lon = self.get_geocodes(True, self.location)
-            if lat is not None:
+            if lat:
                 self.lat = lat
                 self.lon = lon
             else:
@@ -379,7 +377,7 @@ class GUI(xbmcgui.WindowXML):
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
         set_window_prop(self.window, 'index', "")
-        itemlist = None
+        items = None
         modeselect = [("concerts", ADDON_LANGUAGE(32016)),
                       ("festivals", ADDON_LANGUAGE(32017)),
                       ("geopics", ADDON_LANGUAGE(32027)),
@@ -397,41 +395,41 @@ class GUI(xbmcgui.WindowXML):
             GP = GooglePlaces()
             category = GP.select_category()
             if category:
-                self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
+                self.pin_string, items = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
         elif keys[index] == "foursquare":
             FS = FourSquare()
             section = FS.select_section()
             if section:
-                itemlist, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
+                items, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "concerts":
             LFM = LastFM()
             category = LFM.select_category()
             if category:
                 results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
-                itemlist, self.pin_string = LFM.create_venue_list(results)
+                items, self.pin_string = LFM.create_venue_list(results)
         elif keys[index] == "mapquest":
             MQ = MapQuest()
-            itemlist, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
+            items, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
         elif keys[index] == "festivals":
             LFM = LastFM()
             category = LFM.select_category()
             if category:
                 results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
-                itemlist, self.pin_string = LFM.create_venue_list(results)
+                items, self.pin_string = LFM.create_venue_list(results)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
             set_window_prop(self.window, 'imagepath', folder_path)
-            itemlist, self.pin_string = get_images(folder_path)
+            items, self.pin_string = get_images(folder_path)
         elif keys[index] == "eventful":
             EF = Eventful()
             category = EF.select_category()
             if category:
-                itemlist, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
+                items, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
         elif keys[index] == "reset":
             self.pin_string = ""
-            itemlist = []
-        if itemlist is not None:
-            fill_list_control(self.venue_list, itemlist)
+            items = []
+        if items is not None:
+            fill_list_control(self.venue_list, items)
         self.street_view = False
 
     @ch.click(C_SEARCH)
@@ -448,26 +446,26 @@ class GUI(xbmcgui.WindowXML):
             return None
         if KEYS[index] == "googlemaps":
             self.search_location()
-            itemlist = []
+            items = []
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
-            itemlist, self.pin_string = FS.get_places_list(self.lat, self.lon, query)
+            items, self.pin_string = FS.get_places(self.lat, self.lon, query)
         elif KEYS[index] == "lastfmconcerts":
             artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
             results = LFM.get_artist_events(artist)
-            itemlist, self.pin_string = LFM.create_venue_list(results)
+            items, self.pin_string = LFM.create_venue_list(results)
         elif KEYS[index] == "lastfmvenues":
             venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
-            venueid = LFM.get_venue_id(venue)
-            results = LFM.get_venue_events(venueid)
-            itemlist, self.pin_string = LFM.create_venue_list(results)
+            venue_id = LFM.get_venue_id(venue)
+            results = LFM.get_venue_events(venue_id)
+            items, self.pin_string = LFM.create_venue_list(results)
         elif KEYS[index] == "reset":
             self.pin_string = ""
-            itemlist = []
-        fill_list_control(self.venue_list, itemlist)
+            items = []
+        fill_list_control(self.venue_list, items)
         self.street_view = False
 
     def get_map_urls(self):
@@ -517,7 +515,7 @@ class GUI(xbmcgui.WindowXML):
         url = "&address=%s" % (search_string)
         log("Google Geocodes Search:" + url)
         results = Get_JSON_response(base_url + url)
-        places_list = []
+        places = []
         for item in results["results"]:
             locationinfo = item["geometry"]["location"]
             lat = str(locationinfo["lat"])
@@ -529,13 +527,13 @@ class GUI(xbmcgui.WindowXML):
                          'lon': lon,
                          'thumb': googlemap,
                          'id': item['formatted_address']}
-            places_list.append(prop_list)
+            places.append(prop_list)
         first_hit = results["results"][0]["geometry"]["location"]
         if show_dialog:
             if len(results["results"]) > 1:  # open dialog when more than one hit
                 w = Search_Select_Dialog('DialogSelect.xml',
                                          ADDON_PATH,
-                                         listing=create_listitems(places_list))
+                                         listing=create_listitems(places))
                 w.doModal()
                 if w.lat is not "":
                     self.zoom_level = 12

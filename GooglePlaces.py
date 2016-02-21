@@ -125,7 +125,7 @@ class GooglePlaces():
         base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=%s' % (GOOGLE_PLACES_KEY)
         url = '&radius=%i&location=%s&types=%s' % (radius, location, locationtype)
         results = Get_JSON_response(base_url + url)
-        places_list = []
+        places = []
         pin_string = ""
         letter = ord('A')
         count = 0
@@ -159,11 +159,11 @@ class GooglePlaces():
                              "rating": rating,
                              "index": str(count)}
                 pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places_list.append(prop_list)
+                places.append(prop_list)
                 count += 1
                 letter += 1
         elif results['meta']['code'] == 400:
             log("LIMIT EXCEEDED")
         else:
             log("ERROR")
-        return pin_string, places_list
+        return pin_string, places
