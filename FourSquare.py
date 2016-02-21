@@ -11,6 +11,7 @@ FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 FACTUAL_KEY = 'n1yQsp5q68HLgKSYkBmRSWG710KI0IzlQS55hOIY'
 FACTUAL_SECRET = '8kG0Khj87JfcNiabqmixuQYuGgDUvu1PnWN5IVca'
 BING_KEY = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
+BASE_URL = "https://api.foursquare.com/v2/"
 
 # def GetBingMap(self):
 # url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%s?mapSize=800,600&key=%s' % (urllib.quote(self.search_string),BING_KEY)
@@ -38,7 +39,8 @@ class FourSquare():
             if "name" not in venue:
                 venue = venue["venue"]
             if venue['categories']:
-                icon = venue['categories'][0]['icon']['prefix'] + "88" + venue['categories'][0]['icon']['suffix']
+                icon = venue['categories'][0]['icon']
+                icon = icon['prefix'] + "88" + icon['suffix']
             else:
                 icon = ""
             if 'formattedAddress' in venue['location']:
@@ -73,13 +75,13 @@ class FourSquare():
         return places_list, self.pin_string
 
     def GetPlacesList(self, lat, lon, query="", category_id=""):
-        base_url = "https://api.foursquare.com/v2/venues/search?limit=26&client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
-        url = '&ll=%.8f,%.8f' % (lat, lon)
-        if query is not "":
-            url = url + "&query=%s" % (query)
-        if category_id is not "":
-            url = url + "&categoryId=%s" % (category_id)
-        results = Get_JSON_response(base_url + url)
+        params = {"limit": 26,
+                  "ll": '%.8f,%.8f' % (lat, lon),
+                  "query": query,
+                  "categoryId": category_id}
+        results = self.get_data(method="venues/search",
+                                params=params,
+                                cache_days=7)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
                 return self.HandleFourSquarePlacesResult(results['response']['venues'])
@@ -92,11 +94,12 @@ class FourSquare():
         return [], ""
 
     def GetPlacesListExplore(self, lat, lon, placetype):
-        base_url = "https://api.foursquare.com/v2/venues/explore?limit=26&client_id=%s&client_secret=%s&v=20130815&venuePhotos=1" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
-        # url = 'https://api.foursquare.com/v2/venues/search?ll=%.8f,%.8f&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, FOURSQUARE_ID, FOURSQUARE_SECRET)
-        # url = 'https://api.foursquare.com/v2/venues/search?ll=%.6f,%.8f&query=%s&limit=50&client_id=%s&client_secret=%s&v=20130815' % (self.lat, self.lon, "Food", FOURSQUARE_ID, FOURSQUARE_SECRET)
-        url = '&ll=%.8f,%.8f&section=%s' % (float(lat), float(lon), placetype)
-        results = Get_JSON_response(base_url + url)
+        params = {"venuePhotos": 1,
+                  "ll": '%.8f,%.8f' % (float(lat), float(lon)),
+                  "section": placetype}
+        results = self.get_data(method="venues/explore",
+                                params=params,
+                                cache_days=7)
         if not results or 'meta' not in results:
             return [], ""
         if results['meta']['code'] == 200:
@@ -111,21 +114,18 @@ class FourSquare():
         return [], ""
 
     def select_category(self):
-        url = "https://api.foursquare.com/v2/venues/categories?client_id=%s&client_secret=%s&v=20130815" % (FOURSQUARE_ID, FOURSQUARE_SECRET)
-        results = Get_JSON_response(url, 7)
+        results = self.get_data(method="venues/categories",
+                                cache_days=7)
         modeselect = ["All Categories"]
-        for item in results["categories"]:
-            modeselect.append(cleanText(item["name"]))
+        modeselect += [cleanText(item["name"]) for item in results["categories"]]
         index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index > 0:
             return results["categories"][index - 1]["id"]
         elif index > -1:
             return ""
-        else:
-            return None
 
     def SelectSection(self):
-        Sections = {"topPicks": ADDON.getLocalizedString(32005),
+        sections = {"topPicks": ADDON.getLocalizedString(32005),
                     "food": ADDON.getLocalizedString(32006),
                     "drinks": ADDON.getLocalizedString(32007),
                     "coffee": ADDON.getLocalizedString(32008),
@@ -137,12 +137,22 @@ class FourSquare():
                     "specials": ADDON.getLocalizedString(32014),
                     "nextVenues": ADDON.getLocalizedString(32015)}
         modeselect = ["All Sections"]
-        for value in Sections.itervalues():
-            modeselect.append(value)
+        modeselect += [value for value in sections.itervalues()]
         index = xbmcgui.Dialog().select("Choose Section", modeselect)
         if index > 0:
-            return Sections.keys()[index - 1]
+            return sections.keys()[index - 1]
         elif index > -1:
             return ""
-        else:
-            return None
+
+    def get_data(self, method, params={}, cache_days=0.5):
+        params["client_id"] = FOURSQUARE_ID
+        params["client_secret"] = FOURSQUARE_SECRET
+        params["v"] = 20130815
+        # params = {k: v for k, v in params.items() if v}
+        params = dict((k, v) for (k, v) in params.iteritems() if v)
+        params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
+        url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
+                                                   method=method,
+                                                   params=urllib.urlencode(params))
+        return get_JSON_response(url=url,
+                                 cache_days=cache_days)

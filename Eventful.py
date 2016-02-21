@@ -112,5 +112,4 @@ class Eventful():
                                                    method=method,
                                                    params=urllib.urlencode(params))
         return get_JSON_response(url=url,
-                                 cache_days=cache_days,
-                                 folder="YouTube")
+                                 cache_days=cache_days)
