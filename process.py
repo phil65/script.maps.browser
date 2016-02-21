@@ -4,7 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from LastFM import LastFMDialog
 from gui import GUI
 
 
@@ -18,18 +17,6 @@ def StartInfoActions(infos, params):
         params["prefix"] = params["prefix"] + '.'
     # NOTICE: compatibility
     for info in infos:
-        # data = []
-        if info == 'venueinfo':
-            HOME.setProperty('infodialogs.active', "true")
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, venue_id=params.get("id", ""), name=params.get("name", ""))
-            dialog.doModal()
-            HOME.clearProperty('infodialogs.active')
-        elif info == 'eventinfo':
-            HOME.setProperty('infodialogs.active', "true")
-            dialog = LastFMDialog(u'script-%s-dialog.xml' % (ADDON_NAME), ADDON_PATH, eventid=params.get("id", ""), name=params.get("name", ""))
-            dialog.doModal()
-            HOME.clearProperty('infodialogs.active')
-        elif info == "map":
+        if info == "map":
             gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
             gui.doModal()
-            del gui

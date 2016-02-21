@@ -4,7 +4,7 @@ from Utils import *
 ADDON = xbmcaddon.Addon()
 
 
-class Search_Select_Dialog(xbmcgui.WindowXMLDialog):
+class SearchSelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
@@ -28,7 +28,7 @@ class Search_Select_Dialog(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-        if controlID == 6 or controlID == 3:
+        if controlID in [3, 6]:
             self.lat = self.list.getSelectedItem().getProperty("lat")
             self.lon = self.list.getSelectedItem().getProperty("lon")
             self.close()
