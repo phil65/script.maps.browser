@@ -97,9 +97,9 @@ class GUI(xbmcgui.WindowXML):
             self.window.setProperty('ListLayout', '1')
         else:
             self.window.setProperty('ListLayout', '0')
-        self.venue_list = self.getControl(C_PLACES_LIST)
+        self.venues = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
-        fill_list_control(self.venue_list, self.items)
+        fill_list_control(self.venues, self.items)
         self.window.setProperty("map_image", self.map_url)
         self.window.setProperty("streetview_image", self.street_view_url)
         if not ADDON.getSetting('firststart') == "true":
@@ -225,7 +225,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_PLACES_LIST)
     def list_click(self):
-        item = self.venue_list.getSelectedItem()
+        item = self.venues.getSelectedItem()
         self.lat = float(item.getProperty("lat"))
         self.lon = float(item.getProperty("lon"))
         self.zoom_level = 12
@@ -385,7 +385,7 @@ class GUI(xbmcgui.WindowXML):
             self.pin_string = ""
             items = []
         if items is not None:
-            fill_list_control(self.venue_list, items)
+            fill_list_control(self.venues, items)
         self.street_view = False
 
     @ch.click(C_SEARCH)
@@ -408,7 +408,7 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "reset":
             self.pin_string = ""
             items = []
-        fill_list_control(self.venue_list, items)
+        fill_list_control(self.venues, items)
         self.street_view = False
 
     def get_map_urls(self):
@@ -422,7 +422,7 @@ class GUI(xbmcgui.WindowXML):
         self.map_url = url + self.pin_string
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
-        self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, str(zoom), GOOGLE_STREETVIEW_KEY, str(self.direction), str(self.pitch))
+        self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, zoom, GOOGLE_STREETVIEW_KEY, self.direction, self.pitch)
         self.window.setProperty(self.prefix + 'location', self.location)
         self.window.setProperty(self.prefix + 'lat', str(self.lat))
         self.window.setProperty(self.prefix + 'lon', str(self.lon))
@@ -465,18 +465,18 @@ class GUI(xbmcgui.WindowXML):
             lon = str(locationinfo["lng"])
             search_string = lat + "," + lon
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
-            prop_list = {'label': item['formatted_address'],
-                         'lat': lat,
-                         'lon': lon,
-                         'thumb': googlemap,
-                         'id': item['formatted_address']}
-            places.append(prop_list)
+            props = {'label': item['formatted_address'],
+                     'lat': lat,
+                     'lon': lon,
+                     'thumb': googlemap,
+                     'id': item['formatted_address']}
+            places.append(props)
         first_hit = results["results"][0]["geometry"]["location"]
         if show_dialog:
             if len(results["results"]) > 1:  # open dialog when more than one hit
                 w = SearchSelectDialog('DialogSelect.xml',
-                                         ADDON_PATH,
-                                         listing=create_listitems(places))
+                                       ADDON_PATH,
+                                       listing=create_listitems(places))
                 w.doModal()
                 if w.lat is not "":
                     self.zoom_level = 12

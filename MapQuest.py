@@ -66,26 +66,26 @@ class MapQuest():
                       "key": GOOGLE_MAPS_KEY}
             google_map = 'http://maps.googleapis.com/maps/api/staticmap?' + urllib.urlencode(params)
             incident_type = incident_types.get(place['type'], "")
-            prop_list = {'name': place['shortDesc'],
-                         'label': place['shortDesc'],
-                         'label2': place['startTime'],
-                         'description': place['fullDesc'],
-                         'distance': str(place['distance']),
-                         'delaytypical': str(place['delayFromTypical']),
-                         'delayfreeflow': str(place['delayFromFreeFlow']),
-                         "GoogleMap": google_map,
-                         "venue_image": image,
-                         "thumb": image,
-                         "icon": place['iconURL'],
-                         'date': place['startTime'],
-                         'severity': str(place['severity']),
-                         'type': incident_type,
-                         "sortletter": chr(letter),
-                         "lat": lat,
-                         "lon": lon,
-                         "index": str(i)}
+            props = {'name': place['shortDesc'],
+                     'label': place['shortDesc'],
+                     'label2': place['startTime'],
+                     'description': place['fullDesc'],
+                     'distance': str(place['distance']),
+                     'delaytypical': str(place['delayFromTypical']),
+                     'delayfreeflow': str(place['delayFromFreeFlow']),
+                     "GoogleMap": google_map,
+                     "venue_image": image,
+                     "thumb": image,
+                     "icon": place['iconURL'],
+                     'date': place['startTime'],
+                     'severity': str(place['severity']),
+                     'type': incident_type,
+                     "sortletter": chr(letter),
+                     "lat": lat,
+                     "lon": lon,
+                     "index": str(i)}
             pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places.append(prop_list)
+            places.append(props)
             letter += 1
             if i > MAX_LIMIT:
                 break

@@ -84,26 +84,26 @@ class Eventful():
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
             date = date.replace("00:00:00", "")
-            prop_list = {"id": str(venue['id']),
-                         "eventful_id": str(venue['venue_id']),
-                         "eventname": cleanText(venue['title']),
-                         "description": cleanText(venue['description']),
-                         "name": venuename,
-                         "label": venuename,
-                         "label2": date,
-                         "photo": photo,
-                         "thumb": photo,
-                         "date": date,
-                         "address": cleanText(venue["venue_address"]),
-                         "Venue_Image": photo,
-                         "venue_id_eventful": venue['venue_id'],
-                         "GoogleMap": googlemap,
-                         "index":  str(count),
-                         "sortletter": chr(letter),
-                         "lat": lat,
-                         "lon": lon}
+            props = {"id": str(venue['id']),
+                     "eventful_id": str(venue['venue_id']),
+                     "eventname": cleanText(venue['title']),
+                     "description": cleanText(venue['description']),
+                     "name": venuename,
+                     "label": venuename,
+                     "label2": date,
+                     "photo": photo,
+                     "thumb": photo,
+                     "date": date,
+                     "address": cleanText(venue["venue_address"]),
+                     "Venue_Image": photo,
+                     "venue_id_eventful": venue['venue_id'],
+                     "GoogleMap": googlemap,
+                     "index":  str(count),
+                     "sortletter": chr(letter),
+                     "lat": lat,
+                     "lon": lon}
             pin_string += "&markers=color:blue%7Clabel:%s%7C%s,%s" % (chr(letter), lat, lon)
-            places.append(prop_list)
+            places.append(props)
             count += 1
             letter += 1
         return places, pin_string

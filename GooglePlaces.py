@@ -143,20 +143,20 @@ class GooglePlaces():
                 lat = str(place['geometry']['location']['lat'])
                 lon = str(place['geometry']['location']['lng'])
                 rating = str(place['rating'] * 2.0) if "rating" in place else ""
-                prop_list = {'name': place['name'],
-                             'label': place['name'],
-                             'label2': " / ".join(place['types']),
-                             'description': description,
-                             "sortletter": chr(letter),
-                             "index": str(count),
-                             "thumb": photo,
-                             "icon": place['icon'],
-                             "lat": lat,
-                             "lon": lon,
-                             "rating": rating,
-                             "index": str(count)}
+                props = {'name': place['name'],
+                         'label': place['name'],
+                         'label2': " / ".join(place['types']),
+                         'description': description,
+                         "sortletter": chr(letter),
+                         "index": str(count),
+                         "thumb": photo,
+                         "icon": place['icon'],
+                         "lat": lat,
+                         "lon": lon,
+                         "rating": rating,
+                         "index": str(count)}
                 pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places.append(prop_list)
+                places.append(props)
                 count += 1
                 letter += 1
         elif results['meta']['code'] == 400:

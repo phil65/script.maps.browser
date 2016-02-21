@@ -52,29 +52,29 @@ class FourSquare():
             lon = str(venue['location']['lng'])
             search_string = lat + "," + lon
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
-            prop_list = {"id": str(venue['id']),
-                         "foursquare_id": str(venue['id']),
-                         "distance": str(venue['location']['distance']),
-                         "visited": str(venue['stats']['usersCount']),
-                         "twitter": venue['contact'].get('twitter', ""),
-                         "eventname": formattedAddress,
-                         "description": formattedAddress,
-                         "name": venue['name'],
-                         "label": venue['name'],
-                         "label2": venue['name'],
-                         "icon": icon,
-                         "photo": photo,
-                         "thumb": photo,
-                         "Venue_Image": icon,
-                         "GoogleMap": googlemap,
-                         "index":  str(count),
-                         "sortletter": chr(letter + count),
-                         "lat": lat,
-                         "lon": lon,
-                         "phone": venue['contact'].get('phone', ""),
-                         "comments": str(venue['stats']['tipCount'])}
+            props = {"id": str(venue['id']),
+                     "foursquare_id": str(venue['id']),
+                     "distance": str(venue['location']['distance']),
+                     "visited": str(venue['stats']['usersCount']),
+                     "twitter": venue['contact'].get('twitter', ""),
+                     "eventname": formattedAddress,
+                     "description": formattedAddress,
+                     "name": venue['name'],
+                     "label": venue['name'],
+                     "label2": venue['name'],
+                     "icon": icon,
+                     "photo": photo,
+                     "thumb": photo,
+                     "Venue_Image": icon,
+                     "GoogleMap": googlemap,
+                     "index":  str(count),
+                     "sortletter": chr(letter + count),
+                     "lat": lat,
+                     "lon": lon,
+                     "phone": venue['contact'].get('phone', ""),
+                     "comments": str(venue['stats']['tipCount'])}
             self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-            places.append(prop_list)
+            places.append(props)
         return places, self.pin_string
 
     def get_places(self, lat, lon, query="", category_id=""):

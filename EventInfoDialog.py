@@ -22,9 +22,9 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         self.foursquare_id = kwargs.get('foursquare_id')
         if self.eventful_id:
             EF = Eventful()
-            self.prop_list = EF.get_venue_info(self.eventful_id)
-            self.event_list = self.prop_list["events"]["event"]
-            prettyprint(self.event_list)
+            self.props = EF.get_venue_info(self.eventful_id)
+            self.events = self.props["events"]["event"]
+            prettyprint(self.events)
         elif self.foursquare_id:
             pass
         self.pin_string = ""
@@ -34,9 +34,9 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
         self.setControls()
 
     def setControls(self):
-        self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
-        self.getControl(self.C_TITLE).setLabel(self.prop_list["name"])
-        self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
+        self.getControl(self.C_TEXT_FIELD).setText(self.props["description"])
+        self.getControl(self.C_TITLE).setLabel(self.props["name"])
+        self.getControl(self.C_BIG_IMAGE).setImage(self.props["thumb"])
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

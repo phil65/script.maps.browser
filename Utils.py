@@ -180,7 +180,7 @@ def get_images(path=""):
     pin_string = "&markers=color:blue"
     letter = ord('A')
     count = 0
-    images_list = list()
+    images = []
     for filename in xbmcvfs.listdir(path)[-1]:
         try:
             img = Image.open(path + filename)
@@ -193,26 +193,26 @@ def get_images(path=""):
             else:
                 date = ""
             if lat:
-                prop_list = {"name": filename,
-                             "label": filename,
-                             "lat": str(lat),
-                             "lon": str(lon),
-                             "date": date,
-                             "description": date,
-                             "thumb": path + filename,
-                             "filepath": path + filename,
-                             "index": str(count),
-                             "sortletter": chr(letter),
-                             }
+                props = {"name": filename,
+                         "label": filename,
+                         "lat": str(lat),
+                         "lon": str(lon),
+                         "date": date,
+                         "description": date,
+                         "thumb": path + filename,
+                         "filepath": path + filename,
+                         "index": str(count),
+                         "sortletter": chr(letter),
+                         }
                 if len(pin_string) < 1850:
                     pin_string = pin_string + "%7C" + str(lat) + "," + str(lon)
                     letter += 1
-                images_list.append(prop_list)
+                images.append(props)
                 count += 1
         except Exception as e:
             log("Error when handling get_images results")
             log(e)
-    return images_list, pin_string
+    return images, pin_string
 
 
 def string_to_deg(raw_string):
@@ -242,19 +242,6 @@ def parse_geotags(lat, lon):
         lat = string_to_deg(coords[0])
         lon = string_to_deg(coords[1])
     return lat, lon
-
-
-def create_listitem(json_array):
-    item = xbmcgui.ListItem("Undefined")
-    for key, value in json_array.iteritems():
-        item.setProperty(key, value)
-        if key in ["thumb", "poster", "banner", "icon"]:
-            item.setArt({key: value})
-        elif key == "label":
-            item.setLabel(value)
-        elif key == "label2":
-            item.setLabel2(value)
-    return item
 
 
 def create_listitems(data):
