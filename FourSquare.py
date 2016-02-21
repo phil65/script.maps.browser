@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 # code for FourSquare Scraping based on script.maps by a.a.alsaleh. credits to him.
 
 import xbmcgui
@@ -26,7 +31,7 @@ class FourSquare():
     def __init__(self):
         pass
 
-    def HandleFourSquarePlacesResult(self, results):
+    def handle_places(self, results):
         self.pin_string = ""
         places_list = list()
         letter = ord('A')
@@ -74,7 +79,7 @@ class FourSquare():
             places_list.append(prop_list)
         return places_list, self.pin_string
 
-    def GetPlacesList(self, lat, lon, query="", category_id=""):
+    def get_places_list(self, lat, lon, query="", category_id=""):
         params = {"limit": 26,
                   "ll": '%.8f,%.8f' % (lat, lon),
                   "query": query,
@@ -84,7 +89,7 @@ class FourSquare():
                                 cache_days=7)
         if results and 'meta' in results:
             if results['meta']['code'] == 200:
-                return self.HandleFourSquarePlacesResult(results['response']['venues'])
+                return self.handle_places(results['response']['venues'])
             elif results['meta']['code'] == 400:
                 Notify("Error", "LIMIT EXCEEDED")
             else:
@@ -93,7 +98,7 @@ class FourSquare():
             log("ERROR")
         return [], ""
 
-    def GetPlacesListExplore(self, lat, lon, placetype):
+    def get_places_by_section(self, lat, lon, placetype):
         params = {"venuePhotos": 1,
                   "ll": '%.8f,%.8f' % (float(lat), float(lon)),
                   "section": placetype}
@@ -104,7 +109,7 @@ class FourSquare():
             return [], ""
         if results['meta']['code'] == 200:
             if results['response']['groups'][0]['items']:
-                return self.HandleFourSquarePlacesResult(results['response']['groups'][0]['items'])
+                return self.handle_places(results['response']['groups'][0]['items'])
             else:
                 Notify("Error", "No results found near the selected area.")
         elif results['meta']['code'] == 400:
@@ -124,7 +129,7 @@ class FourSquare():
         elif index > -1:
             return ""
 
-    def SelectSection(self):
+    def select_section(self):
         sections = {"topPicks": ADDON.getLocalizedString(32005),
                     "food": ADDON.getLocalizedString(32006),
                     "drinks": ADDON.getLocalizedString(32007),

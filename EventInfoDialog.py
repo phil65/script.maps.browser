@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 import xbmcgui
 from Eventful import Eventful
 from Utils import *
@@ -30,13 +35,8 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
 
     def setControls(self):
         self.getControl(self.C_TEXT_FIELD).setText(self.prop_list["description"])
-     #   self.getControl(202).setLabel(self.prop_list["date"])
         self.getControl(self.C_TITLE).setLabel(self.prop_list["name"])
         self.getControl(self.C_BIG_IMAGE).setImage(self.prop_list["thumb"])
-    #    self.getControl(self.C_RIGHT_IMAGE).setImage(self.prop_list["venue_image"])
-    #    self.getControl(204).setLabel(self.prop_list["street"])
-    #    self.getControl(self.C_TITLE).setLabel(self.prop_list["eventname"])
-    #    self.getControl(self.C_ARTIST_LIST).addItems(items=self.itemlist)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

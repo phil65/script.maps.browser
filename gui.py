@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -369,9 +374,9 @@ class GUI(xbmcgui.WindowXML):
                     self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
             elif keys[index] == "foursquare":
                 FS = FourSquare()
-                section = FS.SelectSection()
+                section = FS.select_section()
                 if section:
-                    itemlist, self.pin_string = FS.GetPlacesListExplore(self.lat, self.lon, section)
+                    itemlist, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
             elif keys[index] == "concerts":
                 LFM = LastFM()
                 category = LFM.select_category()
@@ -420,7 +425,7 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
-            itemlist, self.pin_string = FS.GetPlacesList(self.lat, self.lon, query)
+            itemlist, self.pin_string = FS.get_places_list(self.lat, self.lon, query)
         elif KEYS[index] == "lastfmconcerts":
             artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
             LFM = LastFM()
