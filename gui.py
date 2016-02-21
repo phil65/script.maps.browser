@@ -78,13 +78,12 @@ class GUI(xbmcgui.WindowXML):
                 self.prefix = param[7:]
                 if not self.prefix.endswith('.') and self.prefix != "":
                     self.prefix = self.prefix + '.'
-            # get lat / lon values
         if self.location == "geocode":
             self.lat, self.lon = parse_geotags(self.strlat, self.strlon)
-        elif (self.location == "") and (self.strlat == ""):  # both empty
+        elif not self.location and not self.strlat:  # both empty
             self.lat, self.lon = get_location_coords()
             self.zoom_level = 2
-        elif (not self.location == "") and (self.strlat == ""):  # latlon empty
+        elif self.location and self.strlat:  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)
         else:
             self.lat = float(self.strlat)
@@ -171,44 +170,45 @@ class GUI(xbmcgui.WindowXML):
     @ch.action("left", "*")
     @ch.action("right", "*")
     def navigate(self):
-        if self.nav_mode_active:
-            log("lat: " + str(self.lat) + " lon: " + str(self.lon))
-            if not self.street_view:
-                stepsize = 60.0 / pow(2, self.zoom_level)
-                if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                    self.lat = float(self.lat) + stepsize
-                elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                    self.lat = float(self.lat) - stepsize
-                elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
-                    self.lon = float(self.lon) - 2.0 * stepsize
-                elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
-                    self.lon = float(self.lon) + 2.0 * stepsize
-            else:
-                stepsize = 0.0002
-                radiantdirection = float(radians(self.direction))
-                if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                    self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
-                    self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
-                elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                    self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
-                    self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
-                elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
-                    if self.direction <= 0:
-                        self.direction = 360
-                    self.direction -= 18
-                elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
-                    if self.direction >= 348:
-                        self.direction = 0
-                    self.direction += 18
-            if self.lat > 90.0:
-                self.lat -= 180.0
-            if self.lat < -90.0:
-                self.lat += 180.0
-            if self.lon > 180.0:
-                self.lon -= 360.0
-            if self.lon < -180.0:
-                self.lon += 180.0
-            self.location = str(self.lat) + "," + str(self.lon)
+        if not self.nav_mode_active:
+            return None
+        log("lat: " + str(self.lat) + " lon: " + str(self.lon))
+        if not self.street_view:
+            stepsize = 60.0 / pow(2, self.zoom_level)
+            if self.action_id == xbmcgui.ACTION_MOVE_UP:
+                self.lat = float(self.lat) + stepsize
+            elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
+                self.lat = float(self.lat) - stepsize
+            elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
+                self.lon = float(self.lon) - 2.0 * stepsize
+            elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
+                self.lon = float(self.lon) + 2.0 * stepsize
+        else:
+            stepsize = 0.0002
+            radiantdirection = float(radians(self.direction))
+            if self.action_id == xbmcgui.ACTION_MOVE_UP:
+                self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
+                self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
+            elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
+                self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
+                self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
+            elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
+                if self.direction <= 0:
+                    self.direction = 360
+                self.direction -= 18
+            elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
+                if self.direction >= 348:
+                    self.direction = 0
+                self.direction += 18
+        if self.lat > 90.0:
+            self.lat -= 180.0
+        if self.lat < -90.0:
+            self.lat += 180.0
+        if self.lon > 180.0:
+            self.lon -= 360.0
+        if self.lon < -180.0:
+            self.lon += 180.0
+        self.location = str(self.lat) + "," + str(self.lon)
 
     @ch.click(C_STREET_VIEW)
     def toggle_street_view(self):
@@ -249,9 +249,6 @@ class GUI(xbmcgui.WindowXML):
                                          ADDON_PATH,
                                          eventful_id=eventful_id)
             dialog.doModal()
-            if dialog.events_items:
-                self.pin_string = dialog.events_pin_string
-                fill_list_control(self.venue_list, dialog.events_items)
 
     @ch.click(C_ZOOM_IN)
     def zoom_in(self):
