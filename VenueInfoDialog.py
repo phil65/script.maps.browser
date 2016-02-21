@@ -14,7 +14,7 @@ class VenueInfoDialog(xbmcgui.WindowXMLDialog):
     C_ARTIST_LIST = 500
 
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        super(VenueInfoDialog, self).__init__(*args, **kwargs)
         self.venue_id = kwargs.get('venueid')
         self.prop_list = []
         self.pin_string = ""

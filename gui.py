@@ -120,9 +120,8 @@ class GUI(xbmcgui.WindowXML):
         fill_list_control(self.venue_list, self.itemlist)
         self.window.setProperty("map_image", self.map_url)
         self.window.setProperty("streetview_image", self.street_view_url)
-        settings = xbmcaddon.Addon(id='script.maps.browser')
-        if not settings.getSetting('firststart') == "true":
-            settings.setSetting(id='firststart', value='true')
+        if not ADDON.getSetting('firststart') == "true":
+            ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
         log('onInit finished')
 
@@ -354,7 +353,8 @@ class GUI(xbmcgui.WindowXML):
             set_window_prop(self.window, 'streetview', 'True')
 
     def search_location(self):
-        self.location = xbmcgui.Dialog().input(ADDON_LANGUAGE(32032), type=xbmcgui.INPUT_ALPHANUM)
+        self.location = xbmcgui.Dialog().input(ADDON_LANGUAGE(32032),
+                                               type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
             lat, lon = self.get_geocodes(True, self.location)
@@ -456,10 +456,6 @@ class GUI(xbmcgui.WindowXML):
             itemlist = []
         fill_list_control(self.venue_list, itemlist)
         self.street_view = False
-
-    def toggle_info(self):
-        self.show_info = not self.show_info
-        self.info_controller.setVisible(self.show_info)
 
     def get_map_urls(self):
         if self.street_view is True:

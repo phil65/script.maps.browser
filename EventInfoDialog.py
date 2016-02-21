@@ -17,7 +17,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
     C_ARTIST_LIST = 500
 
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        super(EventInfoDialog, self).__init__(*args, **kwargs)
         self.eventful_id = kwargs.get('eventful_id')
         self.foursquare_id = kwargs.get('foursquare_id')
         if self.eventful_id:
