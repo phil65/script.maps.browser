@@ -18,63 +18,62 @@ class LastFM():
         count = 0
         events_list = []
         if "events" in results:
-            if "@attr" in results["events"]:
-                if not isinstance(results['events']['event'], list):
-                    results['events']['event'] = [results['events']['event']]
-                for event in results['events']['event']:
-                    artists = event['artists']['artist']
-                    if isinstance(artists, list):
-                        my_arts = ' / '.join(artists)
-                    else:
-                        my_arts = artists
-                    location = event['venue']['location']
-                    lat = location['geo:point'].get('geo:lat')
-                    lon = location['geo:point'].get('geo:long')
-                    if lat and lon:
-                        search_string = lat + "," + lon
-                    elif location['street']:
-                        search_string = location['city'] + " " + location['street']
-                    elif location['city']:
-                        search_string = location['city'] + " " + event['venue']['name']
-                    else:
-                        search_string = event['venue']['name']
-                    google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
-                    address_formatted = location['street'] + "[CR]" + location['city'] + "[CR]" + location['country']
-                    description = unicode(cleanText(event['description']))
-                    if my_arts != event['artists']['headliner']:
-                        description = "[B]" + my_arts + "[/B][CR]" + description
-                    prop_list = {"date": event['startDate'][:-8],
-                                 "name": event['venue']['name'],
-                                 "venue_id": event['venue']['id'],
-                                 "event_id": event['id'],
-                                 "street": location['street'],
-                                 "eventname": event['title'],
-                                 "website": event['website'],
-                                 "description": description,
-                                 "city": location['city'],
-                                 "country": location['country'],
-                                 "address": address_formatted,
-                                 "lon": lon,
-                                 "lat": lat,
-                                 "index": str(count),
-                                 "artists": my_arts,
-                                 "sortletter": chr(letter),
-                                 "googlemap": google_map,
-                                 "artist_image": event['image'][-1]['#text'],
-                                 "venue_image": event['venue']['image'][-1]['#text'],
-                                 "headliner": event['artists']['headliner'],
-                                 "thumb": event['venue']['image'][-1]['#text'],
-                                 "label": event['venue']['name'],
-                                 "label2": event['startDate'][:-8]}
-                    events_list.append(prop_list)
-                    if count < 26:
-                        self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                    else:
-                        self.pin_string = self.pin_string + "&markers=color:blue%7C" + lat + "," + lon
-                    count += 1
-                    letter += 1
-            else:
+            if "@attr" not in results["events"]:
                 Notify("Error", "No concerts found")
+            if not isinstance(results['events']['event'], list):
+                results['events']['event'] = [results['events']['event']]
+            for event in results['events']['event']:
+                artists = event['artists']['artist']
+                if isinstance(artists, list):
+                    my_arts = ' / '.join(artists)
+                else:
+                    my_arts = artists
+                location = event['venue']['location']
+                lat = location['geo:point'].get('geo:lat')
+                lon = location['geo:point'].get('geo:long')
+                if lat and lon:
+                    search_string = lat + "," + lon
+                elif location['street']:
+                    search_string = location['city'] + " " + location['street']
+                elif location['city']:
+                    search_string = location['city'] + " " + event['venue']['name']
+                else:
+                    search_string = event['venue']['name']
+                google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+                address_formatted = location['street'] + "[CR]" + location['city'] + "[CR]" + location['country']
+                description = unicode(cleanText(event['description']))
+                if my_arts != event['artists']['headliner']:
+                    description = "[B]" + my_arts + "[/B][CR]" + description
+                prop_list = {"date": event['startDate'][:-8],
+                             "name": event['venue']['name'],
+                             "venue_id": event['venue']['id'],
+                             "event_id": event['id'],
+                             "street": location['street'],
+                             "eventname": event['title'],
+                             "website": event['website'],
+                             "description": description,
+                             "city": location['city'],
+                             "country": location['country'],
+                             "address": address_formatted,
+                             "lon": lon,
+                             "lat": lat,
+                             "index": str(count),
+                             "artists": my_arts,
+                             "sortletter": chr(letter),
+                             "googlemap": google_map,
+                             "artist_image": event['image'][-1]['#text'],
+                             "venue_image": event['venue']['image'][-1]['#text'],
+                             "headliner": event['artists']['headliner'],
+                             "thumb": event['venue']['image'][-1]['#text'],
+                             "label": event['venue']['name'],
+                             "label2": event['startDate'][:-8]}
+                events_list.append(prop_list)
+                if count < 26:
+                    self.pin_string = self.pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+                else:
+                    self.pin_string = self.pin_string + "&markers=color:blue%7C" + lat + "," + lon
+                count += 1
+                letter += 1
         elif "error" in results:
             Notify("Error", results["message"])
         else:
@@ -144,7 +143,7 @@ class LastFMDialog(xbmcgui.WindowXMLDialog):
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        super(LastFMDialog, self).__init__(*args, **kwargs)
         self.venue_id = kwargs.get('venueid')
         self.event_id = kwargs.get('eventid')
         self.event = []

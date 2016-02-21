@@ -14,8 +14,8 @@ BASE_URL = 'http://www.mapquestapi.com/traffic/v2/'
 
 incident_types = {1: "Construction",
                   2: "Event",
-                  3: "Event",
-                  4: "Congestion / Flow"}
+                  3: "Congestion / Flow",
+                  4: "Incident / Accident"}
 
 
 class MapQuest():
@@ -23,7 +23,7 @@ class MapQuest():
     def __init__(self):
         pass
 
-    def GetItemList(self, lat, lon, zoom):
+    def get_incidents(self, lat, lon, zoom):
         mx, my = latlon_to_meters(lat, lon)
         px, py = meters_to_pixels(mx, my, zoom)
         mx_high, my_high = pixels_to_meters(px + 320, py + 200, zoom)

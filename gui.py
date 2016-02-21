@@ -410,7 +410,7 @@ class GUI(xbmcgui.WindowXML):
                     itemlist, self.pin_string = LFM.create_venue_list(results)
             elif keys[index] == "mapquest":
                 MQ = MapQuest()
-                itemlist, self.pin_string = MQ.GetItemList(self.lat, self.lon, self.zoom_level)
+                itemlist, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
             elif keys[index] == "festivals":
                 LFM = LastFM()
                 category = LFM.select_category()
