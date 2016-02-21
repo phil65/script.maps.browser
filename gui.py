@@ -144,55 +144,76 @@ class GUI(xbmcgui.WindowXML):
         self.street_view_url = ""
 
     def onAction(self, action):
-        action_id = action.getId()
-        if action_id == xbmcgui.ACTION_SHOW_INFO:
-            if ADDON.getSetting("InfoButtonAction") == "1":
-                self.toggle_map_mode()
-            else:
-                if not self.street_view:
-                    self.toggle_street_mode()
-                    self.toggle_nav_mode()
-                else:
-                    self.toggle_street_mode()
-        elif action_id in self.ACTION_CONTEXT_MENU:
-            self.toggle_nav_mode()
-        elif action_id in self.ACTION_PREVIOUS_MENU:
-            if self.nav_mode_active or self.street_view:
-                set_window_prop(self.window, 'NavMode', '')
-                set_window_prop(self.window, 'streetview', '')
-                self.nav_mode_active = False
-                self.street_view = False
-                xbmc.executebuiltin("SetFocus(" + str(self.saved_id) + ")")
-            else:
-                self.close()
-        elif action_id in self.ACTION_EXIT_SCRIPT:
+        super(GUI, self).onAction(action)
+        ch.serve_action(action, self.getFocusId(), self)
+        self.get_map_urls()
+        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("map_image", self.map_url)
+
+    @ch.action("close", "*")
+    def close_script(self):
+        self.close()
+
+    @ch.action("previousmenu", "*")
+    def previous_menu(self):
+        if self.nav_mode_active or self.street_view:
+            set_window_prop(self.window, 'NavMode', '')
+            set_window_prop(self.window, 'streetview', '')
+            self.nav_mode_active = False
+            self.street_view = False
+            self.window.setFocusId(self.saved_id)
+        else:
             self.close()
-        elif self.nav_mode_active:
+
+    def onClick(self, control_id):
+        super(GUI, self).onClick(control_id)
+        ch.serve(control_id, self)
+        self.get_map_urls()
+        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("map_image", self.map_url)
+
+    @ch.action("info", "*")
+    def info_press(self):
+        if ADDON.getSetting("InfoButtonAction") == "1":
+            self.toggle_map_mode()
+        else:
+            if not self.street_view:
+                self.toggle_street_mode()
+                self.toggle_nav_mode()
+            else:
+                self.toggle_street_mode()
+
+    @ch.action("up", "*")
+    @ch.action("down", "*")
+    @ch.action("left", "*")
+    @ch.action("right", "*")
+    def navigate(self):
+        if self.nav_mode_active:
             log("lat: " + str(self.lat) + " lon: " + str(self.lon))
             if not self.street_view:
                 stepsize = 60.0 / pow(2, self.zoom_level)
-                if action_id == xbmcgui.ACTION_MOVE_UP:
+                if self.action_id == xbmcgui.ACTION_MOVE_UP:
                     self.lat = float(self.lat) + stepsize
-                elif action_id == xbmcgui.ACTION_MOVE_DOWN:
+                elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
                     self.lat = float(self.lat) - stepsize
-                elif action_id == xbmcgui.ACTION_MOVE_LEFT:
+                elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
                     self.lon = float(self.lon) - 2.0 * stepsize
-                elif action_id == xbmcgui.ACTION_MOVE_RIGHT:
+                elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
                     self.lon = float(self.lon) + 2.0 * stepsize
             else:
                 stepsize = 0.0002
                 radiantdirection = float(radians(self.direction))
-                if action_id == xbmcgui.ACTION_MOVE_UP:
+                if self.action_id == xbmcgui.ACTION_MOVE_UP:
                     self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
-                elif action_id == xbmcgui.ACTION_MOVE_DOWN:
+                elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
                     self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
                     self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
-                elif action_id == xbmcgui.ACTION_MOVE_LEFT:
+                elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
                     if self.direction <= 0:
                         self.direction = 360
                     self.direction -= 18
-                elif action_id == xbmcgui.ACTION_MOVE_RIGHT:
+                elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
                     if self.direction >= 348:
                         self.direction = 0
                     self.direction += 18
@@ -205,16 +226,6 @@ class GUI(xbmcgui.WindowXML):
             if self.lon < -180.0:
                 self.lon += 180.0
             self.location = str(self.lat) + "," + str(self.lon)
-        self.get_map_urls()
-        self.window.setProperty("streetview_image", self.street_view_url)
-        self.window.setProperty("map_image", self.map_url)
-
-    def onClick(self, control_id):
-        super(GUI, self).onClick(control_id)
-        ch.serve(control_id, self)
-        self.get_map_urls()
-        self.window.setProperty("streetview_image", self.street_view_url)
-        self.window.setProperty("map_image", self.map_url)
 
     @ch.click(C_STREET_VIEW)
     def toggle_street_view(self):
@@ -301,6 +312,7 @@ class GUI(xbmcgui.WindowXML):
         if self.pitch >= -80:
             self.pitch -= 10
 
+    @ch.action("contextmenu", "*")
     def toggle_nav_mode(self):
         if self.nav_mode_active:
             self.nav_mode_active = False

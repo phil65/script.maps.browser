@@ -3,6 +3,8 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+import urllib
+
 from Utils import *
 
 MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
@@ -28,8 +30,10 @@ class MapQuest():
         mx_low, my_low = pixels_to_meters(px - 320, py - 200, zoom)
         lat_high, lon_high = meters_to_latlon(mx_high, my_high)
         lat_low, lon_low = meters_to_latlon(mx_low, my_low)
-        boundings = str(lat_high) + "," + str(lon_high) + "," + str(lat_low) + "," + str(lon_low)
-        url = '%sincidents?key=%s&inFormat=kvp&boundingBox=%s' % (BASE_URL, MAPQUEST_KEY, boundings)
+        params = {"key": MAPQUEST_KEY,
+                  "inFormat": "kvp",
+                  "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
+        url = BASE_URL + 'incidents?' + urllib.urlencode(params)
         results = Get_JSON_response(url)
         places_list = []
         pin_string = ""
@@ -43,10 +47,24 @@ class MapQuest():
         for i, place in enumerate(results['incidents']):
             lat = str(place['lat'])
             lon = str(place['lng'])
-            url = "flow?key=%s&mapLat=%s&mapLng=%s&mapHeight=400&mapWidth=400&mapScale=433342" % (MAPQUEST_KEY, lat, lon)
+            params = {"key": MAPQUEST_KEY,
+                      "mapLat": place['lat'],
+                      "mapLng": place['lng'],
+                      "mapHeight": 400,
+                      "mapWidth": 400,
+                      "mapScale": 433342}
+            url = "flow?" + urllib.urlencode(params)
             image = BASE_URL + url
             search_string = lat + "," + lon
-            google_map = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+            params = {"sensor": "false",
+                      "scale": 2,
+                      "maptype": "roadmap",
+                      "center": search_string,
+                      "zoom": 13,
+                      "markers": search_string,
+                      "size": "640x640",
+                      "key": GOOGLE_MAPS_KEY}
+            google_map = 'http://maps.googleapis.com/maps/api/staticmap?' + urllib.urlencode(params)
             incident_type = incident_types.get(place['type'], "")
             prop_list = {'name': place['shortDesc'],
                          'label': place['shortDesc'],
