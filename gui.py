@@ -391,47 +391,48 @@ class GUI(xbmcgui.WindowXML):
         listitems = [item[1] for item in modeselect]
         keys = [item[0] for item in modeselect]
         index = xbmcgui.Dialog().select(ADDON_LANGUAGE(32020), listitems)
-        if not index < 0:
-            if keys[index] == "googleplaces":
-                GP = GooglePlaces()
-                category = GP.select_category()
-                if category:
-                    self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
-            elif keys[index] == "foursquare":
-                FS = FourSquare()
-                section = FS.select_section()
-                if section:
-                    itemlist, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
-            elif keys[index] == "concerts":
-                LFM = LastFM()
-                category = LFM.select_category()
-                if category:
-                    results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
-                    itemlist, self.pin_string = LFM.create_venue_list(results)
-            elif keys[index] == "mapquest":
-                MQ = MapQuest()
-                itemlist, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
-            elif keys[index] == "festivals":
-                LFM = LastFM()
-                category = LFM.select_category()
-                if category:
-                    results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
-                    itemlist, self.pin_string = LFM.create_venue_list(results)
-            elif keys[index] == "geopics":
-                folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
-                set_window_prop(self.window, 'imagepath', folder_path)
-                itemlist, self.pin_string = get_images(folder_path)
-            elif keys[index] == "eventful":
-                EF = Eventful()
-                category = EF.select_category()
-                if category:
-                    itemlist, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
-            elif keys[index] == "reset":
-                self.pin_string = ""
-                itemlist = []
-            if itemlist is not None:
-                fill_list_control(self.venue_list, itemlist)
-            self.street_view = False
+        if index == -1:
+            return None
+        if keys[index] == "googleplaces":
+            GP = GooglePlaces()
+            category = GP.select_category()
+            if category:
+                self.pin_string, itemlist = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
+        elif keys[index] == "foursquare":
+            FS = FourSquare()
+            section = FS.select_section()
+            if section:
+                itemlist, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
+        elif keys[index] == "concerts":
+            LFM = LastFM()
+            category = LFM.select_category()
+            if category:
+                results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
+                itemlist, self.pin_string = LFM.create_venue_list(results)
+        elif keys[index] == "mapquest":
+            MQ = MapQuest()
+            itemlist, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
+        elif keys[index] == "festivals":
+            LFM = LastFM()
+            category = LFM.select_category()
+            if category:
+                results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
+                itemlist, self.pin_string = LFM.create_venue_list(results)
+        elif keys[index] == "geopics":
+            folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
+            set_window_prop(self.window, 'imagepath', folder_path)
+            itemlist, self.pin_string = get_images(folder_path)
+        elif keys[index] == "eventful":
+            EF = Eventful()
+            category = EF.select_category()
+            if category:
+                itemlist, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
+        elif keys[index] == "reset":
+            self.pin_string = ""
+            itemlist = []
+        if itemlist is not None:
+            fill_list_control(self.venue_list, itemlist)
+        self.street_view = False
 
     @ch.click(C_SEARCH)
     def open_search_dialog(self):
@@ -470,10 +471,7 @@ class GUI(xbmcgui.WindowXML):
         self.street_view = False
 
     def get_map_urls(self):
-        if self.street_view is True:
-            size = "320x200"
-        else:
-            size = "640x400"
+        size = "320x200" if self.street_view else "640x400"
         if self.lat and self.lon:
             self.search_string = str(self.lat) + "," + str(self.lon)
         else:
@@ -500,8 +498,7 @@ class GUI(xbmcgui.WindowXML):
         mx2, my2 = pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
         self.radiusx = abs((mx - mx2) / 2000)
         self.radius = abs((my - my2) / 2000)
-        if self.radius > 500:
-            self.radius = 500
+        self.radius = min(self.radius, 500)
         cache_path = xbmc.getCacheThumbName(self.map_url)
         log(cache_path)
         if self.prefix == "":
@@ -515,46 +512,41 @@ class GUI(xbmcgui.WindowXML):
                 set_window_prop(self.window, self.prefix + 'NavMode', "")
 
     def get_geocodes(self, show_dialog, search_string):
-        try:
-            search_string = urllib.quote_plus(search_string)
-            base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
-            url = "&address=%s" % (search_string)
-            log("Google Geocodes Search:" + url)
-            results = Get_JSON_response(base_url + url)
-            places_list = []
-            for item in results["results"]:
-                locationinfo = item["geometry"]["location"]
-                lat = str(locationinfo["lat"])
-                lon = str(locationinfo["lng"])
-                search_string = lat + "," + lon
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
-                prop_list = {'label': item['formatted_address'],
-                             'lat': lat,
-                             'lon': lon,
-                             'thumb': googlemap,
-                             'id': item['formatted_address']}
-                places_list.append(prop_list)
-            first_hit = results["results"][0]["geometry"]["location"]
-            if show_dialog:
-                if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = Search_Select_Dialog('DialogSelect.xml',
-                                             ADDON_PATH,
-                                             listing=create_listitems(places_list))
-                    w.doModal()
-                    if w.lat is not "":
-                        self.zoom_level = 12
-                        return (float(w.lat), float(w.lon))
-                    else:
-                        return (self.lat, self.lon)
-                elif len(results["results"]) == 1:
+        search_string = urllib.quote_plus(search_string)
+        base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
+        url = "&address=%s" % (search_string)
+        log("Google Geocodes Search:" + url)
+        results = Get_JSON_response(base_url + url)
+        places_list = []
+        for item in results["results"]:
+            locationinfo = item["geometry"]["location"]
+            lat = str(locationinfo["lat"])
+            lon = str(locationinfo["lng"])
+            search_string = lat + "," + lon
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+            prop_list = {'label': item['formatted_address'],
+                         'lat': lat,
+                         'lon': lon,
+                         'thumb': googlemap,
+                         'id': item['formatted_address']}
+            places_list.append(prop_list)
+        first_hit = results["results"][0]["geometry"]["location"]
+        if show_dialog:
+            if len(results["results"]) > 1:  # open dialog when more than one hit
+                w = Search_Select_Dialog('DialogSelect.xml',
+                                         ADDON_PATH,
+                                         listing=create_listitems(places_list))
+                w.doModal()
+                if w.lat is not "":
                     self.zoom_level = 12
-                    return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
+                    return (float(w.lat), float(w.lon))
                 else:
-                    return (self.lat, self.lon)  # old values when no hit
-            else:
+                    return (self.lat, self.lon)
+            elif len(results["results"]) == 1:
                 self.zoom_level = 12
-                return (first_hit["lat"], first_hit["lng"])
-        except Exception as e:
-            log("Exception in get_geocodes")
-            log(e)
-            return (None, None)
+                return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
+            else:
+                return (self.lat, self.lon)  # old values when no hit
+        else:
+            self.zoom_level = 12
+            return (first_hit["lat"], first_hit["lng"])
