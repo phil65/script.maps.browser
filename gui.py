@@ -73,22 +73,6 @@ class GUI(xbmcgui.WindowXML):
             if param.startswith('folder='):
                 folder = param[7:]
                 self.items, self.pin_string = self.get_images(folder)
-            elif param.startswith('artist='):
-                artist = param[7:]
-                LFM = LastFM()
-                results = LFM.get_artist_events(artist)
-                self.items, self.pin_string = LFM.create_venue_list(results)
-            elif param.startswith('list='):
-                listtype = param[5:]
-                self.zoom_level = 14
-                if listtype == "nearfestivals":
-                    LFM = LastFM()
-                    results = LFM.get_near_events(self.lat, self.lon, self.radius, "", True)
-                    self.items, self.pin_string = LFM.create_venue_list(results)
-                elif listtype == "nearconcerts":
-                    LFM = LastFM()
-                    results = LFM.get_near_events(self.lat, self.lon, self.radius)
-                    self.items, self.pin_string = LFM.create_venue_list(results)
             elif param.startswith('direction='):
                 self.direction = param[10:]
             elif param.startswith('prefix='):
@@ -378,9 +362,7 @@ class GUI(xbmcgui.WindowXML):
     def select_places_provider(self):
         set_window_prop(self.window, 'index', "")
         items = None
-        modeselect = [("concerts", ADDON_LANGUAGE(32016)),
-                      ("festivals", ADDON_LANGUAGE(32017)),
-                      ("geopics", ADDON_LANGUAGE(32027)),
+        modeselect = [("geopics", ADDON_LANGUAGE(32027)),
                       ("eventful", ADDON_LANGUAGE(32028)),
                       ("foursquare", ADDON_LANGUAGE(32029)),
                       ("mapquest", ADDON_LANGUAGE(32030)),
@@ -401,21 +383,9 @@ class GUI(xbmcgui.WindowXML):
             section = FS.select_section()
             if section:
                 items, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
-        elif keys[index] == "concerts":
-            LFM = LastFM()
-            category = LFM.select_category()
-            if category:
-                results = LFM.get_near_events(self.lat, self.lon, self.radius, category)
-                items, self.pin_string = LFM.create_venue_list(results)
         elif keys[index] == "mapquest":
             MQ = MapQuest()
             items, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
-        elif keys[index] == "festivals":
-            LFM = LastFM()
-            category = LFM.select_category()
-            if category:
-                results = LFM.get_near_events(self.lat, self.lon, self.radius, category, True)
-                items, self.pin_string = LFM.create_venue_list(results)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
             set_window_prop(self.window, 'imagepath', folder_path)
@@ -436,8 +406,6 @@ class GUI(xbmcgui.WindowXML):
     def open_search_dialog(self):
         modeselect = [("googlemaps", ADDON_LANGUAGE(32024)),
                       ("foursquareplaces", ADDON_LANGUAGE(32004)),
-                      ("lastfmconcerts", ADDON_LANGUAGE(32023)),
-                      ("lastfmvenues", ADDON_LANGUAGE(32033)),
                       ("reset", ADDON_LANGUAGE(32019))]
         KEYS = [item[0] for item in modeselect]
         VALUES = [item[1] for item in modeselect]
@@ -451,17 +419,6 @@ class GUI(xbmcgui.WindowXML):
             query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
             items, self.pin_string = FS.get_places(self.lat, self.lon, query)
-        elif KEYS[index] == "lastfmconcerts":
-            artist = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
-            LFM = LastFM()
-            results = LFM.get_artist_events(artist)
-            items, self.pin_string = LFM.create_venue_list(results)
-        elif KEYS[index] == "lastfmvenues":
-            venue = xbmcgui.Dialog().input(ADDON_LANGUAGE(32025), type=xbmcgui.INPUT_ALPHANUM)
-            LFM = LastFM()
-            venue_id = LFM.get_venue_id(venue)
-            results = LFM.get_venue_events(venue_id)
-            items, self.pin_string = LFM.create_venue_list(results)
         elif KEYS[index] == "reset":
             self.pin_string = ""
             items = []
