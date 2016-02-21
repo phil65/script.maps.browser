@@ -17,36 +17,40 @@ from FourSquare import FourSquare
 from Search_Select_Dialog import Search_Select_Dialog
 from EventInfoDialog import EventInfoDialog
 from math import sin, cos, radians, pow
+from ActionHandler import ActionHandler
+
+ch = ActionHandler()
+
 
 ADDON = xbmcaddon.Addon()
 ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_PATH = ADDON.getAddonInfo('path')
 ADDON_NAME = ADDON.getAddonInfo('name')
 
+C_SEARCH = 101
+C_STREET_VIEW = 102
+C_ZOOM_IN = 103
+C_ZOOM_OUT = 104
+C_MODE_ROADMAP = 105
+C_MODE_HYBRID = 106
+C_MODE_SATELLITE = 107
+C_MODE_TERRAIN = 108
+C_GOTO_PLACE = 111
+C_SELECT_PROVIDER = 112
+C_LEFT = 120
+C_RIGHT = 121
+C_UP = 122
+C_DOWN = 123
+C_LOOK_UP = 124
+C_LOOK_DOWN = 125
+C_PLACES_LIST = 200
+C_MODE_TOGGLE = 126
 
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 GOOGLE_STREETVIEW_KEY = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
 
 class GUI(xbmcgui.WindowXML):
-    C_SEARCH = 101
-    C_STREET_VIEW = 102
-    C_ZOOM_IN = 103
-    C_ZOOM_OUT = 104
-    C_MODE_ROADMAP = 105
-    C_MODE_HYBRID = 106
-    C_MODE_SATELLITE = 107
-    C_MODE_TERRAIN = 108
-    C_GOTO_PLACE = 111
-    C_SELECT_PROVIDER = 112
-    C_LEFT = 120
-    C_RIGHT = 121
-    C_UP = 122
-    C_DOWN = 123
-    C_LOOK_UP = 124
-    C_LOOK_DOWN = 125
-    C_PLACES_LIST = 200
-    C_MODE_TOGGLE = 126
 
     ACTION_CONTEXT_MENU = [117]
     ACTION_PREVIOUS_MENU = [9, 92, 10]
@@ -111,7 +115,7 @@ class GUI(xbmcgui.WindowXML):
             set_window_prop(self.window, 'ListLayout', '1')
         else:
             set_window_prop(self.window, 'ListLayout', '0')
-        self.venue_list = self.getControl(self.C_PLACES_LIST)
+        self.venue_list = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
         fill_list_control(self.venue_list, self.itemlist)
         self.window.setProperty("map_image", self.map_url)
@@ -207,78 +211,66 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty("map_image", self.map_url)
 
     def onClick(self, control_id):
-        if control_id == self.C_ZOOM_IN:
-            self.zoom_in()
-        elif control_id == self.C_ZOOM_OUT:
-            self.zoom_out()
-        elif control_id == self.C_SEARCH:
-            self.open_search_dialog()
-        elif control_id == self.C_MODE_TOGGLE:
-            self.toggle_map_mode()
-        elif control_id == self.C_STREET_VIEW:
-            if not self.street_view:
-                self.toggle_street_mode()
-                self.toggle_nav_mode()
-            else:
-                self.toggle_street_mode()
-        elif control_id == self.C_MODE_ROADMAP:
-            self.type = "roadmap"
-        elif control_id == self.C_MODE_SATELLITE:
-            self.type = "satellite"
-        elif control_id == self.C_MODE_HYBRID:
-            self.type = "hybrid"
-        elif control_id == self.C_MODE_TERRAIN:
-            self.type = "terrain"
-        elif control_id == self.C_GOTO_PLACE:
-            self.location = self.window.getProperty("Location")
-            self.lat, self.lon = self.get_geocodes(False, self.location)
-        elif control_id == self.C_SELECT_PROVIDER:
-            self.select_places_provider()
-        elif control_id == self.C_LEFT:
-            pass
-        elif control_id == self.C_RIGHT:
-            pass
-        elif control_id == self.C_UP:
-            pass
-        elif control_id == self.C_DOWN:
-            pass
-        elif control_id == self.C_LOOK_UP:
-            self.pitch_up()
-        elif control_id == self.C_LOOK_DOWN:
-            self.pitch_down()
-        elif control_id == self.C_PLACES_LIST:
-            selecteditem = self.venue_list.getSelectedItem()
-            self.lat = float(selecteditem.getProperty("lat"))
-            self.lon = float(selecteditem.getProperty("lon"))
-            self.zoom_level = 12
-            itemindex = selecteditem.getProperty("index")
-            if not itemindex == self.window.getProperty('index'):
-                set_window_prop(self.window, 'index', itemindex)
-            else:
-                event_id = selecteditem.getProperty("event_id")
-                venue_id = selecteditem.getProperty("venue_id")
-                foursquare_id = selecteditem.getProperty("foursquare_id")
-                eventful_id = selecteditem.getProperty("eventful_id")
-                picture_path = selecteditem.getProperty("filepath")
-                if event_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventid=event_id)
-                elif venue_id:
-                    dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, venueid=venue_id)
-                elif picture_path:
-                    dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME, ADDON_PATH, picture_path=picture_path)
-                elif foursquare_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, foursquare_id=foursquare_id)
-                elif eventful_id:
-                    dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME, ADDON_PATH, eventful_id=eventful_id)
-                dialog.doModal()
-                if len(dialog.events_items) > 0:
-                    self.pin_string = dialog.events_pin_string
-                    fill_list_control(self.venue_list, dialog.events_items)
-                del dialog
+        super(GUI, self).onClick(control_id)
+        ch.serve(control_id, self)
         self.get_map_urls()
         self.window.setProperty("streetview_image", self.street_view_url)
         self.window.setProperty("map_image", self.map_url)
 
+    @ch.click(C_STREET_VIEW)
+    def toggle_street_view(self):
+        if not self.street_view:
+            self.toggle_street_mode()
+            self.toggle_nav_mode()
+        else:
+            self.toggle_street_mode()
+
+    @ch.click(C_GOTO_PLACE)
+    def go_to_place(self):
+        self.location = self.window.getProperty("Location")
+        self.lat, self.lon = self.get_geocodes(False, self.location)
+
+    @ch.click(C_PLACES_LIST)
+    def list_click(self):
+        item = self.venue_list.getSelectedItem()
+        self.lat = float(item.getProperty("lat"))
+        self.lon = float(item.getProperty("lon"))
+        self.zoom_level = 12
+        itemindex = item.getProperty("index")
+        if itemindex != self.window.getProperty('index'):
+            set_window_prop(self.window, 'index', itemindex)
+        else:
+            event_id = item.getProperty("event_id")
+            venue_id = item.getProperty("venue_id")
+            foursquare_id = item.getProperty("foursquare_id")
+            eventful_id = item.getProperty("eventful_id")
+            picture_path = item.getProperty("filepath")
+            if event_id:
+                dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                      ADDON_PATH,
+                                      eventid=event_id)
+            elif venue_id:
+                dialog = LastFMDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                      ADDON_PATH,
+                                      venueid=venue_id)
+            elif picture_path:
+                dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
+                                       ADDON_PATH,
+                                       picture_path=picture_path)
+            elif foursquare_id:
+                dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                         ADDON_PATH,
+                                         foursquare_id=foursquare_id)
+            elif eventful_id:
+                dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                         ADDON_PATH,
+                                         eventful_id=eventful_id)
+            dialog.doModal()
+            if dialog.events_items:
+                self.pin_string = dialog.events_pin_string
+                fill_list_control(self.venue_list, dialog.events_items)
+
+    @ch.click(C_ZOOM_IN)
     def zoom_in(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.street_view:
@@ -288,6 +280,7 @@ class GUI(xbmcgui.WindowXML):
             if self.zoom_level <= 20:
                 self.zoom_level += 1
 
+    @ch.click(C_ZOOM_OUT)
     def zoom_out(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.street_view:
@@ -297,11 +290,13 @@ class GUI(xbmcgui.WindowXML):
             if self.zoom_level >= 1:
                 self.zoom_level -= 1
 
+    @ch.click(C_LOOK_UP)
     def pitch_up(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.pitch <= 80:
             self.pitch += 10
 
+    @ch.click(C_LOOK_DOWN)
     def pitch_down(self):
         self.location = str(self.lat) + "," + str(self.lon)
         if self.pitch >= -80:
@@ -318,6 +313,7 @@ class GUI(xbmcgui.WindowXML):
             set_window_prop(self.window, 'NavMode', 'True')
             xbmc.executebuiltin("SetFocus(725)")
 
+    @ch.click(C_MODE_TOGGLE)
     def toggle_map_mode(self):
         if self.type == "roadmap":
             self.type = "satellite"
@@ -327,6 +323,22 @@ class GUI(xbmcgui.WindowXML):
             self.type = "terrain"
         else:
             self.type = "roadmap"
+
+    @ch.click(C_MODE_ROADMAP)
+    def set_roadmap_type(self):
+        self.type = "roadmap"
+
+    @ch.click(C_MODE_HYBRID)
+    def set_hybrid_type(self):
+        self.type = "hybrid"
+
+    @ch.click(C_MODE_SATELLITE)
+    def set_satellite_type(self):
+        self.type = "satellite"
+
+    @ch.click(C_MODE_TERRAIN)
+    def set_terrain_type(self):
+        self.type = "terrain"
 
     def toggle_street_mode(self):
         if self.street_view:
@@ -352,6 +364,7 @@ class GUI(xbmcgui.WindowXML):
             else:
                 Notify("Error", "No Search results found.")
 
+    @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
         set_window_prop(self.window, 'index', "")
         itemlist = None
@@ -408,6 +421,7 @@ class GUI(xbmcgui.WindowXML):
                 fill_list_control(self.venue_list, itemlist)
             self.street_view = False
 
+    @ch.click(C_SEARCH)
     def open_search_dialog(self):
         modeselect = [("googlemaps", ADDON_LANGUAGE(32024)),
                       ("foursquareplaces", ADDON_LANGUAGE(32004)),
@@ -515,7 +529,9 @@ class GUI(xbmcgui.WindowXML):
             first_hit = results["results"][0]["geometry"]["location"]
             if show_dialog:
                 if len(results["results"]) > 1:  # open dialog when more than one hit
-                    w = Search_Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(places_list))
+                    w = Search_Select_Dialog('DialogSelect.xml',
+                                             ADDON_PATH,
+                                             listing=create_listitems(places_list))
                     w.doModal()
                     if w.lat is not "":
                         self.zoom_level = 12
