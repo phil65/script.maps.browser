@@ -61,7 +61,7 @@ class Eventful():
         return self.handle_events(results['venue'])
 
     def handle_events(self, results):
-        pin_string = ""
+        pins = ""
         places = []
         letter = ord('A')
         count = 0
@@ -102,11 +102,11 @@ class Eventful():
                      "sortletter": chr(letter),
                      "lat": lat,
                      "lon": lon}
-            pin_string += "&markers=color:blue%7Clabel:%s%7C%s,%s" % (chr(letter), lat, lon)
+            pins += "&markers=color:blue%7Clabel:%s%7C%s,%s" % (chr(letter), lat, lon)
             places.append(props)
             count += 1
             letter += 1
-        return places, pin_string
+        return places, pins
 
     def get_data(self, method, params={}, cache_days=0.5):
         params["app_key"] = EVENTFUL_KEY

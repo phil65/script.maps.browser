@@ -36,7 +36,7 @@ class MapQuest():
         url = BASE_URL + 'incidents?' + urllib.urlencode(params)
         results = Get_JSON_response(url)
         places = []
-        pin_string = ""
+        pins = ""
         letter = ord('A')
         if results['info']['statuscode'] == 400:
             Notify("Error", " - ".join(results['info']['messages']))
@@ -84,11 +84,11 @@ class MapQuest():
                      "lat": lat,
                      "lon": lon,
                      "index": str(i)}
-            pin_string = pin_string + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places.append(props)
             letter += 1
             if i > MAX_LIMIT:
                 break
         fill_area = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lat_high, lon_high, lat_high, lon_low, lat_low, lon_low, lat_low, lon_high)
-        pin_string = pin_string + fill_area.replace("|", "%7C")
-        return places, pin_string
+        pins = pins + fill_area.replace("|", "%7C")
+        return places, pins

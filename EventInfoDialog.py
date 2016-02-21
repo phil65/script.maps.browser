@@ -27,7 +27,7 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
             prettyprint(self.events)
         elif self.foursquare_id:
             pass
-        self.pin_string = ""
+        self.pins = ""
         self.itemlist = []
 
     def onInit(self):

@@ -71,7 +71,7 @@ class GUI(xbmcgui.WindowXML):
             log("param = " + param)
             if param.startswith('folder='):
                 folder = param[7:]
-                self.items, self.pin_string = self.get_images(folder)
+                self.items, self.pins = self.get_images(folder)
             elif param.startswith('direction='):
                 self.direction = param[10:]
             elif param.startswith('prefix='):
@@ -117,7 +117,7 @@ class GUI(xbmcgui.WindowXML):
         self.lon = 0.0
         self.pitch = 0
         self.venue_id = None
-        self.pin_string = ""
+        self.pins = ""
         self.direction = 0
         self.saved_id = 100
         self.prefix = ""
@@ -363,26 +363,26 @@ class GUI(xbmcgui.WindowXML):
             GP = GooglePlaces()
             category = GP.select_category()
             if category:
-                self.pin_string, items = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
+                self.pins, items = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
         elif keys[index] == "foursquare":
             FS = FourSquare()
             section = FS.select_section()
             if section:
-                items, self.pin_string = FS.get_places_by_section(self.lat, self.lon, section)
+                items, self.pins = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
             MQ = MapQuest()
-            items, self.pin_string = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
+            items, self.pins = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
             self.window.setProperty('imagepath', folder_path)
-            items, self.pin_string = get_images(folder_path)
+            items, self.pins = get_images(folder_path)
         elif keys[index] == "eventful":
             EF = Eventful()
             category = EF.select_category()
             if category:
-                items, self.pin_string = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
+                items, self.pins = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
         elif keys[index] == "reset":
-            self.pin_string = ""
+            self.pins = ""
             items = []
         if items is not None:
             fill_list_control(self.venues, items)
@@ -404,9 +404,9 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
-            items, self.pin_string = FS.get_places(self.lat, self.lon, query)
+            items, self.pins = FS.get_places(self.lat, self.lon, query)
         elif KEYS[index] == "reset":
-            self.pin_string = ""
+            self.pins = ""
             items = []
         fill_list_control(self.venues, items)
         self.street_view = False
@@ -419,7 +419,7 @@ class GUI(xbmcgui.WindowXML):
             self.search_string = urllib.quote_plus(self.location.replace('"', ''))
         base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (ADDON.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
         url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, GOOGLE_MAPS_KEY)
-        self.map_url = url + self.pin_string
+        self.map_url = url + self.pins
         zoom = 120 - int(self.zoom_level_streetview) * 6
         base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
         self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, zoom, GOOGLE_STREETVIEW_KEY, self.direction, self.pitch)

@@ -177,7 +177,7 @@ def log(txt):
 
 
 def get_images(path=""):
-    pin_string = "&markers=color:blue"
+    pins = "&markers=color:blue"
     letter = ord('A')
     count = 0
     images = []
@@ -204,15 +204,15 @@ def get_images(path=""):
                          "index": str(count),
                          "sortletter": chr(letter),
                          }
-                if len(pin_string) < 1850:
-                    pin_string = pin_string + "%7C" + str(lat) + "," + str(lon)
+                if len(pins) < 1850:
+                    pins += "%7C" + str(lat) + "," + str(lon)
                     letter += 1
                 images.append(props)
                 count += 1
         except Exception as e:
             log("Error when handling get_images results")
             log(e)
-    return images, pin_string
+    return images, pins
 
 
 def string_to_deg(raw_string):
