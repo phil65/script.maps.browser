@@ -5,6 +5,7 @@ import urllib
 
 GOOGLE_PLACES_KEY = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 ADDON = xbmcaddon.Addon()
+BASE_URL = 'https://maps.googleapis.com/maps/api/place/'
 
 
 class GooglePlaces():
@@ -124,7 +125,7 @@ class GooglePlaces():
                   "radius": min(30000, radius),
                   "location": "%s,%s" % (lat, lon),
                   "types": locationtype}
-        base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+        base_url = BASE_URL + 'nearbysearch/json?'
         results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
         places = []
         pins = ""
@@ -136,8 +137,10 @@ class GooglePlaces():
             return "", []
         for count, place in enumerate(results['results']):
             try:
-                photo_ref = place['photos'][0]['photo_reference']
-                photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, GOOGLE_PLACES_KEY)
+                params = {"maxwidth": 400,
+                          "photoreference": place['photos'][0]['photo_reference'],
+                          "key": GOOGLE_PLACES_KEY}
+                photo = BASE_URL + 'photo?' + urllib.urlencode(params)
             except:
                 photo = ""
             description = place['vicinity'] if "vicinity" in place else place.get('formatted_address', "")
