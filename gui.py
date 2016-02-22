@@ -86,8 +86,8 @@ class GUI(xbmcgui.WindowXML):
 
     def onInit(self):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        self.window.setProperty('NavMode', '')
-        self.window.setProperty('streetview', '')
+        self.window.clearProperty('NavMode')
+        self.window.clearProperty('streetview')
         if ADDON.getSetting("VenueLayout") == "1":
             self.window.setProperty('ListLayout', '1')
         else:
@@ -132,8 +132,8 @@ class GUI(xbmcgui.WindowXML):
     @ch.action("previousmenu", "*")
     def previous_menu(self):
         if self.nav_mode_active or self.street_view:
-            self.window.setProperty('NavMode', '')
-            self.window.setProperty('streetview', '')
+            self.window.clearProperty('NavMode')
+            self.window.clearProperty('streetview')
             self.nav_mode_active = False
             self.street_view = False
             self.window.setFocusId(self.saved_id)
@@ -279,7 +279,7 @@ class GUI(xbmcgui.WindowXML):
     def toggle_nav_mode(self):
         if self.nav_mode_active:
             self.nav_mode_active = False
-            self.window.setProperty('NavMode', '')
+            self.window.clearProperty('NavMode')
             self.window.setFocusId(self.saved_id)
         else:
             self.saved_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
@@ -318,7 +318,7 @@ class GUI(xbmcgui.WindowXML):
         if self.street_view:
             self.street_view = False
             self.zoom = self.zoom_saved
-            self.window.setProperty('streetview', '')
+            self.window.clearProperty('streetview')
         else:
             self.street_view = True
             self.zoom_saved = self.zoom
@@ -339,7 +339,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
-        self.window.setProperty('index', "")
+        self.window.clearProperty('index')
         items = None
         modeselect = [("geopics", ADDON_LANGUAGE(32027)),
                       ("eventful", ADDON_LANGUAGE(32028)),
@@ -441,11 +441,11 @@ class GUI(xbmcgui.WindowXML):
         if self.street_view:
             self.window.setProperty('streetview', "True")
         else:
-            self.window.setProperty('streetview', "")
+            self.window.clearProperty('streetview')
         if self.nav_mode_active:
             self.window.setProperty('NavMode', "True")
         else:
-            self.window.setProperty('NavMode', "")
+            self.window.clearProperty('NavMode')
         if self.lat:
             hor_px = int(size.split("x")[0])
             ver_px = int(size.split("x")[1])
