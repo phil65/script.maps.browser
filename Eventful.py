@@ -3,8 +3,10 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
 import xbmcgui
+import urllib
+
+import Utils
 
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
@@ -21,7 +23,7 @@ class Eventful():
                                 cache_days=7)
         modeselect = ["All Categories"]
         for item in results["category"]:
-            modeselect.append(cleanText(item["name"]))
+            modeselect.append(Utils.cleanText(item["name"]))
         index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index == -1:
             return None
@@ -68,7 +70,7 @@ class Eventful():
         if not isinstance(results, list):
             results = [results]
         for venue in results:
-            venuename = cleanText(venue['venue_name'])
+            venuename = Utils.cleanText(venue['venue_name'])
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
             search_string = lat + "," + lon
@@ -86,15 +88,15 @@ class Eventful():
             date = date.replace("00:00:00", "")
             props = {"id": str(venue['id']),
                      "eventful_id": str(venue['venue_id']),
-                     "eventname": cleanText(venue['title']),
-                     "description": cleanText(venue['description']),
+                     "eventname": Utils.cleanText(venue['title']),
+                     "description": Utils.cleanText(venue['description']),
                      "name": venuename,
                      "label": venuename,
                      "label2": date,
                      "photo": photo,
                      "thumb": photo,
                      "date": date,
-                     "address": cleanText(venue["venue_address"]),
+                     "address": Utils.cleanText(venue["venue_address"]),
                      "Venue_Image": photo,
                      "venue_id_eventful": venue['venue_id'],
                      "GoogleMap": googlemap,
@@ -116,5 +118,5 @@ class Eventful():
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
-        return get_JSON_response(url=url,
-                                 cache_days=cache_days)
+        return Utils.get_JSON_response(url=url,
+                                       cache_days=cache_days)

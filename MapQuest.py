@@ -34,7 +34,7 @@ class MapQuest():
                   "inFormat": "kvp",
                   "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
         url = BASE_URL + 'incidents?' + urllib.urlencode(params)
-        results = Get_JSON_response(url)
+        results = get_JSON_response(url)
         places = []
         pins = ""
         letter = ord('A')

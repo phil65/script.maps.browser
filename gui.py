@@ -110,7 +110,7 @@ class GUI(xbmcgui.WindowXML):
     def init_vars(self):
         self.nav_mode_active = False
         self.street_view = False
-        self.search_string = ""
+        self.center = ""
         self.zoom_level_saved = 10
         self.zoom_level_streetview = 0
         self.lat = 0.0
@@ -413,16 +413,29 @@ class GUI(xbmcgui.WindowXML):
 
     def get_map_urls(self):
         size = "320x200" if self.street_view else "640x400"
-        if self.lat and self.lon:
-            self.search_string = str(self.lat) + "," + str(self.lon)
-        else:
-            self.search_string = urllib.quote_plus(self.location.replace('"', ''))
-        base_url = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&format=%s&language=%s&' % (ADDON.getSetting("ImageFormat"), xbmc.getLanguage(xbmc.ISO_639_1))
-        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (self.type, self.search_string, self.zoom_level, self.search_string, size, GOOGLE_MAPS_KEY)
-        self.map_url = url + self.pins
-        zoom = 120 - int(self.zoom_level_streetview) * 6
-        base_url = 'http://maps.googleapis.com/maps/api/streetview?&sensor=false&format=%s&' % (ADDON.getSetting("ImageFormat"))
-        self.street_view_url = base_url + 'location=%s&size=640x400&fov=%s&key=%s&heading=%s&pitch=%s' % (self.search_string, zoom, GOOGLE_STREETVIEW_KEY, self.direction, self.pitch)
+        self.center = "%s,%s" % (self.lat, self.lon) if self.lat else self.location.replace('"', '')
+        params = {"sensor": "false",
+                  "scale": 2,
+                  "format": ADDON.getSetting("ImageFormat"),
+                  "language": xbmc.getLanguage(xbmc.ISO_639_1),
+                  "maptype": self.type,
+                  "center": self.center,
+                  "zoom": self.zoom_level,
+                  "markers": self.center,
+                  "size": size,
+                  "key": GOOGLE_MAPS_KEY}
+        base_url = "http://maps.googleapis.com/maps/api/staticmap?&" + urllib.urlencode(params)
+        self.map_url = base_url + self.pins
+        params = {"sensor": "false",
+                  "format": ADDON.getSetting("ImageFormat"),
+                  "language": xbmc.getLanguage(xbmc.ISO_639_1),
+                  "fov": 120 - int(self.zoom_level_streetview) * 6,
+                  "location": self.center,
+                  "heading": self.direction,
+                  "pitch": self.pitch,
+                  "size": "640x400",
+                  "key": GOOGLE_STREETVIEW_KEY}
+        self.street_view_url = "http://maps.googleapis.com/maps/api/streetview?&" + urllib.urlencode(params)
         self.window.setProperty(self.prefix + 'location', self.location)
         self.window.setProperty(self.prefix + 'lat', str(self.lat))
         self.window.setProperty(self.prefix + 'lon', str(self.lon))
@@ -457,7 +470,7 @@ class GUI(xbmcgui.WindowXML):
         base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
         url = "&address=%s" % (search_string)
         log("Google Geocodes Search:" + url)
-        results = Get_JSON_response(base_url + url)
+        results = get_JSON_response(base_url + url)
         places = []
         for item in results["results"]:
             locationinfo = item["geometry"]["location"]

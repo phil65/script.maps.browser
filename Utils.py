@@ -145,7 +145,7 @@ def get_string_from_url(url):
     return ""
 
 
-def Get_JSON_response(url="", cache_days=0.5):
+def get_JSON_response(url="", cache_days=0.5):
     filename = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
@@ -161,7 +161,7 @@ def Get_JSON_response(url="", cache_days=0.5):
 def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = Get_JSON_response(base_url + url, 30)
+    results = get_JSON_response(base_url + url, 30)
     if results and results["artists"]:
         log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
         return results["artists"][0]["id"]

@@ -124,7 +124,7 @@ class GooglePlaces():
                   "location": str(lat) + "," + str(lon),
                   "types": locationtype}
         base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
-        results = Get_JSON_response(base_url + urllib.urlencode(params))
+        results = get_JSON_response(base_url + urllib.urlencode(params))
         places = []
         pins = ""
         letter = ord('A')
