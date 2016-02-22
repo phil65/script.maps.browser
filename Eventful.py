@@ -104,7 +104,7 @@ class Eventful():
                      "sortletter": chr(letter),
                      "lat": lat,
                      "lon": lon}
-            pins += "&markers=color:blue%7Clabel:%s%7C%s,%s" % (chr(letter), lat, lon)
+            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
             places.append(props)
             count += 1
             letter += 1

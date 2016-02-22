@@ -129,7 +129,7 @@ class GooglePlaces():
         places = []
         pins = ""
         letter = ord('A')
-        if results['meta']['code'] == 400:
+        if "meta" in results and results['meta']['code'] == 400:
             Utils.log("LIMIT EXCEEDED")
             return "", []
         if "results" not in results:

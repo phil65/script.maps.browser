@@ -20,7 +20,6 @@
 import sys
 import xbmc
 import xbmcaddon
-from Utils import *
 from gui import GUI
 
 ADDON = xbmcaddon.Addon()

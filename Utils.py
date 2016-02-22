@@ -7,6 +7,7 @@ import xbmc
 import xbmcaddon
 import xbmcvfs
 import xbmcgui
+import urllib
 import urllib2
 import os
 import re
@@ -14,7 +15,7 @@ import time
 import math
 from PIL import Image
 import hashlib
-from ImageTags import *
+import ImageTags
 import simplejson as json
 from functools import wraps
 import threading
@@ -162,11 +163,10 @@ def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = get_JSON_response(base_url + url, 30)
-    if results and results["artists"]:
-        log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
-        return results["artists"][0]["id"]
-    else:
+    if not results or not results["artists"]:
         return None
+    log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
+    return results["artists"][0]["id"]
 
 
 def log(txt):
@@ -179,13 +179,12 @@ def log(txt):
 def get_images(path=""):
     pins = "&markers=color:blue"
     letter = ord('A')
-    count = 0
     images = []
-    for filename in xbmcvfs.listdir(path)[-1]:
+    for count, filename in enumerate(xbmcvfs.listdir(path)[-1]):
         try:
             img = Image.open(path + filename)
-            exif_data = get_exif_data(img)
-            lat, lon = get_lat_lon(exif_data)
+            exif_data = ImageTags.get_exif_data(img)
+            lat, lon = ImageTags.get_lat_lon(exif_data)
             if "DateTimeOriginal" in exif_data:
                 date = exif_data["DateTimeOriginal"]
             elif "DateTime" in exif_data:
@@ -208,7 +207,6 @@ def get_images(path=""):
                     pins += "%7C" + str(lat) + "," + str(lon)
                     letter += 1
                 images.append(props)
-                count += 1
         except Exception as e:
             log("Error when handling get_images results")
             log(e)
@@ -276,12 +274,9 @@ def get_location_coords():
 
 
 def save_to_file(content, filename, path=""):
-    if not path:
-        text_file_path = get_browse_dialog() + filename + ".txt"
-    else:
-        if not xbmcvfs.exists(path):
-            xbmcvfs.mkdir(path)
-        text_file_path = os.path.join(path, filename + ".txt")
+    if not xbmcvfs.exists(path):
+        xbmcvfs.mkdir(path)
+    text_file_path = os.path.join(path, filename + ".txt")
     log("save to textfile:")
     log(text_file_path)
     text_file = xbmcvfs.File(text_file_path, "w")
@@ -291,9 +286,6 @@ def save_to_file(content, filename, path=""):
 
 
 def read_from_file(path=""):
-    # Set path
-    if path == "":
-        path = get_browse_dialog(dlg_type=1)
     # Check to see if file exists
     if xbmcvfs.exists(path):
         f = open(path)
