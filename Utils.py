@@ -301,7 +301,6 @@ def read_from_file(path=""):
 
 
 def cleanText(text):
-    import re
     if text:
         text = re.sub('<br \/>', '[CR]', text)
         text = re.sub('<br\/>', '[CR]', text)
