@@ -118,7 +118,7 @@ class GooglePlaces():
         else:
             return None
 
-    def GetGooglePlacesList(self, lat, lon, radius, locationtype):
+    def get_locations(self, lat, lon, radius, locationtype):
         params = {"key": GOOGLE_PLACES_KEY,
                   "radius": min(30000, radius),
                   "location": str(lat) + "," + str(lon),

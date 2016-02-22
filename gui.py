@@ -208,7 +208,7 @@ class GUI(xbmcgui.WindowXML):
             self.lon -= 360.0
         if self.lon < -180.0:
             self.lon += 180.0
-        self.location = str(self.lat) + "," + str(self.lon)
+        self.location = "%s,%s" % (self.lat, self.lon)
 
     @ch.click(C_STREET_VIEW)
     def toggle_street_view(self):
@@ -252,7 +252,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_ZOOM_IN)
     def zoom_in(self):
-        self.location = str(self.lat) + "," + str(self.lon)
+        self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
             if self.zoom_level_streetview <= 20:
                 self.zoom_level_streetview += 1
@@ -262,7 +262,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_ZOOM_OUT)
     def zoom_out(self):
-        self.location = str(self.lat) + "," + str(self.lon)
+        self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
             if self.zoom_level_streetview >= 1:
                 self.zoom_level_streetview -= 1
@@ -272,13 +272,13 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_LOOK_UP)
     def pitch_up(self):
-        self.location = str(self.lat) + "," + str(self.lon)
+        self.location = "%s,%s" % (self.lat, self.lon)
         if self.pitch <= 80:
             self.pitch += 10
 
     @ch.click(C_LOOK_DOWN)
     def pitch_down(self):
-        self.location = str(self.lat) + "," + str(self.lon)
+        self.location = "%s,%s" % (self.lat, self.lon)
         if self.pitch >= -80:
             self.pitch -= 10
 
@@ -363,7 +363,7 @@ class GUI(xbmcgui.WindowXML):
             GP = GooglePlaces()
             category = GP.select_category()
             if category:
-                self.pins, items = GP.GetGooglePlacesList(self.lat, self.lon, self.radius * 1000, category)
+                self.pins, items = GP.get_locations(self.lat, self.lon, self.radius * 1000, category)
         elif keys[index] == "foursquare":
             FS = FourSquare()
             section = FS.select_section()
@@ -491,7 +491,7 @@ class GUI(xbmcgui.WindowXML):
                                        ADDON_PATH,
                                        listing=create_listitems(places))
                 w.doModal()
-                if w.lat is not "":
+                if w.lat:
                     self.zoom_level = 12
                     return (float(w.lat), float(w.lon))
                 else:

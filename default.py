@@ -27,8 +27,6 @@ ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-# sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
-from process import StartInfoActions
 
 
 class Main:
@@ -36,19 +34,10 @@ class Main:
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
         xbmc.executebuiltin('SetProperty(mapsbrowser_running,True,home)')
-        # try:
         self._parse_argv()
-        if self.infos:
-            StartInfoActions(self.infos, self.params)
-        else:
-            gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
-            gui.doModal()
-            del gui
+        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
+        gui.doModal()
         xbmc.executebuiltin('ClearProperty(mapsbrowser_running,home)')
-        # except Exception:
-        #     xbmc.executebuiltin('Dialog.Close(busydialog)')
-        #     buggalo.onExceptionRaised()
-        #     xbmc.executebuiltin('ClearProperty(mapsbrowser_running,home)')
 
     def _parse_argv(self):
         self.handle = None
