@@ -172,26 +172,26 @@ class GUI(xbmcgui.WindowXML):
     def navigate(self):
         if not self.nav_mode_active:
             return None
-        log("lat: " + str(self.lat) + " lon: " + str(self.lon))
+        log("lat: %s lon: %s" % (self.lat, self.lon))
         if not self.street_view:
             stepsize = 60.0 / pow(2, self.zoom_level)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                self.lat = float(self.lat) + stepsize
+                self.lat = self.lat + stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                self.lat = float(self.lat) - stepsize
+                self.lat = self.lat - stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
-                self.lon = float(self.lon) - 2.0 * stepsize
+                self.lon = self.lon - 2.0 * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
-                self.lon = float(self.lon) + 2.0 * stepsize
+                self.lon = self.lon + 2.0 * stepsize
         else:
             stepsize = 0.0002
             radiantdirection = float(radians(self.direction))
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                self.lat = float(self.lat) + cos(radiantdirection) * float(stepsize)
-                self.lon = float(self.lon) + sin(radiantdirection) * float(stepsize)
+                self.lat = self.lat + cos(radiantdirection) * stepsize
+                self.lon = self.lon + sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                self.lat = float(self.lat) - cos(radiantdirection) * float(stepsize)
-                self.lon = float(self.lon) - sin(radiantdirection) * float(stepsize)
+                self.lat = self.lat - cos(radiantdirection) * stepsize
+                self.lon = self.lon - sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
                 if self.direction <= 0:
                     self.direction = 360
@@ -232,23 +232,23 @@ class GUI(xbmcgui.WindowXML):
         itemindex = item.getProperty("index")
         if itemindex != self.window.getProperty('index'):
             self.window.setProperty('index', itemindex)
-        else:
-            foursquare_id = item.getProperty("foursquare_id")
-            eventful_id = item.getProperty("eventful_id")
-            picture_path = item.getProperty("filepath")
-            if picture_path:
-                dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
-                                       ADDON_PATH,
-                                       picture_path=picture_path)
-            elif foursquare_id:
-                dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
-                                         ADDON_PATH,
-                                         foursquare_id=foursquare_id)
-            elif eventful_id:
-                dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
-                                         ADDON_PATH,
-                                         eventful_id=eventful_id)
-            dialog.doModal()
+            return None
+        foursquare_id = item.getProperty("foursquare_id")
+        eventful_id = item.getProperty("eventful_id")
+        picture_path = item.getProperty("filepath")
+        if picture_path:
+            dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
+                                   ADDON_PATH,
+                                   picture_path=picture_path)
+        elif foursquare_id:
+            dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                     ADDON_PATH,
+                                     foursquare_id=foursquare_id)
+        elif eventful_id:
+            dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
+                                     ADDON_PATH,
+                                     eventful_id=eventful_id)
+        dialog.doModal()
 
     @ch.click(C_ZOOM_IN)
     def zoom_in(self):
