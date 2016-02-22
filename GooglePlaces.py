@@ -1,5 +1,6 @@
-from Utils import *
+import Utils
 import xbmcgui
+import xbmcaddon
 import urllib
 
 GOOGLE_PLACES_KEY = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
@@ -121,46 +122,41 @@ class GooglePlaces():
     def get_locations(self, lat, lon, radius, locationtype):
         params = {"key": GOOGLE_PLACES_KEY,
                   "radius": min(30000, radius),
-                  "location": str(lat) + "," + str(lon),
+                  "location": "%s,%s" % (lat, lon),
                   "types": locationtype}
         base_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
-        results = get_JSON_response(base_url + urllib.urlencode(params))
+        results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
         places = []
         pins = ""
         letter = ord('A')
-        count = 0
-        if "results" in results:
-            for place in results['results']:
-                try:
-                    photo_ref = place['photos'][0]['photo_reference']
-                    photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, GOOGLE_PLACES_KEY)
-                except:
-                    photo = ""
-                if "vicinity" in place:
-                    description = place['vicinity']
-                else:
-                    description = place.get('formatted_address', "")
-                lat = str(place['geometry']['location']['lat'])
-                lon = str(place['geometry']['location']['lng'])
-                rating = str(place['rating'] * 2.0) if "rating" in place else ""
-                props = {'name': place['name'],
-                         'label': place['name'],
-                         'label2': " / ".join(place['types']),
-                         'description': description,
-                         "sortletter": chr(letter),
-                         "index": str(count),
-                         "thumb": photo,
-                         "icon": place['icon'],
-                         "lat": lat,
-                         "lon": lon,
-                         "rating": rating,
-                         "index": str(count)}
-                pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
-                places.append(props)
-                count += 1
-                letter += 1
-        elif results['meta']['code'] == 400:
-            log("LIMIT EXCEEDED")
-        else:
-            log("ERROR")
+        if results['meta']['code'] == 400:
+            Utils.log("LIMIT EXCEEDED")
+            return "", []
+        if "results" not in results:
+            return "", []
+        for count, place in enumerate(results['results']):
+            try:
+                photo_ref = place['photos'][0]['photo_reference']
+                photo = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=%s' % (photo_ref, GOOGLE_PLACES_KEY)
+            except:
+                photo = ""
+            description = place['vicinity'] if "vicinity" in place else place.get('formatted_address', "")
+            lat = str(place['geometry']['location']['lat'])
+            lon = str(place['geometry']['location']['lng'])
+            rating = str(place['rating'] * 2.0) if "rating" in place else ""
+            props = {'name': place['name'],
+                     'label': place['name'],
+                     'label2': " / ".join(place['types']),
+                     'description': description,
+                     "sortletter": chr(letter),
+                     "index": str(count),
+                     "thumb": photo,
+                     "icon": place['icon'],
+                     "lat": lat,
+                     "lon": lon,
+                     "rating": rating,
+                     "index": str(count)}
+            pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            places.append(props)
+            letter += 1
         return pins, places
