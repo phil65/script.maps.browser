@@ -1,5 +1,5 @@
 import xbmcgui
-from Utils import *
+import xbmcaddon
 
 ADDON = xbmcaddon.Addon()
 

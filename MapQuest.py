@@ -4,8 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
-
-from Utils import *
+import Utils
 
 MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -24,25 +23,25 @@ class MapQuest():
         pass
 
     def get_incidents(self, lat, lon, zoom):
-        mx, my = latlon_to_meters(lat, lon)
-        px, py = meters_to_pixels(mx, my, zoom)
-        mx_high, my_high = pixels_to_meters(px + 320, py + 200, zoom)
-        mx_low, my_low = pixels_to_meters(px - 320, py - 200, zoom)
-        lat_high, lon_high = meters_to_latlon(mx_high, my_high)
-        lat_low, lon_low = meters_to_latlon(mx_low, my_low)
+        mx, my = Utils.latlon_to_meters(lat, lon)
+        px, py = Utils.meters_to_pixels(mx, my, zoom)
+        mx_high, my_high = Utils.pixels_to_meters(px + 320, py + 200, zoom)
+        mx_low, my_low = Utils.pixels_to_meters(px - 320, py - 200, zoom)
+        lat_high, lon_high = Utils.meters_to_latlon(mx_high, my_high)
+        lat_low, lon_low = Utils.meters_to_latlon(mx_low, my_low)
         params = {"key": MAPQUEST_KEY,
                   "inFormat": "kvp",
                   "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
         url = BASE_URL + 'incidents?' + urllib.urlencode(params)
-        results = get_JSON_response(url)
+        results = Utils.get_JSON_response(url)
         places = []
         pins = ""
         letter = ord('A')
         if results['info']['statuscode'] == 400:
-            notify("Error", " - ".join(results['info']['messages']))
+            Utils.notify("Error", " - ".join(results['info']['messages']))
             return [], ""
         elif "incidents" not in results:
-            notify("Error", "Could not fetch results")
+            Utils.notify("Error", "Could not fetch results")
             return [], ""
         for i, place in enumerate(results['incidents']):
             lat = str(place['lat'])
