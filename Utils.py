@@ -140,7 +140,7 @@ def get_string_from_url(url):
             data = response.read()
             return data
         except:
-            Notify("Error", "Could not download data. Internet connection OK?")
+            notify("Error", "Could not download data. Internet connection OK?")
             log("get_string_from_url: could not get data from %s" % url)
             succeed += 1
     return ""
@@ -294,7 +294,7 @@ def read_from_file(path=""):
         try:
             return fc
         except:
-            Notify("Exception in read_from_file()")
+            notify("Exception in read_from_file()")
             return []
     else:
         return False
@@ -344,7 +344,7 @@ class PictureDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
+def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 

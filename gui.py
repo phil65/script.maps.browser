@@ -8,14 +8,14 @@ import xbmcaddon
 import xbmcgui
 import urllib
 import sys
-from Utils import *
+import Utils
 from Eventful import Eventful
 from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
 from SearchSelectDialog import SearchSelectDialog
 from EventInfoDialog import EventInfoDialog
-from math import sin, cos, radians, pow
+import math
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -56,7 +56,7 @@ class GUI(xbmcgui.WindowXML):
     ACTION_EXIT_SCRIPT = [13]
     ACTION_0 = [58, 18]
 
-    @busy_dialog
+    @Utils.busy_dialog
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
         self.items = []
         self.location = kwargs.get("location", "")
@@ -68,20 +68,15 @@ class GUI(xbmcgui.WindowXML):
         self.init_vars()
         for arg in sys.argv:
             param = arg.lower()
-            log("param = " + param)
             if param.startswith('folder='):
                 folder = param[7:]
                 self.items, self.pins = self.get_images(folder)
             elif param.startswith('direction='):
                 self.direction = param[10:]
-            elif param.startswith('prefix='):
-                self.prefix = param[7:]
-                if not self.prefix.endswith('.') and self.prefix != "":
-                    self.prefix = self.prefix + '.'
         if self.location == "geocode":
-            self.lat, self.lon = parse_geotags(self.strlat, self.strlon)
+            self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
-            self.lat, self.lon = get_location_coords()
+            self.lat, self.lon = Utils.get_location_coords()
             self.zoom_level = 2
         elif self.location and self.strlat:  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)
@@ -99,13 +94,12 @@ class GUI(xbmcgui.WindowXML):
             self.window.setProperty('ListLayout', '0')
         self.venues = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
-        fill_list_control(self.venues, self.items)
+        Utils.fill_list_control(self.venues, self.items)
         self.window.setProperty("map_image", self.map_url)
         self.window.setProperty("streetview_image", self.street_view_url)
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
-        log('onInit finished')
 
     def init_vars(self):
         self.nav_mode_active = False
@@ -120,7 +114,6 @@ class GUI(xbmcgui.WindowXML):
         self.pins = ""
         self.direction = 0
         self.saved_id = 100
-        self.prefix = ""
         self.radius = 50
         self.map_url = ""
         self.street_view_url = ""
@@ -172,9 +165,9 @@ class GUI(xbmcgui.WindowXML):
     def navigate(self):
         if not self.nav_mode_active:
             return None
-        log("lat: %s lon: %s" % (self.lat, self.lon))
+        Utils.log("lat: %s lon: %s" % (self.lat, self.lon))
         if not self.street_view:
-            stepsize = 60.0 / pow(2, self.zoom_level)
+            stepsize = 60.0 / math.pow(2, self.zoom_level)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
                 self.lat = self.lat + stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
@@ -185,13 +178,13 @@ class GUI(xbmcgui.WindowXML):
                 self.lon = self.lon + 2.0 * stepsize
         else:
             stepsize = 0.0002
-            radiantdirection = float(radians(self.direction))
+            radiantdirection = math.radians(self.direction)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                self.lat = self.lat + cos(radiantdirection) * stepsize
-                self.lon = self.lon + sin(radiantdirection) * stepsize
+                self.lat = self.lat + math.cos(radiantdirection) * stepsize
+                self.lon = self.lon + math.sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                self.lat = self.lat - cos(radiantdirection) * stepsize
-                self.lon = self.lon - sin(radiantdirection) * stepsize
+                self.lat = self.lat - math.cos(radiantdirection) * stepsize
+                self.lon = self.lon - math.sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
                 if self.direction <= 0:
                     self.direction = 360
@@ -237,9 +230,9 @@ class GUI(xbmcgui.WindowXML):
         eventful_id = item.getProperty("eventful_id")
         picture_path = item.getProperty("filepath")
         if picture_path:
-            dialog = PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
-                                   ADDON_PATH,
-                                   picture_path=picture_path)
+            dialog = Utils.PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
+                                         ADDON_PATH,
+                                         picture_path=picture_path)
         elif foursquare_id:
             dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
                                      ADDON_PATH,
@@ -342,7 +335,7 @@ class GUI(xbmcgui.WindowXML):
                 self.lat = lat
                 self.lon = lon
             else:
-                Notify("Error", "No Search results found.")
+                Utils.notify("Error", "No Search results found.")
 
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
@@ -375,7 +368,7 @@ class GUI(xbmcgui.WindowXML):
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
             self.window.setProperty('imagepath', folder_path)
-            items, self.pins = get_images(folder_path)
+            items, self.pins = Utils.get_images(folder_path)
         elif keys[index] == "eventful":
             EF = Eventful()
             category = EF.select_category()
@@ -385,7 +378,7 @@ class GUI(xbmcgui.WindowXML):
             self.pins = ""
             items = []
         if items is not None:
-            fill_list_control(self.venues, items)
+            Utils.fill_list_control(self.venues, items)
         self.street_view = False
 
     @ch.click(C_SEARCH)
@@ -408,7 +401,7 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "reset":
             self.pins = ""
             items = []
-        fill_list_control(self.venues, items)
+        Utils.fill_list_control(self.venues, items)
         self.street_view = False
 
     def get_map_urls(self):
@@ -436,41 +429,37 @@ class GUI(xbmcgui.WindowXML):
                   "size": "640x400",
                   "key": GOOGLE_STREETVIEW_KEY}
         self.street_view_url = "http://maps.googleapis.com/maps/api/streetview?&" + urllib.urlencode(params)
-        self.window.setProperty(self.prefix + 'location', self.location)
-        self.window.setProperty(self.prefix + 'lat', str(self.lat))
-        self.window.setProperty(self.prefix + 'lon', str(self.lon))
-        self.window.setProperty(self.prefix + 'zoomlevel', str(self.zoom_level))
-        self.window.setProperty(self.prefix + 'direction', str(self.direction / 18))
-        self.window.setProperty(self.prefix + 'type', self.type)
-        self.window.setProperty(self.prefix + 'aspect', self.aspect)
-        self.window.setProperty(self.prefix + 'map_image', self.map_url)
-        self.window.setProperty(self.prefix + 'streetview_image', self.street_view_url)
+        self.window.setProperty('location', self.location)
+        self.window.setProperty('lat', str(self.lat))
+        self.window.setProperty('lon', str(self.lon))
+        self.window.setProperty('zoomlevel', str(self.zoom_level))
+        self.window.setProperty('direction', str(self.direction / 18))
+        self.window.setProperty('type', self.type)
+        self.window.setProperty('aspect', self.aspect)
+        self.window.setProperty('map_image', self.map_url)
+        self.window.setProperty('streetview_image', self.street_view_url)
         hor_px = int(size.split("x")[0])
         ver_px = int(size.split("x")[1])
-        mx, my = latlon_to_meters(self.lat, self.lon)
-        px, py = meters_to_pixels(mx, my, self.zoom_level)
-        mx2, my2 = pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
+        mx, my = Utils.latlon_to_meters(self.lat, self.lon)
+        px, py = Utils.meters_to_pixels(mx, my, self.zoom_level)
+        mx2, my2 = Utils.pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
         self.radiusx = abs((mx - mx2) / 2000)
         self.radius = abs((my - my2) / 2000)
         self.radius = min(self.radius, 500)
-        cache_path = xbmc.getCacheThumbName(self.map_url)
-        log(cache_path)
-        if self.prefix == "":
-            if self.street_view:
-                self.window.setProperty(self.prefix + 'streetview', "True")
-            else:
-                self.window.setProperty(self.prefix + 'streetview', "")
-            if self.nav_mode_active:
-                self.window.setProperty(self.prefix + 'NavMode', "True")
-            else:
-                self.window.setProperty(self.prefix + 'NavMode', "")
+        if self.street_view:
+            self.window.setProperty('streetview', "True")
+        else:
+            self.window.setProperty('streetview', "")
+        if self.nav_mode_active:
+            self.window.setProperty('NavMode', "True")
+        else:
+            self.window.setProperty('NavMode', "")
 
     def get_geocodes(self, show_dialog, search_string):
         search_string = urllib.quote_plus(search_string)
         base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
         url = "&address=%s" % (search_string)
-        log("Google Geocodes Search:" + url)
-        results = get_JSON_response(base_url + url)
+        results = Utils.get_JSON_response(base_url + url)
         places = []
         for item in results["results"]:
             locationinfo = item["geometry"]["location"]
@@ -489,7 +478,7 @@ class GUI(xbmcgui.WindowXML):
             if len(results["results"]) > 1:  # open dialog when more than one hit
                 w = SearchSelectDialog('DialogSelect.xml',
                                        ADDON_PATH,
-                                       listing=create_listitems(places))
+                                       listing=Utils.create_listitems(places))
                 w.doModal()
                 if w.lat:
                     self.zoom_level = 12

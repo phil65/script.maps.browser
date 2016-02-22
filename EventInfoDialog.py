@@ -5,7 +5,6 @@
 
 import xbmcgui
 from Eventful import Eventful
-from Utils import *
 
 
 class EventInfoDialog(xbmcgui.WindowXMLDialog):
@@ -24,7 +23,6 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
             EF = Eventful()
             self.props = EF.get_venue_info(self.eventful_id)
             self.events = self.props["events"]["event"]
-            prettyprint(self.events)
         elif self.foursquare_id:
             pass
         self.pins = ""

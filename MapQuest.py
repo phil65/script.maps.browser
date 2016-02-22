@@ -39,10 +39,10 @@ class MapQuest():
         pins = ""
         letter = ord('A')
         if results['info']['statuscode'] == 400:
-            Notify("Error", " - ".join(results['info']['messages']))
+            notify("Error", " - ".join(results['info']['messages']))
             return [], ""
         elif "incidents" not in results:
-            Notify("Error", "Could not fetch results")
+            notify("Error", "Could not fetch results")
             return [], ""
         for i, place in enumerate(results['incidents']):
             lat = str(place['lat'])

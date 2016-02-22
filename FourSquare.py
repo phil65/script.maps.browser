@@ -7,7 +7,8 @@
 
 import xbmcgui
 import xbmcaddon
-from Utils import *
+import urllib
+import Utils
 
 ADDON = xbmcaddon.Addon()
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -89,11 +90,11 @@ class FourSquare():
             if results['meta']['code'] == 200:
                 return self.handle_places(results['response']['venues'])
             elif results['meta']['code'] == 400:
-                Notify("Error", "LIMIT EXCEEDED")
+                Utils.notify("Error", "LIMIT EXCEEDED")
             else:
-                Notify("ERROR", "Could not get requested information")
+                Utils.notify("ERROR", "Could not get requested information")
         else:
-            log("ERROR")
+            Utils.log("ERROR")
         return [], ""
 
     def get_places_by_section(self, lat, lon, placetype):
@@ -109,18 +110,18 @@ class FourSquare():
             if results['response']['groups'][0]['items']:
                 return self.handle_places(results['response']['groups'][0]['items'])
             else:
-                Notify("Error", "No results found near the selected area.")
+                Utils.notify("Error", "No results found near the selected area.")
         elif results['meta']['code'] == 400:
-            log("LIMIT EXCEEDED")
+            Utils.log("LIMIT EXCEEDED")
         else:
-            log("ERROR" + str(results['meta']['code']))
+            Utils.log("ERROR" + str(results['meta']['code']))
         return [], ""
 
     def select_category(self):
         results = self.get_data(method="venues/categories",
                                 cache_days=7)
         modeselect = ["All Categories"]
-        modeselect += [cleanText(item["name"]) for item in results["categories"]]
+        modeselect += [Utils.cleanText(item["name"]) for item in results["categories"]]
         index = xbmcgui.Dialog().select("Choose Category", modeselect)
         if index > 0:
             return results["categories"][index - 1]["id"]
@@ -157,5 +158,5 @@ class FourSquare():
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
-        return get_JSON_response(url=url,
-                                 cache_days=cache_days)
+        return Utils.get_JSON_response(url=url,
+                                       cache_days=cache_days)
