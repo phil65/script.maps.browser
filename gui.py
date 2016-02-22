@@ -63,7 +63,7 @@ class GUI(xbmcgui.WindowXML):
         self.type = kwargs.get("type", "roadmap")
         self.strlat = kwargs.get("lat", "")
         self.strlon = kwargs.get("lon", "")
-        self.zoom_level = kwargs.get("zoom_level", 10)
+        self.zoom = kwargs.get("zoom", 10)
         self.aspect = kwargs.get("aspect", "640x400")
         self.init_vars()
         for arg in sys.argv:
@@ -77,7 +77,7 @@ class GUI(xbmcgui.WindowXML):
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
             self.lat, self.lon = Utils.get_location_coords()
-            self.zoom_level = 2
+            self.zoom = 2
         elif self.location and self.strlat:  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)
         else:
@@ -105,8 +105,8 @@ class GUI(xbmcgui.WindowXML):
         self.nav_mode_active = False
         self.street_view = False
         self.center = ""
-        self.zoom_level_saved = 10
-        self.zoom_level_streetview = 0
+        self.zoom_saved = 10
+        self.zoom_streetview = 0
         self.lat = 0.0
         self.lon = 0.0
         self.pitch = 0
@@ -167,7 +167,7 @@ class GUI(xbmcgui.WindowXML):
             return None
         Utils.log("lat: %s lon: %s" % (self.lat, self.lon))
         if not self.street_view:
-            stepsize = 60.0 / math.pow(2, self.zoom_level)
+            stepsize = 60.0 / math.pow(2, self.zoom)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
                 self.lat = self.lat + stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
@@ -221,7 +221,7 @@ class GUI(xbmcgui.WindowXML):
         item = self.venues.getSelectedItem()
         self.lat = float(item.getProperty("lat"))
         self.lon = float(item.getProperty("lon"))
-        self.zoom_level = 12
+        self.zoom = 12
         itemindex = item.getProperty("index")
         if itemindex != self.window.getProperty('index'):
             self.window.setProperty('index', itemindex)
@@ -247,21 +247,21 @@ class GUI(xbmcgui.WindowXML):
     def zoom_in(self):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
-            if self.zoom_level_streetview <= 20:
-                self.zoom_level_streetview += 1
+            if self.zoom_streetview <= 20:
+                self.zoom_streetview += 1
         else:
-            if self.zoom_level <= 20:
-                self.zoom_level += 1
+            if self.zoom <= 20:
+                self.zoom += 1
 
     @ch.click(C_ZOOM_OUT)
     def zoom_out(self):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
-            if self.zoom_level_streetview >= 1:
-                self.zoom_level_streetview -= 1
+            if self.zoom_streetview >= 1:
+                self.zoom_streetview -= 1
         else:
-            if self.zoom_level >= 1:
-                self.zoom_level -= 1
+            if self.zoom >= 1:
+                self.zoom -= 1
 
     @ch.click(C_LOOK_UP)
     def pitch_up(self):
@@ -317,12 +317,12 @@ class GUI(xbmcgui.WindowXML):
     def toggle_street_mode(self):
         if self.street_view:
             self.street_view = False
-            self.zoom_level = self.zoom_level_saved
+            self.zoom = self.zoom_saved
             self.window.setProperty('streetview', '')
         else:
             self.street_view = True
-            self.zoom_level_saved = self.zoom_level
-            self.zoom_level = 15
+            self.zoom_saved = self.zoom
+            self.zoom = 15
             self.window.setProperty('streetview', 'True')
 
     def search_location(self):
@@ -364,7 +364,7 @@ class GUI(xbmcgui.WindowXML):
                 items, self.pins = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
             MQ = MapQuest()
-            items, self.pins = MQ.get_incidents(self.lat, self.lon, self.zoom_level)
+            items, self.pins = MQ.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
             self.window.setProperty('imagepath', folder_path)
@@ -413,7 +413,7 @@ class GUI(xbmcgui.WindowXML):
                   "language": xbmc.getLanguage(xbmc.ISO_639_1),
                   "maptype": self.type,
                   "center": self.center,
-                  "zoom": self.zoom_level,
+                  "zoom": self.zoom,
                   "markers": self.center,
                   "size": size,
                   "key": GOOGLE_MAPS_KEY}
@@ -422,7 +422,7 @@ class GUI(xbmcgui.WindowXML):
         params = {"sensor": "false",
                   "format": ADDON.getSetting("ImageFormat"),
                   "language": xbmc.getLanguage(xbmc.ISO_639_1),
-                  "fov": 120 - int(self.zoom_level_streetview) * 6,
+                  "fov": 120 - int(self.zoom_streetview) * 6,
                   "location": self.center,
                   "heading": self.direction,
                   "pitch": self.pitch,
@@ -432,20 +432,12 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty('location', self.location)
         self.window.setProperty('lat', str(self.lat))
         self.window.setProperty('lon', str(self.lon))
-        self.window.setProperty('zoomlevel', str(self.zoom_level))
+        self.window.setProperty('zoomlevel', str(self.zoom))
         self.window.setProperty('direction', str(self.direction / 18))
         self.window.setProperty('type', self.type)
         self.window.setProperty('aspect', self.aspect)
         self.window.setProperty('map_image', self.map_url)
         self.window.setProperty('streetview_image', self.street_view_url)
-        hor_px = int(size.split("x")[0])
-        ver_px = int(size.split("x")[1])
-        mx, my = Utils.latlon_to_meters(self.lat, self.lon)
-        px, py = Utils.meters_to_pixels(mx, my, self.zoom_level)
-        mx2, my2 = Utils.pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom_level)
-        self.radiusx = abs((mx - mx2) / 2000)
-        self.radius = abs((my - my2) / 2000)
-        self.radius = min(self.radius, 500)
         if self.street_view:
             self.window.setProperty('streetview', "True")
         else:
@@ -454,6 +446,13 @@ class GUI(xbmcgui.WindowXML):
             self.window.setProperty('NavMode', "True")
         else:
             self.window.setProperty('NavMode', "")
+        if self.lat:
+            hor_px = int(size.split("x")[0])
+            ver_px = int(size.split("x")[1])
+            mx, my = Utils.latlon_to_meters(self.lat, self.lon)
+            px, py = Utils.meters_to_pixels(mx, my, self.zoom)
+            mx2, my2 = Utils.pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom)
+            self.radius = min(abs((my - my2) / 2000), 500)
 
     def get_geocodes(self, show_dialog, search_string):
         search_string = urllib.quote_plus(search_string)
@@ -481,15 +480,15 @@ class GUI(xbmcgui.WindowXML):
                                        listing=Utils.create_listitems(places))
                 w.doModal()
                 if w.lat:
-                    self.zoom_level = 12
+                    self.zoom = 12
                     return (float(w.lat), float(w.lon))
                 else:
                     return (self.lat, self.lon)
             elif len(results["results"]) == 1:
-                self.zoom_level = 12
+                self.zoom = 12
                 return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
             else:
                 return (self.lat, self.lon)  # old values when no hit
         else:
-            self.zoom_level = 12
+            self.zoom = 12
             return (first_hit["lat"], first_hit["lng"])
