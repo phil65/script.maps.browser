@@ -13,11 +13,11 @@
 	<extension point="xbmc.addon.metadata">
 		<language/>
 		<summary lang="en">Google Maps Browser (including Street View)</summary>
-		<description lang="en">This Maps Browser Add-on allows you to explore the map with a remote. It can also show Places (Source: FourSquare), Concerts (Source: Last.FM), geotagged images and much more on the map. Also offers skin integration.</description>
+		<description lang="en">This Maps Browser Add-on allows you to explore the map with a remote. It can also show POIs, geotagged images and much more on the map.</description>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
 		<forum>-</forum>
-		<source>-</source>
-		<email>-</email>
+		<source>https://github.com/phil65/script.maps.browser</source>
+		<email>phil65@kodi.tv</email>
 	</extension>
 </addon>
