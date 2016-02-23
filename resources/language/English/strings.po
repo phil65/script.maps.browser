@@ -599,12 +599,22 @@ msgctxt "#32119"
 msgid "zoo"
 msgstr ""
 
-#: /resources/lib/GooglePlaces.py:114
+#: /resources/lib/GooglePlaces.py:114 /resources/lib/FourSquare.py:136
 msgctxt "#32120"
 msgid "All Sections"
 msgstr ""
 
-#: /resources/lib/GooglePlaces.py:116
+#: /resources/lib/GooglePlaces.py:116 /resources/lib/FourSquare.py:138
 msgctxt "#32121"
 msgid "Choose Section"
+msgstr ""
+
+#: /resources/lib/Eventful.py:23 /resources/lib/FourSquare.py:116
+msgctxt "#32122"
+msgid "All Categories"
+msgstr ""
+
+#: /resources/lib/Eventful.py:26 /resources/lib/FourSquare.py:118
+msgctxt "#32123"
+msgid "Choose Category"
 msgstr ""

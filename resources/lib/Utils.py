@@ -33,6 +33,13 @@ ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0  # 20037508.342789244
 HOME = xbmcgui.Window(10000)
 
 
+def LANG(label_id):
+    if 31000 <= label_id <= 33000:
+        return ADDON.getLocalizedString(label_id)
+    else:
+        return xbmc.getLocalizedString(label_id)
+
+
 def run_async(func):
     """
     Decorator to put a function into a separate thread

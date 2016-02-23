@@ -20,10 +20,10 @@ class Eventful():
     def select_category(self):
         results = self.get_data(method="categories/list",
                                 cache_days=7)
-        modeselect = ["All Categories"]
+        modeselect = [Utils.LANG(32122)]
         for item in results["category"]:
             modeselect.append(Utils.cleanText(item["name"]))
-        index = xbmcgui.Dialog().select("Choose Category", modeselect)
+        index = xbmcgui.Dialog().select(Utils.LANG(32123), modeselect)
         if index == -1:
             return None
         if index > 0:

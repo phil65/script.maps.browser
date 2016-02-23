@@ -113,29 +113,29 @@ class FourSquare():
     def select_category(self):
         results = self.get_data(method="venues/categories",
                                 cache_days=7)
-        modeselect = ["All Categories"]
+        modeselect = [Utils.LANG(32122)]
         modeselect += [Utils.cleanText(item["name"]) for item in results["categories"]]
-        index = xbmcgui.Dialog().select("Choose Category", modeselect)
+        index = xbmcgui.Dialog().select(Utils.LANG(32123), modeselect)
         if index > 0:
             return results["categories"][index - 1]["id"]
         elif index > -1:
             return ""
 
     def select_section(self):
-        sections = {"topPicks": ADDON.getLocalizedString(32005),
-                    "food": ADDON.getLocalizedString(32006),
-                    "drinks": ADDON.getLocalizedString(32007),
-                    "coffee": ADDON.getLocalizedString(32008),
-                    "shops": ADDON.getLocalizedString(32009),
-                    "arts": ADDON.getLocalizedString(32010),
-                    "outdoors": ADDON.getLocalizedString(32011),
-                    "sights": ADDON.getLocalizedString(32012),
-                    "trending": ADDON.getLocalizedString(32013),
-                    "specials": ADDON.getLocalizedString(32014),
-                    "nextVenues": ADDON.getLocalizedString(32015)}
-        modeselect = ["All Sections"]
+        sections = {"topPicks": Utils.LANG(32005),
+                    "food": Utils.LANG(32006),
+                    "drinks": Utils.LANG(32007),
+                    "coffee": Utils.LANG(32008),
+                    "shops": Utils.LANG(32009),
+                    "arts": Utils.LANG(32010),
+                    "outdoors": Utils.LANG(32011),
+                    "sights": Utils.LANG(32012),
+                    "trending": Utils.LANG(32013),
+                    "specials": Utils.LANG(32014),
+                    "nextVenues": Utils.LANG(32015)}
+        modeselect = [Utils.LANG(32120)]
         modeselect += [value for value in sections.itervalues()]
-        index = xbmcgui.Dialog().select("Choose Section", modeselect)
+        index = xbmcgui.Dialog().select(Utils.LANG(32121), modeselect)
         if index > 0:
             return sections.keys()[index - 1]
         elif index > -1:
