@@ -3,11 +3,12 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmc
 import xbmcaddon
 import xbmcgui
 import urllib
 import sys
+
+import googlemaps
 import Utils
 from Eventful import Eventful
 from MapQuest import MapQuest
@@ -44,11 +45,6 @@ C_LOOK_DOWN = 125
 C_PLACES_LIST = 200
 C_MODE_TOGGLE = 126
 
-GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-GOOGLE_STREETVIEW_KEY = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
-
-BASE_URL = "http://maps.googleapis.com/maps/api/"
-
 
 class GUI(xbmcgui.WindowXML):
 
@@ -73,7 +69,7 @@ class GUI(xbmcgui.WindowXML):
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
             self.lat, self.lon = Utils.get_location_coords()
-            self.zoom = 2
+            self.zoom = 3
         elif self.location and self.strlat:  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)
         else:
@@ -92,7 +88,7 @@ class GUI(xbmcgui.WindowXML):
         self.get_map_urls()
         Utils.fill_list_control(self.venues, self.items)
         self.window.setProperty("map_image", self.map_url)
-        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("streetview_image", self.streetview_url)
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
@@ -112,13 +108,13 @@ class GUI(xbmcgui.WindowXML):
         self.saved_id = 100
         self.radius = 50
         self.map_url = ""
-        self.street_view_url = ""
+        self.streetview_url = ""
 
     def onAction(self, action):
         # super(GUI, self).onAction(action)
         ch.serve_action(action, self.getFocusId(), self)
         self.get_map_urls()
-        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("streetview_image", self.streetview_url)
         self.window.setProperty("map_image", self.map_url)
 
     @ch.action("previousmenu", "*")
@@ -140,7 +136,7 @@ class GUI(xbmcgui.WindowXML):
         super(GUI, self).onClick(control_id)
         ch.serve(control_id, self)
         self.get_map_urls()
-        self.window.setProperty("streetview_image", self.street_view_url)
+        self.window.setProperty("streetview_image", self.streetview_url)
         self.window.setProperty("map_image", self.map_url)
 
     @ch.action("info", "*")
@@ -401,29 +397,21 @@ class GUI(xbmcgui.WindowXML):
         self.street_view = False
 
     def get_map_urls(self):
-        size = "320x200" if self.street_view else "640x400"
         self.center = "%s,%s" % (self.lat, self.lon) if self.lat else self.location.replace('"', '')
-        params = {"sensor": "false",
-                  "scale": 2,
-                  "format": ADDON.getSetting("ImageFormat"),
-                  "language": xbmc.getLanguage(xbmc.ISO_639_1),
-                  "maptype": self.type,
-                  "center": self.center,
-                  "zoom": self.zoom,
-                  "markers": self.center,
-                  "size": size,
-                  "key": GOOGLE_MAPS_KEY}
-        self.map_url = BASE_URL + "staticmap?&" + urllib.urlencode(params) + self.pins
-        params = {"sensor": "false",
-                  "format": ADDON.getSetting("ImageFormat"),
-                  "language": xbmc.getLanguage(xbmc.ISO_639_1),
-                  "fov": 120 - int(self.zoom_streetview) * 6,
-                  "location": self.center,
-                  "heading": self.direction,
-                  "pitch": self.pitch,
-                  "size": "640x400",
-                  "key": GOOGLE_STREETVIEW_KEY}
-        self.street_view_url = BASE_URL + "streetview?&" + urllib.urlencode(params)
+        size = "320x200" if self.street_view else "640x400"
+        googlemap = googlemaps.get_static_map(lat=self.lat,
+                                              lon=self.lon,
+                                              location=self.location.replace('"', ''),
+                                              maptype=self.type,
+                                              zoom=self.zoom,
+                                              size=size)
+        self.map_url = googlemap + self.pins
+        self.streetview_url = googlemaps.get_streetview_image(lat=self.lat,
+                                                              lon=self.lon,
+                                                              location=self.location.replace('"', ''),
+                                                              fov=120 - int(self.zoom_streetview) * 6,
+                                                              pitch=self.pitch,
+                                                              heading=self.direction)
         self.window.setProperty('location', self.location)
         self.window.setProperty('lat', str(self.lat))
         self.window.setProperty('lon', str(self.lon))
@@ -432,7 +420,7 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty('type', self.type)
         self.window.setProperty('aspect', self.aspect)
         self.window.setProperty('map_image', self.map_url)
-        self.window.setProperty('streetview_image', self.street_view_url)
+        self.window.setProperty('streetview_image', self.streetview_url)
         if self.street_view:
             self.window.setProperty('streetview', "True")
         else:
@@ -459,23 +447,17 @@ class GUI(xbmcgui.WindowXML):
             locationinfo = item["geometry"]["location"]
             lat = str(locationinfo["lat"])
             lon = str(locationinfo["lng"])
-            search_string = lat + "," + lon
-            params = {"sensor": "false",
-                      "scale": 1,
-                      "maptype": "roadmap",
-                      "center": search_string,
-                      "zoom": 13,
-                      "markers": search_string,
-                      "size": "320x320",
-                      "key": GOOGLE_MAPS_KEY}
-            googlemap = BASE_URL + 'staticmap?&' + urllib.urlencode(params)
+            googlemap = googlemaps.get_static_map(lat=lat,
+                                                  lon=lon,
+                                                  scale=1,
+                                                  size="320x320")
             props = {'label': item['formatted_address'],
                      'lat': lat,
                      'lon': lon,
                      'thumb': googlemap,
                      'id': item['formatted_address']}
             places.append(props)
-        first_hit = results["results"][0]["geometry"]["location"]
+        first_match = results["results"][0]["geometry"]["location"]
         if show_dialog:
             if len(results["results"]) > 1:  # open dialog when more than one hit
                 w = SearchSelectDialog('DialogSelect.xml',
@@ -489,9 +471,9 @@ class GUI(xbmcgui.WindowXML):
                     return (self.lat, self.lon)
             elif len(results["results"]) == 1:
                 self.zoom = 12
-                return (first_hit["lat"], first_hit["lng"])  # no window when only 1 result
+                return (first_match["lat"], first_match["lng"])  # no window when only 1 result
             else:
                 return (self.lat, self.lon)  # old values when no hit
         else:
             self.zoom = 12
-            return (first_hit["lat"], first_hit["lng"])
+            return (first_match["lat"], first_match["lng"])
