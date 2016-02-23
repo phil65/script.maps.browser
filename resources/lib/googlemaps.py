@@ -23,9 +23,9 @@ def get_static_map(lat=None, lon=None, location="", scale=2, zoom=13, maptype="r
               "maptype": maptype,
               "format": ADDON.getSetting("ImageFormat"),
               "language": xbmc.getLanguage(xbmc.ISO_639_1),
-              "center": location,
+              "center": location.replace('"', ''),
               "zoom": zoom,
-              "markers": location,
+              "markers": location.replace('"', ''),
               "size": size,
               "key": GOOGLEMAPS_KEY}
     return BASE_URL + 'staticmap?' + urllib.urlencode(params)
@@ -36,7 +36,7 @@ def get_streetview_image(lat=None, lon=None, fov=0, location="", heading=0, pitc
               "format": ADDON.getSetting("ImageFormat"),
               "language": xbmc.getLanguage(xbmc.ISO_639_1),
               "fov": fov,
-              "location": "%s,%s" % (lat, lon) if lat and lon else location,
+              "location": "%s,%s" % (lat, lon) if lat and lon else location.replace('"', ''),
               "heading": heading,
               "pitch": pitch,
               "size": size,

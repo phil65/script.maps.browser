@@ -80,10 +80,7 @@ class GUI(xbmcgui.WindowXML):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
         self.window.clearProperty('NavMode')
         self.window.clearProperty('streetview')
-        if ADDON.getSetting("VenueLayout") == "1":
-            self.window.setProperty('ListLayout', '1')
-        else:
-            self.window.setProperty('ListLayout', '0')
+        self.window.setProperty('ListLayout', '1' if ADDON.getSetting("VenueLayout") == "1" else '0')
         self.venues = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
         Utils.fill_list_control(self.venues, self.items)
@@ -96,13 +93,11 @@ class GUI(xbmcgui.WindowXML):
     def init_vars(self):
         self.nav_mode_active = False
         self.street_view = False
-        self.center = ""
         self.zoom_saved = 10
         self.zoom_streetview = 0
         self.lat = 0.0
         self.lon = 0.0
         self.pitch = 0
-        self.venue_id = None
         self.pins = ""
         self.direction = 0
         self.saved_id = 100
@@ -320,7 +315,7 @@ class GUI(xbmcgui.WindowXML):
     def search_location(self):
         self.location = xbmcgui.Dialog().input(Utils.LANG(32032),
                                                type=xbmcgui.INPUT_ALPHANUM)
-        if not self.location == "":
+        if self.location:
             self.street_view = False
             lat, lon = self.get_geocodes(True, self.location)
             if lat:
@@ -397,19 +392,18 @@ class GUI(xbmcgui.WindowXML):
         self.street_view = False
 
     def get_map_urls(self):
-        self.center = "%s,%s" % (self.lat, self.lon) if self.lat else self.location.replace('"', '')
         size = "320x200" if self.street_view else "640x400"
         googlemap = googlemaps.get_static_map(lat=self.lat,
                                               lon=self.lon,
-                                              location=self.location.replace('"', ''),
+                                              location=self.location,
                                               maptype=self.type,
                                               zoom=self.zoom,
                                               size=size)
         self.map_url = googlemap + self.pins
         self.streetview_url = googlemaps.get_streetview_image(lat=self.lat,
                                                               lon=self.lon,
-                                                              location=self.location.replace('"', ''),
-                                                              fov=120 - int(self.zoom_streetview) * 6,
+                                                              location=self.location,
+                                                              fov=120 - self.zoom_streetview * 6,
                                                               pitch=self.pitch,
                                                               heading=self.direction)
         self.window.setProperty('location', self.location)
