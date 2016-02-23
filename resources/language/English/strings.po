@@ -618,3 +618,38 @@ msgstr ""
 msgctxt "#32123"
 msgid "Choose Category"
 msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:305
+msgctxt "#32124"
+msgid "Places"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:347
+msgctxt "#32125"
+msgid "Street view"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:377
+msgctxt "#32126"
+msgid "Zoom +"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:398
+msgctxt "#32127"
+msgid "Zoom -"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:429
+msgctxt "#32128"
+msgid "Map type"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:451
+msgctxt "#32129"
+msgid "Look up"
+msgstr ""
+
+#: /resources/skins/Default/1080i/script-Maps Browser-main.xml:473
+msgctxt "#32130"
+msgid "Look down"
+msgstr ""

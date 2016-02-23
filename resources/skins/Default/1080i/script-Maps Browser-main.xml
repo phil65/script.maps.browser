@@ -278,13 +278,13 @@
             </control>
             <control id="650" type="grouplist">
                 <orientation>horizontal</orientation>
-                <posx>50</posx>
+                <posx>0</posx>
                 <itemgap>-20</itemgap>
                 <onup>200</onup>
                 <onleft>652</onleft>
                 <onright>103</onright>
                 <control type="radiobutton" id="112">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -292,7 +292,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -302,10 +302,10 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/Flag.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/Flag.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/Flag.png</textureradioondisabled>
-                    <label>Places</label>
+                    <label>$ADDON[script.maps.browser 32124]</label>
                 </control>
                 <control type="radiobutton" id="101">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -313,7 +313,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -323,10 +323,10 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/Search.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/Search.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/Search.png</textureradioondisabled>
-                    <label>Search</label>
+                    <label>$LOCALIZE[137]</label>
                 </control>
                 <control type="radiobutton" id="102">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -334,7 +334,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -344,7 +344,7 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/streetview.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/streetview.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/map.png</textureradioondisabled>
-                    <label>Street view</label>
+                    <label>$ADDON[script.maps.browser 32125]</label>
                     <selected>!IsEmpty(Window.Property(streetview))</selected>
                 </control>
             </control>
@@ -356,7 +356,7 @@
                 <onup>200</onup>
                 <onright>652</onright>
                 <control type="radiobutton" id="103">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -364,7 +364,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -374,10 +374,10 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/zoomin.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/zoomin.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/zoomin.png</textureradioondisabled>
-                    <label>Zoom +</label>
+                    <label>$ADDON[script.maps.browser 32126]</label>
                 </control>
                 <control type="radiobutton" id="104">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -385,7 +385,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -395,11 +395,11 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/zoomout.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/zoomout.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/zoomout.png</textureradioondisabled>
-                    <label>Zoom -</label>
+                    <label>$ADDON[script.maps.browser 32127]</label>
                 </control>
             </control>
             <control id="652" type="grouplist">
-                <posx>1370</posx>
+                <posx>1420</posx>
                 <width>500</width>
                 <orientation>horizontal</orientation>
                 <align>right</align>
@@ -408,7 +408,7 @@
                 <onright>112</onright>
                 <itemgap>-20</itemgap>
                 <control type="radiobutton" id="126">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -416,7 +416,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -426,11 +426,11 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/hybrid.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/hybrid.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/hybrid.png</textureradioondisabled>
-                    <label>Map type</label>
+                    <label>$ADDON[script.maps.browser 32128]</label>
                     <visible>IsEmpty(Window.Property(streetview))</visible>
                 </control>
                 <control type="radiobutton" id="124">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -438,7 +438,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -448,11 +448,11 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/arrowup.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/arrowup.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/arrowup.png</textureradioondisabled>
-                    <label>Look up</label>
+                    <label>$ADDON[script.maps.browser 32129]</label>
                     <visible>!IsEmpty(Window.Property(streetview))</visible>
                 </control>
                 <control type="radiobutton" id="125">
-                    <width>262</width>
+                    <width>240</width>
                     <height>142</height>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -460,7 +460,7 @@
                     <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
                     <textoffsetx>35</textoffsetx>
                     <textoffsety>78</textoffsety>
-                    <radioposx>108</radioposx>
+                    <radioposx>96</radioposx>
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
@@ -470,7 +470,7 @@
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/arrowdown.png</textureradiooffnofocus>
                     <textureradiooffdisabled colordiffuse="disabled">googlemaps/arrowdown.png</textureradiooffdisabled>
                     <textureradioondisabled colordiffuse="disabled">googlemaps/arrowdown.png</textureradioondisabled>
-                    <label>Look down</label>
+                    <label>$ADDON[script.maps.browser 32130]</label>
                     <visible>!IsEmpty(Window.Property(streetview))</visible>
                 </control>
             </control>
