@@ -48,6 +48,8 @@ C_MODE_TOGGLE = 126
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 GOOGLE_STREETVIEW_KEY = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 
+BASE_URL = "http://maps.googleapis.com/maps/api/"
+
 
 class GUI(xbmcgui.WindowXML):
 
@@ -417,8 +419,7 @@ class GUI(xbmcgui.WindowXML):
                   "markers": self.center,
                   "size": size,
                   "key": GOOGLE_MAPS_KEY}
-        base_url = "http://maps.googleapis.com/maps/api/staticmap?&" + urllib.urlencode(params)
-        self.map_url = base_url + self.pins
+        self.map_url = BASE_URL + "staticmap?&" + urllib.urlencode(params) + self.pins
         params = {"sensor": "false",
                   "format": ADDON.getSetting("ImageFormat"),
                   "language": xbmc.getLanguage(xbmc.ISO_639_1),
@@ -428,7 +429,7 @@ class GUI(xbmcgui.WindowXML):
                   "pitch": self.pitch,
                   "size": "640x400",
                   "key": GOOGLE_STREETVIEW_KEY}
-        self.street_view_url = "http://maps.googleapis.com/maps/api/streetview?&" + urllib.urlencode(params)
+        self.street_view_url = BASE_URL + "streetview?&" + urllib.urlencode(params)
         self.window.setProperty('location', self.location)
         self.window.setProperty('lat', str(self.lat))
         self.window.setProperty('lon', str(self.lon))
@@ -465,7 +466,15 @@ class GUI(xbmcgui.WindowXML):
             lat = str(locationinfo["lat"])
             lon = str(locationinfo["lng"])
             search_string = lat + "," + lon
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=1&maptype=roadmap&center=%s&zoom=13&markers=%s&size=320x320&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+            params = {"sensor": "false",
+                      "scale": 1,
+                      "maptype": "roadmap",
+                      "center": search_string,
+                      "zoom": 13,
+                      "markers": search_string,
+                      "size": "320x320",
+                      "key": GOOGLE_MAPS_KEY}
+            googlemap = BASE_URL + 'staticmap?&' + urllib.urlencode(params)
             props = {'label': item['formatted_address'],
                      'lat': lat,
                      'lon': lon,
