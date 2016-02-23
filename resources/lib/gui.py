@@ -80,7 +80,6 @@ class GUI(xbmcgui.WindowXML):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
         self.clearProperty('NavMode')
         self.clearProperty('streetview')
-        self.window.setProperty('ListLayout', '1' if ADDON.getSetting("VenueLayout") == "1" else '0')
         self.venues = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
         Utils.fill_list_control(self.venues, self.items)

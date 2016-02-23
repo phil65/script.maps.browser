@@ -110,136 +110,7 @@
                 <ondown>651</ondown>
                 <onleft>200</onleft>
                 <onright>200</onright>
-                <itemlayout condition="Stringcompare(Window.Property(ListLayout),0)" height="150" width="600">
-                    <control type="group">
-                        <posy>80</posy>
-                        <control type="image">
-                            <posx>-4</posx>
-                            <width>600</width>
-                            <height>177</height>
-                            <texture>dialogs/dialog_back.png</texture>
-                        </control>
-                        <control type="image">
-                            <posy>15</posy>
-                            <posx>15</posx>
-                            <width>145</width>
-                            <height>145</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
-                        </control>
-                        <control type="group">
-                            <posx>170</posx>
-                            <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                            <control type="label">
-                                <posy>15</posy>
-                                <width>345</width>
-                                <height>35</height>
-                                <font>Font_Reg26</font>
-                                <textcolor>white</textcolor>
-                                <label>[COLOR=grey]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
-                            </control>
-                            <control type="label">
-                                <posy>125</posy>
-                                <width>345</width>
-                                <height>35</height>
-                                <font>Font_Reg22_Caps</font>
-                                <textcolor>grey</textcolor>
-                                <label>$INFO[ListItem.Label2]</label>
-                            </control>
-                            <control type="textbox">
-                                <posy>45</posy>
-                                <width>305</width>
-                                <height>81</height>
-                                <font>Font_Reg26</font>
-                                <align>left</align>
-                                <textcolor>grey</textcolor>
-                                <posx>0</posx>
-                                <label>$INFO[ListItem.Property(eventname)]</label>
-                            </control>
-                        </control>
-                        <control type="textbox">
-                            <posx>170</posx>
-                            <posy>50</posy>
-                            <width>345</width>
-                            <height>110</height>
-                            <align>left</align>
-                            <font>Font_Reg31_Caps</font>
-                            <textcolor>white</textcolor>
-                            <label>$ADDON[script.maps.browser 32034]</label>
-                            <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                        </control>
-                    </control>
-                </itemlayout>
-                <focusedlayout condition="Stringcompare(Window.Property(ListLayout),0)" height="150" width="600">
-                    <control type="group">
-                        <posy>80</posy>
-                        <control type="image">
-                            <posx>-4</posx>
-                            <width>600</width>
-                            <height>177</height>
-                            <texture>dialogs/dialog_back.png</texture>
-                        </control>
-                        <control type="image">
-                            <posy>15</posy>
-                            <posx>15</posx>
-                            <width>145</width>
-                            <height>145</height>
-                            <aspectratio>keep</aspectratio>
-                            <texture fallback="DefaultPicture.png">$INFO[ListItem.Thumb]</texture>
-                        </control>
-                        <control type="image">
-                            <posx>160</posx>
-                            <posy>12</posy>
-                            <width>400</width>
-                            <height>150</height>
-                            <texture border="8">views/tripanel/listselect_fo.png</texture>
-                            <include>PanelGlowFade</include>
-                            <visible>Control.HasFocus(200)</visible>
-                        </control>
-                        <control type="group">
-                            <posx>170</posx>
-                            <visible>!Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                            <control type="label">
-                                <posy>15</posy>
-                                <width>345</width>
-                                <height>35</height>
-                                <font>Font_Reg26</font>
-                                <textcolor>white</textcolor>
-                                <label>[COLOR=grey]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
-                            </control>
-                            <control type="label">
-                                <posy>125</posy>
-                                <width>345</width>
-                                <height>35</height>
-                                <font>Font_Reg22_Caps</font>
-                                <textcolor>grey</textcolor>
-                                <label>$INFO[ListItem.Label2]</label>
-                            </control>
-                            <control type="textbox">
-                                <posy>45</posy>
-                                <width>305</width>
-                                <height>81</height>
-                                <font>Font_Reg26</font>
-                                <align>left</align>
-                                <textcolor>grey</textcolor>
-                                <posx>0</posx>
-                                <label>$INFO[ListItem.Property(eventname)]</label>
-                            </control>
-                        </control>
-                        <control type="textbox">
-                            <posx>170</posx>
-                            <posy>50</posy>
-                            <width>345</width>
-                            <height>110</height>
-                            <align>left</align>
-                            <font>Font_Reg31_Caps</font>
-                            <textcolor>white</textcolor>
-                            <label>$ADDON[script.maps.browser 32034]</label>
-                            <visible>Stringcompare(ListItem.Property(index),Window.Property(index))</visible>
-                        </control>
-                    </control>
-                </focusedlayout>
-                <itemlayout height="280" width="450" condition="Stringcompare(Window.Property(ListLayout),1)">
+                <itemlayout height="280" width="450">
                     <control type="image">
                         <width>450</width>
                         <height>270</height>
@@ -311,7 +182,7 @@
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout height="200" width="450" condition="Stringcompare(Window.Property(ListLayout),1)">
+                <focusedlayout height="200" width="450">
                     <control type="image">
                         <width>450</width>
                         <height>270</height>
