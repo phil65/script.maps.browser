@@ -52,6 +52,8 @@ class Eventful():
         results = self.get_data(method="venues/get",
                                 params={"id": event_id},
                                 cache_days=7)
+        if not results:
+            return []
         return self.handle_events(results['venue'])
 
     def get_event_info(self, event_id=""):
@@ -60,42 +62,37 @@ class Eventful():
         results = self.get_data(method="events/get",
                                 params=params,
                                 cache_days=7)
-        return self.handle_events(results['venue'])
+        if not results:
+            return []
+        return self.handle_events(results['event'])
 
     def handle_events(self, results):
         pins = ""
         places = []
         letter = ord('A')
-        count = 0
         if not isinstance(results, list):
             results = [results]
-        for venue in results:
+        for count, venue in enumerate(results):
             venuename = Utils.cleanText(venue['venue_name'])
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
             search_string = lat + "," + lon
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
-            if "image" in venue and venue["image"]:
-                photo = venue["image"]["large"]["url"]
-            else:
-                photo = ""
-            #  start_time = venue["start_time"].split(" ")
-            #  stop_time = venue["stop_time"].split(" ")
+            photo = venue["image"]["large"]["url"] if venue.get("image") else ""
             if venue["start_time"] == venue["stop_time"] or not venue["stop_time"]:
                 date = venue["start_time"]
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
-            date = date.replace("00:00:00", "")
             props = {"id": str(venue['id']),
                      "eventful_id": str(venue['venue_id']),
                      "eventname": Utils.cleanText(venue['title']),
                      "description": Utils.cleanText(venue['description']),
                      "name": venuename,
                      "label": venuename,
-                     "label2": date,
+                     "label2": date.replace("00:00:00", ""),
                      "photo": photo,
                      "thumb": photo,
-                     "date": date,
+                     "date": date.replace("00:00:00", ""),
                      "address": Utils.cleanText(venue["venue_address"]),
                      "Venue_Image": photo,
                      "venue_id_eventful": venue['venue_id'],
@@ -106,7 +103,6 @@ class Eventful():
                      "lon": lon}
             pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
             places.append(props)
-            count += 1
             letter += 1
         return places, pins
 
