@@ -32,17 +32,13 @@ class Main:
 
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
-        xbmc.executebuiltin('SetProperty(mapsbrowser_running,True,home)')
         self._parse_argv()
         gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
         gui.doModal()
-        xbmc.executebuiltin('ClearProperty(mapsbrowser_running,home)')
 
     def _parse_argv(self):
-        self.handle = None
         self.infos = []
-        self.params = {"handle": None,
-                       "control": None}
+        self.params = {"handle": None}
         for arg in sys.argv:
             if arg == 'script.maps.browser':
                 continue
