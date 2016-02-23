@@ -78,8 +78,8 @@ class GUI(xbmcgui.WindowXML):
 
     def onInit(self):
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-        self.window.clearProperty('NavMode')
-        self.window.clearProperty('streetview')
+        self.clearProperty('NavMode')
+        self.clearProperty('streetview')
         self.window.setProperty('ListLayout', '1' if ADDON.getSetting("VenueLayout") == "1" else '0')
         self.venues = self.getControl(C_PLACES_LIST)
         self.get_map_urls()
@@ -119,11 +119,11 @@ class GUI(xbmcgui.WindowXML):
     @ch.action("close", "*")
     def previous_menu(self):
         if self.nav_mode_active or self.street_view:
-            self.window.clearProperty('NavMode')
-            self.window.clearProperty('streetview')
+            self.clearProperty('NavMode')
+            self.clearProperty('streetview')
             self.nav_mode_active = False
             self.street_view = False
-            self.window.setFocusId(self.saved_id)
+            self.setFocusId(self.saved_id)
         else:
             self.close()
 
@@ -200,7 +200,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_GOTO_PLACE)
     def go_to_place(self):
-        self.location = self.window.getProperty("Location")
+        self.location = self.getProperty("Location")
         self.lat, self.lon = self.get_geocodes(False, self.location)
 
     @ch.click(C_PLACES_LIST)
@@ -210,7 +210,7 @@ class GUI(xbmcgui.WindowXML):
         self.lon = float(item.getProperty("lon"))
         self.zoom = 12
         itemindex = item.getProperty("index")
-        if itemindex != self.window.getProperty('index'):
+        if itemindex != self.getProperty('index'):
             self.window.setProperty('index', itemindex)
             return None
         foursquare_id = item.getProperty("foursquare_id")
@@ -266,13 +266,13 @@ class GUI(xbmcgui.WindowXML):
     def toggle_nav_mode(self):
         if self.nav_mode_active:
             self.nav_mode_active = False
-            self.window.clearProperty('NavMode')
-            self.window.setFocusId(self.saved_id)
+            self.clearProperty('NavMode')
+            self.setFocusId(self.saved_id)
         else:
             self.saved_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
             self.nav_mode_active = True
             self.window.setProperty('NavMode', 'True')
-            self.window.setFocusId(725)
+            self.setFocusId(725)
 
     @ch.click(C_MODE_TOGGLE)
     def toggle_map_mode(self):
@@ -305,7 +305,7 @@ class GUI(xbmcgui.WindowXML):
         if self.street_view:
             self.street_view = False
             self.zoom = self.zoom_saved
-            self.window.clearProperty('streetview')
+            self.clearProperty('streetview')
         else:
             self.street_view = True
             self.zoom_saved = self.zoom
@@ -326,7 +326,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
-        self.window.clearProperty('index')
+        self.clearProperty('index')
         items = None
         modeselect = [("geopics", Utils.LANG(32027)),
                       ("eventful", Utils.LANG(32028)),
