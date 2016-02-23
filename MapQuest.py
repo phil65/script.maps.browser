@@ -5,9 +5,9 @@
 
 import urllib
 import Utils
+import googlemaps
 
 MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
-GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 MAX_LIMIT = 25
 BASE_URL = 'http://www.mapquestapi.com/traffic/v2/'
 
@@ -53,16 +53,8 @@ class MapQuest():
                       "mapWidth": 400,
                       "mapScale": 433342}
             url = BASE_URL + "flow?" + urllib.urlencode(params)
-            search_string = "%s,%s" % (place['lat'], place['lng'])
-            params = {"sensor": "false",
-                      "scale": 2,
-                      "maptype": "roadmap",
-                      "center": search_string,
-                      "zoom": 13,
-                      "markers": search_string,
-                      "size": "640x640",
-                      "key": GOOGLE_MAPS_KEY}
-            google_map = 'http://maps.googleapis.com/maps/api/staticmap?' + urllib.urlencode(params)
+            googlemap = googlemaps.get_static_map(lat=lat,
+                                                  lon=lon)
             props = {'name': place['shortDesc'],
                      'label': place['shortDesc'],
                      'label2': place['startTime'],
@@ -70,7 +62,7 @@ class MapQuest():
                      'distance': str(place['distance']),
                      'delaytypical': str(place['delayFromTypical']),
                      'delayfreeflow': str(place['delayFromFreeFlow']),
-                     "GoogleMap": google_map,
+                     "GoogleMap": googlemap,
                      "venue_image": url,
                      "thumb": url,
                      "icon": place['iconURL'],

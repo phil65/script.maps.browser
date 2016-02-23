@@ -7,8 +7,7 @@ import xbmcgui
 import urllib
 
 import Utils
-
-GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+import googlemaps
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
 
@@ -76,8 +75,8 @@ class Eventful():
             venuename = Utils.cleanText(venue['venue_name'])
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
-            search_string = lat + "," + lon
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
+            googlemap = googlemaps.get_static_map(lat=lat,
+                                                  lon=lon)
             photo = venue["image"]["large"]["url"] if venue.get("image") else ""
             if venue["start_time"] == venue["stop_time"] or not venue["stop_time"]:
                 date = venue["start_time"]

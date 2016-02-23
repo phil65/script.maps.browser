@@ -379,7 +379,7 @@ class GUI(xbmcgui.WindowXML):
         elif keys[index] == "reset":
             self.pins = ""
             items = []
-        if items is not None:
+        if items:
             Utils.fill_list_control(self.venues, items)
         self.street_view = False
 

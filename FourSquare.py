@@ -9,9 +9,9 @@ import xbmcgui
 import xbmcaddon
 import urllib
 import Utils
+import googlemaps
 
 ADDON = xbmcaddon.Addon()
-GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 BING_KEY = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
@@ -44,8 +44,8 @@ class FourSquare():
                 formattedAddress = "[CR]".join(filter(None, venue['location']['formattedAddress']))
             lat = str(venue['location']['lat'])
             lon = str(venue['location']['lng'])
-            search_string = lat + "," + lon
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLEMAPS_KEY)
+            googlemap = googlemaps.get_static_map(lat=lat,
+                                                  lon=lon)
             props = {"id": str(venue['id']),
                      "foursquare_id": str(venue['id']),
                      "distance": str(venue['location']['distance']),

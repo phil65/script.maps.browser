@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="General">
-        <setting id="InfoButtonAction" type="enum" label="Choose Info Button Action" default="0" values="Street View|Map Type"/>
-        <setting id="VenueLayout" type="enum" label="Choose Venue List Style" default="0" values="Panel|Image"/>
-        <setting id="ImageFormat" type="labelenum" label="Choose Map Image Format (affects image loading times)" values="png8|png32|gif|jpg|jpg-baseline"/>
+    <category label="16000">
+        <setting id="InfoButtonAction" type="enum" label="Choose Info button action" default="0" values="StreetView toggle|Maptype toggle"/>
+        <setting id="VenueLayout" type="enum" label="Choose venue list style" default="0" values="Panel|Image"/>
+        <setting id="ImageFormat" type="labelenum" label="Choose map image Format" values="png8|png32|gif|jpg|jpg-baseline"/>
     </category>
 </settings>
