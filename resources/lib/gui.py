@@ -22,7 +22,6 @@ ch = ActionHandler()
 
 
 ADDON = xbmcaddon.Addon()
-ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_PATH = ADDON.getAddonInfo('path')
 ADDON_NAME = ADDON.getAddonInfo('name')
 
@@ -52,11 +51,6 @@ BASE_URL = "http://maps.googleapis.com/maps/api/"
 
 
 class GUI(xbmcgui.WindowXML):
-
-    ACTION_CONTEXT_MENU = [117]
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    ACTION_EXIT_SCRIPT = [13]
-    ACTION_0 = [58, 18]
 
     @Utils.busy_dialog
     def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
@@ -101,7 +95,7 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty("streetview_image", self.street_view_url)
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
-            xbmcgui.Dialog().ok(ADDON_LANGUAGE(32001), ADDON_LANGUAGE(32002), ADDON_LANGUAGE(32003))
+            xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
 
     def init_vars(self):
         self.nav_mode_active = False
@@ -328,7 +322,7 @@ class GUI(xbmcgui.WindowXML):
             self.window.setProperty('streetview', 'True')
 
     def search_location(self):
-        self.location = xbmcgui.Dialog().input(ADDON_LANGUAGE(32032),
+        self.location = xbmcgui.Dialog().input(Utils.LANG(32032),
                                                type=xbmcgui.INPUT_ALPHANUM)
         if not self.location == "":
             self.street_view = False
@@ -343,15 +337,15 @@ class GUI(xbmcgui.WindowXML):
     def select_places_provider(self):
         self.window.clearProperty('index')
         items = None
-        modeselect = [("geopics", ADDON_LANGUAGE(32027)),
-                      ("eventful", ADDON_LANGUAGE(32028)),
-                      ("foursquare", ADDON_LANGUAGE(32029)),
-                      ("mapquest", ADDON_LANGUAGE(32030)),
-                      ("googleplaces", ADDON_LANGUAGE(32031)),
-                      ("reset", ADDON_LANGUAGE(32019))]
+        modeselect = [("geopics", Utils.LANG(32027)),
+                      ("eventful", Utils.LANG(32028)),
+                      ("foursquare", Utils.LANG(32029)),
+                      ("mapquest", Utils.LANG(32030)),
+                      ("googleplaces", Utils.LANG(32031)),
+                      ("reset", Utils.LANG(32019))]
         listitems = [item[1] for item in modeselect]
         keys = [item[0] for item in modeselect]
-        index = xbmcgui.Dialog().select(ADDON_LANGUAGE(32020), listitems)
+        index = xbmcgui.Dialog().select(Utils.LANG(32020), listitems)
         if index == -1:
             return None
         if keys[index] == "googleplaces":
@@ -368,7 +362,7 @@ class GUI(xbmcgui.WindowXML):
             MQ = MapQuest()
             items, self.pins = MQ.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
-            folder_path = xbmcgui.Dialog().browse(0, ADDON_LANGUAGE(32021), 'pictures')
+            folder_path = xbmcgui.Dialog().browse(0, Utils.LANG(32021), 'pictures')
             self.window.setProperty('imagepath', folder_path)
             items, self.pins = Utils.get_images(folder_path)
         elif keys[index] == "eventful":
@@ -385,19 +379,19 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.click(C_SEARCH)
     def open_search_dialog(self):
-        modeselect = [("googlemaps", ADDON_LANGUAGE(32024)),
-                      ("foursquareplaces", ADDON_LANGUAGE(32004)),
-                      ("reset", ADDON_LANGUAGE(32019))]
+        modeselect = [("googlemaps", Utils.LANG(32024)),
+                      ("foursquareplaces", Utils.LANG(32004)),
+                      ("reset", Utils.LANG(32019))]
         KEYS = [item[0] for item in modeselect]
         VALUES = [item[1] for item in modeselect]
-        index = xbmcgui.Dialog().select(ADDON_LANGUAGE(32026), VALUES)
+        index = xbmcgui.Dialog().select(Utils.LANG(32026), VALUES)
         if index < 0:
             return None
         if KEYS[index] == "googlemaps":
             self.search_location()
             items = []
         elif KEYS[index] == "foursquareplaces":
-            query = xbmcgui.Dialog().input(ADDON_LANGUAGE(32022), type=xbmcgui.INPUT_ALPHANUM)
+            query = xbmcgui.Dialog().input(Utils.LANG(32022), type=xbmcgui.INPUT_ALPHANUM)
             FS = FourSquare()
             items, self.pins = FS.get_places(self.lat, self.lon, query)
         elif KEYS[index] == "reset":

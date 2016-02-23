@@ -12,26 +12,18 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
     C_TEXT_FIELD = 200
     C_TITLE = 201
     C_BIG_IMAGE = 211
-    C_RIGHT_IMAGE = 210
     C_ARTIST_LIST = 500
 
     def __init__(self, *args, **kwargs):
         super(EventInfoDialog, self).__init__(*args, **kwargs)
         self.eventful_id = kwargs.get('eventful_id')
-        self.foursquare_id = kwargs.get('foursquare_id')
         if self.eventful_id:
             EF = Eventful()
             self.props = EF.get_venue_info(self.eventful_id)
             self.events = self.props["events"]["event"]
-        elif self.foursquare_id:
-            pass
         self.pins = ""
-        self.itemlist = []
 
     def onInit(self):
-        self.setControls()
-
-    def setControls(self):
         self.getControl(self.C_TEXT_FIELD).setText(self.props["description"])
         self.getControl(self.C_TITLE).setLabel(self.props["name"])
         self.getControl(self.C_BIG_IMAGE).setImage(self.props["thumb"])
@@ -43,6 +35,3 @@ class EventInfoDialog(xbmcgui.WindowXMLDialog):
     def onClick(self, controlID):
         if controlID == self.C_ARTIST_LIST:
             self.close()
-
-    def onFocus(self, controlID):
-        pass
