@@ -119,17 +119,17 @@ class GUI(xbmcgui.WindowXML):
         self.street_view_url = ""
 
     def onAction(self, action):
-        super(GUI, self).onAction(action)
+        # super(GUI, self).onAction(action)
         ch.serve_action(action, self.getFocusId(), self)
         self.get_map_urls()
         self.window.setProperty("streetview_image", self.street_view_url)
         self.window.setProperty("map_image", self.map_url)
 
-    @ch.action("close", "*")
+    @ch.action("previousmenu", "*")
     def close_script(self):
         self.close()
 
-    @ch.action("previousmenu", "*")
+    @ch.action("close", "*")
     def previous_menu(self):
         if self.nav_mode_active or self.street_view:
             self.window.clearProperty('NavMode')
