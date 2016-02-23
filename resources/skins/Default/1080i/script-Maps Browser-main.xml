@@ -4,24 +4,6 @@
     <defaultcontrol always="true">101</defaultcontrol>
     <allowoverlay>no</allowoverlay>
     <controls>
-        <control id="9023" type="button">
-            <include>HiddenObject</include>
-            <onfocus>SetProperty(index,$ESCINFO[Container(200).ListItem.Property(index)],home)</onfocus>
-            <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Street)])</onfocus>
-            <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$INFO[Container(200).ListItem.Property(City)] $INFO[Container(200).ListItem.Property(Name)])</onfocus>
-            <onfocus>SendClick(111)</onfocus>
-            <onfocus>SetFocus(200)</onfocus>
-            <visible>!Stringcompare(Container(200).ListItem.Property(index),Window.Property(index))</visible>
-        </control>
-        <control id="9022" type="button">
-            <include>HiddenObject</include>
-            <onfocus condition="!IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Street)])</onfocus>
-            <onfocus condition="IsEmpty(Container(200).ListItem.Property(Street))">SetProperty(Location,$ESCINFO[Container(200).ListItem.Property(City)] $ESCINFO[Container(200).ListItem.Property(Name)])</onfocus>
-            <onfocus>SetProperty(index,$ESCINFO[Container(200).ListItem.Property(index)],home)</onfocus>
-            <onfocus>SendClick(111)</onfocus>
-            <onfocus>SetFocus(200)</onfocus>
-            <visible>!Stringcompare(Container(200).ListItem.Property(index),Window.Property(index))</visible>
-        </control>
         <control id="111" type="button">
             <include>HiddenObject</include>
         </control>
@@ -148,7 +130,7 @@
                             <height>35</height>
                             <font>font12</font>
                             <textcolor>FFe5e5e5</textcolor>
-                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Label][/B]</label>
                         </control>
                         <control type="group">
                             <control type="label">
@@ -220,7 +202,7 @@
                             <height>35</height>
                             <font>font12</font>
                             <textcolor>FFe5e5e5</textcolor>
-                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Property(Name)][/B]</label>
+                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Label][/B]</label>
                         </control>
                         <control type="group">
                             <control type="label">
