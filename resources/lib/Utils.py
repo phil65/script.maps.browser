@@ -65,7 +65,7 @@ def fill_list_control(listcontrol, listitem_dict):
     listcontrol.reset()
     listitems = create_listitems(listitem_dict)
     listcontrol.addItems(items=listitems)
-    set_window_prop(xbmcgui.Window(xbmcgui.getCurrentWindowId()), 'index', "")
+    xbmcgui.Window(xbmcgui.getCurrentWindowId()).clearProperty("index")
 
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
@@ -126,23 +126,17 @@ def meters_to_latlon(mx, my):
     return lat, lon
 
 
-def set_window_prop(window, key, value):
-    return window.setProperty(key, value)
-
-
 def get_string_from_url(url):
-    succeed = 0
-    while (succeed < 3) and (not xbmc.abortRequested):
+    for i in range(0, 3):
         try:
             request = urllib2.Request(url)
             request.add_header('User-agent', 'XBMC/14.2 ( phil65@kodi.tv )')
             response = urllib2.urlopen(request, timeout=3)
-            data = response.read()
-            return data
+            return response.read()
         except:
-            notify("Error", "Could not download data. Internet connection OK?")
-            log("get_string_from_url: could not get data from %s" % url)
-            succeed += 1
+            xbmc.sleep(500)
+    notify("Error", "Could not download data. Internet connection OK?")
+    log("get_string_from_url: could not get data from %s" % url)
     return ""
 
 
