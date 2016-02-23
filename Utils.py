@@ -266,11 +266,11 @@ def create_listitems(data):
 
 def get_location_coords():
     # url = 'https://www.telize.com/geoip'
-    response = get_string_from_url('http://freegeoip.net/json')
+    response = get_string_from_url('http://ip-api.com/json')
     if not response:
         return "", ""
     results = json.loads(response)
-    return results["latitude"], results["longitude"]
+    return results["lat"], results["lon"]
 
 
 def save_to_file(content, filename, path=""):
