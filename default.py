@@ -20,7 +20,7 @@
 import sys
 import xbmc
 import xbmcaddon
-from gui import GUI
+from resources.lib.gui import GUI
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
