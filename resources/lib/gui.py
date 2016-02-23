@@ -161,22 +161,22 @@ class GUI(xbmcgui.WindowXML):
         if not self.street_view:
             stepsize = 60.0 / math.pow(2, self.zoom)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                self.lat = self.lat + stepsize
+                self.lat += stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                self.lat = self.lat - stepsize
+                self.lat -= stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
-                self.lon = self.lon - 2.0 * stepsize
+                self.lon -= 2.0 * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_RIGHT:
-                self.lon = self.lon + 2.0 * stepsize
+                self.lon += 2.0 * stepsize
         else:
             stepsize = 0.0002
             radiantdirection = math.radians(self.direction)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
-                self.lat = self.lat + math.cos(radiantdirection) * stepsize
-                self.lon = self.lon + math.sin(radiantdirection) * stepsize
+                self.lat += math.cos(radiantdirection) * stepsize
+                self.lon += math.sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_DOWN:
-                self.lat = self.lat - math.cos(radiantdirection) * stepsize
-                self.lon = self.lon - math.sin(radiantdirection) * stepsize
+                self.lat -= math.cos(radiantdirection) * stepsize
+                self.lon -= math.sin(radiantdirection) * stepsize
             elif self.action_id == xbmcgui.ACTION_MOVE_LEFT:
                 if self.direction <= 0:
                     self.direction = 360
