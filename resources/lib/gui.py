@@ -7,6 +7,7 @@ import xbmcaddon
 import xbmcgui
 import urllib
 import sys
+import math
 
 import googlemaps
 import Utils
@@ -16,7 +17,6 @@ from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
 from SearchSelectDialog import SearchSelectDialog
 from EventInfoDialog import EventInfoDialog
-import math
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -421,14 +421,8 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty('aspect', self.aspect)
         self.window.setProperty('map_image', self.map_url)
         self.window.setProperty('streetview_image', self.streetview_url)
-        if self.street_view:
-            self.window.setProperty('streetview', "True")
-        else:
-            self.window.clearProperty('streetview')
-        if self.nav_mode_active:
-            self.window.setProperty('NavMode', "True")
-        else:
-            self.window.clearProperty('NavMode')
+        self.window.setProperty('streetview', "True" if self.street_view else "")
+        self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
         if self.lat:
             hor_px = int(size.split("x")[0])
             ver_px = int(size.split("x")[1])
@@ -438,28 +432,24 @@ class GUI(xbmcgui.WindowXML):
             self.radius = min(abs((my - my2) / 2000), 500)
 
     def get_geocodes(self, show_dialog, search_string):
-        search_string = urllib.quote_plus(search_string)
         base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
-        url = "&address=%s" % (search_string)
+        url = "&address=%s" % (urllib.quote_plus(search_string))
         results = Utils.get_JSON_response(base_url + url)
-        places = []
-        for item in results["results"]:
-            locationinfo = item["geometry"]["location"]
-            lat = str(locationinfo["lat"])
-            lon = str(locationinfo["lng"])
-            googlemap = googlemaps.get_static_map(lat=lat,
-                                                  lon=lon,
-                                                  scale=1,
-                                                  size="320x320")
-            props = {'label': item['formatted_address'],
-                     'lat': lat,
-                     'lon': lon,
-                     'thumb': googlemap,
-                     'id': item['formatted_address']}
-            places.append(props)
         first_match = results["results"][0]["geometry"]["location"]
         if show_dialog:
             if len(results["results"]) > 1:  # open dialog when more than one hit
+                places = []
+                for item in results["results"]:
+                    location = item["geometry"]["location"]
+                    googlemap = googlemaps.get_static_map(lat=location["lat"],
+                                                          lon=location["lng"],
+                                                          scale=1,
+                                                          size="320x320")
+                    places.append({'label': item['formatted_address'],
+                                   'lat': location["lat"],
+                                   'lon': location["lng"],
+                                   'thumb': googlemap,
+                                   'id': item['formatted_address']})
                 w = SearchSelectDialog('DialogSelect.xml',
                                        ADDON_PATH,
                                        listing=Utils.create_listitems(places))
