@@ -435,35 +435,30 @@ class GUI(xbmcgui.WindowXML):
         base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
         url = "&address=%s" % (urllib.quote_plus(search_string))
         results = Utils.get_JSON_response(base_url + url)
+        if not results or not results.get("results"):
+            return self.lat, self.lon
         first_match = results["results"][0]["geometry"]["location"]
-        if show_dialog:
-            if len(results["results"]) > 1:  # open dialog when more than one hit
-                places = []
-                for item in results["results"]:
-                    location = item["geometry"]["location"]
-                    googlemap = googlemaps.get_static_map(lat=location["lat"],
-                                                          lon=location["lng"],
-                                                          scale=1,
-                                                          size="320x320")
-                    places.append({'label': item['formatted_address'],
-                                   'lat': location["lat"],
-                                   'lon': location["lng"],
-                                   'thumb': googlemap,
-                                   'id': item['formatted_address']})
-                w = SearchSelectDialog('DialogSelect.xml',
-                                       ADDON_PATH,
-                                       listing=Utils.create_listitems(places))
-                w.doModal()
-                if w.lat:
-                    self.zoom = 12
-                    return (float(w.lat), float(w.lon))
-                else:
-                    return (self.lat, self.lon)
-            elif len(results["results"]) == 1:
+        if show_dialog and len(results["results"]) > 1:
+            places = []
+            for item in results["results"]:
+                location = item["geometry"]["location"]
+                googlemap = googlemaps.get_static_map(lat=location["lat"],
+                                                      lon=location["lng"],
+                                                      scale=1,
+                                                      size="320x320")
+                places.append({'label': item['formatted_address'],
+                               'lat': location["lat"],
+                               'lon': location["lng"],
+                               'thumb': googlemap,
+                               'id': item['formatted_address']})
+            w = SearchSelectDialog('DialogSelect.xml',
+                                   ADDON_PATH,
+                                   listing=Utils.create_listitems(places))
+            w.doModal()
+            if w.lat:
                 self.zoom = 12
-                return (first_match["lat"], first_match["lng"])  # no window when only 1 result
-            else:
-                return (self.lat, self.lon)  # old values when no hit
-        else:
+                return (float(w.lat), float(w.lon))
+        elif results["results"]:
             self.zoom = 12
-            return (first_match["lat"], first_match["lng"])
+            return (first_match["lat"], first_match["lng"])  # no window when only 1 result
+        return (self.lat, self.lon)  # old values when no hit
