@@ -29,7 +29,7 @@ class Eventful():
             return None
         if index > 0:
             return results["category"][index - 1]["id"]
-        elif index > -1:
+        elif index == 0:
             return ""
 
     def get_eventlist(self, lat="", lon="", query="", category="", radius=30):

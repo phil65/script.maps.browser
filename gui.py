@@ -372,7 +372,7 @@ class GUI(xbmcgui.WindowXML):
         elif keys[index] == "eventful":
             EF = Eventful()
             category = EF.select_category()
-            if category:
+            if category is not None:
                 items, self.pins = EF.get_eventlist(self.lat, self.lon, "", category, self.radius)
         elif keys[index] == "reset":
             self.pins = ""
