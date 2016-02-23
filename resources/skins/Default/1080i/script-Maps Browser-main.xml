@@ -107,20 +107,6 @@
                         <aspectratio>scale</aspectratio>
                         <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
-                    <control type="image">
-                        <posy>5</posy>
-                        <width>450</width>
-                        <height>50</height>
-                        <aspectratio>stretch</aspectratio>
-                        <texture>bottom_shadow.png</texture>
-                    </control>
-                    <control type="image">
-                        <posy>190</posy>
-                        <width>450</width>
-                        <height>75</height>
-                        <aspectratio>stretch</aspectratio>
-                        <texture>bottom_shadow2.png</texture>
-                    </control>
                     <control type="group">
                         <posx>5</posx>
                         <control type="label">
@@ -178,20 +164,6 @@
                         <height>260</height>
                         <aspectratio>scale</aspectratio>
                         <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
-                    </control>
-                    <control type="image">
-                        <posy>5</posy>
-                        <width>450</width>
-                        <height>50</height>
-                        <aspectratio>stretch</aspectratio>
-                        <texture>bottom_shadow.png</texture>
-                    </control>
-                    <control type="image">
-                        <posy>190</posy>
-                        <width>450</width>
-                        <height>75</height>
-                        <aspectratio>stretch</aspectratio>
-                        <texture>bottom_shadow2.png</texture>
                     </control>
                     <control type="group">
                         <posx>5</posx>
@@ -256,7 +228,7 @@
                 <posy>0</posy>
                 <width>1920</width>
                 <height>135</height>
-                <texture flipy="true">osd/osd_back.png</texture>
+                <texture flipy="true">frame/InfoBar.png</texture>
             </control>
             <control id="650" type="grouplist">
                 <orientation>horizontal</orientation>
