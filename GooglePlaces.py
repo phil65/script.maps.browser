@@ -151,7 +151,7 @@ class GooglePlaces():
                      'label': place['name'],
                      'label2': " / ".join(place['types']),
                      'description': description,
-                     "sortletter": chr(letter),
+                     "letter": chr(letter),
                      "index": str(count),
                      "thumb": photo,
                      "icon": place['icon'],

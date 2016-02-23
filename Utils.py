@@ -150,6 +150,7 @@ def get_JSON_response(url="", cache_days=0.5):
     filename = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
+    log(url)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
     else:
@@ -201,7 +202,7 @@ def get_images(path=""):
                          "thumb": path + filename,
                          "filepath": path + filename,
                          "index": str(count),
-                         "sortletter": chr(letter),
+                         "letter": chr(letter),
                          }
                 if len(pins) < 1850:
                     pins += "%7C" + str(lat) + "," + str(lon)

@@ -52,9 +52,8 @@ class MapQuest():
                       "mapHeight": 400,
                       "mapWidth": 400,
                       "mapScale": 433342}
-            url = "flow?" + urllib.urlencode(params)
-            image = BASE_URL + url
-            search_string = lat + "," + lon
+            url = BASE_URL + "flow?" + urllib.urlencode(params)
+            search_string = "%s,%s" % (place['lat'], place['lng'])
             params = {"sensor": "false",
                       "scale": 2,
                       "maptype": "roadmap",
@@ -64,7 +63,6 @@ class MapQuest():
                       "size": "640x640",
                       "key": GOOGLE_MAPS_KEY}
             google_map = 'http://maps.googleapis.com/maps/api/staticmap?' + urllib.urlencode(params)
-            incident_type = incident_types.get(place['type'], "")
             props = {'name': place['shortDesc'],
                      'label': place['shortDesc'],
                      'label2': place['startTime'],
@@ -73,17 +71,17 @@ class MapQuest():
                      'delaytypical': str(place['delayFromTypical']),
                      'delayfreeflow': str(place['delayFromFreeFlow']),
                      "GoogleMap": google_map,
-                     "venue_image": image,
-                     "thumb": image,
+                     "venue_image": url,
+                     "thumb": url,
                      "icon": place['iconURL'],
                      'date': place['startTime'],
                      'severity': str(place['severity']),
-                     'type': incident_type,
-                     "sortletter": chr(letter),
+                     'type': incident_types.get(place['type'], ""),
+                     "letter": chr(letter),
                      "lat": lat,
                      "lon": lon,
                      "index": str(i)}
-            pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
             places.append(props)
             letter += 1
             if i > MAX_LIMIT:

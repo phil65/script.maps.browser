@@ -98,7 +98,7 @@ class Eventful():
                      "venue_id_eventful": venue['venue_id'],
                      "GoogleMap": googlemap,
                      "index":  str(count),
-                     "sortletter": chr(letter),
+                     "letter": chr(letter),
                      "lat": lat,
                      "lon": lon}
             pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)

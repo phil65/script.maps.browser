@@ -62,7 +62,7 @@ class FourSquare():
                      "Venue_Image": icon,
                      "GoogleMap": googlemap,
                      "index":  str(count),
-                     "sortletter": chr(letter + count),
+                     "letter": chr(letter + count),
                      "lat": lat,
                      "lon": lon,
                      "phone": venue['contact'].get('phone', ""),
