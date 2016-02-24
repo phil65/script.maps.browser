@@ -33,7 +33,7 @@ msgid "Accounting"
 msgstr ""
 
 msgctxt "#32001"
-msgid "Welcome to XBMC Maps Browser"
+msgid "Welcome to Maps Browser add-on"
 msgstr ""
 
 msgctxt "#32002"
