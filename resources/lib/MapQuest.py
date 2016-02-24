@@ -64,12 +64,11 @@ class MapQuest():
                      'date': place['startTime'],
                      'severity': str(place['severity']),
                      'type': incident_types.get(place['type'], ""),
-                     "letter": chr(letter),
+                     "letter": chr(letter + i),
                      "lat": lat,
                      "lon": lon}
-            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
+            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), lat, lon)
             places.append(props)
-            letter += 1
             if i > MAX_LIMIT:
                 break
         box_params = ["&path=color:0x00000000",

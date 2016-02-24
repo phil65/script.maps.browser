@@ -71,7 +71,7 @@ class Eventful():
         letter = ord('A')
         if not isinstance(results, list):
             results = [results]
-        for count, venue in enumerate(results):
+        for i, venue in enumerate(results):
             venuename = Utils.cleanText(venue['venue_name'])
             lat = str(venue['latitude'])
             lon = str(venue['longitude'])
@@ -98,10 +98,10 @@ class Eventful():
                      "date": date,
                      "address": Utils.cleanText(venue["venue_address"]),
                      "GoogleMap": googlemap,
-                     "letter": chr(letter + count),
+                     "letter": chr(letter + i),
                      "lat": lat,
                      "lon": lon}
-            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
+            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), lat, lon)
             places.append(props)
         return places, pins
 
