@@ -33,7 +33,7 @@ class MapQuest():
         pins = ""
         letter = ord('A')
         if results['info']['statuscode'] == 400:
-            Utils.notify("Error", " - ".join(results['info']['messages']))
+            Utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
             return [], ""
         elif "incidents" not in results:
             Utils.notify("Error", "Could not fetch results")
