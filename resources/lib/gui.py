@@ -68,7 +68,7 @@ class GUI(xbmcgui.WindowXML):
         if self.location == "geocode":
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
-            self.lat, self.lon = Utils.get_location_coords()
+            self.lat, self.lon = Utils.get_coords_by_ip()
             self.zoom = 3
         elif self.location and self.strlat:  # latlon empty
             self.lat, self.lon = self.get_geocodes(False, self.location)

@@ -33,15 +33,17 @@ class Main:
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
         self._parse_argv()
-        gui = GUI(u'script-%s-main.xml' % ADDON_NAME, ADDON_PATH)
+        gui = GUI(u'script-%s-main.xml' % ADDON_NAME,
+                  ADDON_PATH,
+                  lat=self.params.get("lat"),
+                  lon=self.params.get("lon"),
+                  location=self.params.get("location"))
         gui.doModal()
 
     def _parse_argv(self):
         self.infos = []
-        self.params = {"handle": None}
-        for arg in sys.argv:
-            if arg == 'script.maps.browser':
-                continue
+        self.params = {}
+        for arg in sys.argv[1:]:
             param = arg.replace('"', '').replace("'", " ")
             if param.startswith('info='):
                 self.infos.append(param[5:])

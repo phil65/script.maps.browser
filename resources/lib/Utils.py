@@ -266,7 +266,7 @@ def create_listitems(data):
     return items
 
 
-def get_location_coords():
+def get_coords_by_ip():
     # url = 'https://www.telize.com/geoip'
     response = get_string_from_url('http://ip-api.com/json')
     if not response:
