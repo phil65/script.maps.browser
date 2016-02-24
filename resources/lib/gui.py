@@ -259,7 +259,7 @@ class GUI(xbmcgui.WindowXML):
             self.clearProperty('NavMode')
             self.setFocusId(self.saved_id)
         else:
-            self.saved_id = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getFocusId()
+            self.saved_id = self.getFocusId()
             self.nav_mode_active = True
             self.window.setProperty('NavMode', 'True')
             self.setFocusId(725)
@@ -406,13 +406,7 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty('streetview_image', self.streetview_url)
         self.window.setProperty('streetview', "True" if self.street_view else "")
         self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
-        if self.lat:
-            hor_px = int(size.split("x")[0])
-            ver_px = int(size.split("x")[1])
-            mx, my = Utils.latlon_to_meters(self.lat, self.lon)
-            px, py = Utils.meters_to_pixels(mx, my, self.zoom)
-            mx2, my2 = Utils.pixels_to_meters(px + hor_px / 2, py + ver_px / 2, self.zoom)
-            self.radius = min(abs((my - my2) / 2000), 500)
+        self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, size)
 
     def get_geocodes(self, show_dialog, search_string):
         base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"

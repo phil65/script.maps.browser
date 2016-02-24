@@ -68,6 +68,15 @@ def get_bounding_box(lat, lon, zoom):
     return lat_high, lon_high, lat_low, lon_low
 
 
+def get_radius(lat, lon, zoom, size):
+    hor_px = int(size.split("x")[0])
+    ver_px = int(size.split("x")[1])
+    mx, my = latlon_to_meters(lat, lon)
+    px, py = meters_to_pixels(mx, my, zoom)
+    mx2, my2 = pixels_to_meters(px + hor_px / 2, py + ver_px / 2, zoom)
+    return min(abs((my - my2) / 2000), 500)
+
+
 def latlon_to_meters(lat, lon):
     '''
     Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
