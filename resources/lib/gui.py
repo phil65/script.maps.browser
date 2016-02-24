@@ -90,7 +90,7 @@ class GUI(xbmcgui.WindowXML):
         self.clearProperty('streetview')
         self.venues = self.getControl(C_PLACES_LIST)
         self.update()
-        Utils.fill_list_control(self.venues, self.items)
+        Utils.set_list(self.venues, self.items)
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
@@ -354,7 +354,7 @@ class GUI(xbmcgui.WindowXML):
             self.pins = ""
             items = []
         if items:
-            Utils.fill_list_control(self.venues, items)
+            Utils.set_list(self.venues, items)
         self.street_view = False
 
     @ch.click(C_SEARCH)
@@ -377,7 +377,7 @@ class GUI(xbmcgui.WindowXML):
         elif KEYS[index] == "reset":
             self.pins = ""
             items = []
-        Utils.fill_list_control(self.venues, items)
+        Utils.set_list(self.venues, items)
         self.street_view = False
 
     def update(self):

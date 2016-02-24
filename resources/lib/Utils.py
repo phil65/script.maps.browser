@@ -7,7 +7,6 @@ import xbmc
 import xbmcaddon
 import xbmcvfs
 import xbmcgui
-import urllib
 import urllib2
 import os
 import re
@@ -40,19 +39,6 @@ def LANG(label_id):
         return xbmc.getLocalizedString(label_id)
 
 
-def run_async(func):
-    """
-    Decorator to put a function into a separate thread
-    """
-    @wraps(func)
-    def async_func(*args, **kwargs):
-        func_hl = threading.Thread(target=func, args=args, kwargs=kwargs)
-        func_hl.start()
-        return func_hl
-
-    return async_func
-
-
 def busy_dialog(func):
     """
     Decorator to show busy dialog while function is running
@@ -68,22 +54,11 @@ def busy_dialog(func):
     return decorator
 
 
-def fill_list_control(listcontrol, listitem_dict):
+def set_list(listcontrol, listitem_dict):
     listcontrol.reset()
     listitems = create_listitems(listitem_dict)
     listcontrol.addItems(items=listitems)
     xbmcgui.Window(xbmcgui.getCurrentWindowId()).clearProperty("index")
-
-
-def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
-    skinwindow = xbmcgui.Window(window)
-    if not data:
-        return None
-    for (key, value) in data.iteritems():
-        value = unicode(value)
-        skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
-        if debug:
-            log('%s%s' % (prefix, str(key)) + value)
 
 
 def get_bounding_box(lat, lon, zoom):
@@ -169,16 +144,6 @@ def get_JSON_response(url="", cache_days=0.5):
         results = json.loads(response)
         save_to_file(results, filename, ADDON_DATA_PATH)
     return results
-
-
-def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
-    base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
-    url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = get_JSON_response(base_url + url, 30)
-    if not results or not results["artists"]:
-        return None
-    log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
-    return results["artists"][0]["id"]
 
 
 def log(txt):
@@ -299,17 +264,16 @@ def save_to_file(content, filename, path=""):
 
 def read_from_file(path=""):
     # Check to see if file exists
-    if xbmcvfs.exists(path):
-        f = open(path)
-        fc = json.load(f)
-        log("loaded textfile " + path)
-        try:
-            return fc
-        except:
-            notify("Exception in read_from_file()")
-            return []
-    else:
+    if not xbmcvfs.exists(path):
         return False
+    f = open(path)
+    fc = json.load(f)
+    log("loaded textfile " + path)
+    try:
+        return fc
+    except:
+        notify("Exception in read_from_file()")
+        return []
 
 
 def cleanText(text):
