@@ -23,12 +23,7 @@ class MapQuest():
         pass
 
     def get_incidents(self, lat, lon, zoom):
-        mx, my = Utils.latlon_to_meters(lat, lon)
-        px, py = Utils.meters_to_pixels(mx, my, zoom)
-        mx_high, my_high = Utils.pixels_to_meters(px + 320, py + 200, zoom)
-        mx_low, my_low = Utils.pixels_to_meters(px - 320, py - 200, zoom)
-        lat_high, lon_high = Utils.meters_to_latlon(mx_high, my_high)
-        lat_low, lon_low = Utils.meters_to_latlon(mx_low, my_low)
+        lat_high, lon_high, lat_low, lon_low = Utils.get_bounding_box(lat, lon, zoom)
         params = {"key": MAPQUEST_KEY,
                   "inFormat": "kvp",
                   "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}

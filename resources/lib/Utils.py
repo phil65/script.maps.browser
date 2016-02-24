@@ -86,6 +86,16 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=
             log('%s%s' % (prefix, str(key)) + value)
 
 
+def get_bounding_box(lat, lon, zoom):
+    mx, my = latlon_to_meters(lat, lon)
+    px, py = meters_to_pixels(mx, my, zoom)
+    mx_high, my_high = pixels_to_meters(px + 320, py + 200, zoom)
+    mx_low, my_low = pixels_to_meters(px - 320, py - 200, zoom)
+    lat_high, lon_high = meters_to_latlon(mx_high, my_high)
+    lat_low, lon_low = meters_to_latlon(mx_low, my_low)
+    return lat_high, lon_high, lat_low, lon_low
+
+
 def latlon_to_meters(lat, lon):
     '''
     Converts given lat/lon in WGS84 Datum to XY in Spherical Mercator EPSG:900913
