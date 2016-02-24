@@ -3,19 +3,20 @@ from PIL.ExifTags import TAGS, GPSTAGS
 
 def get_exif_data(image):
     """Returns a dictionary from the exif data of an PIL Image item. Also converts the GPS Tags"""
-    exif_data = {}
     info = image._getexif()
-    if info:
-        for tag, value in info.items():
-            decoded = TAGS.get(tag, tag)
-            if decoded == "GPSInfo":
-                gps_data = {}
-                for t in value:
-                    sub_decoded = GPSTAGS.get(t, t)
-                    gps_data[sub_decoded] = value[t]
-                exif_data[decoded] = gps_data
-            else:
-                exif_data[decoded] = value
+    if not info:
+        return {}
+    exif_data = {}
+    for tag, value in info.items():
+        decoded = TAGS.get(tag, tag)
+        if decoded == "GPSInfo":
+            gps_data = {}
+            for t in value:
+                sub_decoded = GPSTAGS.get(t, t)
+                gps_data[sub_decoded] = value[t]
+            exif_data[decoded] = gps_data
+        else:
+            exif_data[decoded] = value
     return exif_data
 
 
@@ -28,7 +29,7 @@ def _convert_to_degrees(value):
 
 
 def get_lat_lon(exif_data):
-    """Returns the latitude and longitude, if available, from the provided exif_data (obtained through get_exif_data above)"""
+    """Returns the latitude and longitude, if available, from the provided exif_data (obtained through get_exif_data)"""
     if "GPSInfo" not in exif_data:
         return None, None
     gps_info = exif_data["GPSInfo"]

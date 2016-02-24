@@ -99,8 +99,6 @@ class GUI(xbmcgui.WindowXML):
         # super(GUI, self).onAction(action)
         ch.serve_action(action, self.getFocusId(), self)
         self.update()
-        self.window.setProperty("streetview_image", self.streetview_url)
-        self.window.setProperty("map_image", self.map_url)
 
     @ch.action("previousmenu", "*")
     def close_script(self):
@@ -121,8 +119,6 @@ class GUI(xbmcgui.WindowXML):
         super(GUI, self).onClick(control_id)
         ch.serve(control_id, self)
         self.update()
-        self.window.setProperty("streetview_image", self.streetview_url)
-        self.window.setProperty("map_image", self.map_url)
 
     @ch.action("info", "*")
     def info_press(self):
