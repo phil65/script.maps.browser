@@ -5,7 +5,6 @@
 
 import xbmcaddon
 import xbmcgui
-import urllib
 import math
 
 import googlemaps
@@ -14,7 +13,6 @@ from Eventful import Eventful
 from MapQuest import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
-from SearchSelectDialog import SearchSelectDialog
 from EventInfoDialog import EventInfoDialog
 from ActionHandler import ActionHandler
 
@@ -79,7 +77,9 @@ class GUI(xbmcgui.WindowXML):
             self.lat, self.lon = Utils.get_coords_by_ip()
             self.zoom = 3
         elif self.location and self.strlat:  # latlon empty
-            self.lat, self.lon = self.get_geocodes(False, self.location)
+            data = googlemaps.get_coords_by_location(False, self.location)
+            if data:
+                self.lat, self.lon, self.zoom = data
         else:
             self.lat = float(self.strlat)
             self.lon = float(self.strlon)
@@ -187,7 +187,9 @@ class GUI(xbmcgui.WindowXML):
     @ch.click(C_GOTO_PLACE)
     def go_to_place(self):
         self.location = self.getProperty("Location")
-        self.lat, self.lon = self.get_geocodes(False, self.location)
+        data = googlemaps.get_coords_by_location(False, self.location)
+        if data:
+            self.lat, self.lon, self.zoom = data
 
     @ch.click(C_PLACES_LIST)
     def list_click(self):
@@ -302,10 +304,9 @@ class GUI(xbmcgui.WindowXML):
                                                type=xbmcgui.INPUT_ALPHANUM)
         if self.location:
             self.street_view = False
-            lat, lon = self.get_geocodes(True, self.location)
-            if lat:
-                self.lat = lat
-                self.lon = lon
+            data = googlemaps.get_coords_by_location(True, self.location)
+            if data:
+                self.lat, self.lon, self.zoom = data
             else:
                 Utils.notify("Error", "No Search results found.")
 
@@ -403,35 +404,3 @@ class GUI(xbmcgui.WindowXML):
         self.window.setProperty('streetview', "True" if self.street_view else "")
         self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
         self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, size)
-
-    def get_geocodes(self, show_dialog, search_string):
-        base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
-        url = "&address=%s" % (urllib.quote_plus(search_string))
-        results = Utils.get_JSON_response(base_url + url)
-        if not results or not results.get("results"):
-            return self.lat, self.lon
-        first_match = results["results"][0]["geometry"]["location"]
-        if show_dialog and len(results["results"]) > 1:
-            places = []
-            for item in results["results"]:
-                location = item["geometry"]["location"]
-                googlemap = googlemaps.get_static_map(lat=location["lat"],
-                                                      lon=location["lng"],
-                                                      scale=1,
-                                                      size="320x320")
-                places.append({'label': item['formatted_address'],
-                               'lat': location["lat"],
-                               'lon': location["lng"],
-                               'thumb': googlemap,
-                               'id': item['formatted_address']})
-            w = SearchSelectDialog('DialogSelect.xml',
-                                   ADDON_PATH,
-                                   listing=Utils.create_listitems(places))
-            w.doModal()
-            if w.lat:
-                self.zoom = 12
-                return (float(w.lat), float(w.lon))
-        elif results["results"]:
-            self.zoom = 12
-            return (first_match["lat"], first_match["lng"])  # no window when only 1 result
-        return (self.lat, self.lon)  # old values when no hit
