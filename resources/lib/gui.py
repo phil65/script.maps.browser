@@ -57,14 +57,23 @@ class GUI(xbmcgui.WindowXML):
         self.strlon = kwargs.get("lon", "")
         self.zoom = kwargs.get("zoom", 10)
         self.aspect = kwargs.get("aspect", "640x400")
-        self.init_vars()
-        for arg in sys.argv:
-            param = arg.lower()
-            if param.startswith('folder='):
-                folder = param[7:]
-                self.items, self.pins = self.get_images(folder)
-            elif param.startswith('direction='):
-                self.direction = param[10:]
+        self.nav_mode_active = False
+        self.street_view = False
+        self.zoom_saved = 10
+        self.zoom_streetview = 0
+        self.lat = 0.0
+        self.lon = 0.0
+        self.pitch = 0
+        self.pins = ""
+        self.direction = 0
+        self.saved_id = 100
+        self.radius = 50
+        self.map_url = ""
+        self.streetview_url = ""
+        if kwargs.get("folder"):
+            self.items, self.pins = self.get_images(kwargs["folder"])
+        if kwargs.get("direction"):
+            self.direction = kwargs["direction"]
         if self.location == "geocode":
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
@@ -88,21 +97,6 @@ class GUI(xbmcgui.WindowXML):
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
-
-    def init_vars(self):
-        self.nav_mode_active = False
-        self.street_view = False
-        self.zoom_saved = 10
-        self.zoom_streetview = 0
-        self.lat = 0.0
-        self.lon = 0.0
-        self.pitch = 0
-        self.pins = ""
-        self.direction = 0
-        self.saved_id = 100
-        self.radius = 50
-        self.map_url = ""
-        self.streetview_url = ""
 
     def onAction(self, action):
         # super(GUI, self).onAction(action)
