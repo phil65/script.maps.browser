@@ -38,7 +38,7 @@
                 <posy>40</posy>
                 <height>260</height>
                 <width>410</width>
-                <texture background="true" colordiffuse="FF000000">views/addonwall_select.png</texture>
+                <texture border="8" colordiffuse="FF000000">buttons/thumbnail_focused.png</texture>
             </control>
             <control type="image">
                 <posy>20</posy>
