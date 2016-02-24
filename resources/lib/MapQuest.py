@@ -73,6 +73,12 @@ class MapQuest():
             letter += 1
             if i > MAX_LIMIT:
                 break
-        fill_area = "&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|%s,%s|%s,%s|%s,%s|%s,%s" % (lat_high, lon_high, lat_high, lon_low, lat_low, lon_low, lat_low, lon_high)
-        pins = pins + fill_area.replace("|", "%7C")
+        box_params = ["&path=color:0x00000000",
+                      "weight:5",
+                      "fillcolor:0xFFFF0033",
+                      "%s,%s" % (lat_high, lon_high),
+                      "%s,%s" % (lat_high, lon_low),
+                      "%s,%s" % (lat_low, lon_low),
+                      "%s,%s" % (lat_low, lon_high)]
+        pins = pins + "%7C".join(box_params)
         return places, pins

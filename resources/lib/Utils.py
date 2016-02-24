@@ -213,7 +213,7 @@ def get_images(path=""):
                          "filepath": path + filename,
                          "index": str(count),
                          }
-                if len(pins) < 1850:
+                if len(pins) < 1830:
                     pins += "%7C{0},{1}".format(lat, lon)
                 images.append(props)
         except Exception as e:
