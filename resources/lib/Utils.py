@@ -180,7 +180,6 @@ def log(txt):
 
 def get_images(path=""):
     pins = "&markers=color:blue"
-    letter = ord('A')
     images = []
     for count, filename in enumerate(xbmcvfs.listdir(path)[-1]):
         try:
@@ -203,11 +202,9 @@ def get_images(path=""):
                          "thumb": path + filename,
                          "filepath": path + filename,
                          "index": str(count),
-                         "letter": chr(letter),
                          }
                 if len(pins) < 1850:
-                    pins += "%7C" + str(lat) + "," + str(lon)
-                    letter += 1
+                    pins += "%7C{0},{1}".format(lat, lon)
                 images.append(props)
         except Exception as e:
             log("Error when handling get_images results")
@@ -249,19 +246,22 @@ def create_listitems(data):
         return []
     items = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem('%s' % (str(count)))
+        listitem = xbmcgui.ListItem()
         for (key, value) in result.iteritems():
-            if str(key).lower() in ["name", "label", "title"]:
-                listitem.setLabel(unicode(value))
-            if str(key).lower() in ["thumb"]:
-                listitem.setThumbnailImage(unicode(value))
-            if str(key).lower() in ["icon"]:
-                listitem.setIconImage(unicode(value))
-            if str(key).lower() in ["thumb", "poster", "banner", "fanart"]:
-                listitem.setArt({str(key).lower(): unicode(value)})
-            if str(key).lower() in ["path"]:
-                listitem.setPath(path=unicode(value))
-            listitem.setProperty('%s' % (str(key)), unicode(value))
+            if not value:
+                continue
+            value = unicode(value)
+            if key in ["name", "label", "title"]:
+                listitem.setLabel(value)
+            if key in ["thumb"]:
+                listitem.setThumbnailImage(value)
+            if key in ["icon"]:
+                listitem.setIconImage(value)
+            if key in ["thumb", "poster", "banner", "fanart"]:
+                listitem.setArt({key: value})
+            if key in ["path"]:
+                listitem.setPath(path=value)
+            listitem.setProperty(key, value)
         items.append(listitem)
     return items
 

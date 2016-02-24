@@ -6,7 +6,6 @@
 import xbmcaddon
 import xbmcgui
 import urllib
-import sys
 import math
 
 import googlemaps
@@ -71,7 +70,7 @@ class GUI(xbmcgui.WindowXML):
         self.map_url = ""
         self.streetview_url = ""
         if kwargs.get("folder"):
-            self.items, self.pins = self.get_images(kwargs["folder"])
+            self.items, self.pins = Utils.get_images(kwargs["folder"])
         if kwargs.get("direction"):
             self.direction = kwargs["direction"]
         if self.location == "geocode":
@@ -90,10 +89,8 @@ class GUI(xbmcgui.WindowXML):
         self.clearProperty('NavMode')
         self.clearProperty('streetview')
         self.venues = self.getControl(C_PLACES_LIST)
-        self.get_map_urls()
+        self.update()
         Utils.fill_list_control(self.venues, self.items)
-        self.window.setProperty("map_image", self.map_url)
-        self.window.setProperty("streetview_image", self.streetview_url)
         if not ADDON.getSetting('firststart') == "true":
             ADDON.setSetting(id='firststart', value='true')
             xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
@@ -101,7 +98,7 @@ class GUI(xbmcgui.WindowXML):
     def onAction(self, action):
         # super(GUI, self).onAction(action)
         ch.serve_action(action, self.getFocusId(), self)
-        self.get_map_urls()
+        self.update()
         self.window.setProperty("streetview_image", self.streetview_url)
         self.window.setProperty("map_image", self.map_url)
 
@@ -123,7 +120,7 @@ class GUI(xbmcgui.WindowXML):
     def onClick(self, control_id):
         super(GUI, self).onClick(control_id)
         ch.serve(control_id, self)
-        self.get_map_urls()
+        self.update()
         self.window.setProperty("streetview_image", self.streetview_url)
         self.window.setProperty("map_image", self.map_url)
 
@@ -383,7 +380,7 @@ class GUI(xbmcgui.WindowXML):
         Utils.fill_list_control(self.venues, items)
         self.street_view = False
 
-    def get_map_urls(self):
+    def update(self):
         size = "320x200" if self.street_view else "640x400"
         googlemap = googlemaps.get_static_map(lat=self.lat,
                                               lon=self.lon,
