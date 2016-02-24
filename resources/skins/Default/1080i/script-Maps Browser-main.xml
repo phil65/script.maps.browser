@@ -85,134 +85,142 @@
             <animation condition="Control.HasFocus(725)" effect="fade" end="0" start="100" time="280">Conditional</animation>
             <control id="200" type="list">
                 <width>1920</width>
-                <posy>735</posy>
+                <posy>0</posy>
                 <height>980</height>
                 <orientation>horizontal</orientation>
                 <onup>651</onup>
                 <ondown>651</ondown>
                 <onleft>200</onleft>
                 <onright>200</onright>
-                <itemlayout height="280" width="450">
+                <itemlayout height="280" width="384">
                     <control type="image">
-                        <width>450</width>
-                        <height>270</height>
+                        <width>384</width>
+                        <height>240</height>
                         <aspectratio>scale</aspectratio>
                         <texture>common/black.png</texture>
                     </control>
                     <control type="image">
                         <posy>5</posy>
                         <posx>3</posx>
-                        <width>444</width>
-                        <height>260</height>
+                        <width>378</width>
+                        <height>230</height>
                         <aspectratio>scale</aspectratio>
                         <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
-                    <control type="group">
-                        <posx>5</posx>
-                        <control type="label">
-                            <posy>220</posy>
-                            <aligny>top</aligny>
-                            <width>420</width>
-                            <height>35</height>
-                            <font>font12</font>
-                            <textcolor>FFe5e5e5</textcolor>
-                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Label][/B]</label>
-                        </control>
-                        <control type="group">
-                            <control type="label">
-                                <posy>2</posy>
-                                <width>420</width>
-                                <height>35</height>
-                                <font>font10</font>
-                                <textcolor>FFe5e5e5</textcolor>
-                                <shadowcolor>FF000000</shadowcolor>
-                                <label>[UPPERCASE]$INFO[ListItem.Label2][/UPPERCASE]</label>
-                            </control>
-                            <control type="label">
-                                <posy>80</posy>
-                                <width>420</width>
-                                <height>81</height>
-                                <font>font10</font>
-                                <align>left</align>
-                                <aligny>bottom</aligny>
-                                <shadowcolor>FF000000</shadowcolor>
-                                <textcolor>FFe5e5e5</textcolor>
-                                <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
-                            </control>
-                            <control type="image">
-                                <posy>100</posy>
-                                <width>180</width>
-                                <height>40</height>
-                                <aspectratio align="center">keep</aspectratio>
-                                <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
-                                <colordiffuse>FFe5e5e5</colordiffuse>
-                            </control>
-                        </control>
+                    <control type="image">
+                        <posx>3</posx>
+                        <posy>170</posy>
+                        <width>384</width>
+                        <height>70</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture colordiffuse="AAFFFFFF">common/black.png</texture>
+                    </control>
+                    <control type="image">
+                        <posx>3</posx>
+                        <posy>5</posy>
+                        <width>384</width>
+                        <height>32</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture colordiffuse="AAFFFFFF">common/black.png</texture>
+                    </control>
+                    <control type="label">
+                        <posy>185</posy>
+                        <posx>20</posx>
+                        <aligny>center</aligny>
+                        <width>344</width>
+                        <height>35</height>
+                        <font>font10</font>
+                        <textcolor>FFe5e5e5</textcolor>
+                        <label>$INFO[ListItem.Property(date),,[CR]][B][COLOR=FFa4a4a4]$INFO[ListItem.Property(letter),,:][/B] [/COLOR]$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posy>5</posy>
+                        <posx>20</posx>
+                        <width>344</width>
+                        <height>81</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <shadowcolor>FF000000</shadowcolor>
+                        <textcolor>FFe5e5e5</textcolor>
+                        <label>$INFO[ListItem.Property(eventname)]</label>
+                    </control>
+                    <control type="image">
+                        <posy>105</posy>
+                        <width>180</width>
+                        <height>40</height>
+                        <aspectratio align="center">keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
+                        <colordiffuse>FFe5e5e5</colordiffuse>
                     </control>
                 </itemlayout>
-                <focusedlayout height="200" width="450">
+                <focusedlayout height="200" width="384">
                     <control type="image">
-                        <width>450</width>
-                        <height>270</height>
+                        <width>384</width>
+                        <height>240</height>
                         <aspectratio>scale</aspectratio>
                         <texture>common/black.png</texture>
                     </control>
                     <control type="image">
                         <posy>5</posy>
                         <posx>3</posx>
-                        <width>444</width>
-                        <height>260</height>
+                        <width>378</width>
+                        <height>230</height>
                         <aspectratio>scale</aspectratio>
                         <texture fallback="DefaultPicture.png">$INFO[ListItem.Art(thumb)]</texture>
                     </control>
-                    <control type="group">
-                        <posx>5</posx>
-                        <control type="label">
-                            <posy>220</posy>
-                            <aligny>top</aligny>
-                            <width>420</width>
-                            <height>35</height>
-                            <font>font12</font>
-                            <textcolor>FFe5e5e5</textcolor>
-                            <label>[COLOR=FFa4a4a4]$INFO[ListItem.Property(letter)]: [/COLOR][B]$INFO[ListItem.Label][/B]</label>
-                        </control>
-                        <control type="group">
-                            <control type="label">
-                                <posy>2</posy>
-                                <width>420</width>
-                                <height>35</height>
-                                <font>font10</font>
-                                <textcolor>FFe5e5e5</textcolor>
-                                <shadowcolor>FF000000</shadowcolor>
-                                <label>[UPPERCASE]$INFO[ListItem.Label2][/UPPERCASE]</label>
-                            </control>
-                            <control type="label">
-                                <posy>80</posy>
-                                <width>420</width>
-                                <height>81</height>
-                                <font>font10</font>
-                                <align>left</align>
-                                <aligny>bottom</aligny>
-                                <shadowcolor>FF000000</shadowcolor>
-                                <textcolor>FFe5e5e5</textcolor>
-                                <label>[UPPERCASE]$INFO[ListItem.Property(eventname)][/UPPERCASE]</label>
-                            </control>
-                            <control type="image">
-                                <posy>100</posy>
-                                <width>180</width>
-                                <height>40</height>
-                                <aspectratio align="center">keep</aspectratio>
-                                <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
-                                <colordiffuse>FFe5e5e5</colordiffuse>
-                            </control>
-                        </control>
+                    <control type="image">
+                        <posx>3</posx>
+                        <posy>170</posy>
+                        <width>378</width>
+                        <height>70</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture colordiffuse="AAFFFFFF">common/black.png</texture>
                     </control>
                     <control type="image">
-                        <posx>-3</posx>
+                        <posx>3</posx>
+                        <posy>5</posy>
+                        <width>378</width>
+                        <height>32</height>
+                        <aspectratio>scale</aspectratio>
+                        <texture colordiffuse="AAFFFFFF">common/black.png</texture>
+                    </control>
+                    <control type="label">
+                        <posy>185</posy>
+                        <posx>20</posx>
+                        <aligny>center</aligny>
+                        <width>344</width>
+                        <height>35</height>
+                        <font>font10</font>
+                        <textcolor>FFe5e5e5</textcolor>
+                        <label>$INFO[ListItem.Property(date),,[CR]][B][COLOR=FFa4a4a4]$INFO[ListItem.Property(letter),,:][/B] [/COLOR]$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posy>5</posy>
+                        <posx>20</posx>
+                        <width>344</width>
+                        <height>81</height>
+                        <font>font10</font>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <shadowcolor>FF000000</shadowcolor>
+                        <textcolor>FFe5e5e5</textcolor>
+                        <label>$INFO[ListItem.Property(eventname)]</label>
+                    </control>
+                    <control type="image">
+                        <posy>105</posy>
+                        <width>180</width>
+                        <height>40</height>
+                        <aspectratio align="center">keep</aspectratio>
+                        <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
+                        <colordiffuse>FFe5e5e5</colordiffuse>
+                    </control>
+                    <control type="image">
+                        <posx>0</posx>
                         <posy>0</posy>
-                        <width>456</width>
-                        <height>260</height>
-                        <texture border="8">views/addonwall_select.png</texture>
+                        <width>384</width>
+                        <height>240</height>
+                        <texture border="8" colordiffuse="FF12B2E7">buttons/thumbnail_focused.png</texture>
                         <colordiffuse>FF0084ff</colordiffuse>
                         <include>PanelGlowFade</include>
                         <visible>Control.HasFocus(200)</visible>

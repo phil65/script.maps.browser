@@ -8,6 +8,7 @@ import urllib
 
 import Utils
 import googlemaps
+import re
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
 
@@ -31,7 +32,7 @@ class Eventful():
         elif index == 0:
             return ""
 
-    def get_eventlist(self, lat="", lon="", query="", category="", radius=30):
+    def get_events(self, lat="", lon="", query="", category="", radius=30):
         params = {"image_sizes": "large",
                   "include": "price",
                   "units": "km",
@@ -80,8 +81,12 @@ class Eventful():
             photo = venue["image"]["large"]["url"] if venue.get("image") else ""
             if venue["start_time"] == venue["stop_time"] or not venue["stop_time"]:
                 date = venue["start_time"]
+            elif venue["start_time"][:10] == venue["stop_time"][:10]:
+                date = venue["start_time"] + " - " + venue["stop_time"][:10]
+                date = re.sub(r"\d{2}:\d{2}:\d{2}", "", date)
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
+                date = re.sub(r"\d{2}:\d{2}:\d{2}", "", date)
             props = {"id": str(venue['id']),
                      "eventful_id": str(venue['venue_id']),
                      "eventname": Utils.cleanText(venue['title']),
@@ -91,7 +96,7 @@ class Eventful():
                      "label2": date.replace("00:00:00", ""),
                      "photo": photo,
                      "thumb": photo,
-                     "date": date.replace("00:00:00", ""),
+                     "date": date,
                      "address": Utils.cleanText(venue["venue_address"]),
                      "Venue_Image": photo,
                      "venue_id_eventful": venue['venue_id'],
