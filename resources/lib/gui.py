@@ -46,7 +46,7 @@ C_MODE_TOGGLE = 126
 class GUI(xbmcgui.WindowXML):
 
     @Utils.busy_dialog
-    def __init__(self, skin_file, ADDON_PATH, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.items = []
         self.location = kwargs.get("location", "")
         self.type = kwargs.get("type", "roadmap")
@@ -62,15 +62,13 @@ class GUI(xbmcgui.WindowXML):
         self.lon = 0.0
         self.pitch = 0
         self.pins = ""
-        self.direction = 0
         self.saved_id = 100
         self.radius = 50
         self.map_url = ""
         self.streetview_url = ""
+        self.direction = kwargs.get("direction", 0)
         if kwargs.get("folder"):
             self.items, self.pins = Utils.get_images(kwargs["folder"])
-        if kwargs.get("direction"):
-            self.direction = kwargs["direction"]
         if self.location == "geocode":
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
