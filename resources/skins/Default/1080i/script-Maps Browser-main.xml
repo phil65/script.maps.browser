@@ -80,7 +80,6 @@
             </control>
         </control>
         <control type="group">
-            <include>Animation_VisibleChange200</include>
             <visible>IsEmpty(Window.Property(streetview)) + IntegerGreaterThan(Container(200).NumItems,0)</visible>
             <animation condition="Control.HasFocus(725)" effect="fade" end="0" start="100" time="280">Conditional</animation>
             <control id="200" type="list">
@@ -222,7 +221,6 @@
                         <height>240</height>
                         <texture border="8" colordiffuse="FF12B2E7">buttons/thumbnail_focused.png</texture>
                         <colordiffuse>FF0084ff</colordiffuse>
-                        <include>PanelGlowFade</include>
                         <visible>Control.HasFocus(200)</visible>
                     </control>
                 </focusedlayout>
@@ -438,7 +436,9 @@
             </control>
         </control>
         <control id="725" type="button">
-            <include>HiddenObject</include>
+            <width>1</width>
+            <height>1</height>
+            <left>-2000</left>
             <texturenofocus>-</texturenofocus>
             <font>-</font>
         </control>
