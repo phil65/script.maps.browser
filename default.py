@@ -37,7 +37,8 @@ class Main:
                   ADDON_PATH,
                   lat=self.params.get("lat"),
                   lon=self.params.get("lon"),
-                  location=self.params.get("location"))
+                  location=self.params.get("location"),
+                  folder=self.params.get("folder"))
         gui.doModal()
 
     def _parse_argv(self):
