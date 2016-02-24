@@ -16,9 +16,6 @@ from PIL import Image
 import hashlib
 import ImageTags
 import simplejson as json
-from functools import wraps
-import threading
-
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -187,22 +184,20 @@ def get_images(path=""):
     return images, pins
 
 
-def string_to_deg(raw_string):
-    raw_string = raw_string.strip().replace('"', '').replace("'", "")
-    clean_string = raw_string[1:]
-    clean_string = clean_string.replace("d", "")
-    clean_string = clean_string.replace("  ", " ")
+def string_to_deg(string):
+    string = string.strip().replace('"', '').replace("'", "")
+    string = string[1:].replace("d", "").replace("  ", " ")
     div = '[|:|\s]'  # allowable field delimiters "|", ":", whitespace
     sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
     co_re = re.compile(sdec)
-    co_search = co_re.search(clean_string)
+    co_search = co_re.search(string)
     if co_search is None:
-        raise ValueError("Invalid input string: %s" % raw_string)
+        raise ValueError("Invalid input string: %s" % string)
     elems = co_search.groups()
     dec_degrees = float(elems[0]) + float(elems[1]) / 60.0 + float(elems[2]) / 3600.0
-    if raw_string[0].lower() == "w" or raw_string[0].lower() == "s":
+    if string[0].lower() in ["w", "s"]:
         dec_degrees = -1.0 * dec_degrees
-    return float(dec_degrees)
+    return dec_degrees
 
 
 def parse_geotags(lat, lon):
