@@ -61,7 +61,6 @@ class FourSquare():
                      "thumb": photo,
                      "Venue_Image": icon,
                      "GoogleMap": googlemap,
-                     "index":  str(count),
                      "letter": chr(letter + count),
                      "lat": lat,
                      "lon": lon,

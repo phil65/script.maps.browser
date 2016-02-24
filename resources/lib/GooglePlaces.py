@@ -144,19 +144,16 @@ class GooglePlaces():
             description = place['vicinity'] if "vicinity" in place else place.get('formatted_address', "")
             lat = str(place['geometry']['location']['lat'])
             lon = str(place['geometry']['location']['lng'])
-            rating = str(place['rating'] * 2.0) if "rating" in place else ""
             props = {'name': place['name'],
                      'label': place['name'],
                      'label2': " / ".join(place['types']),
                      'description': description,
                      "letter": chr(letter),
-                     "index": str(count),
                      "thumb": photo,
                      "icon": place['icon'],
                      "lat": lat,
                      "lon": lon,
-                     "rating": rating,
-                     "index": str(count)}
+                     "rating": str(place['rating'] * 2.0) if "rating" in place else ""}
             pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
             places.append(props)
             letter += 1

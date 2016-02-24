@@ -22,8 +22,7 @@ class Eventful():
         results = self.get_data(method="categories/list",
                                 cache_days=7)
         modeselect = [Utils.LANG(32122)]
-        for item in results["category"]:
-            modeselect.append(Utils.cleanText(item["name"]))
+        modeselect += [Utils.cleanText(i["name"]) for i in results["category"]]
         index = xbmcgui.Dialog().select(Utils.LANG(32123), modeselect)
         if index == -1:
             return None
@@ -98,16 +97,12 @@ class Eventful():
                      "thumb": photo,
                      "date": date,
                      "address": Utils.cleanText(venue["venue_address"]),
-                     "Venue_Image": photo,
-                     "venue_id_eventful": venue['venue_id'],
                      "GoogleMap": googlemap,
-                     "index":  str(count),
-                     "letter": chr(letter),
+                     "letter": chr(letter + count),
                      "lat": lat,
                      "lon": lon}
             pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
             places.append(props)
-            letter += 1
         return places, pins
 
     def get_data(self, method, params={}, cache_days=0.5):

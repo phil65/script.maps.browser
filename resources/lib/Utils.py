@@ -162,7 +162,7 @@ def log(txt):
 def get_images(path=""):
     pins = "&markers=color:blue"
     images = []
-    for count, filename in enumerate(xbmcvfs.listdir(path)[-1]):
+    for filename in xbmcvfs.listdir(path)[-1]:
         try:
             img = Image.open(path + filename)
             exif_data = ImageTags.get_exif_data(img)
@@ -183,7 +183,6 @@ def get_images(path=""):
                      "description": date,
                      "thumb": path + filename,
                      "filepath": path + filename,
-                     "index": str(count),
                      }
             if len(pins) < 1830:
                 pins += "%7C{0},{1}".format(lat, lon)
@@ -241,6 +240,7 @@ def create_listitems(data):
             if key in ["path"]:
                 listitem.setPath(path=value)
             listitem.setProperty(key, value)
+            listitem.setProperty("index", str(count))
         items.append(listitem)
     return items
 

@@ -66,8 +66,7 @@ class MapQuest():
                      'type': incident_types.get(place['type'], ""),
                      "letter": chr(letter),
                      "lat": lat,
-                     "lon": lon,
-                     "index": str(i)}
+                     "lon": lon}
             pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter), lat, lon)
             places.append(props)
             letter += 1
