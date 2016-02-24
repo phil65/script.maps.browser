@@ -302,14 +302,13 @@ class GUI(xbmcgui.WindowXML):
 
     def toggle_street_mode(self):
         if self.street_view:
-            self.street_view = False
             self.zoom = self.zoom_saved
             self.clearProperty('streetview')
         else:
-            self.street_view = True
             self.zoom_saved = self.zoom
             self.zoom = 15
             self.window.setProperty('streetview', 'True')
+        self.street_view = not self.street_view
 
     def search_location(self):
         self.location = xbmcgui.Dialog().input(Utils.LANG(32032),
