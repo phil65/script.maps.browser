@@ -196,29 +196,29 @@ def get_images(path=""):
             img = Image.open(path + filename)
             exif_data = ImageTags.get_exif_data(img)
             lat, lon = ImageTags.get_lat_lon(exif_data)
+            if not lat or not lon:
+                continue
             if "DateTimeOriginal" in exif_data:
                 date = exif_data["DateTimeOriginal"]
             elif "DateTime" in exif_data:
                 date = exif_data["DateTime"]
             else:
                 date = ""
-            if lat:
-                props = {"name": filename,
-                         "label": filename,
-                         "lat": str(lat),
-                         "lon": str(lon),
-                         "date": date,
-                         "description": date,
-                         "thumb": path + filename,
-                         "filepath": path + filename,
-                         "index": str(count),
-                         }
-                if len(pins) < 1830:
-                    pins += "%7C{0},{1}".format(lat, lon)
-                images.append(props)
-        except Exception as e:
-            log("Error when handling get_images results")
-            log(e)
+            props = {"name": filename,
+                     "label": filename,
+                     "lat": str(lat),
+                     "lon": str(lon),
+                     "date": date,
+                     "description": date,
+                     "thumb": path + filename,
+                     "filepath": path + filename,
+                     "index": str(count),
+                     }
+            if len(pins) < 1830:
+                pins += "%7C{0},{1}".format(lat, lon)
+            images.append(props)
+        except Exception:
+            pass
     return images, pins
 
 
