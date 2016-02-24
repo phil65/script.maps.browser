@@ -7,7 +7,7 @@ import urllib
 import Utils
 import googlemaps
 
-MAPQUEST_KEY = "Fmjtd%7Cluur2hu829%2C75%3Do5-9wasd4"
+MAPQUEST_KEY = "Fmjtd|luur2hu829,75=o5-9wasd4"
 MAX_LIMIT = 25
 BASE_URL = 'http://www.mapquestapi.com/traffic/v2/'
 
