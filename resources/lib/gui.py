@@ -120,14 +120,7 @@ class GUI(xbmcgui.WindowXML):
 
     @ch.action("info", "*")
     def info_press(self):
-        if ADDON.getSetting("InfoButtonAction") == "1":
-            self.toggle_map_mode()
-        else:
-            if not self.street_view:
-                self.toggle_street_mode()
-                self.toggle_nav_mode()
-            else:
-                self.toggle_street_mode()
+        self.toggle_map_mode()
 
     @ch.action("up", "*")
     @ch.action("down", "*")
