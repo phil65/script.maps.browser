@@ -10,7 +10,7 @@ import math
 import googlemaps
 import Utils
 from Eventful import Eventful
-from MapQuest import MapQuest
+import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
 from EventInfoDialog import EventInfoDialog
@@ -300,13 +300,14 @@ class MapsBrowser(xbmcgui.WindowXML):
     def search_location(self):
         self.location = xbmcgui.Dialog().input(Utils.LANG(32032),
                                                type=xbmcgui.INPUT_ALPHANUM)
-        if self.location:
-            self.street_view = False
-            data = googlemaps.get_coords_by_location(True, self.location)
-            if data:
-                self.lat, self.lon, self.zoom = data
-            else:
-                Utils.notify("Error", "No Search results found.")
+        if not self.location:
+            return None
+        self.street_view = False
+        data = googlemaps.get_coords_by_location(True, self.location)
+        if data:
+            self.lat, self.lon, self.zoom = data
+        else:
+            Utils.notify("Error", "No Search results found.")
 
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self):
@@ -325,26 +326,24 @@ class MapsBrowser(xbmcgui.WindowXML):
             return None
         if keys[index] == "googleplaces":
             GP = GooglePlaces()
-            category = GP.select_category()
-            if category:
-                self.pins, items = GP.get_locations(self.lat, self.lon, self.radius * 1000, category)
+            cat = GP.select_category()
+            if cat is not None:
+                self.pins, items = GP.get_locations(self.lat, self.lon, self.radius * 1000, cat)
         elif keys[index] == "foursquare":
             FS = FourSquare()
             section = FS.select_section()
             if section:
                 items, self.pins = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
-            MQ = MapQuest()
-            items, self.pins = MQ.get_incidents(self.lat, self.lon, self.zoom)
+            items, self.pins = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, Utils.LANG(32021), 'pictures')
-            self.window.setProperty('imagepath', folder_path)
             items, self.pins = Utils.get_images(folder_path)
         elif keys[index] == "eventful":
             EF = Eventful()
-            category = EF.select_category()
-            if category is not None:
-                items, self.pins = EF.get_events(self.lat, self.lon, "", category, self.radius)
+            cat = EF.select_category()
+            if cat is not None:
+                items, self.pins = EF.get_events(self.lat, self.lon, "", cat, self.radius)
         elif keys[index] == "reset":
             self.pins = ""
             items = []
