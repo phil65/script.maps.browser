@@ -192,21 +192,11 @@ class MapsBrowser(xbmcgui.WindowXML):
         if itemindex != self.getProperty('index'):
             self.window.setProperty('index', itemindex)
             return None
-        foursquare_id = item.getProperty("foursquare_id")
-        eventful_id = item.getProperty("eventful_id")
         picture_path = item.getProperty("filepath")
         if picture_path:
             dialog = Utils.PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
                                          ADDON_PATH,
                                          picture_path=picture_path)
-        elif foursquare_id:
-            dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
-                                     ADDON_PATH,
-                                     foursquare_id=foursquare_id)
-        elif eventful_id:
-            dialog = EventInfoDialog(u'script-%s-dialog.xml' % ADDON_NAME,
-                                     ADDON_PATH,
-                                     eventful_id=eventful_id)
         dialog.doModal()
 
     @ch.click(C_ZOOM_IN)
