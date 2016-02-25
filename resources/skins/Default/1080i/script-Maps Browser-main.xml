@@ -275,12 +275,12 @@
                     <radioposy>13</radioposy>
                     <radiowidth>48</radiowidth>
                     <font>font10</font>
-                    <textureradioonfocus colordiffuse="D0FFFFFF">googlemaps/Search.png</textureradioonfocus>
-                    <textureradioonnofocus colordiffuse="D0FFFFFF">googlemaps/Search.png</textureradioonnofocus>
-                    <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/Search.png</textureradioofffocus>
-                    <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/Search.png</textureradiooffnofocus>
-                    <textureradiooffdisabled colordiffuse="disabled">googlemaps/Search.png</textureradiooffdisabled>
-                    <textureradioondisabled colordiffuse="disabled">googlemaps/Search.png</textureradioondisabled>
+                    <textureradioonfocus colordiffuse="D0FFFFFF">googlemaps/search.png</textureradioonfocus>
+                    <textureradioonnofocus colordiffuse="D0FFFFFF">googlemaps/search.png</textureradioonnofocus>
+                    <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/search.png</textureradioofffocus>
+                    <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/search.png</textureradiooffnofocus>
+                    <textureradiooffdisabled colordiffuse="disabled">googlemaps/search.png</textureradiooffdisabled>
+                    <textureradioondisabled colordiffuse="disabled">googlemaps/search.png</textureradioondisabled>
                     <label>$LOCALIZE[137]</label>
                 </control>
             </control>
