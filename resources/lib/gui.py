@@ -373,13 +373,12 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.street_view = False
 
     def update(self):
-        size = "320x200" if self.street_view else "640x400"
         googlemap = googlemaps.get_static_map(lat=self.lat,
                                               lon=self.lon,
                                               location=self.location,
                                               maptype=self.type,
                                               zoom=self.zoom,
-                                              size=size)
+                                              size="640x400")
         self.map_url = googlemap + self.pins
         self.streetview_url = googlemaps.get_streetview_image(lat=self.lat,
                                                               lon=self.lon,
@@ -394,7 +393,8 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.window.setProperty('direction', str(self.direction / 18))
         self.window.setProperty('type', self.type)
         self.window.setProperty('aspect', self.aspect)
-        self.window.setProperty('map_image', self.map_url)
+        self.window.setProperty('map', self.map_url)
+        self.window.setProperty('streetview_map', googlemap.replace("640x400", "320x200"))
         self.window.setProperty('streetview_image', self.streetview_url)
         self.window.setProperty('streetview', "True" if self.street_view else "")
         self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
