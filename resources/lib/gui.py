@@ -69,7 +69,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.lon = 0.0
         self.pitch = 0
         self.pins = ""
-        self.saved_id = 100
+        self.saved_id = C_NAV_MODE
         self.radius = 50
         self.map_url = ""
         self.streetview_url = ""
@@ -112,11 +112,12 @@ class MapsBrowser(xbmcgui.WindowXML):
     @ch.action("close", "*")
     def previous_menu(self):
         if self.nav_mode_active or self.street_view:
-            self.clearProperty('NavMode')
             self.clearProperty('streetview')
-            self.nav_mode_active = False
             self.street_view = False
-            self.setFocusId(self.saved_id)
+            if self.nav_mode_active:
+                self.clearProperty('NavMode')
+                self.nav_mode_active = False
+                self.setFocusId(self.saved_id)
         else:
             self.close()
 
