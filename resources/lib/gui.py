@@ -398,4 +398,4 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.window.setProperty('streetview_image', self.streetview_url)
         self.window.setProperty('streetview', "True" if self.street_view else "")
         self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
-        self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, size)
+        self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, "640x400")

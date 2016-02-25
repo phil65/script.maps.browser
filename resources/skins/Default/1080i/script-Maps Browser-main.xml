@@ -218,7 +218,7 @@
                         <posx>0</posx>
                         <posy>0</posy>
                         <width>384</width>
-                        <height>220</height>
+                        <height>240</height>
                         <texture border="8" colordiffuse="FF12B2E7">buttons/thumbnail_focused.png</texture>
                         <colordiffuse>FF0084ff</colordiffuse>
                         <visible>Control.HasFocus(200)</visible>
