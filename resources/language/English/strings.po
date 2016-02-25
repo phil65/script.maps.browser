@@ -121,7 +121,7 @@ msgid "Choose folder with geotagged images"
 msgstr ""
 
 msgctxt "#32022"
-msgid "\"Enter music tags to search for\""
+msgid "Enter location search terms"
 msgstr ""
 
 #: /resources/lib/GooglePlaces.py:29
@@ -146,7 +146,7 @@ msgid "Places from geotagged images"
 msgstr ""
 
 msgctxt "#32028"
-msgid "Eventful Near Events"
+msgid "Eventful events"
 msgstr ""
 
 msgctxt "#32029"
@@ -154,7 +154,7 @@ msgid "FourSquare Explore"
 msgstr ""
 
 msgctxt "#32030"
-msgid "MapQuest Traffic Incidents"
+msgid "MapQuest traffic incidents (US only)"
 msgstr ""
 
 msgctxt "#32031"
