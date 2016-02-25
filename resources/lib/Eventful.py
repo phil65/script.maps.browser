@@ -39,7 +39,7 @@ class Eventful():
                   "sort_order": "date",
                   "date": "Future",
                   "where": "%.8f,%.8f" % (lat, lon),
-                  "within": int(radius),
+                  "within": max(int(radius), 5),
                   "query": query,
                   "category": category}
         results = self.get_data(method="events/search",
