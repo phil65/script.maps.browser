@@ -31,6 +31,7 @@ C_MODE_ROADMAP = 105
 C_MODE_HYBRID = 106
 C_MODE_SATELLITE = 107
 C_MODE_TERRAIN = 108
+C_NAV_MODE = 109
 C_GOTO_PLACE = 111
 C_SELECT_PROVIDER = 112
 C_LEFT = 120
@@ -40,7 +41,7 @@ C_DOWN = 123
 C_LOOK_UP = 124
 C_LOOK_DOWN = 125
 C_PLACES_LIST = 200
-C_MODE_TOGGLE = 126
+C_MAPTYPE_TOGGLE = 126
 
 
 def get_window(*args, **kwargs):
@@ -176,11 +177,7 @@ class MapsBrowser(xbmcgui.WindowXML):
 
     @ch.click(C_STREET_VIEW)
     def toggle_street_view(self):
-        if not self.street_view:
-            self.toggle_street_mode()
-            self.toggle_nav_mode()
-        else:
-            self.toggle_street_mode()
+        self.toggle_street_mode()
 
     @ch.click(C_GOTO_PLACE)
     def go_to_place(self):
@@ -248,6 +245,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         if self.pitch >= -80:
             self.pitch -= 10
 
+    @ch.click(C_NAV_MODE)
     @ch.action("contextmenu", "*")
     def toggle_nav_mode(self):
         if self.nav_mode_active:
@@ -260,7 +258,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.window.setProperty('NavMode', 'True')
             self.setFocusId(725)
 
-    @ch.click(C_MODE_TOGGLE)
+    @ch.click(C_MAPTYPE_TOGGLE)
     def toggle_map_mode(self):
         if self.type == "roadmap":
             self.type = "satellite"

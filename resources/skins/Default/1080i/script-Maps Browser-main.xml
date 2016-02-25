@@ -31,7 +31,7 @@
         </control>
         <control type="group">
             <visible>!IsEmpty(Window.Property(streetview))</visible>
-            <animation delay="600" effect="slide" end="0,0" start="400,0" time="560" tween="cubic" reversible="true">Visible</animation>
+            <animation delay="0" effect="slide" end="0,0" start="400,0" time="360" tween="cubic" reversible="true">Visible</animation>
             <posx>1500</posx>
             <control type="image">
                 <posx>-5</posx>
@@ -228,8 +228,8 @@
         </control>
         <control type="group">
             <posy>950</posy>
-            <animation condition="Control.HasFocus(725)" effect="slide" end="0,200" start="0,0" time="480" tween="quadratic">Conditional</animation>
-            <animation delay="600" effect="slide" end="0,0" start="0,200" time="560" tween="cubic">WindowOpen</animation>
+            <animation condition="Control.HasFocus(725)" effect="slide" end="0,200" start="0,0" time="400" tween="quadratic">Conditional</animation>
+            <animation delay="300" effect="slide" end="0,0" start="0,200" time="400" tween="cubic">WindowOpen</animation>
             <control type="image">
                 <posy>0</posy>
                 <width>1920</width>
@@ -316,6 +316,27 @@
                     <textureradioondisabled colordiffuse="disabled">googlemaps/map.png</textureradioondisabled>
                     <label>$ADDON[script.maps.browser 32125]</label>
                     <selected>!IsEmpty(Window.Property(streetview))</selected>
+                </control>
+                <control type="radiobutton" id="109">
+                    <width>220</width>
+                    <height>142</height>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <texturefocus border="40">buttons/button-theme-fo.png</texturefocus>
+                    <texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
+                    <textoffsetx>35</textoffsetx>
+                    <textoffsety>78</textoffsety>
+                    <radioposx>86</radioposx>
+                    <radioposy>13</radioposy>
+                    <radiowidth>48</radiowidth>
+                    <font>font10</font>
+                    <textureradioonfocus colordiffuse="D0FFFFFF">googlemaps/navigate.png</textureradioonfocus>
+                    <textureradioonnofocus colordiffuse="D0FFFFFF">googlemaps/navigate.png</textureradioonnofocus>
+                    <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/navigate.png</textureradioofffocus>
+                    <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/navigate.png</textureradiooffnofocus>
+                    <textureradiooffdisabled colordiffuse="disabled">googlemaps/navigate.png</textureradiooffdisabled>
+                    <textureradioondisabled colordiffuse="disabled">googlemaps/navigate.png</textureradioondisabled>
+                    <label>Navigate</label>
                 </control>
                 <control type="grouplist" id="130">
                     <itemgap>-30</itemgap>
