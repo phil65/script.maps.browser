@@ -341,6 +341,7 @@
                 <control type="grouplist" id="130">
                     <itemgap>-30</itemgap>
                     <height>150</height>
+                    <width>220</width>
                     <control type="radiobutton" id="103">
                         <width>220</width>
                         <height>85</height>
