@@ -94,7 +94,7 @@
                 <itemlayout height="280" width="384">
                     <control type="image">
                         <width>384</width>
-                        <height>220</height>
+                        <height>240</height>
                         <aspectratio>scale</aspectratio>
                         <texture>common/black.png</texture>
                     </control>
@@ -156,7 +156,7 @@
                 <focusedlayout height="200" width="384">
                     <control type="image">
                         <width>384</width>
-                        <height>220</height>
+                        <height>240</height>
                         <aspectratio>scale</aspectratio>
                         <texture>common/black.png</texture>
                     </control>
