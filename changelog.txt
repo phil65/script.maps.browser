@@ -1,2 +1,5 @@
+v1.0.0
+- complete rework
+
 v0.8.0
-Initial Version.
+- Initial version
