@@ -12,22 +12,20 @@
             <width>1920</width>
             <height>1080</height>
             <aspectratio>scale</aspectratio>
-            <fadetime>150</fadetime>
+            <fadetime>400</fadetime>
             <animation effect="fade" time="200">VisibleChange</animation>
             <texture>$INFO[Window.Property(streetview_image)]</texture>
             <visible>!IsEmpty(Window.Property(streetview))</visible>
         </control>
-        <control type="group">
+        <control type="image">
+            <posx>0</posx>
+            <width>1920</width>
+            <height>1080</height>
+            <aspectratio>scale</aspectratio>
+            <fadetime>400</fadetime>
             <animation effect="fade" time="200">VisibleChange</animation>
             <visible>IsEmpty(Window.Property(streetview))</visible>
-            <control type="image">
-                <posx>0</posx>
-                <width>1920</width>
-                <height>1080</height>
-                <aspectratio>scale</aspectratio>
-                <fadetime>150</fadetime>
-                <texture>$INFO[Window.Property(map)]</texture>
-            </control>
+            <texture>$INFO[Window.Property(map)]</texture>
         </control>
         <control type="group">
             <visible>!IsEmpty(Window.Property(streetview))</visible>
