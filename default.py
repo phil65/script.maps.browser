@@ -20,7 +20,7 @@
 import sys
 import xbmc
 import xbmcaddon
-from resources.lib.gui import GUI
+from resources.lib import gui
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
@@ -33,13 +33,11 @@ class Main:
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
         self._parse_argv()
-        gui = GUI(u'script-%s-main.xml' % ADDON_NAME,
-                  ADDON_PATH,
-                  lat=self.params.get("lat"),
-                  lon=self.params.get("lon"),
-                  location=self.params.get("location"),
-                  folder=self.params.get("folder"))
-        gui.doModal()
+        wnd = gui.get_window(lat=self.params.get("lat"),
+                             lon=self.params.get("lon"),
+                             location=self.params.get("location"),
+                             folder=self.params.get("folder"))
+        wnd.doModal()
 
     def _parse_argv(self):
         self.infos = []

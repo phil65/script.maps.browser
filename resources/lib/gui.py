@@ -43,7 +43,14 @@ C_PLACES_LIST = 200
 C_MODE_TOGGLE = 126
 
 
-class GUI(xbmcgui.WindowXML):
+def get_window(*args, **kwargs):
+    return MapsBrowser(u'script-%s-main.xml' % ADDON_NAME,
+                       ADDON_PATH,
+                       *args,
+                       **kwargs)
+
+
+class MapsBrowser(xbmcgui.WindowXML):
 
     @Utils.busy_dialog
     def __init__(self, *args, **kwargs):
@@ -94,7 +101,7 @@ class GUI(xbmcgui.WindowXML):
             xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
 
     def onAction(self, action):
-        # super(GUI, self).onAction(action)
+        # super(MapsBrowser, self).onAction(action)
         ch.serve_action(action, self.getFocusId(), self)
         self.update()
 
@@ -114,7 +121,7 @@ class GUI(xbmcgui.WindowXML):
             self.close()
 
     def onClick(self, control_id):
-        super(GUI, self).onClick(control_id)
+        super(MapsBrowser, self).onClick(control_id)
         ch.serve(control_id, self)
         self.update()
 
