@@ -24,7 +24,7 @@ msgstr ""
 msgctxt "Addon Description"
 msgid ""
 "This Maps Browser Add-on allows you to explore the map with a remote. It can also show Places (Source: FourSquare), "
-"Concerts (Source: Last.FM), geotagged images and much more on the map. Also offers skin integration."
+"events (source: Eventful), geotagged images and much more on the map. Also offers skin integration."
 msgstr ""
 
 #: /resources/lib/GooglePlaces.py:17
@@ -131,10 +131,6 @@ msgstr ""
 
 msgctxt "#32024"
 msgid "Google maps search"
-msgstr ""
-
-msgctxt "#32025"
-msgid "Type in artist name"
 msgstr ""
 
 msgctxt "#32026"
