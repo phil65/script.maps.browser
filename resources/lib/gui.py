@@ -377,7 +377,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         streetview_map = googlemaps.get_static_map(lat=self.lat,
                                                    lon=self.lon,
                                                    location=self.location,
-                                                   maptype=self.type,
+                                                   maptype="roadmap",
                                                    zoom=15,
                                                    size="320x200")
         self.map_url = googlemap + self.pins
