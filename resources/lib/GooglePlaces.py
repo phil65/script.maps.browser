@@ -109,7 +109,7 @@ class GooglePlaces():
                       "zoo": Utils.LANG(32119)
                       }
         modeselect = [Utils.LANG(32120)]
-        modeselect += [value for value in Categories.iterkeys()]
+        modeselect += [value for value in Categories.itervalues()]
         index = xbmcgui.Dialog().select(Utils.LANG(32121), modeselect)
         if index > 0:
             return Categories.keys()[index - 1]
