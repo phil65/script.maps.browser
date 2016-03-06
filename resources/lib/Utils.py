@@ -193,17 +193,17 @@ def get_images(path=""):
 
 
 def string_to_deg(string):
+    reverse = True if string[0].lower() in ["w", "s"] else False
     string = string.strip().replace('"', '').replace("'", "")
-    string = string[1:].replace("d", "").replace("  ", " ")
+    string = string[1:].replace("d", "").replace("  ", " ").replace("  ", " ")
     div = '[|:|\s]'  # allowable field delimiters "|", ":", whitespace
     sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
-    co_re = re.compile(sdec)
-    co_search = co_re.search(string)
+    co_search = re.compile(sdec).search(string)
     if co_search is None:
         raise ValueError("Invalid input string: %s" % string)
     elems = co_search.groups()
     dec_degrees = float(elems[0]) + float(elems[1]) / 60.0 + float(elems[2]) / 3600.0
-    if string[0].lower() in ["w", "s"]:
+    if string[0].lower() in ["w", "s"] or reverse:
         dec_degrees = -1.0 * dec_degrees
     return dec_degrees
 
