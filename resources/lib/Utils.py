@@ -193,7 +193,7 @@ def get_images(path=""):
 
 
 def string_to_deg(string):
-    reverse = True if string[0].lower() in ["w", "s"] else False
+    reverse = string[0].lower() in ["w", "s"]
     string = string.strip().replace('"', '').replace("'", "")
     string = string[1:].replace("d", "").replace("  ", " ").replace("  ", " ")
     div = '[|:|\s]'  # allowable field delimiters "|", ":", whitespace
