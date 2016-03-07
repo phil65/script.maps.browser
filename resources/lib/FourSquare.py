@@ -66,7 +66,7 @@ class FourSquare():
                      "lon": lon,
                      "phone": venue['contact'].get('phone', ""),
                      "comments": str(venue['stats']['tipCount'])}
-            self.pins = self.pins + "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            self.pins = self.pins + "&markers=color:blue%7Clabel:" + chr(letter + count) + "%7C" + lat + "," + lon
             places.append(props)
         return places, self.pins
 

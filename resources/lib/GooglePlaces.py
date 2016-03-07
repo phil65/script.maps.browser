@@ -148,13 +148,12 @@ class GooglePlaces():
                      'label': place['name'],
                      'label2': " / ".join(place['types']),
                      'description': description,
-                     "letter": chr(letter),
+                     "letter": chr(letter + count),
                      "thumb": photo,
                      "icon": place['icon'],
                      "lat": lat,
                      "lon": lon,
                      "rating": str(place['rating'] * 2.0) if "rating" in place else ""}
-            pins += "&markers=color:blue%7Clabel:" + chr(letter) + "%7C" + lat + "," + lon
+            pins += "&markers=color:blue%7Clabel:" + chr(letter + count) + "%7C" + lat + "," + lon
             places.append(props)
-            letter += 1
         return pins, places
