@@ -5,7 +5,9 @@
     <allowoverlay>no</allowoverlay>
     <controls>
         <control id="111" type="button">
-            <include>HiddenObject</include>
+            <left>-100</left>
+            <height>1</height>
+            <width>1</width>
         </control>
         <control type="image">
             <posx>0</posx>
@@ -74,7 +76,7 @@
                 <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),18)" effect="rotate" end="-18" time="0">Conditional</animation>
                 <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),19)" effect="rotate" end="-18" time="0">Conditional</animation>
                 <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),20)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <colordiffuse>red</colordiffuse>
+                <colordiffuse>FFCE4421</colordiffuse>
             </control>
         </control>
         <control type="group">
@@ -142,14 +144,6 @@
                         <textcolor>FFe5e5e5</textcolor>
                         <label>$INFO[ListItem.Property(eventname)]</label>
                     </control>
-                    <control type="image">
-                        <posy>105</posy>
-                        <width>180</width>
-                        <height>40</height>
-                        <aspectratio align="center">keep</aspectratio>
-                        <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
-                        <colordiffuse>FFe5e5e5</colordiffuse>
-                    </control>
                 </itemlayout>
                 <focusedlayout height="200" width="384">
                     <control type="image">
@@ -203,14 +197,6 @@
                         <shadowcolor>FF000000</shadowcolor>
                         <textcolor>FFe5e5e5</textcolor>
                         <label>$INFO[ListItem.Property(eventname)]</label>
-                    </control>
-                    <control type="image">
-                        <posy>105</posy>
-                        <width>180</width>
-                        <height>40</height>
-                        <aspectratio align="center">keep</aspectratio>
-                        <texture>$INFO[ListItem.Property(rating),stars/,.png]</texture>
-                        <colordiffuse>FFe5e5e5</colordiffuse>
                     </control>
                     <control type="image">
                         <posx>0</posx>
