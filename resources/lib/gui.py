@@ -13,7 +13,6 @@ from Eventful import Eventful
 import MapQuest
 from GooglePlaces import GooglePlaces
 from FourSquare import FourSquare
-from EventInfoDialog import EventInfoDialog
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
