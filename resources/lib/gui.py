@@ -41,6 +41,7 @@ C_LOOK_UP = 124
 C_LOOK_DOWN = 125
 C_PLACES_LIST = 200
 C_MAPTYPE_TOGGLE = 126
+C_BUTTON_NAV = 725
 
 
 def get_window(*args, **kwargs):
@@ -198,6 +199,10 @@ class MapsBrowser(xbmcgui.WindowXML):
                                          picture_path=picture_path)
         dialog.doModal()
 
+    @ch.click(C_BUTTON_NAV)
+    def quit_nav(self):
+        self.previous_menu()
+
     @ch.click(C_ZOOM_IN)
     def zoom_in(self):
         self.location = "%s,%s" % (self.lat, self.lon)
@@ -241,7 +246,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.saved_id = self.getFocusId()
             self.nav_mode_active = True
             self.window.setProperty('NavMode', 'True')
-            self.setFocusId(725)
+            self.setFocusId(C_BUTTON_NAV)
 
     @ch.click(C_MAPTYPE_TOGGLE)
     def toggle_map_mode(self):
