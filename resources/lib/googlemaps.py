@@ -76,4 +76,20 @@ def get_coords_by_location(show_dialog, search_string):
             return (float(w.lat), float(w.lon), 12)
     elif results["results"]:
         return (first_match["lat"], first_match["lng"], 12)  # no window when only 1 result
-    return (self.lat, self.lon)  # old values when no hit
+    return None  # old values when no hit
+
+
+def create_letter_pins(items):
+    letter = ord('A')
+    pins = ""
+    for i, item in enumerate(items):
+        pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), item["lat"], item["lon"])
+    return pins
+
+
+def create_pins(items):
+    pins = "&markers=color:blue"
+    for i, item in enumerate(items):
+        if len(pins) < 1830:
+            pins += "%7C{0},{1}".format(item["lat"], item["lon"])
+    return pins

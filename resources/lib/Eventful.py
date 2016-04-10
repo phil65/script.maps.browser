@@ -66,7 +66,6 @@ class Eventful():
         return self.handle_events(results['event'])
 
     def handle_events(self, results):
-        pins = ""
         places = []
         letter = ord('A')
         if not isinstance(results, list):
@@ -101,9 +100,8 @@ class Eventful():
                      "letter": chr(letter + i),
                      "lat": lat,
                      "lon": lon}
-            pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), lat, lon)
             places.append(props)
-        return places, pins
+        return places
 
     def get_data(self, method, params={}, cache_days=0.5):
         params["app_key"] = EVENTFUL_KEY
@@ -115,3 +113,5 @@ class Eventful():
                                                    params=urllib.urlencode(params))
         return Utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
+
+EF = Eventful()

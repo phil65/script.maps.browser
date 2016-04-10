@@ -24,7 +24,6 @@ class FourSquare():
         pass
 
     def handle_places(self, results):
-        self.pins = ""
         places = list()
         letter = ord('A')
         for count, venue in enumerate(results):
@@ -66,9 +65,8 @@ class FourSquare():
                      "lon": lon,
                      "phone": venue['contact'].get('phone', ""),
                      "comments": str(venue['stats']['tipCount'])}
-            self.pins = self.pins + "&markers=color:blue%7Clabel:" + chr(letter + count) + "%7C" + lat + "," + lon
             places.append(props)
-        return places, self.pins
+        return places
 
     def get_places(self, lat, lon, query="", category_id=""):
         params = {"limit": 26,
@@ -152,3 +150,5 @@ class FourSquare():
                                                    params=urllib.urlencode(params))
         return Utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
+
+FS = FourSquare()

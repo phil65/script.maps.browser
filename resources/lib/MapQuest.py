@@ -25,7 +25,6 @@ def get_incidents(lat, lon, zoom):
     url = BASE_URL + 'incidents?' + urllib.urlencode(params)
     results = Utils.get_JSON_response(url)
     places = []
-    pins = ""
     letter = ord('A')
     if results['info']['statuscode'] == 400:
         Utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
@@ -62,10 +61,14 @@ def get_incidents(lat, lon, zoom):
                  "letter": chr(letter + i),
                  "lat": lat,
                  "lon": lon}
-        pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), lat, lon)
         places.append(props)
         if i > MAX_LIMIT:
             break
+    return places
+
+
+def get_bounding_box(lat, lon, zoom):
+    lat_high, lon_high, lat_low, lon_low = Utils.get_bounding_box(lat, lon, zoom)
     box_params = ["&path=color:0x00000000",
                   "weight:5",
                   "fillcolor:0xFFFF0033",
@@ -73,5 +76,4 @@ def get_incidents(lat, lon, zoom):
                   "%s,%s" % (lat_high, lon_low),
                   "%s,%s" % (lat_low, lon_low),
                   "%s,%s" % (lat_low, lon_high)]
-    pins = pins + "%7C".join(box_params)
-    return places, pins
+    return "%7C".join(box_params)

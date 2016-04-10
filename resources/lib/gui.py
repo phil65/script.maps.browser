@@ -9,10 +9,10 @@ import math
 
 import googlemaps
 import Utils
-from Eventful import Eventful
+from Eventful import EF
 import MapQuest
-from GooglePlaces import GooglePlaces
-from FourSquare import FourSquare
+from GooglePlaces import GP
+from FourSquare import FS
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -75,7 +75,8 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.streetview_url = ""
         self.direction = kwargs.get("direction", 0)
         if kwargs.get("folder"):
-            self.items, self.pins = Utils.get_images(kwargs["folder"])
+            self.items = Utils.get_images(kwargs["folder"])
+            self.pins = googlemaps.create_pins(self.items)
         if self.location == "geocode":
             self.lat, self.lon = Utils.parse_geotags(self.strlat, self.strlon)
         elif not self.location and not self.strlat:  # both empty
@@ -106,11 +107,11 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.update()
 
     @ch.action("previousmenu", "*")
-    def close_script(self):
+    def close_script(self, control_id):
         self.close()
 
     @ch.action("close", "*")
-    def previous_menu(self):
+    def previous_menu(self, control_id):
         if self.nav_mode_active or self.street_view:
             self.clearProperty('streetview')
             self.street_view = False
@@ -127,14 +128,14 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.update()
 
     @ch.action("info", "*")
-    def info_press(self):
+    def info_press(self, control_id):
         self.toggle_map_mode()
 
     @ch.action("up", "*")
     @ch.action("down", "*")
     @ch.action("left", "*")
     @ch.action("right", "*")
-    def navigate(self):
+    def navigate(self, control_id):
         if not self.nav_mode_active:
             return None
         Utils.log("lat: %s lon: %s" % (self.lat, self.lon))
@@ -176,14 +177,14 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.location = "%s,%s" % (self.lat, self.lon)
 
     @ch.click(C_GOTO_PLACE)
-    def go_to_place(self):
+    def go_to_place(self, control_id):
         self.location = self.getProperty("Location")
         data = googlemaps.get_coords_by_location(False, self.location)
         if data:
             self.lat, self.lon, self.zoom = data
 
     @ch.click(C_PLACES_LIST)
-    def list_click(self):
+    def list_click(self, control_id):
         item = self.venues.getSelectedItem()
         self.lat = float(item.getProperty("lat"))
         self.lon = float(item.getProperty("lon"))
@@ -200,11 +201,11 @@ class MapsBrowser(xbmcgui.WindowXML):
         dialog.doModal()
 
     @ch.click(C_BUTTON_NAV)
-    def quit_nav(self):
+    def quit_nav(self, control_id):
         self.previous_menu()
 
     @ch.click(C_ZOOM_IN)
-    def zoom_in(self):
+    def zoom_in(self, control_id):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
             if self.zoom_streetview <= 20:
@@ -214,7 +215,7 @@ class MapsBrowser(xbmcgui.WindowXML):
                 self.zoom += 1
 
     @ch.click(C_ZOOM_OUT)
-    def zoom_out(self):
+    def zoom_out(self, control_id):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.street_view:
             if self.zoom_streetview >= 1:
@@ -224,20 +225,20 @@ class MapsBrowser(xbmcgui.WindowXML):
                 self.zoom -= 1
 
     @ch.click(C_LOOK_UP)
-    def pitch_up(self):
+    def pitch_up(self, control_id):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.pitch <= 80:
             self.pitch += 10
 
     @ch.click(C_LOOK_DOWN)
-    def pitch_down(self):
+    def pitch_down(self, control_id):
         self.location = "%s,%s" % (self.lat, self.lon)
         if self.pitch >= -80:
             self.pitch -= 10
 
     @ch.click(C_NAV_MODE)
     @ch.action("contextmenu", "*")
-    def toggle_nav_mode(self):
+    def toggle_nav_mode(self, control_id):
         if self.nav_mode_active:
             self.nav_mode_active = False
             self.clearProperty('NavMode')
@@ -249,7 +250,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.setFocusId(C_BUTTON_NAV)
 
     @ch.click(C_MAPTYPE_TOGGLE)
-    def toggle_map_mode(self):
+    def toggle_map_mode(self, control_id):
         if self.type == "roadmap":
             self.type = "satellite"
         elif self.type == "satellite":
@@ -260,23 +261,23 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.type = "roadmap"
 
     @ch.click(C_MODE_ROADMAP)
-    def set_roadmap_type(self):
+    def set_roadmap_type(self, control_id):
         self.type = "roadmap"
 
     @ch.click(C_MODE_HYBRID)
-    def set_hybrid_type(self):
+    def set_hybrid_type(self, control_id):
         self.type = "hybrid"
 
     @ch.click(C_MODE_SATELLITE)
-    def set_satellite_type(self):
+    def set_satellite_type(self, control_id):
         self.type = "satellite"
 
     @ch.click(C_MODE_TERRAIN)
-    def set_terrain_type(self):
+    def set_terrain_type(self, control_id):
         self.type = "terrain"
 
     @ch.click(C_STREET_VIEW)
-    def toggle_street_mode(self):
+    def toggle_street_mode(self, control_id):
         if self.street_view:
             self.clearProperty('streetview')
         else:
@@ -285,7 +286,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.street_view = not self.street_view
 
     def search_location(self):
-        self.location = xbmcgui.Dialog().input(Utils.LANG(32032),
+        self.location = xbmcgui.Dialog().input(heading=Utils.LANG(32032),
                                                type=xbmcgui.INPUT_ALPHANUM)
         if not self.location:
             return None
@@ -297,7 +298,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             Utils.notify("Error", "No Search results found.")
 
     @ch.click(C_SELECT_PROVIDER)
-    def select_places_provider(self):
+    def select_places_provider(self, control_id):
         self.clearProperty('index')
         items = None
         modeselect = [("geopics", Utils.LANG(32027)),
@@ -312,34 +313,32 @@ class MapsBrowser(xbmcgui.WindowXML):
         if index == -1:
             return None
         if keys[index] == "googleplaces":
-            GP = GooglePlaces()
             cat = GP.select_category()
             if cat is not None:
-                self.pins, items = GP.get_locations(self.lat, self.lon, self.radius * 1000, cat)
+                items = GP.get_locations(self.lat, self.lon, self.radius * 1000, cat)
         elif keys[index] == "foursquare":
-            FS = FourSquare()
             section = FS.select_section()
-            if section:
-                items, self.pins = FS.get_places_by_section(self.lat, self.lon, section)
+            if not section:
+                items = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
-            items, self.pins = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
+            items = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, Utils.LANG(32021), 'pictures')
-            items, self.pins = Utils.get_images(folder_path)
+            items = Utils.get_images(folder_path)
         elif keys[index] == "eventful":
-            EF = Eventful()
             cat = EF.select_category()
             if cat is not None:
-                items, self.pins = EF.get_events(self.lat, self.lon, "", cat, self.radius)
+                items = EF.get_events(self.lat, self.lon, "", cat, self.radius)
         elif keys[index] == "reset":
             self.pins = ""
             items = []
         if items:
+            self.pins = googlemaps.create_letter_pins(items)
             Utils.set_list(self.venues, items)
         self.street_view = False
 
     @ch.click(C_SEARCH)
-    def open_search_dialog(self):
+    def open_search_dialog(self, control_id):
         modeselect = [("googlemaps", Utils.LANG(32024)),
                       ("foursquareplaces", Utils.LANG(32004)),
                       ("reset", Utils.LANG(32019))]
@@ -348,16 +347,15 @@ class MapsBrowser(xbmcgui.WindowXML):
         index = xbmcgui.Dialog().select(Utils.LANG(32026), VALUES)
         if index < 0:
             return None
+        items = []
         if KEYS[index] == "googlemaps":
             self.search_location()
-            items = []
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(Utils.LANG(32022), type=xbmcgui.INPUT_ALPHANUM)
-            FS = FourSquare()
-            items, self.pins = FS.get_places(self.lat, self.lon, query)
+            items = FS.get_places(self.lat, self.lon, query)
         elif KEYS[index] == "reset":
             self.pins = ""
-            items = []
+        self.pins = googlemaps.create_letter_pins(items)
         Utils.set_list(self.venues, items)
         self.street_view = False
 

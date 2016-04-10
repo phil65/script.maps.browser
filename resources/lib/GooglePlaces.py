@@ -126,7 +126,6 @@ class GooglePlaces():
         base_url = BASE_URL + 'nearbysearch/json?'
         results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
         places = []
-        pins = ""
         letter = ord('A')
         if "meta" in results and results['meta']['code'] == 400:
             Utils.log("LIMIT EXCEEDED")
@@ -154,6 +153,8 @@ class GooglePlaces():
                      "lat": lat,
                      "lon": lon,
                      "rating": str(place['rating'] * 2.0) if "rating" in place else ""}
-            pins += "&markers=color:blue%7Clabel:" + chr(letter + count) + "%7C" + lat + "," + lon
             places.append(props)
-        return pins, places
+        return places
+
+
+GP = GooglePlaces()

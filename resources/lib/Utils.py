@@ -160,7 +160,6 @@ def log(txt):
 
 
 def get_images(path=""):
-    pins = "&markers=color:blue"
     images = []
     for filename in xbmcvfs.listdir(path)[-1]:
         try:
@@ -184,12 +183,10 @@ def get_images(path=""):
                      "thumb": path + filename,
                      "filepath": path + filename,
                      }
-            if len(pins) < 1830:
-                pins += "%7C{0},{1}".format(lat, lon)
             images.append(props)
         except Exception:
             pass
-    return images, pins
+    return images
 
 
 def string_to_deg(string):
