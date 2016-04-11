@@ -27,13 +27,6 @@ ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0  # 20037508.342789244
 HOME = xbmcgui.Window(10000)
 
 
-def set_list(listcontrol, listitem_dict):
-    listcontrol.reset()
-    listitems = create_listitems(listitem_dict)
-    listcontrol.addItems(items=listitems)
-    xbmcgui.Window(xbmcgui.getCurrentWindowId()).clearProperty("index")
-
-
 def get_bounding_box(lat, lon, zoom):
     mx, my = latlon_to_meters(lat, lon)
     px, py = meters_to_pixels(mx, my, zoom)

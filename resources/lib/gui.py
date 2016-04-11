@@ -93,7 +93,9 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.clearProperty('streetview')
         self.venues = self.getControl(C_PLACES_LIST)
         self.update()
-        Utils.set_list(self.venues, self.items)
+        self.venues.reset()
+        self.venues.addItems(items=utils.create_listitems(self.items))
+        self.clearProperty("index")
         if not addon.setting('firststart') == "true":
             addon.set_setting('firststart', 'true')
             xbmcgui.Dialog().ok(addon.LANG(32001), addon.LANG(32002), addon.LANG(32003))
@@ -331,7 +333,9 @@ class MapsBrowser(xbmcgui.WindowXML):
             items = []
         if items:
             self.pins = googlemaps.create_letter_pins(items)
-            Utils.set_list(self.venues, items)
+            self.venues.reset()
+            self.venues.addItems(items=utils.create_listitems(items))
+            self.clearProperty("index")
         self.street_view = False
 
     @ch.click(C_SEARCH)
@@ -353,7 +357,9 @@ class MapsBrowser(xbmcgui.WindowXML):
         elif KEYS[index] == "reset":
             self.pins = ""
         self.pins = googlemaps.create_letter_pins(items)
-        Utils.set_list(self.venues, items)
+        self.venues.reset()
+        self.venues.addItems(items=utils.create_listitems(items))
+        self.clearProperty("index")
         self.street_view = False
 
     def update(self):
