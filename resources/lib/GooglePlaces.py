@@ -136,13 +136,12 @@ class GooglePlaces():
         base_url = BASE_URL + 'nearbysearch/json?'
         results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
         places = []
-        letter = ord('A')
         if "meta" in results and results['meta']['code'] == 400:
             utils.log("LIMIT EXCEEDED")
             return "", []
         if "results" not in results:
             return "", []
-        for count, place in enumerate(results['results']):
+        for place in results['results']:
             try:
                 params = {"maxwidth": 400,
                           "photoreference": place['photos'][0]['photo_reference'],
@@ -157,7 +156,6 @@ class GooglePlaces():
                      'label': place['name'],
                      'label2': " / ".join(place['types']),
                      'description': description,
-                     "letter": chr(letter + count),
                      "thumb": photo,
                      "icon": place['icon'],
                      "lat": lat,

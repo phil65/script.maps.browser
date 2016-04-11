@@ -233,24 +233,3 @@ def cleanText(text):
         return text.strip()
     else:
         return ""
-
-
-class PictureDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_ARTIST_LIST = 500
-
-    def __init__(self, *args, **kwargs):
-        self.picture_path = kwargs.get('picture_path')
-
-    def onInit(self):
-        self.getControl(100).setImage(self.picture_path)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, controlID):
-        pass
-
-    def onFocus(self, controlID):
-        pass

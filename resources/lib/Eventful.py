@@ -12,6 +12,7 @@ import Utils
 import googlemaps
 
 from kodi65 import addon
+from kodi65.listitem import ListItem
 
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
@@ -71,10 +72,9 @@ class Eventful():
 
     def handle_events(self, results):
         places = []
-        letter = ord('A')
         if not isinstance(results, list):
             results = [results]
-        for i, venue in enumerate(results):
+        for venue in results:
             venuename = Utils.cleanText(venue['venue_name'])
             lat = venue['latitude']
             lon = venue['longitude']
@@ -100,7 +100,6 @@ class Eventful():
                      "date": date,
                      "address": Utils.cleanText(venue["venue_address"]),
                      "GoogleMap": googlemap,
-                     "letter": chr(letter + i),
                      "lat": lat,
                      "lon": lon}
             places.append(props)

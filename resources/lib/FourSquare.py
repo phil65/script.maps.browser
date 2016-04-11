@@ -26,9 +26,8 @@ class FourSquare():
         pass
 
     def handle_places(self, results):
-        places = list()
-        letter = ord('A')
-        for count, venue in enumerate(results):
+        places = []
+        for venue in results:
             try:
                 photo_node = venue['venue']['photos']['groups'][0]['items'][0]
                 photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
@@ -61,7 +60,6 @@ class FourSquare():
                      "thumb": photo,
                      "Venue_Image": icon,
                      "GoogleMap": googlemap,
-                     "letter": chr(letter + count),
                      "lat": lat,
                      "lon": lon,
                      "phone": venue['contact'].get('phone', ""),

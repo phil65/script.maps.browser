@@ -27,14 +27,13 @@ def get_incidents(lat, lon, zoom):
     url = BASE_URL + 'incidents?' + urllib.urlencode(params)
     results = Utils.get_JSON_response(url)
     places = []
-    letter = ord('A')
     if results['info']['statuscode'] == 400:
         utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
         return [], ""
     elif "incidents" not in results:
         utils.notify("Error", "Could not fetch results")
         return [], ""
-    for i, place in enumerate(results['incidents']):
+    for place in results['incidents'][:MAX_LIMIT]:
         lat = str(place['lat'])
         lon = str(place['lng'])
         params = {"key": MAPQUEST_KEY,
@@ -60,12 +59,9 @@ def get_incidents(lat, lon, zoom):
                  'date': place['startTime'],
                  'severity': str(place['severity']),
                  'type': incident_types.get(place['type'], ""),
-                 "letter": chr(letter + i),
                  "lat": lat,
                  "lon": lon}
         places.append(props)
-        if i > MAX_LIMIT:
-            break
     return places
 
 

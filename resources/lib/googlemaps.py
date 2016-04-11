@@ -83,7 +83,9 @@ def create_letter_pins(items):
     letter = ord('A')
     pins = ""
     for i, item in enumerate(items):
-        pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(chr(letter + i), item["lat"], item["lon"])
+        char = chr(letter + i)
+        item["letter"] = char
+        pins += "&markers=color:blue%7Clabel:{0}%7C{1},{2}".format(char, item["lat"], item["lon"])
     return pins
 
 

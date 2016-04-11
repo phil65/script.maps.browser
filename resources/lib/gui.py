@@ -15,6 +15,7 @@ from FourSquare import FS
 
 from kodi65 import utils
 from kodi65 import addon
+from kodi65 import slideshow
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -194,10 +195,8 @@ class MapsBrowser(xbmcgui.WindowXML):
             return None
         picture_path = item.getProperty("filepath")
         if picture_path:
-            dialog = Utils.PictureDialog(u'script-%s-picturedialog.xml' % addon.NAME,
-                                         addon.PATH,
-                                         picture_path=picture_path)
-        dialog.doModal()
+            pos = slideshow.open_slideshow(listitems=self.venues,
+                                           index=self.getControl(control_id).getSelectedPosition())
 
     @ch.click(C_BUTTON_NAV)
     def quit_nav(self, control_id):
