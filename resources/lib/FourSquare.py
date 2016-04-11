@@ -5,13 +5,15 @@
 
 # code for FourSquare Scraping based on script.maps by a.a.alsaleh. credits to him.
 
-import xbmcgui
-import xbmcaddon
 import urllib
+
+import xbmcgui
 import Utils
 import googlemaps
 
-ADDON = xbmcaddon.Addon()
+from kodi65 import utils
+from kodi65 import addon
+
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 BING_KEY = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
@@ -56,7 +58,6 @@ class FourSquare():
                      "label": venue['name'],
                      "label2": venue['name'],
                      "icon": icon,
-                     "photo": photo,
                      "thumb": photo,
                      "Venue_Image": icon,
                      "GoogleMap": googlemap,
@@ -80,11 +81,11 @@ class FourSquare():
             if results['meta']['code'] == 200:
                 return self.handle_places(results['response']['venues'])
             elif results['meta']['code'] == 400:
-                Utils.notify("Error", "LIMIT EXCEEDED")
+                utils.notify("Error", "LIMIT EXCEEDED")
             else:
-                Utils.notify("ERROR", "Could not get requested information")
+                utils.notify("ERROR", "Could not get requested information")
         else:
-            Utils.log("ERROR")
+            utils.log("ERROR")
         return [], ""
 
     def get_places_by_section(self, lat, lon, placetype):
@@ -100,39 +101,39 @@ class FourSquare():
             if results['response']['groups'][0]['items']:
                 return self.handle_places(results['response']['groups'][0]['items'])
             else:
-                Utils.notify("Error", "No results found near the selected area.")
+                utils.notify("Error", "No results found near the selected area.")
         elif results['meta']['code'] == 400:
-            Utils.log("LIMIT EXCEEDED")
+            utils.log("LIMIT EXCEEDED")
         else:
-            Utils.log("ERROR" + str(results['meta']['code']))
+            utils.log("ERROR" + str(results['meta']['code']))
         return [], ""
 
     def select_category(self):
         results = self.get_data(method="venues/categories",
                                 cache_days=7)
-        modeselect = [Utils.LANG(32122)]
-        modeselect += [Utils.cleanText(item["name"]) for item in results["categories"]]
-        index = xbmcgui.Dialog().select(Utils.LANG(32123), modeselect)
+        modeselect = [addon.LANG(32122)]
+        modeselect += [item["name"] for item in results["categories"]]
+        index = xbmcgui.Dialog().select(addon.LANG(32123), modeselect)
         if index > 0:
             return results["categories"][index - 1]["id"]
         elif index > -1:
             return ""
 
     def select_section(self):
-        sections = {"topPicks": Utils.LANG(32005),
-                    "food": Utils.LANG(32006),
-                    "drinks": Utils.LANG(32007),
-                    "coffee": Utils.LANG(32008),
-                    "shops": Utils.LANG(32009),
-                    "arts": Utils.LANG(32010),
-                    "outdoors": Utils.LANG(32011),
-                    "sights": Utils.LANG(32012),
-                    "trending": Utils.LANG(32013),
-                    "specials": Utils.LANG(32014),
-                    "nextVenues": Utils.LANG(32015)}
-        modeselect = [Utils.LANG(32120)]
+        sections = {"topPicks": addon.LANG(32005),
+                    "food": addon.LANG(32006),
+                    "drinks": addon.LANG(32007),
+                    "coffee": addon.LANG(32008),
+                    "shops": addon.LANG(32009),
+                    "arts": addon.LANG(32010),
+                    "outdoors": addon.LANG(32011),
+                    "sights": addon.LANG(32012),
+                    "trending": addon.LANG(32013),
+                    "specials": addon.LANG(32014),
+                    "nextVenues": addon.LANG(32015)}
+        modeselect = [addon.LANG(32120)]
         modeselect += [value for value in sections.itervalues()]
-        index = xbmcgui.Dialog().select(Utils.LANG(32121), modeselect)
+        index = xbmcgui.Dialog().select(addon.LANG(32121), modeselect)
         if index > 0:
             return sections.keys()[index - 1]
         elif index > -1:
@@ -143,8 +144,8 @@ class FourSquare():
         params["client_secret"] = FOURSQUARE_SECRET
         params["v"] = 20130815
         # params = {k: v for k, v in params.items() if v}
-        params = dict((k, v) for (k, v) in params.iteritems() if v)
-        params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
+        params = {k: v for (k, v) in params.iteritems() if v}
+        params = {k: unicode(v).encode('utf-8') for (k, v) in params.iteritems()}
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))

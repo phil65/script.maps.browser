@@ -7,6 +7,8 @@ import urllib
 import Utils
 import googlemaps
 
+from kodi65 import utils
+
 MAPQUEST_KEY = "lACkugtJjBp3lSA1ajvP05Sb6SikjNAW"
 MAX_LIMIT = 25
 BASE_URL = 'http://www.mapquestapi.com/traffic/v2/'
@@ -27,10 +29,10 @@ def get_incidents(lat, lon, zoom):
     places = []
     letter = ord('A')
     if results['info']['statuscode'] == 400:
-        Utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
+        utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
         return [], ""
     elif "incidents" not in results:
-        Utils.notify("Error", "Could not fetch results")
+        utils.notify("Error", "Could not fetch results")
         return [], ""
     for i, place in enumerate(results['incidents']):
         lat = str(place['lat'])

@@ -2,9 +2,9 @@
 <addon id="script.maps.browser" name="Maps Browser" version="1.1.0" provider-name="Philipp Temminghoff (phil65)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
-		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.module.pil" version="1.1.7"/>
 		<import addon="script.module.actionhandler" version="1.0.0"/>
+		<import addon="script.module.kodi65" version="1.0.0"/>
 	</requires>
 	<extension point="xbmc.python.script" library="default.py">
 		<provides>executable</provides>

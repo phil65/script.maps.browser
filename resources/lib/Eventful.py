@@ -3,12 +3,16 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmcgui
 import urllib
+import re
+
+import xbmcgui
 
 import Utils
 import googlemaps
-import re
+
+from kodi65 import addon
+
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
 
@@ -21,9 +25,9 @@ class Eventful():
     def select_category(self):
         results = self.get_data(method="categories/list",
                                 cache_days=7)
-        modeselect = [Utils.LANG(32122)]
+        modeselect = [addon.LANG(32122)]
         modeselect += [Utils.cleanText(i["name"]) for i in results["category"]]
-        index = xbmcgui.Dialog().select(Utils.LANG(32123), modeselect)
+        index = xbmcgui.Dialog().select(addon.LANG(32123), modeselect)
         if index == -1:
             return None
         if index > 0:
@@ -72,8 +76,8 @@ class Eventful():
             results = [results]
         for i, venue in enumerate(results):
             venuename = Utils.cleanText(venue['venue_name'])
-            lat = str(venue['latitude'])
-            lon = str(venue['longitude'])
+            lat = venue['latitude']
+            lon = venue['longitude']
             googlemap = googlemaps.get_static_map(lat=lat,
                                                   lon=lon)
             photo = venue["image"]["large"]["url"] if venue.get("image") else ""
@@ -85,14 +89,13 @@ class Eventful():
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
                 date = re.sub(r"\d{2}:\d{2}:\d{2}", "", date)
-            props = {"id": str(venue['id']),
+            props = {"label": venuename,
+                     "label2": date.replace("00:00:00", ""),
+                     "id": str(venue['id']),
                      "eventful_id": str(venue['venue_id']),
                      "eventname": Utils.cleanText(venue['title']),
                      "description": Utils.cleanText(venue['description']),
                      "name": venuename,
-                     "label": venuename,
-                     "label2": date.replace("00:00:00", ""),
-                     "photo": photo,
                      "thumb": photo,
                      "date": date,
                      "address": Utils.cleanText(venue["venue_address"]),
@@ -105,9 +108,8 @@ class Eventful():
 
     def get_data(self, method, params={}, cache_days=0.5):
         params["app_key"] = EVENTFUL_KEY
-        # params = {k: v for k, v in params.items() if v}
-        params = dict((k, v) for (k, v) in params.iteritems() if v)
-        params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
+        params = {k: v for k, v in params.iteritems() if v}
+        params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems()}
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))

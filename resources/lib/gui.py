@@ -3,7 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmcaddon
 import xbmcgui
 import math
 
@@ -13,14 +12,12 @@ from Eventful import EF
 import MapQuest
 from GooglePlaces import GP
 from FourSquare import FS
+
+from kodi65 import utils
+from kodi65 import addon
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
-
-
-ADDON = xbmcaddon.Addon()
-ADDON_PATH = ADDON.getAddonInfo('path')
-ADDON_NAME = ADDON.getAddonInfo('name')
 
 C_SEARCH = 101
 C_STREET_VIEW = 102
@@ -45,15 +42,15 @@ C_BUTTON_NAV = 725
 
 
 def get_window(*args, **kwargs):
-    return MapsBrowser(u'script-%s-main.xml' % ADDON_NAME,
-                       ADDON_PATH,
+    return MapsBrowser(u'script-%s-main.xml' % addon.NAME,
+                       addon.PATH,
                        *args,
                        **kwargs)
 
 
 class MapsBrowser(xbmcgui.WindowXML):
 
-    @Utils.busy_dialog
+    @utils.busy_dialog
     def __init__(self, *args, **kwargs):
         self.items = []
         self.location = kwargs.get("location", "")
@@ -97,9 +94,9 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.venues = self.getControl(C_PLACES_LIST)
         self.update()
         Utils.set_list(self.venues, self.items)
-        if not ADDON.getSetting('firststart') == "true":
-            ADDON.setSetting(id='firststart', value='true')
-            xbmcgui.Dialog().ok(Utils.LANG(32001), Utils.LANG(32002), Utils.LANG(32003))
+        if not addon.setting('firststart') == "true":
+            addon.set_setting('firststart', 'true')
+            xbmcgui.Dialog().ok(addon.LANG(32001), addon.LANG(32002), addon.LANG(32003))
 
     def onAction(self, action):
         # super(MapsBrowser, self).onAction(action)
@@ -138,7 +135,7 @@ class MapsBrowser(xbmcgui.WindowXML):
     def navigate(self, control_id):
         if not self.nav_mode_active:
             return None
-        Utils.log("lat: %s lon: %s" % (self.lat, self.lon))
+        utils.log("lat: %s lon: %s" % (self.lat, self.lon))
         if not self.street_view:
             stepsize = 60.0 / math.pow(2, self.zoom)
             if self.action_id == xbmcgui.ACTION_MOVE_UP:
@@ -191,12 +188,12 @@ class MapsBrowser(xbmcgui.WindowXML):
         self.zoom = 12
         itemindex = item.getProperty("index")
         if itemindex != self.getProperty('index'):
-            self.window.setProperty('index', itemindex)
+            self.setProperty('index', itemindex)
             return None
         picture_path = item.getProperty("filepath")
         if picture_path:
-            dialog = Utils.PictureDialog(u'script-%s-picturedialog.xml' % ADDON_NAME,
-                                         ADDON_PATH,
+            dialog = Utils.PictureDialog(u'script-%s-picturedialog.xml' % addon.NAME,
+                                         addon.PATH,
                                          picture_path=picture_path)
         dialog.doModal()
 
@@ -246,7 +243,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         else:
             self.saved_id = self.getFocusId()
             self.nav_mode_active = True
-            self.window.setProperty('NavMode', 'True')
+            self.setProperty('NavMode', 'True')
             self.setFocusId(C_BUTTON_NAV)
 
     @ch.click(C_MAPTYPE_TOGGLE)
@@ -282,11 +279,11 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.clearProperty('streetview')
         else:
             self.clearProperty('map')
-            self.window.setProperty('streetview', 'True')
+            self.setProperty('streetview', 'True')
         self.street_view = not self.street_view
 
     def search_location(self):
-        self.location = xbmcgui.Dialog().input(heading=Utils.LANG(32032),
+        self.location = xbmcgui.Dialog().input(heading=addon.LANG(32032),
                                                type=xbmcgui.INPUT_ALPHANUM)
         if not self.location:
             return None
@@ -295,21 +292,21 @@ class MapsBrowser(xbmcgui.WindowXML):
         if data:
             self.lat, self.lon, self.zoom = data
         else:
-            Utils.notify("Error", "No Search results found.")
+            utils.notify("Error", "No Search results found.")
 
     @ch.click(C_SELECT_PROVIDER)
     def select_places_provider(self, control_id):
         self.clearProperty('index')
         items = None
-        modeselect = [("geopics", Utils.LANG(32027)),
-                      ("eventful", Utils.LANG(32028)),
-                      ("foursquare", Utils.LANG(32029)),
-                      ("mapquest", Utils.LANG(32030)),
-                      ("googleplaces", Utils.LANG(32031)),
-                      ("reset", Utils.LANG(32019))]
+        modeselect = [("geopics", addon.LANG(32027)),
+                      ("eventful", addon.LANG(32028)),
+                      ("foursquare", addon.LANG(32029)),
+                      ("mapquest", addon.LANG(32030)),
+                      ("googleplaces", addon.LANG(32031)),
+                      ("reset", addon.LANG(32019))]
         listitems = [item[1] for item in modeselect]
         keys = [item[0] for item in modeselect]
-        index = xbmcgui.Dialog().select(Utils.LANG(32020), listitems)
+        index = xbmcgui.Dialog().select(addon.LANG(32020), listitems)
         if index == -1:
             return None
         if keys[index] == "googleplaces":
@@ -323,7 +320,7 @@ class MapsBrowser(xbmcgui.WindowXML):
         elif keys[index] == "mapquest":
             items = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
-            folder_path = xbmcgui.Dialog().browse(0, Utils.LANG(32021), 'pictures')
+            folder_path = xbmcgui.Dialog().browse(0, addon.LANG(32021), 'pictures')
             items = Utils.get_images(folder_path)
         elif keys[index] == "eventful":
             cat = EF.select_category()
@@ -339,19 +336,19 @@ class MapsBrowser(xbmcgui.WindowXML):
 
     @ch.click(C_SEARCH)
     def open_search_dialog(self, control_id):
-        modeselect = [("googlemaps", Utils.LANG(32024)),
-                      ("foursquareplaces", Utils.LANG(32004)),
-                      ("reset", Utils.LANG(32019))]
+        modeselect = [("googlemaps", addon.LANG(32024)),
+                      ("foursquareplaces", addon.LANG(32004)),
+                      ("reset", addon.LANG(32019))]
         KEYS = [item[0] for item in modeselect]
         VALUES = [item[1] for item in modeselect]
-        index = xbmcgui.Dialog().select(Utils.LANG(32026), VALUES)
+        index = xbmcgui.Dialog().select(addon.LANG(32026), VALUES)
         if index < 0:
             return None
         items = []
         if KEYS[index] == "googlemaps":
             self.search_location()
         elif KEYS[index] == "foursquareplaces":
-            query = xbmcgui.Dialog().input(Utils.LANG(32022), type=xbmcgui.INPUT_ALPHANUM)
+            query = xbmcgui.Dialog().input(addon.LANG(32022), type=xbmcgui.INPUT_ALPHANUM)
             items = FS.get_places(self.lat, self.lon, query)
         elif KEYS[index] == "reset":
             self.pins = ""
@@ -379,16 +376,16 @@ class MapsBrowser(xbmcgui.WindowXML):
                                                               fov=120 - self.zoom_streetview * 6,
                                                               pitch=self.pitch,
                                                               heading=self.direction)
-        self.window.setProperty('location', self.location)
-        self.window.setProperty('lat', str(self.lat))
-        self.window.setProperty('lon', str(self.lon))
-        self.window.setProperty('zoomlevel', str(self.zoom))
-        self.window.setProperty('direction', str(self.direction / 18))
-        self.window.setProperty('type', self.type)
-        self.window.setProperty('aspect', self.aspect)
-        self.window.setProperty('map', self.map_url)
-        self.window.setProperty('streetview_map', streetview_map)
-        self.window.setProperty('streetview_image', self.streetview_url)
-        self.window.setProperty('streetview', "True" if self.street_view else "")
-        self.window.setProperty('NavMode', "True" if self.nav_mode_active else "")
+        self.setProperty('location', self.location)
+        self.setProperty('lat', str(self.lat))
+        self.setProperty('lon', str(self.lon))
+        self.setProperty('zoomlevel', str(self.zoom))
+        self.setProperty('direction', str(self.direction / 18))
+        self.setProperty('type', self.type)
+        self.setProperty('aspect', self.aspect)
+        self.setProperty('map', self.map_url)
+        self.setProperty('streetview_map', streetview_map)
+        self.setProperty('streetview_image', self.streetview_url)
+        self.setProperty('streetview', "True" if self.street_view else "")
+        self.setProperty('NavMode', "True" if self.nav_mode_active else "")
         self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, "640x400")
