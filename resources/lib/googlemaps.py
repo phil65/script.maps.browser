@@ -7,7 +7,9 @@ import urllib
 import xbmc
 import xbmcaddon
 import Utils
-from SearchSelectDialog import SearchSelectDialog
+from kodi65 import addon
+from kodi65 import selectdialog
+from kodi65.listitem import ListItem
 
 
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -63,17 +65,16 @@ def get_coords_by_location(show_dialog, search_string):
                                        lon=location["lng"],
                                        scale=1,
                                        size="320x320")
-            places.append({'label': item['formatted_address'],
-                           'lat': location["lat"],
-                           'lon': location["lng"],
-                           'thumb': googlemap,
-                           'id': item['formatted_address']})
-        w = SearchSelectDialog('DialogSelect.xml',
-                               ADDON_PATH,
-                               listing=Utils.create_listitems(places))
-        w.doModal()
-        if w.lat:
-            return (float(w.lat), float(w.lon), 12)
+            place = ListItem(label=item['formatted_address'])
+            place.set_properties({'lat': location["lat"],
+                                  'lon': location["lng"],
+                                  'id': item['formatted_address']})
+            place.set_art("thumb", googlemap)
+            places.append(place)
+        listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32015),
+                                                         listitems=places)
+        if index > -1:
+            return (listitem.get_property("lat"), listitem.get_property("lon"), 12)
     elif results["results"]:
         return (first_match["lat"], first_match["lng"], 12)  # no window when only 1 result
     return None  # old values when no hit

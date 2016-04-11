@@ -28,6 +28,9 @@ HOME = xbmcgui.Window(10000)
 
 
 def get_bounding_box(lat, lon, zoom):
+    '''
+    get box covering the whole visible area
+    '''
     mx, my = latlon_to_meters(lat, lon)
     px, py = meters_to_pixels(mx, my, zoom)
     mx_high, my_high = pixels_to_meters(px + 320, py + 200, zoom)
@@ -38,6 +41,9 @@ def get_bounding_box(lat, lon, zoom):
 
 
 def get_radius(lat, lon, zoom, size):
+    '''
+    get screen radius for given position / zoom
+    '''
     hor_px = int(size.split("x")[0])
     ver_px = int(size.split("x")[1])
     mx, my = latlon_to_meters(lat, lon)
