@@ -19,6 +19,18 @@ FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
 BING_KEY = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 BASE_URL = "https://api.foursquare.com/v2/"
 
+SECTIONS = {"topPicks": addon.LANG(32005),
+            "food": addon.LANG(32006),
+            "drinks": addon.LANG(32007),
+            "coffee": addon.LANG(32008),
+            "shops": addon.LANG(32009),
+            "arts": addon.LANG(32010),
+            "outdoors": addon.LANG(32011),
+            "sights": addon.LANG(32012),
+            "trending": addon.LANG(32013),
+            "specials": addon.LANG(32014),
+            "nextVenues": addon.LANG(32015)}
+
 
 class FourSquare():
 
@@ -84,7 +96,7 @@ class FourSquare():
                 utils.notify("ERROR", "Could not get requested information")
         else:
             utils.log("ERROR")
-        return [], ""
+        return []
 
     def get_places_by_section(self, lat, lon, placetype):
         params = {"venuePhotos": 1,
@@ -94,7 +106,7 @@ class FourSquare():
                                 params=params,
                                 cache_days=7)
         if not results or 'meta' not in results:
-            return [], ""
+            return []
         if results['meta']['code'] == 200:
             if results['response']['groups'][0]['items']:
                 return self.handle_places(results['response']['groups'][0]['items'])
@@ -104,7 +116,7 @@ class FourSquare():
             utils.log("LIMIT EXCEEDED")
         else:
             utils.log("ERROR" + str(results['meta']['code']))
-        return [], ""
+        return []
 
     def select_category(self):
         results = self.get_data(method="venues/categories",
@@ -118,22 +130,11 @@ class FourSquare():
             return ""
 
     def select_section(self):
-        sections = {"topPicks": addon.LANG(32005),
-                    "food": addon.LANG(32006),
-                    "drinks": addon.LANG(32007),
-                    "coffee": addon.LANG(32008),
-                    "shops": addon.LANG(32009),
-                    "arts": addon.LANG(32010),
-                    "outdoors": addon.LANG(32011),
-                    "sights": addon.LANG(32012),
-                    "trending": addon.LANG(32013),
-                    "specials": addon.LANG(32014),
-                    "nextVenues": addon.LANG(32015)}
         modeselect = [addon.LANG(32120)]
-        modeselect += [value for value in sections.itervalues()]
+        modeselect += [value for value in SECTIONS.itervalues()]
         index = xbmcgui.Dialog().select(addon.LANG(32121), modeselect)
         if index > 0:
-            return sections.keys()[index - 1]
+            return SECTIONS.keys()[index - 1]
         elif index > -1:
             return ""
 
