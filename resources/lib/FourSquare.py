@@ -17,7 +17,6 @@ from kodi65.listitem import ListItem
 
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
-BING_KEY = 'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 BASE_URL = "https://api.foursquare.com/v2/"
 
 SECTIONS = {"topPicks": addon.LANG(32005),
@@ -140,7 +139,6 @@ class FourSquare():
         params["client_id"] = FOURSQUARE_ID
         params["client_secret"] = FOURSQUARE_SECRET
         params["v"] = 20130815
-        # params = {k: v for k, v in params.items() if v}
         params = {k: v for (k, v) in params.iteritems() if v}
         params = {k: unicode(v).encode('utf-8') for (k, v) in params.iteritems()}
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
