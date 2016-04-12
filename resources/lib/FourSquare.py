@@ -13,6 +13,7 @@ import googlemaps
 
 from kodi65 import utils
 from kodi65 import addon
+from kodi65.listitem import ListItem
 
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
@@ -41,42 +42,39 @@ class FourSquare():
         places = []
         for venue in results:
             try:
-                photo_node = venue['venue']['photos']['groups'][0]['items'][0]
-                photo = photo_node['prefix'] + str(photo_node['height']) + photo_node['suffix']
+                photo = venue['venue']['photos']['groups'][0]['items'][0]
+                photo = "%s%s%s" % (photo['prefix'], photo['height'], photo['suffix'])
             except:
                 photo = ""
             if "name" not in venue:
                 venue = venue["venue"]
             if venue['categories']:
                 icon = venue['categories'][0]['icon']
-                icon = icon['prefix'] + "88" + icon['suffix']
+                icon = "%s88%s" % (icon['prefix'], icon['suffix'])
             else:
                 icon = ""
             if 'formattedAddress' in venue['location']:
                 formattedAddress = "[CR]".join(filter(None, venue['location']['formattedAddress']))
-            lat = str(venue['location']['lat'])
-            lon = str(venue['location']['lng'])
-            googlemap = googlemaps.get_static_map(lat=lat,
-                                                  lon=lon)
-            props = {"id": str(venue['id']),
-                     "foursquare_id": str(venue['id']),
-                     "distance": str(venue['location']['distance']),
-                     "visited": str(venue['stats']['usersCount']),
-                     "twitter": venue['contact'].get('twitter', ""),
-                     "eventname": venue['location']['address'],
-                     "description": formattedAddress,
-                     "name": venue['name'],
-                     "label": venue['name'],
-                     "label2": venue['name'],
-                     "icon": icon,
-                     "thumb": photo,
-                     "Venue_Image": icon,
-                     "GoogleMap": googlemap,
-                     "lat": lat,
-                     "lon": lon,
-                     "phone": venue['contact'].get('phone', ""),
-                     "comments": str(venue['stats']['tipCount'])}
-            places.append(props)
+            lat = venue['location']['lat']
+            lon = venue['location']['lng']
+            item = ListItem(label=venue['name'],
+                            label2=venue['name'])
+            item.set_properties({"id": venue['id'],
+                                 "foursquare_id": venue['id'],
+                                 "distance": venue['location']['distance'],
+                                 "visited": venue['stats']['usersCount'],
+                                 "twitter": venue['contact'].get('twitter', ""),
+                                 "eventname": venue['location']['address'],
+                                 "description": formattedAddress,
+                                 "name": venue['name'],
+                                 "lat": lat,
+                                 "lon": lon,
+                                 "phone": venue['contact'].get('phone', ""),
+                                 "comments": venue['stats']['tipCount']})
+            item.set_artwork({"thumb": photo,
+                              "icon": icon,
+                              "googlemap": googlemaps.get_static_map(lat=lat, lon=lon)})
+            places.append(item)
         return places
 
     def get_places(self, lat, lon, query="", category_id=""):

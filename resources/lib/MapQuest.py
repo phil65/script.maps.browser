@@ -8,6 +8,7 @@ import Utils
 import googlemaps
 
 from kodi65 import utils
+from kodi65.listitem import ListItem
 
 MAPQUEST_KEY = "lACkugtJjBp3lSA1ajvP05Sb6SikjNAW"
 MAX_LIMIT = 25
@@ -43,25 +44,22 @@ def get_incidents(lat, lon, zoom):
                   "mapWidth": 400,
                   "mapScale": 433342}
         url = BASE_URL + "flow?" + urllib.urlencode(params)
-        googlemap = googlemaps.get_static_map(lat=lat,
-                                              lon=lon)
-        props = {'name': place['shortDesc'],
-                 'label': place['shortDesc'],
-                 'label2': place['startTime'],
-                 'description': place['fullDesc'],
-                 'distance': str(place['distance']),
-                 'delaytypical': str(place['delayFromTypical']),
-                 'delayfreeflow': str(place['delayFromFreeFlow']),
-                 "GoogleMap": googlemap,
-                 "venue_image": url,
-                 "thumb": url,
-                 "icon": place['iconURL'],
-                 'date': place['startTime'],
-                 'severity': str(place['severity']),
-                 'type': incident_types.get(place['type'], ""),
-                 "lat": lat,
-                 "lon": lon}
-        places.append(props)
+        item = ListItem(label=place['shortDesc'],
+                        label2=place['startTime'])
+        item.set_properties({'name': place['shortDesc'],
+                             'description': place['fullDesc'],
+                             'distance': str(place['distance']),
+                             'delaytypical': str(place['delayFromTypical']),
+                             'delayfreeflow': str(place['delayFromFreeFlow']),
+                             'date': place['startTime'],
+                             'severity': str(place['severity']),
+                             'type': incident_types.get(place['type'], ""),
+                             "lat": lat,
+                             "lon": lon})
+        item.set_artwork({"thumb": url,
+                          "icon": place['iconURL'],
+                          "googlemap": googlemaps.get_static_map(lat=lat, lon=lon)})
+        places.append(item)
     return places
 
 

@@ -27,7 +27,7 @@ class Eventful():
         results = self.get_data(method="categories/list",
                                 cache_days=7)
         modeselect = [addon.LANG(32122)]
-        modeselect += [Utils.cleanText(i["name"]) for i in results["category"]]
+        modeselect += [i["name"] for i in results["category"]]
         index = xbmcgui.Dialog().select(addon.LANG(32123), modeselect)
         if index == -1:
             return None
@@ -75,7 +75,7 @@ class Eventful():
         if not isinstance(results, list):
             results = [results]
         for venue in results:
-            venuename = Utils.cleanText(venue['venue_name'])
+            venuename = venue['venue_name']
             lat = venue['latitude']
             lon = venue['longitude']
             googlemap = googlemaps.get_static_map(lat=lat,
@@ -89,20 +89,20 @@ class Eventful():
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
                 date = re.sub(r"\d{2}:\d{2}:\d{2}", "", date)
-            props = {"label": venuename,
-                     "label2": date.replace("00:00:00", ""),
-                     "id": str(venue['id']),
-                     "eventful_id": str(venue['venue_id']),
-                     "eventname": Utils.cleanText(venue['title']),
-                     "description": Utils.cleanText(venue['description']),
-                     "name": venuename,
-                     "thumb": photo,
-                     "date": date,
-                     "address": Utils.cleanText(venue["venue_address"]),
-                     "GoogleMap": googlemap,
-                     "lat": lat,
-                     "lon": lon}
-            places.append(props)
+            item = ListItem(label=venuename,
+                            label2=date.replace("00:00:00", ""))
+            item.set_properties({"id": str(venue['id']),
+                                 "eventful_id": str(venue['venue_id']),
+                                 "eventname": venue['title'],
+                                 "description": venue['description'],
+                                 "name": venuename,
+                                 "date": date,
+                                 "address": venue["venue_address"],
+                                 "lat": lat,
+                                 "lon": lon})
+            item.set_artwork({"thumb": photo,
+                              "googlemap": googlemap})
+            places.append(item)
         return places
 
     def get_data(self, method, params={}, cache_days=0.5):

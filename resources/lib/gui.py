@@ -89,7 +89,6 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.lon = float(self.strlon)
 
     def onInit(self):
-        self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
         self.clearProperty('NavMode')
         self.clearProperty('streetview')
         self.venues = self.getControl(C_PLACES_LIST)
@@ -381,16 +380,18 @@ class MapsBrowser(xbmcgui.WindowXML):
                                                               fov=120 - self.zoom_streetview * 6,
                                                               pitch=self.pitch,
                                                               heading=self.direction)
-        self.setProperty('location', self.location)
-        self.setProperty('lat', str(self.lat))
-        self.setProperty('lon', str(self.lon))
-        self.setProperty('zoomlevel', str(self.zoom))
-        self.setProperty('direction', str(self.direction / 18))
-        self.setProperty('type', self.type)
-        self.setProperty('aspect', self.aspect)
-        self.setProperty('map', self.map_url)
-        self.setProperty('streetview_map', streetview_map)
-        self.setProperty('streetview_image', self.streetview_url)
-        self.setProperty('streetview', "True" if self.street_view else "")
-        self.setProperty('NavMode', "True" if self.nav_mode_active else "")
+        props = {'location': self.location,
+                 'lat': self.lat,
+                 'lon': self.lon,
+                 'zoomlevel': self.zoom,
+                 'direction': self.direction / 18,
+                 'type': self.type,
+                 'aspect': self.aspect,
+                 'map': self.map_url,
+                 'streetview_map': streetview_map,
+                 'streetview_image': self.streetview_url,
+                 'streetview': "True" if self.street_view else "",
+                 'NavMode': "True" if self.nav_mode_active else ""}
+        for k, v in props.iteritems():
+            self.setProperty(k, unicode(v))
         self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, "640x400")

@@ -20,6 +20,7 @@ import ImageTags
 
 from kodi65 import addon
 from kodi65 import utils
+from kodi65.listitem import ListItem
 
 TILESIZE = 256
 INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE  # 156543.03392804062 for tileSize 256 pixels
@@ -142,16 +143,13 @@ def get_images(path=""):
                 date = exif_data["DateTime"]
             else:
                 date = ""
-            props = {"name": filename,
-                     "label": filename,
-                     "lat": str(lat),
-                     "lon": str(lon),
-                     "date": date,
-                     "description": date,
-                     "thumb": path + filename,
-                     "filepath": path + filename,
-                     }
-            images.append(props)
+            image = ListItem(label=filename)
+            image.set_properties({"lat": str(lat),
+                                  "lon": str(lon),
+                                  "date": date,
+                                  "description": date})
+            image.set_art("thumb", path + filename)
+            images.append(image)
         except Exception:
             pass
     return images
@@ -184,32 +182,6 @@ def parse_geotags(lat, lon):
     return lat, lon
 
 
-def create_listitems(data):
-    if not data:
-        return []
-    items = []
-    for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem()
-        for (key, value) in result.iteritems():
-            if not value:
-                continue
-            value = unicode(value)
-            if key in ["name", "label", "title"]:
-                listitem.setLabel(value)
-            if key in ["thumb"]:
-                listitem.setThumbnailImage(value)
-            if key in ["icon"]:
-                listitem.setIconImage(value)
-            if key in ["thumb", "poster", "banner", "fanart"]:
-                listitem.setArt({key: value})
-            if key in ["path"]:
-                listitem.setPath(path=value)
-            listitem.setProperty(key, value)
-            listitem.setProperty("index", str(count))
-        items.append(listitem)
-    return items
-
-
 def get_coords_by_ip():
     # url = 'https://www.telize.com/geoip'
     response = get_string_from_url('http://ip-api.com/json')
@@ -217,25 +189,3 @@ def get_coords_by_ip():
         return "", ""
     results = json.loads(response)
     return results["lat"], results["lon"]
-
-
-def cleanText(text):
-    if text:
-        text = re.sub('<br \/>', '[CR]', text)
-        text = re.sub('<br\/>', '[CR]', text)
-        text = re.sub('<(.|\n|\r)*?>', '', text)
-        text = re.sub('&quot;', '"', text)
-        text = re.sub('<*>', '', text)
-        text = re.sub('&amp;', '&', text)
-        text = re.sub('&gt;', '>', text)
-        text = re.sub('&lt;', '<', text)
-        text = re.sub('&#;', "'", text)
-        text = re.sub('&#39;', "'", text)
-        text = re.sub('<i>', '[I]', text)
-        text = re.sub('<\/i>', '[/I]', text)
-        text = re.sub('<strong>', '[B]', text)
-        text = re.sub('<\/strong>', '[/B]', text)
-        text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '', text)
-        return text.strip()
-    else:
-        return ""
