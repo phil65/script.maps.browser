@@ -116,7 +116,7 @@ def get_string_from_url(url):
 
 def get_JSON_response(url="", cache_days=0.5):
     filename = hashlib.md5(url).hexdigest()
-    path = xbmc.translatePath(os.path.join(addon.DATA_PATH, "%s.txt" % filename))
+    path = utils.translate_path(os.path.join(addon.DATA_PATH, "%s.txt" % filename))
     cache_seconds = int(cache_days * 86400.0)
     utils.log(url)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
