@@ -31,10 +31,7 @@ class Eventful():
         index = xbmcgui.Dialog().select(addon.LANG(32123), modeselect)
         if index == -1:
             return None
-        if index > 0:
-            return results["category"][index - 1]["id"]
-        elif index == 0:
-            return ""
+        return results["category"][index - 1]["id"] if index > 0 else ""
 
     def get_events(self, lat="", lon="", query="", category="", radius=30):
         params = {"image_sizes": "large",
@@ -56,9 +53,7 @@ class Eventful():
         results = self.get_data(method="venues/get",
                                 params={"id": event_id},
                                 cache_days=7)
-        if not results:
-            return []
-        return self.handle_events(results['venue'])
+        return self.handle_events(results['venue']) if results else []
 
     def get_event_info(self, event_id=""):
         params = {"id": event_id,
@@ -66,9 +61,7 @@ class Eventful():
         results = self.get_data(method="events/get",
                                 params=params,
                                 cache_days=7)
-        if not results:
-            return []
-        return self.handle_events(results['event'])
+        return self.handle_events(results['event']) if results else []
 
     def handle_events(self, results):
         places = []
