@@ -12,7 +12,8 @@ import Utils
 import googlemaps
 
 from kodi65 import addon
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
+from kodi65.itemlist import ItemList
 
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
@@ -64,7 +65,7 @@ class Eventful():
         return self.handle_events(results['event']) if results else []
 
     def handle_events(self, results):
-        places = []
+        places = ItemList()
         if not isinstance(results, list):
             results = [results]
         for venue in results:
@@ -82,8 +83,8 @@ class Eventful():
             else:
                 date = venue["start_time"] + " - " + venue["stop_time"]
                 date = re.sub(r"\d{2}:\d{2}:\d{2}", "", date)
-            item = ListItem(label=venuename,
-                            label2=date.replace("00:00:00", ""))
+            item = VideoItem(label=venuename,
+                             label2=date.replace("00:00:00", ""))
             item.set_properties({"id": str(venue['id']),
                                  "eventful_id": str(venue['venue_id']),
                                  "eventname": venue['title'],

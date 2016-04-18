@@ -13,7 +13,8 @@ import googlemaps
 
 from kodi65 import utils
 from kodi65 import addon
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
+from kodi65.itemlist import ItemList
 
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"
@@ -38,7 +39,7 @@ class FourSquare():
         pass
 
     def handle_places(self, results):
-        places = []
+        places = ItemList()
         for venue in results:
             try:
                 photo = venue['venue']['photos']['groups'][0]['items'][0]
@@ -56,8 +57,8 @@ class FourSquare():
                 formattedAddress = "[CR]".join(filter(None, venue['location']['formattedAddress']))
             lat = venue['location']['lat']
             lon = venue['location']['lng']
-            item = ListItem(label=venue['name'],
-                            label2=venue['name'])
+            item = VideoItem(label=venue['name'],
+                             label2=venue['name'])
             item.set_properties({"id": venue['id'],
                                  "foursquare_id": venue['id'],
                                  "distance": venue['location']['distance'],

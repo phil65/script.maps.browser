@@ -11,6 +11,8 @@ import Utils
 
 from kodi65 import utils
 from kodi65 import addon
+from kodi65.listitem import VideoItem
+from kodi65.itemlist import ItemList
 
 GOOGLE_PLACES_KEY = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 BASE_URL = 'https://maps.googleapis.com/maps/api/place/'
@@ -136,7 +138,7 @@ class GooglePlaces():
                   "types": locationtype}
         base_url = BASE_URL + 'nearbysearch/json?'
         results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
-        places = []
+        places = ItemList()
         if "meta" in results and results['meta']['code'] == 400:
             utils.log("LIMIT EXCEEDED")
             return "", []
@@ -151,17 +153,15 @@ class GooglePlaces():
             except:
                 photo = ""
             description = place['vicinity'] if "vicinity" in place else place.get('formatted_address', "")
-            lat = str(place['geometry']['location']['lat'])
-            lon = str(place['geometry']['location']['lng'])
-            props = {'label': place['name'],
-                     'label2': " / ".join(place['types']),
-                     'description': description,
-                     "thumb": photo,
-                     "icon": place['icon'],
-                     "lat": lat,
-                     "lon": lon,
-                     "rating": str(place['rating'] * 2.0) if "rating" in place else ""}
-            places.append(props)
+            item = VideoItem(label=place['name'],
+                             label2=" / ".join(place['types']))
+            item.set_artwork({"thumb": photo,
+                              "icon": place['icon']})
+            item.set_info("rating", place['rating'] * 2.0 if "rating" in place else "")
+            item.set_properties({'description': description,
+                                 "lat": place['geometry']['location']['lat'],
+                                 "lon": place['geometry']['location']['lng']})
+            places.append(item)
         return places
 
 

@@ -8,7 +8,8 @@ import Utils
 import googlemaps
 
 from kodi65 import utils
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
+from kodi65.itemlist import ItemList
 
 MAPQUEST_KEY = "lACkugtJjBp3lSA1ajvP05Sb6SikjNAW"
 MAX_LIMIT = 25
@@ -27,13 +28,13 @@ def get_incidents(lat, lon, zoom):
               "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
     url = BASE_URL + 'incidents?' + urllib.urlencode(params)
     results = Utils.get_JSON_response(url)
-    places = []
+    places = ItemList()
     if results['info']['statuscode'] == 400:
         utils.notify("Error", " - ".join(results['info']['messages']), time=10000)
-        return [], ""
+        return []
     elif "incidents" not in results:
         utils.notify("Error", "Could not fetch results")
-        return [], ""
+        return []
     for place in results['incidents'][:MAX_LIMIT]:
         lat = str(place['lat'])
         lon = str(place['lng'])
@@ -44,8 +45,8 @@ def get_incidents(lat, lon, zoom):
                   "mapWidth": 400,
                   "mapScale": 433342}
         url = BASE_URL + "flow?" + urllib.urlencode(params)
-        item = ListItem(label=place['shortDesc'],
-                        label2=place['startTime'])
+        item = VideoItem(label=place['shortDesc'],
+                         label2=place['startTime'])
         item.set_properties({'name': place['shortDesc'],
                              'description': place['fullDesc'],
                              'distance': str(place['distance']),

@@ -21,7 +21,9 @@ def get_exif_data(image):
 
 
 def _convert_to_degrees(value):
-    """Helper function to convert the GPS coordinates stored in the EXIF to degress in float format"""
+    """
+    Helper function to convert the GPS coordinates stored in the EXIF to degress in float format
+    """
     d = float(value[0][0]) / float(value[0][1])
     m = float(value[1][0]) / float(value[1][1])
     s = float(value[2][0]) / float(value[2][1])
@@ -29,7 +31,9 @@ def _convert_to_degrees(value):
 
 
 def get_lat_lon(exif_data):
-    """Returns the latitude and longitude, if available, from the provided exif_data (obtained through get_exif_data)"""
+    """
+    Returns the latitude and longitude, if available, from the provided exif_data (obtained through get_exif_data)
+    """
     if "GPSInfo" not in exif_data:
         return None, None
     gps_info = exif_data["GPSInfo"]

@@ -9,7 +9,8 @@ import xbmcaddon
 import Utils
 from kodi65 import addon
 from kodi65 import selectdialog
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
+from kodi65.itemlist import ItemList
 
 
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -58,14 +59,14 @@ def get_coords_by_location(show_dialog, search_string):
         return None
     first_match = results["results"][0]["geometry"]["location"]
     if show_dialog and len(results["results"]) > 1:
-        places = []
+        places = ItemList()
         for item in results["results"]:
             location = item["geometry"]["location"]
             googlemap = get_static_map(lat=location["lat"],
                                        lon=location["lng"],
                                        scale=1,
                                        size="320x320")
-            place = ListItem(label=item['formatted_address'])
+            place = VideoItem(label=item['formatted_address'])
             place.set_properties({'lat': location["lat"],
                                   'lon': location["lng"],
                                   'id': item['formatted_address']})
