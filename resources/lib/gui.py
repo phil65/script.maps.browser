@@ -194,8 +194,8 @@ class MapsBrowser(xbmcgui.WindowXML):
             return None
         picture_path = item.getProperty("filepath")
         if picture_path:
-            pos = slideshow.open_slideshow(listitems=self.venues,
-                                           index=self.getControl(control_id).getSelectedPosition())
+            pos = slideshow.open(listitems=self.venues,
+                                 index=self.getControl(control_id).getSelectedPosition())
 
     @ch.click(C_BUTTON_NAV)
     def quit_nav(self, control_id):
