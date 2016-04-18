@@ -16,7 +16,7 @@ from FourSquare import FS
 from kodi65 import utils
 from kodi65 import addon
 from kodi65 import slideshow
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
 
