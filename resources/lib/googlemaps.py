@@ -72,10 +72,10 @@ def get_coords_by_location(show_dialog, search_string):
                                   'id': item['formatted_address']})
             place.set_art("thumb", googlemap)
             places.append(place)
-        listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32015),
-                                                         listitems=places)
+        index = selectdialog.open(header=addon.LANG(32015),
+                                  listitems=places)
         if index > -1:
-            return (listitem.get_property("lat"), listitem.get_property("lon"), 12)
+            return (places[index].get_property("lat"), places[index].get_property("lon"), 12)
     elif results["results"]:
         return (first_match["lat"], first_match["lng"], 12)  # no window when only 1 result
     return None  # old values when no hit
