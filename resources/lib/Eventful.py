@@ -12,8 +12,8 @@ import Utils
 import googlemaps
 
 from kodi65 import addon
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"

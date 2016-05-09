@@ -13,8 +13,8 @@ import googlemaps
 
 from kodi65 import utils
 from kodi65 import addon
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 FOURSQUARE_ID = "OPLZAEBJAWPE5F4LW0QGHHSJDF0K3T5GVJAAICXUDHR11GPS"
 FOURSQUARE_SECRET = "0PIG5HGE0LWD3Z5TDSE1JVDXGCVK4AJYHL50VYTJ2CFPVPAC"

@@ -9,8 +9,8 @@ import xbmcaddon
 import Utils
 from kodi65 import addon
 from kodi65 import selectdialog
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'

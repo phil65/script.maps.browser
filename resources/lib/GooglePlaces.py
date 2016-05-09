@@ -11,8 +11,8 @@ import Utils
 
 from kodi65 import utils
 from kodi65 import addon
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 GOOGLE_PLACES_KEY = 'AIzaSyCgfpm7hE_ufKMoiSUhoH75bRmQqV8b7P4'
 BASE_URL = 'https://maps.googleapis.com/maps/api/place/'

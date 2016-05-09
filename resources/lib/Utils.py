@@ -20,7 +20,7 @@ import ImageTags
 
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.listitem import VideoItem
+from kodi65 import VideoItem
 
 TILESIZE = 256
 INITIAL_RESOLUTION = 2 * math.pi * 6378137 / TILESIZE  # 156543.03392804062 for tileSize 256 pixels
