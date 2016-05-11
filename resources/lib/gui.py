@@ -128,7 +128,7 @@ class MapsBrowser(xbmcgui.WindowXML):
 
     @ch.action("info", "*")
     def info_press(self, control_id):
-        self.toggle_map_mode()
+        self.toggle_map_mode(control_id)
 
     @ch.action("up", "*")
     @ch.action("down", "*")
@@ -194,12 +194,12 @@ class MapsBrowser(xbmcgui.WindowXML):
             return None
         picture_path = item.getProperty("filepath")
         if picture_path:
-            pos = slideshow.open(listitems=self.venues,
-                                 index=self.getControl(control_id).getSelectedPosition())
+            slideshow.open(listitems=self.venues,
+                           index=self.getControl(control_id).getSelectedPosition())
 
     @ch.click(C_BUTTON_NAV)
     def quit_nav(self, control_id):
-        self.previous_menu()
+        self.previous_menu(control_id)
 
     @ch.click(C_ZOOM_IN)
     def zoom_in(self, control_id):
