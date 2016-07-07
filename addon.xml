@@ -11,7 +11,9 @@
 	<extension point="xbmc.addon.metadata">
 		<language/>
 		<summary lang="en">Google Maps Browser (including Street View)</summary>
+		<summary lang="zh_TW">Google 地圖瀏覽器 (包括街景)</summary>
 		<description lang="en">This Maps Browser Add-on allows you to explore the map with a remote. It can also show POIs, geotagged images and much more on the map.</description>
+		<description lang="zh_TW">此地圖瀏覽器元件可以讓您用遙控探索地圖。它也可以顯示興趣點，地理標記了的圖片及在地圖上的更多資訊。</description>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
 		<forum>-</forum>
