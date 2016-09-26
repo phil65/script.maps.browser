@@ -14,6 +14,7 @@ from GooglePlaces import GP
 from FourSquare import FS
 
 from kodi65 import utils
+from kodi65 import busy
 from kodi65 import addon
 from kodi65 import slideshow
 from kodi65 import ActionHandler
@@ -51,7 +52,7 @@ def get_window(*args, **kwargs):
 
 class MapsBrowser(xbmcgui.WindowXML):
 
-    @utils.busy_dialog
+    @busy.set_busy
     def __init__(self, *args, **kwargs):
         self.items = []
         self.location = kwargs.get("location", "")
