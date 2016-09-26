@@ -352,7 +352,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             self.search_location()
         elif KEYS[index] == "foursquareplaces":
             query = xbmcgui.Dialog().input(addon.LANG(32022), type=xbmcgui.INPUT_ALPHANUM)
-            items = FS.get_places(self.lat, self.lon, query)
+            items = FS.get_places(self.lat, self.lon, query, intent="global")
         elif KEYS[index] == "reset":
             self.pins = ""
         self.pins = googlemaps.create_letter_pins(items)

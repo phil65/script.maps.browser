@@ -77,10 +77,11 @@ class FourSquare():
             places.append(item)
         return places
 
-    def get_places(self, lat, lon, query="", category_id=""):
+    def get_places(self, lat, lon, query="", category_id="", intent="checkin"):
         params = {"limit": 26,
                   "ll": '%.8f,%.8f' % (lat, lon),
                   "query": query,
+                  "intent": intent,
                   "categoryId": category_id}
         results = self.get_data(method="venues/search",
                                 params=params,
