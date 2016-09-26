@@ -64,7 +64,7 @@ class FourSquare():
                                  "distance": venue['location']['distance'],
                                  "visited": venue['stats']['usersCount'],
                                  "twitter": venue['contact'].get('twitter', ""),
-                                 "eventname": venue['location']['address'],
+                                 "eventname": venue['location'].get('address'),
                                  "description": formattedAddress,
                                  "name": venue['name'],
                                  "lat": lat,
