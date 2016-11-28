@@ -5,6 +5,7 @@
 
 import urllib
 import re
+from xml.sax import saxutils
 
 import xbmcgui
 
@@ -28,7 +29,7 @@ class Eventful():
         results = self.get_data(method="categories/list",
                                 cache_days=7)
         modeselect = [addon.LANG(32122)]
-        modeselect += [i["name"] for i in results["category"]]
+        modeselect += [saxutils.unescape(i["name"]) for i in results["category"]]
         index = xbmcgui.Dialog().select(addon.LANG(32123), modeselect)
         if index == -1:
             return None
