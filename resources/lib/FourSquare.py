@@ -134,7 +134,7 @@ class FourSquare():
         index = xbmcgui.Dialog().select(addon.LANG(32121), modeselect)
         if index > 0:
             return SECTIONS.keys()[index - 1]
-        elif index > -1:
+        elif index == 0:
             return ""
 
     def get_data(self, method, params={}, cache_days=0.5):

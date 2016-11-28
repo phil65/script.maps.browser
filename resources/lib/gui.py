@@ -316,7 +316,7 @@ class MapsBrowser(xbmcgui.WindowXML):
                 items = GP.get_locations(self.lat, self.lon, self.radius * 1000, cat)
         elif keys[index] == "foursquare":
             section = FS.select_section()
-            if not section:
+            if section is not None:
                 items = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
             items = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
