@@ -3,6 +3,8 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import absolute_import
+
 import requests
 import os
 import re
@@ -16,7 +18,7 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 
-import ImageTags
+from resources.lib import ImageTags
 
 from kodi65 import addon
 from kodi65 import utils
