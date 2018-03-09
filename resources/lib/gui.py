@@ -3,15 +3,17 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import absolute_import
+
 import xbmcgui
 import math
 
-import googlemaps
-import Utils
-from Eventful import EF
-import MapQuest
-from GooglePlaces import GP
-from FourSquare import FS
+from resources.lib import googlemaps
+from resources.lib import Utils
+from resources.lib.Eventful import EF
+from resources.lib import MapQuest
+from resources.lib.GooglePlaces import GP
+from resources.lib.FourSquare import FS
 
 from kodi65 import utils
 from kodi65 import busy

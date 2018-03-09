@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import urllib2
+import requests
 import os
 import re
 import time
@@ -103,11 +103,10 @@ def meters_to_latlon(mx, my):
 def get_string_from_url(url):
     for i in range(0, 3):
         try:
-            request = urllib2.Request(url)
-            request.add_header('User-agent', 'XBMC/14.2 ( phil65@kodi.tv )')
-            response = urllib2.urlopen(request, timeout=3)
-            return response.read()
-        except:
+            r = requests.get(url=url,
+                             headers={'User-agent': 'XBMC/14.2 ( phil65@kodi.tv )'})
+            return r.text
+        except Exception:
             xbmc.sleep(500)
     utils.notify("Error", "Could not download data. Internet connection OK?")
     utils.log("get_string_from_url: could not get data from %s" % url)

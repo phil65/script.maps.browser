@@ -17,21 +17,20 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+from __future__ import absolute_import
+
 import sys
 import xbmc
-import xbmcaddon
+
 from resources.lib import gui
 
-ADDON = xbmcaddon.Addon()
-ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_NAME = ADDON.getAddonInfo('name')
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
+from kodi65 import addon
 
 
 class Main:
 
     def __init__(self):
-        xbmc.log("version %s started" % ADDON_VERSION)
+        xbmc.log("version %s started" % addon.VERSION)
         self._parse_argv()
         wnd = gui.get_window(lat=self.params.get("lat"),
                              lon=self.params.get("lon"),
@@ -49,8 +48,9 @@ class Main:
             else:
                 try:
                     self.params[param.split("=")[0].lower()] = "=".join(param.split("=")[1:]).strip()
-                except:
+                except Exception:
                     pass
+
 
 if (__name__ == "__main__"):
     Main()
