@@ -17,7 +17,7 @@
             <fadetime>400</fadetime>
             <animation effect="fade" time="200">VisibleChange</animation>
             <texture>$INFO[Window.Property(streetview_image)]</texture>
-            <visible>!IsEmpty(Window.Property(streetview))</visible>
+            <visible>!String.IsEmpty(Window.Property(streetview))</visible>
         </control>
         <control type="image">
             <posx>0</posx>
@@ -26,11 +26,11 @@
             <aspectratio>scale</aspectratio>
             <fadetime>400</fadetime>
             <animation effect="fade" time="200">VisibleChange</animation>
-            <visible>IsEmpty(Window.Property(streetview))</visible>
+            <visible>String.IsEmpty(Window.Property(streetview))</visible>
             <texture>$INFO[Window.Property(map)]</texture>
         </control>
         <control type="group">
-            <visible>!IsEmpty(Window.Property(streetview))</visible>
+            <visible>!String.IsEmpty(Window.Property(streetview))</visible>
             <animation delay="0" effect="slide" end="0,0" start="400,0" time="360" tween="cubic" reversible="true">Visible</animation>
             <posx>1500</posx>
             <control type="image">
@@ -55,32 +55,32 @@
                 <height>35</height>
                 <texture>arrow.png</texture>
                 <animation center="200,167" condition="true" effect="rotate" end="-90" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),0)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),1)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),2)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),3)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),4)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),5)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),6)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),7)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),8)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),9)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),10)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),11)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),12)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),13)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),14)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),15)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),16)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),17)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),18)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),19)" effect="rotate" end="-18" time="0">Conditional</animation>
-                <animation center="200,167" condition="IntegerGreaterThan(Window.Property(direction),20)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),0)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),1)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),2)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),3)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),4)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),5)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),6)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),7)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),8)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),9)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),10)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),11)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),12)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),13)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),14)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),15)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),16)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),17)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),18)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),19)" effect="rotate" end="-18" time="0">Conditional</animation>
+                <animation center="200,167" condition="Integer.IsGreater(Window.Property(direction),20)" effect="rotate" end="-18" time="0">Conditional</animation>
                 <colordiffuse>FFCE4421</colordiffuse>
             </control>
         </control>
         <control type="group">
-            <visible>IsEmpty(Window.Property(streetview)) + IntegerGreaterThan(Container(200).NumItems,0)</visible>
+            <visible>String.IsEmpty(Window.Property(streetview)) + Integer.IsGreater(Container(200).NumItems,0)</visible>
             <animation condition="Control.HasFocus(725)" effect="fade" end="0" start="100" time="280">Conditional</animation>
             <control id="200" type="list">
                 <width>1920</width>
@@ -293,7 +293,7 @@
                     <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/streetview.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/streetview.png</textureradiooffnofocus>
                     <label>$ADDON[script.maps.browser 32125]</label>
-                    <selected>!IsEmpty(Window.Property(streetview))</selected>
+                    <selected>!String.IsEmpty(Window.Property(streetview))</selected>
                 </control>
                 <control type="radiobutton" id="109">
                     <width>220</width>
@@ -387,7 +387,7 @@
                     <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/hybrid.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/hybrid.png</textureradiooffnofocus>
                     <label>$ADDON[script.maps.browser 32128]</label>
-                    <visible>IsEmpty(Window.Property(streetview))</visible>
+                    <visible>String.IsEmpty(Window.Property(streetview))</visible>
                 </control>
                 <control type="radiobutton" id="124">
                     <width>220</width>
@@ -407,7 +407,7 @@
                     <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/arrowup.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/arrowup.png</textureradiooffnofocus>
                     <label>$ADDON[script.maps.browser 32129]</label>
-                    <visible>!IsEmpty(Window.Property(streetview))</visible>
+                    <visible>!String.IsEmpty(Window.Property(streetview))</visible>
                 </control>
                 <control type="radiobutton" id="125">
                     <width>220</width>
@@ -427,7 +427,7 @@
                     <textureradioofffocus colordiffuse="D0FFFFFF">googlemaps/arrowdown.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="D0FFFFFF">googlemaps/arrowdown.png</textureradiooffnofocus>
                     <label>$ADDON[script.maps.browser 32130]</label>
-                    <visible>!IsEmpty(Window.Property(streetview))</visible>
+                    <visible>!String.IsEmpty(Window.Property(streetview))</visible>
                 </control>
             </control>
         </control>
