@@ -30,7 +30,7 @@ def get_incidents(lat, lon, zoom):
               "inFormat": "kvp",
               "boundingBox": "%s,%s,%s,%s" % (lat_high, lon_high, lat_low, lon_low)}
     url = BASE_URL + 'incidents?' + urllib.urlencode(params)
-    results = Utils.get_JSON_response(url)
+    results = utils.get_JSON_response(url)
     places = ItemList()
     if results['info']['statuscode'] == 400:
         utils.notify("Error", " - ".join(results['info']['messages']), time=10000)

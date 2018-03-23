@@ -14,12 +14,12 @@ from xml.sax import saxutils
 
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import googlemaps
 
 from kodi65 import addon
 from kodi65 import VideoItem
 from kodi65 import ItemList
+from kodi65 import utils
 
 EVENTFUL_KEY = 'Nw3rh3mXn8RhMQNK'
 BASE_URL = "http://api.eventful.com/json/"
@@ -112,7 +112,7 @@ class Eventful():
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
-        return Utils.get_JSON_response(url=url,
+        return utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
 
 

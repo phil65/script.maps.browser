@@ -6,13 +6,9 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-from builtins import str
-
 import urllib
 
 import xbmcgui
-
-from resources.lib import Utils
 
 from kodi65 import utils
 from kodi65 import addon
@@ -142,7 +138,7 @@ class GooglePlaces():
                   "location": "%s,%s" % (lat, lon),
                   "types": locationtype}
         base_url = BASE_URL + 'nearbysearch/json?'
-        results = Utils.get_JSON_response(base_url + urllib.urlencode(params))
+        results = utils.get_JSON_response(base_url + urllib.urlencode(params))
         places = ItemList()
         if "meta" in results and results['meta']['code'] == 400:
             utils.log("LIMIT EXCEEDED")
@@ -155,7 +151,7 @@ class GooglePlaces():
                           "photoreference": place['photos'][0]['photo_reference'],
                           "key": GOOGLE_PLACES_KEY}
                 photo = BASE_URL + 'photo?' + urllib.urlencode(params)
-            except:
+            except Exception:
                 photo = ""
             description = place['vicinity'] if "vicinity" in place else place.get('formatted_address', "")
             item = VideoItem(label=place['name'],

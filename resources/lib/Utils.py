@@ -21,7 +21,6 @@ import xbmcgui
 
 from resources.lib import imagetags
 
-from kodi65 import addon
 from kodi65 import utils
 from kodi65 import VideoItem
 
@@ -117,24 +116,6 @@ def get_string_from_url(url):
     utils.notify("Error", "Could not download data. Internet connection OK?")
     utils.log("get_string_from_url: could not get data from %s" % url)
     return ""
-
-
-def get_JSON_response(url="", cache_days=0.5):
-    '''
-    returns JSON response for *url
-    includes caching (with time cache_days)
-    '''
-    filename = hashlib.md5(url).hexdigest()
-    path = utils.translate_path(os.path.join(addon.DATA_PATH, "%s.txt" % filename))
-    cache_seconds = int(cache_days * 86400.0)
-    utils.log(url)
-    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
-        results = utils.read_from_file(path)
-    else:
-        response = get_string_from_url(url)
-        results = json.loads(response)
-        utils.save_to_file(results, filename, addon.DATA_PATH)
-    return results
 
 
 def get_images(path=""):

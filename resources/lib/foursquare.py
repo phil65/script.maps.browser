@@ -13,7 +13,6 @@ from builtins import str
 import urllib
 
 import xbmcgui
-from resources.lib import Utils
 from resources.lib import googlemaps
 
 from kodi65 import utils
@@ -151,7 +150,7 @@ class FourSquare():
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
-        return Utils.get_JSON_response(url=url,
+        return utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
 
 

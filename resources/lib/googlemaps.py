@@ -9,12 +9,11 @@ from __future__ import unicode_literals
 import urllib
 import xbmc
 
-from resources.lib import Utils
-
 from kodi65 import addon
 from kodi65 import selectdialog
 from kodi65 import VideoItem
 from kodi65 import ItemList
+from kodi65 import utils
 
 
 GOOGLEMAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -55,7 +54,7 @@ def get_streetview_image(lat=None, lon=None, fov=0, location="", heading=0, pitc
 def get_coords_by_location(show_dialog, search_string):
     base_url = "https://maps.googleapis.com/maps/api/geocode/json?&sensor=false"
     url = "&address=%s" % (urllib.quote_plus(search_string))
-    results = Utils.get_JSON_response(base_url + url)
+    results = utils.get_JSON_response(base_url + url)
     if not results or not results.get("results"):
         return None
     first_match = results["results"][0]["geometry"]["location"]
