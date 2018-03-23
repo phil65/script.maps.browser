@@ -14,7 +14,7 @@ import math
 from resources.lib import googlemaps
 from resources.lib import Utils
 from resources.lib.Eventful import EF
-from resources.lib import MapQuest
+from resources.lib import mapquest
 from resources.lib.GooglePlaces import GP
 from resources.lib.FourSquare import FS
 
@@ -324,7 +324,7 @@ class MapsBrowser(xbmcgui.WindowXML):
             if section is not None:
                 items = FS.get_places_by_section(self.lat, self.lon, section)
         elif keys[index] == "mapquest":
-            items = MapQuest.get_incidents(self.lat, self.lon, self.zoom)
+            items = mapquest.get_incidents(self.lat, self.lon, self.zoom)
         elif keys[index] == "geopics":
             folder_path = xbmcgui.Dialog().browse(0, addon.LANG(32021), 'pictures')
             items = Utils.get_images(folder_path)

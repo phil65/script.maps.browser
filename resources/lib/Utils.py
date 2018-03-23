@@ -19,7 +19,7 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 
-from resources.lib import ImageTags
+from resources.lib import imagetags
 
 from kodi65 import addon
 from kodi65 import utils
@@ -135,8 +135,8 @@ def get_images(path=""):
     for filename in xbmcvfs.listdir(path)[-1]:
         try:
             img = Image.open(path + filename)
-            exif_data = ImageTags.get_exif_data(img)
-            lat, lon = ImageTags.get_lat_lon(exif_data)
+            exif_data = imagetags.get_exif_data(img)
+            lat, lon = imagetags.get_lat_lon(exif_data)
             if not lat or not lon:
                 continue
             if "DateTimeOriginal" in exif_data:
