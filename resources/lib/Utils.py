@@ -104,6 +104,9 @@ def meters_to_latlon(mx, my):
 
 
 def get_string_from_url(url):
+    '''
+    download content from *url and return as text
+    '''
     for i in range(0, 3):
         try:
             r = requests.get(url=url,
@@ -117,6 +120,10 @@ def get_string_from_url(url):
 
 
 def get_JSON_response(url="", cache_days=0.5):
+    '''
+    returns JSON response for *url
+    includes caching (with time cache_days)
+    '''
     filename = hashlib.md5(url).hexdigest()
     path = utils.translate_path(os.path.join(addon.DATA_PATH, "%s.txt" % filename))
     cache_seconds = int(cache_days * 86400.0)
@@ -182,6 +189,9 @@ def parse_geotags(lat, lon):
 
 
 def get_coords_by_ip():
+    '''
+    returns lat, lon for current position (based on geoip)
+    '''
     # url = 'https://www.telize.com/geoip'
     response = get_string_from_url('http://ip-api.com/json')
     if not response:
