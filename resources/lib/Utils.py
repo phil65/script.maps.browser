@@ -32,7 +32,7 @@ HOME = xbmcgui.Window(10000)
 
 def get_bounding_box(lat, lon, zoom):
     '''
-    get box covering the whole visible area
+    returns 4 rectangle values lat high, lon high, lat low, lon low
     '''
     mx, my = latlon_to_meters(lat, lon)
     px, py = meters_to_pixels(mx, my, zoom)
@@ -162,6 +162,9 @@ def string_to_deg(string):
 
 
 def parse_geotags(lat, lon):
+    '''
+    parse Kodi GPS String and return lat, lon
+    '''
     if lon:
         return string_to_deg(lat), string_to_deg(lon)
     else:
