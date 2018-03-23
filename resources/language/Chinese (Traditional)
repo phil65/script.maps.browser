@@ -28,7 +28,7 @@ msgid ""
 msgstr "此地圖瀏覽器元件可以讓您用遙控探索地圖。它可以顯示地方資訊 (來源：FourSquare)，
 該處景物 (來源：Eventful)，地理標記了的圖片及在地圖上的更多資訊。而且還提供了外觀皮膚的結合。"
 
-#: /resources/lib/GooglePlaces.py:17
+#: /resources/lib/googleplaces.py:17
 msgctxt "#32000"
 msgid "Accounting"
 msgstr ""
@@ -53,7 +53,7 @@ msgctxt "#32005"
 msgid "Top Picks"
 msgstr "首選熱點"
 
-#: /resources/lib/GooglePlaces.py:54
+#: /resources/lib/googleplaces.py:54
 msgctxt "#32006"
 msgid "Food"
 msgstr "食市"
@@ -94,17 +94,17 @@ msgctxt "#32015"
 msgid "Next venues"
 msgstr "鄰近場館"
 
-#: /resources/lib/GooglePlaces.py:26
+#: /resources/lib/googleplaces.py:26
 msgctxt "#32016"
 msgid "Beauty salon"
 msgstr "美容院"
 
-#: /resources/lib/GooglePlaces.py:27
+#: /resources/lib/googleplaces.py:27
 msgctxt "#32017"
 msgid "Bicycle store"
 msgstr "單車店"
 
-#: /resources/lib/GooglePlaces.py:28
+#: /resources/lib/googleplaces.py:28
 msgctxt "#32018"
 msgid "Book store"
 msgstr "書店"
@@ -125,7 +125,7 @@ msgctxt "#32022"
 msgid "Enter location search terms"
 msgstr "輸入用作搜尋地點的相關詞彙"
 
-#: /resources/lib/GooglePlaces.py:29
+#: /resources/lib/googleplaces.py:29
 msgctxt "#32023"
 msgid "Bowling alley"
 msgstr "保齡球館"
@@ -162,7 +162,7 @@ msgctxt "#32032"
 msgid "Enter search string"
 msgstr "輸入搜尋字串"
 
-#: /resources/lib/GooglePlaces.py:30
+#: /resources/lib/googleplaces.py:30
 msgctxt "#32033"
 msgid "Bus station"
 msgstr "巴士站"
@@ -171,447 +171,447 @@ msgctxt "#32034"
 msgid "Click again to show info"
 msgstr "再點選可顯示資訊"
 
-#: /resources/lib/GooglePlaces.py:18
+#: /resources/lib/googleplaces.py:18
 msgctxt "#32035"
 msgid "Airport"
 msgstr "機場"
 
-#: /resources/lib/GooglePlaces.py:19
+#: /resources/lib/googleplaces.py:19
 msgctxt "#32036"
 msgid "Amusement park"
 msgstr "遊樂園"
 
-#: /resources/lib/GooglePlaces.py:20
+#: /resources/lib/googleplaces.py:20
 msgctxt "#32037"
 msgid "Aquarium"
 msgstr "水族館"
 
-#: /resources/lib/GooglePlaces.py:21
+#: /resources/lib/googleplaces.py:21
 msgctxt "#32038"
 msgid "Art gallery"
 msgstr "藝術廊"
 
-#: /resources/lib/GooglePlaces.py:22
+#: /resources/lib/googleplaces.py:22
 msgctxt "#32039"
 msgid "ATM"
 msgstr "自動提款機"
 
-#: /resources/lib/GooglePlaces.py:23
+#: /resources/lib/googleplaces.py:23
 msgctxt "#32040"
 msgid "Bakery"
 msgstr "麵包店"
 
-#: /resources/lib/GooglePlaces.py:24
+#: /resources/lib/googleplaces.py:24
 msgctxt "#32041"
 msgid "Bank"
 msgstr "銀行"
 
-#: /resources/lib/GooglePlaces.py:25
+#: /resources/lib/googleplaces.py:25
 msgctxt "#32042"
 msgid "Bar"
 msgstr "酒吧"
 
-#: /resources/lib/GooglePlaces.py:31
+#: /resources/lib/googleplaces.py:31
 msgctxt "#32043"
 msgid "Cafe"
 msgstr "餐廳"
 
-#: /resources/lib/GooglePlaces.py:32
+#: /resources/lib/googleplaces.py:32
 msgctxt "#32044"
 msgid "Campground"
 msgstr "營地"
 
-#: /resources/lib/GooglePlaces.py:33
+#: /resources/lib/googleplaces.py:33
 msgctxt "#32045"
 msgid "Car dealer"
 msgstr "汽車經銷商"
 
-#: /resources/lib/GooglePlaces.py:34
+#: /resources/lib/googleplaces.py:34
 msgctxt "#32046"
 msgid "Car rental"
 msgstr "汽車租賃"
 
-#: /resources/lib/GooglePlaces.py:35
+#: /resources/lib/googleplaces.py:35
 msgctxt "#32047"
 msgid "Car repair"
 msgstr "汽車修理"
 
-#: /resources/lib/GooglePlaces.py:36
+#: /resources/lib/googleplaces.py:36
 msgctxt "#32048"
 msgid "Car wash"
 msgstr "洗車場"
 
-#: /resources/lib/GooglePlaces.py:37
+#: /resources/lib/googleplaces.py:37
 msgctxt "#32049"
 msgid "Casino"
 msgstr "賭場"
 
-#: /resources/lib/GooglePlaces.py:38
+#: /resources/lib/googleplaces.py:38
 msgctxt "#32050"
 msgid "Cemetery"
 msgstr "墓地"
 
-#: /resources/lib/GooglePlaces.py:39
+#: /resources/lib/googleplaces.py:39
 msgctxt "#32051"
 msgid "Church"
 msgstr "教堂"
 
-#: /resources/lib/GooglePlaces.py:40
+#: /resources/lib/googleplaces.py:40
 msgctxt "#32052"
 msgid "City hall"
 msgstr "大會堂"
 
-#: /resources/lib/GooglePlaces.py:41
+#: /resources/lib/googleplaces.py:41
 msgctxt "#32053"
 msgid "Clothing store"
 msgstr "服裝店"
 
-#: /resources/lib/GooglePlaces.py:42
+#: /resources/lib/googleplaces.py:42
 msgctxt "#32054"
 msgid "Convenience store"
 msgstr "便利店"
 
-#: /resources/lib/GooglePlaces.py:43
+#: /resources/lib/googleplaces.py:43
 msgctxt "#32055"
 msgid "Courthouse"
 msgstr "法院"
 
-#: /resources/lib/GooglePlaces.py:44
+#: /resources/lib/googleplaces.py:44
 msgctxt "#32056"
 msgid "Dentist"
 msgstr "牙醫"
 
-#: /resources/lib/GooglePlaces.py:45
+#: /resources/lib/googleplaces.py:45
 msgctxt "#32057"
 msgid "Department store"
 msgstr "百貨商店"
 
-#: /resources/lib/GooglePlaces.py:46
+#: /resources/lib/googleplaces.py:46
 msgctxt "#32058"
 msgid "Doctor"
 msgstr "醫生"
 
-#: /resources/lib/GooglePlaces.py:47
+#: /resources/lib/googleplaces.py:47
 msgctxt "#32059"
 msgid "Electrician"
 msgstr "電工"
 
-#: /resources/lib/GooglePlaces.py:48
+#: /resources/lib/googleplaces.py:48
 msgctxt "#32060"
 msgid "Electronics store"
 msgstr "電器商店"
 
-#: /resources/lib/GooglePlaces.py:49
+#: /resources/lib/googleplaces.py:49
 msgctxt "#32061"
 msgid "Embassy"
 msgstr "領使館"
 
-#: /resources/lib/GooglePlaces.py:50
+#: /resources/lib/googleplaces.py:50
 msgctxt "#32062"
 msgid "Establishment"
 msgstr "機構"
 
-#: /resources/lib/GooglePlaces.py:52
+#: /resources/lib/googleplaces.py:52
 msgctxt "#32063"
 msgid "Fire station"
 msgstr "消防局"
 
-#: /resources/lib/GooglePlaces.py:53
+#: /resources/lib/googleplaces.py:53
 msgctxt "#32064"
 msgid "Florist"
 msgstr "花店"
 
-#: /resources/lib/GooglePlaces.py:55
+#: /resources/lib/googleplaces.py:55
 msgctxt "#32065"
 msgid "Funeral home"
 msgstr "殯儀館"
 
-#: /resources/lib/GooglePlaces.py:56
+#: /resources/lib/googleplaces.py:56
 msgctxt "#32066"
 msgid "Furniture store"
 msgstr "傢俬店"
 
-#: /resources/lib/GooglePlaces.py:57
+#: /resources/lib/googleplaces.py:57
 msgctxt "#32067"
 msgid "Gas station"
 msgstr "加油站"
 
-#: /resources/lib/GooglePlaces.py:58
+#: /resources/lib/googleplaces.py:58
 msgctxt "#32068"
 msgid "General contractor"
 msgstr "一般承辦商"
 
-#: /resources/lib/GooglePlaces.py:59
+#: /resources/lib/googleplaces.py:59
 msgctxt "#32069"
 msgid "Grocery or supermarket"
 msgstr "雜貨店或超市"
 
-#: /resources/lib/GooglePlaces.py:61
+#: /resources/lib/googleplaces.py:61
 msgctxt "#32070"
 msgid "Gym"
 msgstr "健身室"
 
-#: /resources/lib/GooglePlaces.py:62
+#: /resources/lib/googleplaces.py:62
 msgctxt "#32071"
 msgid "Hair care"
 msgstr "頭髮護理"
 
-#: /resources/lib/GooglePlaces.py:63
+#: /resources/lib/googleplaces.py:63
 msgctxt "#32072"
 msgid "Hardware store"
 msgstr "五金店"
 
-#: /resources/lib/GooglePlaces.py:64
+#: /resources/lib/googleplaces.py:64
 msgctxt "#32073"
 msgid "Health"
 msgstr "健康中心"
 
-#: /resources/lib/GooglePlaces.py:65
+#: /resources/lib/googleplaces.py:65
 msgctxt "#32074"
 msgid "Hindu temple"
 msgstr "印度廟"
 
-#: /resources/lib/GooglePlaces.py:66
+#: /resources/lib/googleplaces.py:66
 msgctxt "#32075"
 msgid "Home goods store"
 msgstr "家居用品店"
 
-#: /resources/lib/GooglePlaces.py:67
+#: /resources/lib/googleplaces.py:67
 msgctxt "#32076"
 msgid "Hospital"
 msgstr "醫院"
 
-#: /resources/lib/GooglePlaces.py:68
+#: /resources/lib/googleplaces.py:68
 msgctxt "#32077"
 msgid "Insurance agency"
 msgstr "保險代理"
 
-#: /resources/lib/GooglePlaces.py:69
+#: /resources/lib/googleplaces.py:69
 msgctxt "#32078"
 msgid "Jewelry store"
 msgstr "珠寶店"
 
-#: /resources/lib/GooglePlaces.py:70
+#: /resources/lib/googleplaces.py:70
 msgctxt "#32079"
 msgid "Laundry"
 msgstr "洗衣店"
 
-#: /resources/lib/GooglePlaces.py:71
+#: /resources/lib/googleplaces.py:71
 msgctxt "#32080"
 msgid "Lawyer"
 msgstr "律師"
 
-#: /resources/lib/GooglePlaces.py:73
+#: /resources/lib/googleplaces.py:73
 msgctxt "#32081"
 msgid "Liquor store"
 msgstr "酒品店"
 
-#: /resources/lib/GooglePlaces.py:74
+#: /resources/lib/googleplaces.py:74
 msgctxt "#32082"
 msgid "Local government office"
 msgstr "地方政府機關"
 
-#: /resources/lib/GooglePlaces.py:75
+#: /resources/lib/googleplaces.py:75
 msgctxt "#32083"
 msgid "Locksmith"
 msgstr "開鎖匠"
 
-#: /resources/lib/GooglePlaces.py:76
+#: /resources/lib/googleplaces.py:76
 msgctxt "#32084"
 msgid "Lodging"
 msgstr "住宿"
 
-#: /resources/lib/GooglePlaces.py:77
+#: /resources/lib/googleplaces.py:77
 msgctxt "#32085"
 msgid "Meal delivery"
 msgstr "送餐服務"
 
-#: /resources/lib/GooglePlaces.py:78
+#: /resources/lib/googleplaces.py:78
 msgctxt "#32086"
 msgid "Meal takeaway"
 msgstr "外賣店"
 
-#: /resources/lib/GooglePlaces.py:79
+#: /resources/lib/googleplaces.py:79
 msgctxt "#32087"
 msgid "Mosque"
 msgstr "清真寺"
 
-#: /resources/lib/GooglePlaces.py:80
+#: /resources/lib/googleplaces.py:80
 msgctxt "#32088"
 msgid "Movie rental"
 msgstr "電影租賃"
 
-#: /resources/lib/GooglePlaces.py:81
+#: /resources/lib/googleplaces.py:81
 msgctxt "#32089"
 msgid "Movie theater"
 msgstr "電影院"
 
-#: /resources/lib/GooglePlaces.py:82
+#: /resources/lib/googleplaces.py:82
 msgctxt "#32090"
 msgid "Moving company"
 msgstr "搬家公司"
 
-#: /resources/lib/GooglePlaces.py:83
+#: /resources/lib/googleplaces.py:83
 msgctxt "#32091"
 msgid "Museum"
 msgstr "博物館"
 
-#: /resources/lib/GooglePlaces.py:84
+#: /resources/lib/googleplaces.py:84
 msgctxt "#32092"
 msgid "Night club"
 msgstr "夜總會"
 
-#: /resources/lib/GooglePlaces.py:85
+#: /resources/lib/googleplaces.py:85
 msgctxt "#32093"
 msgid "Painter"
 msgstr "油漆工"
 
-#: /resources/lib/GooglePlaces.py:86
+#: /resources/lib/googleplaces.py:86
 msgctxt "#32094"
 msgid "Park"
 msgstr "公園"
 
-#: /resources/lib/GooglePlaces.py:87
+#: /resources/lib/googleplaces.py:87
 msgctxt "#32095"
 msgid "Parking"
 msgstr "停車場"
 
-#: /resources/lib/GooglePlaces.py:88
+#: /resources/lib/googleplaces.py:88
 msgctxt "#32096"
 msgid "Pet store"
 msgstr "寵物店"
 
-#: /resources/lib/GooglePlaces.py:89
+#: /resources/lib/googleplaces.py:89
 msgctxt "#32097"
 msgid "Pharmacy"
 msgstr "藥房"
 
-#: /resources/lib/GooglePlaces.py:90
+#: /resources/lib/googleplaces.py:90
 msgctxt "#32098"
 msgid "Physiotherapist"
 msgstr "物理治療"
 
-#: /resources/lib/GooglePlaces.py:91
+#: /resources/lib/googleplaces.py:91
 msgctxt "#32099"
 msgid "Place of worship"
 msgstr "宗教場所"
 
-#: /resources/lib/GooglePlaces.py:92
+#: /resources/lib/googleplaces.py:92
 msgctxt "#32100"
 msgid "Plumber"
 msgstr "水喉匠"
 
-#: /resources/lib/GooglePlaces.py:93
+#: /resources/lib/googleplaces.py:93
 msgctxt "#32101"
 msgid "Police"
 msgstr "警署"
 
-#: /resources/lib/GooglePlaces.py:94
+#: /resources/lib/googleplaces.py:94
 msgctxt "#32102"
 msgid "Post office"
 msgstr "郵政局"
 
-#: /resources/lib/GooglePlaces.py:95
+#: /resources/lib/googleplaces.py:95
 msgctxt "#32103"
 msgid "Real estate agency"
 msgstr "地產公司"
 
-#: /resources/lib/GooglePlaces.py:96
+#: /resources/lib/googleplaces.py:96
 msgctxt "#32104"
 msgid "Restaurant"
 msgstr "飯館"
 
-#: /resources/lib/GooglePlaces.py:97
+#: /resources/lib/googleplaces.py:97
 msgctxt "#32105"
 msgid "Roofing contractor"
 msgstr "屋頂承辦商"
 
-#: /resources/lib/GooglePlaces.py:98
+#: /resources/lib/googleplaces.py:98
 msgctxt "#32106"
 msgid "Rv park"
 msgstr "旅行車停車場"
 
-#: /resources/lib/GooglePlaces.py:99
+#: /resources/lib/googleplaces.py:99
 msgctxt "#32107"
 msgid "School"
 msgstr "學校"
 
-#: /resources/lib/GooglePlaces.py:100
+#: /resources/lib/googleplaces.py:100
 msgctxt "#32108"
 msgid "Shoe store"
 msgstr "鞋店"
 
-#: /resources/lib/GooglePlaces.py:101
+#: /resources/lib/googleplaces.py:101
 msgctxt "#32109"
 msgid "Spa"
 msgstr "水療中心"
 
-#: /resources/lib/GooglePlaces.py:102
+#: /resources/lib/googleplaces.py:102
 msgctxt "#32110"
 msgid "Stadium"
 msgstr "體育館"
 
-#: /resources/lib/GooglePlaces.py:104
+#: /resources/lib/googleplaces.py:104
 msgctxt "#32111"
 msgid "Store"
 msgstr "商店"
 
-#: /resources/lib/GooglePlaces.py:105
+#: /resources/lib/googleplaces.py:105
 msgctxt "#32112"
 msgid "Subway station"
 msgstr "地鐵站"
 
-#: /resources/lib/GooglePlaces.py:106
+#: /resources/lib/googleplaces.py:106
 msgctxt "#32113"
 msgid "Synagogue"
 msgstr "猶太會堂"
 
-#: /resources/lib/GooglePlaces.py:107
+#: /resources/lib/googleplaces.py:107
 msgctxt "#32114"
 msgid "Taxi stand"
 msgstr "的士站"
 
-#: /resources/lib/GooglePlaces.py:108
+#: /resources/lib/googleplaces.py:108
 msgctxt "#32115"
 msgid "Train station"
 msgstr "火車站"
 
-#: /resources/lib/GooglePlaces.py:109
+#: /resources/lib/googleplaces.py:109
 msgctxt "#32116"
 msgid "Travel agency"
 msgstr "旅行社"
 
-#: /resources/lib/GooglePlaces.py:110
+#: /resources/lib/googleplaces.py:110
 msgctxt "#32117"
 msgid "University"
 msgstr "大學"
 
-#: /resources/lib/GooglePlaces.py:111
+#: /resources/lib/googleplaces.py:111
 msgctxt "#32118"
 msgid "Veterinary care"
 msgstr "獸醫"
 
-#: /resources/lib/GooglePlaces.py:112
+#: /resources/lib/googleplaces.py:112
 msgctxt "#32119"
 msgid "zoo"
 msgstr "動物園"
 
-#: /resources/lib/GooglePlaces.py:114 /resources/lib/FourSquare.py:136
+#: /resources/lib/googleplaces.py:114 /resources/lib/foursquare.py:136
 msgctxt "#32120"
 msgid "All Sections"
 msgstr "所有章節"
 
-#: /resources/lib/GooglePlaces.py:116 /resources/lib/FourSquare.py:138
+#: /resources/lib/googleplaces.py:116 /resources/lib/foursquare.py:138
 msgctxt "#32121"
 msgid "Choose Section"
 msgstr "選擇章節"
 
-#: /resources/lib/Eventful.py:23 /resources/lib/FourSquare.py:116
+#: /resources/lib/Eventful.py:23 /resources/lib/foursquare.py:116
 msgctxt "#32122"
 msgid "All Categories"
 msgstr "所有類別"
 
-#: /resources/lib/Eventful.py:26 /resources/lib/FourSquare.py:118
+#: /resources/lib/Eventful.py:26 /resources/lib/foursquare.py:118
 msgctxt "#32123"
 msgid "Choose Category"
 msgstr "選擇類別"

@@ -13,10 +13,10 @@ import math
 
 from resources.lib import googlemaps
 from resources.lib import Utils
-from resources.lib.Eventful import EF
+from resources.lib.eventful import EF
 from resources.lib import mapquest
-from resources.lib.GooglePlaces import GP
-from resources.lib.FourSquare import FS
+from resources.lib.googleplaces import GP
+from resources.lib.foursquare import FS
 
 from kodi65 import utils
 from kodi65 import busy
