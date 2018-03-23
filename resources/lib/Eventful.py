@@ -3,14 +3,19 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
+from builtins import str
+
 import urllib
 import re
 from xml.sax import saxutils
 
 import xbmcgui
 
-import Utils
-import googlemaps
+from resources.lib import Utils
+from resources.lib import googlemaps
 
 from kodi65 import addon
 from kodi65 import VideoItem
@@ -103,11 +108,12 @@ class Eventful():
     def get_data(self, method, params={}, cache_days=0.5):
         params["app_key"] = EVENTFUL_KEY
         params = {k: v for k, v in params.iteritems() if v}
-        params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems()}
+        params = {k: str(v) for k, v in params.iteritems()}
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
         return Utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
+
 
 EF = Eventful()

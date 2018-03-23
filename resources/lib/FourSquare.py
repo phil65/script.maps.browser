@@ -5,11 +5,16 @@
 
 # code for FourSquare Scraping based on script.maps by a.a.alsaleh. credits to him.
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
+from builtins import str
+
 import urllib
 
 import xbmcgui
-import Utils
-import googlemaps
+from resources.lib import Utils
+from resources.lib import googlemaps
 
 from kodi65 import utils
 from kodi65 import addon
@@ -44,7 +49,7 @@ class FourSquare():
             try:
                 photo = venue['venue']['photos']['groups'][0]['items'][0]
                 photo = "%s%s%s" % (photo['prefix'], photo['height'], photo['suffix'])
-            except:
+            except Exception:
                 photo = ""
             if "name" not in venue:
                 venue = venue["venue"]
@@ -142,11 +147,12 @@ class FourSquare():
         params["client_secret"] = FOURSQUARE_SECRET
         params["v"] = 20130815
         params = {k: v for (k, v) in params.iteritems() if v}
-        params = {k: unicode(v).encode('utf-8') for (k, v) in params.iteritems()}
+        params = {k: str(v) for (k, v) in params.iteritems()}
         url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                    method=method,
                                                    params=urllib.urlencode(params))
         return Utils.get_JSON_response(url=url,
                                        cache_days=cache_days)
+
 
 FS = FourSquare()

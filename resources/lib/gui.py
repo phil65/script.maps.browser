@@ -4,6 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
+
+from builtins import str
 
 import xbmcgui
 import math
@@ -396,5 +399,5 @@ class MapsBrowser(xbmcgui.WindowXML):
                  'streetview': "True" if self.street_view else "",
                  'NavMode': "True" if self.nav_mode_active else ""}
         for k, v in props.iteritems():
-            self.setProperty(k, unicode(v))
+            self.setProperty(k, str(v))
         self.radius = Utils.get_radius(self.lat, self.lon, self.zoom, "640x400")

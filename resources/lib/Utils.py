@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import requests
 import os
@@ -174,13 +175,10 @@ def string_to_deg(string):
 
 def parse_geotags(lat, lon):
     if lon:
-        lat = string_to_deg(lat)
-        lon = string_to_deg(lon)
+        return string_to_deg(lat), string_to_deg(lon)
     else:
         coords = lat.split(",lon=")
-        lat = string_to_deg(coords[0])
-        lon = string_to_deg(coords[1])
-    return lat, lon
+        return string_to_deg(coords[0]), string_to_deg(coords[1])
 
 
 def get_coords_by_ip():
